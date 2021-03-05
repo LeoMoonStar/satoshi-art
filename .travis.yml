@@ -4,11 +4,11 @@ node_js:
 cache: yarn
 before_script:
   - yarn
+script:
+  - yarn lint:check
+  - yarn build
 deploy:
   provider: heroku
   repo: vlad1chek/satoshi-art
-  script:
-    - yarn lint:check
-    - yarn build
   api_key:
     secure: S1I6yLSTn0FC+qTPYqFryEzYvPiydtlgP9Qo+tYLYocOJfJtBK5wjqlkrdMe/bqQcW05Vn/KNI6knVPr8ovMGqNzDHiX0JQCjeRCDyRP77x8rmp8gDEZUuXm8DlYLujO4GiXc1p8YPzldC/KxPL5IAOAhVxpHleGdSRv6/kD0XJv2Dt5WExyXGVvsiaFM/MiSF65tpjZpOR8v+dhgJF6vb74gX4Ewxqqq+k//uE+tmpcIL/t+jGPUNomZH9FnE/n+6xUynpGKVHi/OaNNWL2uw/WwKpwrptki00t9L65/ItSD3fzhXpdDKPZ55K9o1ikrNouOkk9lOEcKo51J0fxQxZsr46zwPffU61QEEsTd0EWzaGXSZLP8qj41d1XIu2lsr4c/Y5erCLgERL3lB6c9/YSeUAu5GSgqw7yYbcN0zQ3WjtaQAuIEeiygJsV5Oji9QdisUP7h1xfi0AytQzBdDrV3SU+hDjtpnALOPTtymw6BmyzPbNIfWI7KkAKIxD1jz8aFVFLAnn1zF6At+HiREeycexpf6H2Pc1Niu9fYvCR4/8ucosRrWyT/G6QQl8Of8Y++My0RjntTDSWT9pxGj4VLZtsAEvbwRs0+SmXsGSLh2IkZWXWlKuafRg9Ea1KCU8YygST8bKBRc3GBiwmhBPEudeKP0xuyLInz/iW2sA=
