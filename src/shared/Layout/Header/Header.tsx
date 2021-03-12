@@ -2,7 +2,7 @@ import React from 'react'
 
 import useStyles from './Header.style'
 
-import LogoIcon from 'shared/icons/logoHeader.png'
+import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
 
 function Header(): JSX.Element {
     const classes = useStyles()
@@ -10,7 +10,7 @@ function Header(): JSX.Element {
     return (
         <div className={classes.container}>
             <div className={classes.logo}>
-                <img src={LogoIcon} alt="logo" />
+                <LogoIcon />
             </div>
             <div className={classes.controls}>controls</div>
         </div>
