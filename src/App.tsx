@@ -1,17 +1,20 @@
-import React, { StrictMode } from "react";
-import TextField from "@material-ui/core/TextField";
-import "./App.css";
+import React from 'react'
+import { ThemeProvider } from '@material-ui/core/styles'
+
+import theme from 'shared/theme'
+import Layout from 'shared/Layout'
+import './App.css'
 
 function App(): JSX.Element {
-  return (
-    <StrictMode>
-      <div className="App">
-        <form className="App-header">
-          <TextField id="standard-basic" label="Standard" />
-        </form>
-      </div>
-    </StrictMode>
-  );
+    return (
+        <React.StrictMode>
+            <ThemeProvider theme={theme}>
+                <Layout>
+                    <div>product page</div>
+                </Layout>
+            </ThemeProvider>
+        </React.StrictMode>
+    )
 }
 
-export default App;
+export default App
