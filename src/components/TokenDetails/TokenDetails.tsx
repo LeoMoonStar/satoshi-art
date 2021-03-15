@@ -43,6 +43,25 @@ enum TabVariants {
     BIDS = 3,
 }
 
+const tabs = [
+    {
+        label: 'Info',
+        value: TabVariants.INFO,
+    },
+    {
+        label: 'Owners',
+        value: TabVariants.OWNERS,
+    },
+    {
+        label: 'History',
+        value: TabVariants.HISTORY,
+    },
+    {
+        label: 'Bids',
+        value: TabVariants.BIDS,
+    },
+]
+
 const TokenDetails = (): JSX.Element => {
     const [tab, selectTab] = useState(TabVariants.INFO)
 
@@ -152,46 +171,19 @@ const TokenDetails = (): JSX.Element => {
                         },
                     }}
                 >
-                    <Tab
-                        classes={{
-                            root: classes.styledTab,
-                            selected: classes.selectedTab,
-                        }}
-                        disableRipple
-                        selected={tab === TabVariants.INFO}
-                        value={TabVariants.INFO}
-                        label={'Info'}
-                    />
-                    <Tab
-                        classes={{
-                            root: classes.styledTab,
-                            selected: classes.selectedTab,
-                        }}
-                        disableRipple
-                        selected={tab === TabVariants.OWNERS}
-                        value={TabVariants.OWNERS}
-                        label={'Owners'}
-                    />
-                    <Tab
-                        classes={{
-                            root: classes.styledTab,
-                            selected: classes.selectedTab,
-                        }}
-                        disableRipple
-                        selected={tab === TabVariants.HISTORY}
-                        value={TabVariants.HISTORY}
-                        label={'History'}
-                    />
-                    <Tab
-                        classes={{
-                            root: classes.styledTab,
-                            selected: classes.selectedTab,
-                        }}
-                        disableRipple
-                        selected={tab === TabVariants.BIDS}
-                        value={TabVariants.BIDS}
-                        label={'Bids'}
-                    />
+                    {tabs.map(({ label, value }) => (
+                        <Tab
+                            key={`${label}_${Math.random()}`}
+                            classes={{
+                                root: classes.styledTab,
+                                selected: classes.selectedTab,
+                            }}
+                            disableRipple
+                            selected={tab === value}
+                            value={value}
+                            label={label}
+                        />
+                    ))}
                 </Tabs>
                 {tab === TabVariants.INFO && <TokenInfo />}
                 {tab === TabVariants.OWNERS && <div />}
