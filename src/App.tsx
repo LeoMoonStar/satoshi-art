@@ -3,6 +3,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 
 import theme from 'shared/theme'
 import Layout from 'shared/Layout'
+import TokenDetails from './components/TokenDetails'
 import './App.css'
 
 function App(): JSX.Element {
@@ -10,7 +11,7 @@ function App(): JSX.Element {
         <React.StrictMode>
             <ThemeProvider theme={theme}>
                 <Layout>
-                    <div>product page</div>
+                    <TokenDetails />
                 </Layout>
             </ThemeProvider>
         </React.StrictMode>
