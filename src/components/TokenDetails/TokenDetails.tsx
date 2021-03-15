@@ -36,7 +36,7 @@ const InfoIconWrapper = styled(Grid)(
     })
 )
 
-enum TAB_VARIANTS {
+enum TabVariants {
     INFO = 0,
     OWNERS = 1,
     HISTORY = 2,
@@ -44,7 +44,7 @@ enum TAB_VARIANTS {
 }
 
 const TokenDetails = (): JSX.Element => {
-    const [tab, selectTab] = useState(TAB_VARIANTS.INFO)
+    const [tab, selectTab] = useState(TabVariants.INFO)
 
     const classes = useStyles()
 
@@ -158,8 +158,8 @@ const TokenDetails = (): JSX.Element => {
                             selected: classes.selectedTab,
                         }}
                         disableRipple
-                        selected={tab === TAB_VARIANTS.INFO}
-                        value={TAB_VARIANTS.INFO}
+                        selected={tab === TabVariants.INFO}
+                        value={TabVariants.INFO}
                         label={'Info'}
                     />
                     <Tab
@@ -168,8 +168,8 @@ const TokenDetails = (): JSX.Element => {
                             selected: classes.selectedTab,
                         }}
                         disableRipple
-                        selected={tab === TAB_VARIANTS.OWNERS}
-                        value={TAB_VARIANTS.OWNERS}
+                        selected={tab === TabVariants.OWNERS}
+                        value={TabVariants.OWNERS}
                         label={'Owners'}
                     />
                     <Tab
@@ -178,8 +178,8 @@ const TokenDetails = (): JSX.Element => {
                             selected: classes.selectedTab,
                         }}
                         disableRipple
-                        selected={tab === TAB_VARIANTS.HISTORY}
-                        value={TAB_VARIANTS.HISTORY}
+                        selected={tab === TabVariants.HISTORY}
+                        value={TabVariants.HISTORY}
                         label={'History'}
                     />
                     <Tab
@@ -188,15 +188,15 @@ const TokenDetails = (): JSX.Element => {
                             selected: classes.selectedTab,
                         }}
                         disableRipple
-                        selected={tab === TAB_VARIANTS.BIDS}
-                        value={TAB_VARIANTS.BIDS}
+                        selected={tab === TabVariants.BIDS}
+                        value={TabVariants.BIDS}
                         label={'Bids'}
                     />
                 </Tabs>
-                {tab === TAB_VARIANTS.INFO && <TokenInfo />}
-                {tab === TAB_VARIANTS.OWNERS && <div />}
-                {tab === TAB_VARIANTS.HISTORY && <div />}
-                {tab === TAB_VARIANTS.BIDS && <div />}
+                {tab === TabVariants.INFO && <TokenInfo />}
+                {tab === TabVariants.OWNERS && <div />}
+                {tab === TabVariants.HISTORY && <div />}
+                {tab === TabVariants.BIDS && <div />}
                 <Grid>
                     <div className={classes.highestBidInfoContainer}>
                         <div className={classes.highestBidContainer}>
