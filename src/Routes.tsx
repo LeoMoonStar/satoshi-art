@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import Product from 'screens/Product'
+import ConnectWallet from 'screens/ConnectWallet'
 
 function Routes(): JSX.Element {
     return (
@@ -9,6 +10,9 @@ function Routes(): JSX.Element {
             <Switch>
                 <Route path={`/productpage`}>
                     <Product />
+                </Route>
+                <Route path={`/connect`}>
+                    <ConnectWallet />
                 </Route>
             </Switch>
         </BrowserRouter>
