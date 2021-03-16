@@ -39,6 +39,37 @@ const useStyles = makeStyles((theme) => {
         },
         info: {
             width: '50%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+        },
+        backBtn: {
+            textDecoration: 'none',
+            display: 'inline-flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            color: 'black',
+            marginBottom: 40,
+        },
+        backBtnText: {
+            fontSize: 30,
+            fontWeight: 900,
+        },
+        divider: {
+            backgroundColor: theme.custom.common.purpleColor,
+            marginTop: 20,
+            marginBottom: 20,
+        },
+        description: {
+            marginBottom: 80,
+            color: theme.custom.common.grayColor,
+        },
+        walletInfo: {
+            color: theme.custom.common.pinkColor,
+        },
+        privateRules: {
+            color: theme.custom.common.grayColor,
+            fontSize: 12,
         },
         connectors: {
             width: '50%',

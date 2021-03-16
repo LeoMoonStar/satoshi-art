@@ -1,4 +1,7 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { Typography, Divider } from '@material-ui/core'
 
 import Button from 'shared/Button'
 import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
@@ -16,36 +19,45 @@ function Wallets(): JSX.Element {
                 </div>
                 <div className={classes.content}>
                     <div className={classes.info}>
-                        <span>Go Back</span>
-
-                        <span>Connect your wallet</span>
-
-                        <span>
+                        <NavLink
+                            className={classes.backBtn}
+                            to={'/productpage'}
+                        >
+                            <ArrowBackIcon />
+                            <Typography variant="h5">Go Back</Typography>
+                        </NavLink>
+                        <Typography
+                            className={classes.backBtnText}
+                            variant="h2"
+                        >
+                            Connect your wallet
+                        </Typography>
+                        <Divider
+                            classes={{
+                                root: classes.divider,
+                            }}
+                        />
+                        <Typography
+                            className={classes.description}
+                            variant="h6"
+                        >
                             Connect with one of available wallet providers or
-                            create a new wallet.
-                        </span>
-                        <span>What is wallet?</span>
-
-                        <span>
+                            create a new wallet.{' '}
+                            <span className={classes.walletInfo}>
+                                What is wallet?
+                            </span>
+                        </Typography>
+                        <Typography
+                            className={classes.privateRules}
+                            variant="h6"
+                        >
                             We do not own your private keys and cannot access
                             your funds without your confirmation.
-                        </span>
+                        </Typography>
                     </div>
                     <div className={classes.connectors}>
                         <Button
-                            label={'Fortmatic'}
-                            className={classes.connectBtn}
-                        />
-                        <Button
-                            label={'WalletConnect'}
-                            className={classes.connectBtn}
-                        />
-                        <Button
-                            label={'Coinbase Wallet'}
-                            className={classes.connectBtn}
-                        />
-                        <Button
-                            label={'MyEtherWallet'}
+                            label={'Metamask'}
                             className={classes.connectBtn}
                         />
                     </div>
