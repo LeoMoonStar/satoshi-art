@@ -31,9 +31,7 @@ const useStyles = makeStyles((theme) => {
         emailInput: {
             height: 46,
             width: 400,
-            borderWidth: 1,
-            borderColor: theme.custom.common.grayColor,
-            borderStyle: 'solid',
+            border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 40,
             marginRight: 12,
             paddingLeft: 15,
@@ -48,9 +46,7 @@ const useStyles = makeStyles((theme) => {
             borderRadius: 40,
             '&:hover': {
                 color: theme.palette.primary.main,
-                borderWidth: 1,
-                borderStyle: 'solid',
-                borderColor: theme.custom.common.grayColor,
+                border: `1px solid ${theme.custom.common.grayColor}`,
             },
         },
     }

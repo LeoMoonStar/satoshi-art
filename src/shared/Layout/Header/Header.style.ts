@@ -45,9 +45,7 @@ const useStyles = makeStyles((theme) => {
         searchInput: {
             height: 40,
             width: 220,
-            borderWidth: 1,
-            borderColor: theme.custom.common.grayColor,
-            borderStyle: 'solid',
+            border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 40,
             marginRight: 12,
             paddingLeft: 15,
