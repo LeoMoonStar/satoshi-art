@@ -7,6 +7,7 @@ interface CustomTheme {
         grayColor: string
         darkerGrayColor: string
         yellowColor: string
+        purpleColor: string
     }
 }
 
@@ -67,6 +68,7 @@ const theme = createMuiTheme({
             grayColor: '#C4C4C4',
             darkerGrayColor: '#7E7E7E',
             yellowColor: '#E3E800',
+            purpleColor: '#5113D5',
         },
     },
 })

@@ -1,9 +1,14 @@
 import React from 'react'
-
-import useStyles from './Header.style'
+import { Input } from '@material-ui/core'
+import Button from 'shared/Button'
 
 import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
-import ConnectButton from 'components/ConnectButton'
+import ConnectButton from 'shared/ConnectButton'
+import { ReactComponent as SearchIcon1 } from 'shared/icons/searchIcons/searchIcon1.svg'
+import { ReactComponent as SearchIcon2 } from 'shared/icons/searchIcons/searchIcon2.svg'
+import { ReactComponent as SearchIcon3 } from 'shared/icons/searchIcons/searchIcon3.svg'
+import { ReactComponent as SearchIcon4 } from 'shared/icons/searchIcons/searchIcon4.svg'
+import useStyles from './Header.style'
 
 function Header(): JSX.Element {
     const classes = useStyles()
@@ -14,7 +19,27 @@ function Header(): JSX.Element {
                 <LogoIcon />
             </div>
             <div className={classes.controls}>
+                <div className={classes.searchWrapper}>
+                    <div className={classes.search}>
+                        <Input
+                            type="search"
+                            classes={{
+                                root: classes.searchInput,
+                            }}
+                            disableUnderline
+                        />
+                        <div className={classes.searchIcons}>
+                            <SearchIcon1 />
+                            <SearchIcon2 />
+                            <SearchIcon3 />
+                            <SearchIcon4 />
+                        </div>
+                    </div>
+                </div>
+
                 <ConnectButton />
+
+                <Button label={'Create'} className={classes.createBtn} />
             </div>
         </div>
     )

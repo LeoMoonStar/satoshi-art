@@ -14,7 +14,7 @@ import { ReactComponent as DotsIcon } from 'shared/icons/dots.svg'
 import { ReactComponent as LikeIcon } from 'shared/icons/like.svg'
 import { ReactComponent as ViewsIcon } from 'shared/icons/views.svg'
 import { ReactComponent as GreySaveIcon } from 'shared/icons/greySave.svg'
-import Button from 'shared/components/Button'
+import Button from 'shared/Button'
 import { TokenInfo } from './TokenInfo'
 import useStyles from './TokenDetails.style'
 
