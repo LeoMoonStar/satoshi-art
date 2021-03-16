@@ -87,6 +87,9 @@ const useStyles = makeStyles((theme) => {
             border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 40,
         },
+        metamaskIcon: {
+            marginRight: 10,
+        },
     }
 })
 export default useStyles
