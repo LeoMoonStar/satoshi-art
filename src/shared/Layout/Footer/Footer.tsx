@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { Input } from '@material-ui/core'
+import Button from 'shared/Button'
 import { ReactComponent as SubscribeTextAsIcon } from 'shared/icons/SubscribeTextAsIcon.svg'
 import { ReactComponent as SatoshiArtIcon } from 'shared/icons/Satoshi.ART.svg'
 
@@ -14,7 +15,18 @@ function Footer(): JSX.Element {
             <div className={classes.topFooter}>
                 <SubscribeTextAsIcon />
                 <div>
-                    <input />
+                    <Input
+                        type="email"
+                        classes={{
+                            root: classes.emailInput,
+                        }}
+                        placeholder={'Email address'}
+                        disableUnderline
+                    />
+                    <Button
+                        label={'Subscribe'}
+                        className={classes.subscribeBtn}
+                    />
                 </div>
             </div>
             <div className={classes.footerSplitter}></div>
