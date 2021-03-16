@@ -5,6 +5,7 @@ import { Typography, Divider } from '@material-ui/core'
 
 import Button from 'shared/Button'
 import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
+import { ReactComponent as MetamaskIcon } from 'shared/icons/metamask.svg'
 
 import useStyles from './Wallets.style'
 
@@ -56,10 +57,10 @@ function Wallets(): JSX.Element {
                         </Typography>
                     </div>
                     <div className={classes.connectors}>
-                        <Button
-                            label={'Metamask'}
-                            className={classes.connectBtn}
-                        />
+                        <Button className={classes.connectBtn}>
+                            <MetamaskIcon className={classes.metamaskIcon} />
+                            <span>Metamask</span>
+                        </Button>
                     </div>
                 </div>
             </div>

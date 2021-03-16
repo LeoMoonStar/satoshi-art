@@ -6,10 +6,15 @@ interface CustomProps extends ButtonProps {
     onClick?: () => void
 }
 
-function Button(props: CustomProps): JSX.Element {
+function Button({
+    children,
+    className,
+    label,
+    onClick,
+}: CustomProps): JSX.Element {
     return (
-        <MUIButton className={props.className} onClick={props.onClick}>
-            {props.label}
+        <MUIButton className={className} onClick={onClick}>
+            {label || children}
         </MUIButton>
     )
 }
