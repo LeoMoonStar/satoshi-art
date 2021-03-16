@@ -1,13 +1,22 @@
 import React from 'react'
 
-import Layout from 'shared/Layout'
+import Footer from 'shared/Layout/Footer'
 import Wallets from './Wallets'
 
+import useStyles from './ConnectWallet.style'
+
 function ConnectWallet(): JSX.Element {
+    const classes = useStyles()
+
     return (
-        <Layout>
-            <Wallets />
-        </Layout>
+        <div className={classes.container}>
+            <div className={classes.content}>
+                <Wallets />
+            </div>
+            <footer className={classes.footer}>
+                <Footer />
+            </footer>
+        </div>
     )
 }
 
