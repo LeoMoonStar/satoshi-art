@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => {
             position: 'sticky',
             top: 0,
             backgroundColor: theme.palette.primary.main,
-            zIndex: 9999,
+            zIndex: 999,
         },
         content: {
             flex: '1 0 auto',
