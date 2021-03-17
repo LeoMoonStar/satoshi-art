@@ -4,14 +4,15 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { Typography, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
-import Button from 'shared/Button'
 import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
-import { ReactComponent as MetamaskIcon } from 'shared/icons/metamask.svg'
 
 import useStyles from './Wallets.style'
+import WalletOption from '../WalletOption'
+import { useWallets } from 'hooks/useWallets'
 
 function Wallets(): JSX.Element {
     const classes = useStyles()
+    const wallets = useWallets()
     const { t } = useTranslation()
 
     return (
@@ -57,10 +58,8 @@ function Wallets(): JSX.Element {
                         </Typography>
                     </div>
                     <div className={classes.connectors}>
-                        <Button className={classes.connectBtn}>
-                            <MetamaskIcon className={classes.metamaskIcon} />
-                            <span>Metamask</span>
-                        </Button>
+                        {/*@TODO: add array mapping when array will have more wallets*/}
+                        <WalletOption wallet={wallets[0]} />
                     </div>
                 </div>
             </div>

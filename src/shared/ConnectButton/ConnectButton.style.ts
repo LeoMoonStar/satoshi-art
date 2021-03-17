@@ -9,16 +9,8 @@ const useStyles = makeStyles((theme) => {
             color: theme.palette.primary.main,
             borderRadius: 40,
         },
-        //temporary style for modal
-        modalContainer: {
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'max-content',
-            backgroundColor: theme.palette.primary.main,
-            border: '2px solid #000',
-            padding: 20,
+        linkStyle: {
+            textDecoration: 'none',
         },
     }
 })
