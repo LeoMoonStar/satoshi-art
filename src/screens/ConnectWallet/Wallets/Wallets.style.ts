@@ -79,17 +79,6 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             marginBottom: 60,
         },
-        connectBtn: {
-            width: 280,
-            height: 54,
-            backgroundColor: theme.palette.primary.main,
-            color: 'black',
-            border: `1px solid ${theme.custom.common.grayColor}`,
-            borderRadius: 40,
-        },
-        metamaskIcon: {
-            marginRight: 10,
-        },
     }
 })
 export default useStyles
