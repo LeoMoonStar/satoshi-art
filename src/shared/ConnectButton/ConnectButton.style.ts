@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => {
             color: theme.palette.primary.main,
             borderRadius: 40,
         },
+        linkStyle: {
+            textDecoration: 'none',
+        },
         //temporary style for modal
         modalContainer: {
             position: 'fixed',
