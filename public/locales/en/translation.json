@@ -21,7 +21,7 @@
   "highestBidBy": "Highest bid by",
   "buyNow": "Buy now",
   "placeABid": "Place a bid",
-  "serviceFee": "Service fee",
+  "serviceFee": "Service fee {{ fee }}%.",
   "Owner": "Owner",
   "Creator": "Creator"
 }

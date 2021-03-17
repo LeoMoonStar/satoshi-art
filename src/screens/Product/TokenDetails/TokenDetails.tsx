@@ -225,7 +225,7 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                     <div className={classes.serviceFeeInfoContainer}>
                         <Typography variant="h6">
-                            {t('serviceFee')} 2.5%.
+                            {t('serviceFee', { fee: '2.5' })}
                         </Typography>
                         <Typography
                             variant="h6"
