@@ -21,13 +21,13 @@ const ConnectButton = (): JSX.Element => {
             {!!account ? (
                 <Button
                     className={classes.connectWalletBtn}
-                    label={!!account ? userAddress : 'Connect Wallet'}
+                    label={userAddress}
                 />
             ) : (
                 <NavLink to={'/connect'} className={classes.linkStyle}>
                     <Button
                         className={classes.connectWalletBtn}
-                        label={!!account ? userAddress : 'Connect Wallet'}
+                        label={'Connect Wallet'}
                     />
                 </NavLink>
             )}
