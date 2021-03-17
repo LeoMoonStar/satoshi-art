@@ -3,7 +3,6 @@ import MUIButton, { ButtonProps } from '@material-ui/core/Button'
 
 interface CustomProps extends ButtonProps {
     label?: string
-    onClick?: () => void
 }
 
 function Button({
