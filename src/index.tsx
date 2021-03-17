@@ -4,6 +4,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import './index.css'
 import App from './App'
 import { getLibrary } from './utils/helpers'
+import './i18n'
 
 function SatoshiArt() {
     return (

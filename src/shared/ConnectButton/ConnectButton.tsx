@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { Modal, Typography } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 import Button from 'shared/Button'
 import { useWallets } from 'hooks/useWallets'
 import { shortAddress } from 'utils/helpers'
@@ -9,6 +10,7 @@ import useStyles from './ConnectWallet.style'
 
 const ConnectButton = (): JSX.Element => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     const [open, setOpen] = useState<boolean>(false)
 
@@ -51,7 +53,7 @@ const ConnectButton = (): JSX.Element => {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            Install Metamask
+                            {t('Install')} Metamask
                         </a>
                     </Typography>
                 </div>

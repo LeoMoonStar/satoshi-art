@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { Typography, Divider } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import Button from 'shared/Button'
 import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
@@ -11,6 +12,7 @@ import useStyles from './Wallets.style'
 
 function Wallets(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.container}>
@@ -25,13 +27,13 @@ function Wallets(): JSX.Element {
                             to={'/productpage'}
                         >
                             <ArrowBackIcon />
-                            <Typography variant="h5">Go Back</Typography>
+                            <Typography variant="h5">{t('goBack')}</Typography>
                         </NavLink>
                         <Typography
                             className={classes.backBtnText}
                             variant="h2"
                         >
-                            Connect your wallet
+                            {t('cnYourWallet')}
                         </Typography>
                         <Divider
                             classes={{
@@ -42,18 +44,16 @@ function Wallets(): JSX.Element {
                             className={classes.description}
                             variant="h6"
                         >
-                            Connect with one of available wallet providers or
-                            create a new wallet.{' '}
+                            {t('cnWithOneOfProviders')}{' '}
                             <span className={classes.walletInfo}>
-                                What is wallet?
+                                {t('whatIsWallet')}
                             </span>
                         </Typography>
                         <Typography
                             className={classes.privateRules}
                             variant="h6"
                         >
-                            We do not own your private keys and cannot access
-                            your funds without your confirmation.
+                            {t('weDontOwnKeys')}
                         </Typography>
                     </div>
                     <div className={classes.connectors}>

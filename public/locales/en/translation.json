@@ -1,3 +1,27 @@
 {
-  "noWallet": "No Ethereum wallet found"
+  "emailAddress": "Email address",
+  "subscribe": "Subscribe",
+  "More Satoshi": "More Satoshi",
+  "Privacy": "Privacy",
+  "Community": "Community",
+  "Help": "Help",
+  "Cookie preferences": "Cookie preferences",
+  "Blog": "Blog",
+  "Install": "Install",
+  "goBack": "Go back",
+  "cnYourWallet": "Connect your wallet",
+  "cnWithOneOfProviders": "Connect with one of available wallet providers or create a new wallet.",
+  "whatIsWallet": "What is wallet?",
+  "weDontOwnKeys": "We do not own your private keys and cannot access your funds without your confirmation.",
+  "Info": "Info",
+  "Owners": "Owners",
+  "History": "History",
+  "Bids": "Bids",
+  "thereIsNoDscr": "There is no description provided for this collectible",
+  "highestBidBy": "Highest bid by",
+  "buyNow": "Buy now",
+  "placeABid": "Place a bid",
+  "serviceFee": "Service fee",
+  "Owner": "Owner",
+  "Creator": "Creator"
 }

@@ -1,11 +1,13 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 import { ReactComponent as OwnerIndicator } from 'shared/icons/ownerIndicator.svg'
 import { ReactComponent as CreatorIndicator } from 'shared/icons/creatorIndicator.svg'
 import useStyles from './TokenInfo.style'
 
 export const TokenInfo = (): JSX.Element => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.container}>
@@ -30,7 +32,7 @@ export const TokenInfo = (): JSX.Element => {
                             variant="subtitle1"
                             className={classes.artistRole}
                         >
-                            Owner
+                            {t('Owner')}
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
@@ -55,7 +57,7 @@ export const TokenInfo = (): JSX.Element => {
                             variant="subtitle1"
                             className={classes.artistRole}
                         >
-                            Creator
+                            {t('Creator')}
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
