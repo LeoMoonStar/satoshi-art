@@ -21,7 +21,8 @@ const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
 
     const connectWallet = async () => {
         const connector = wallet.createConnector()
-        activate(connector).then(() => history.goBack())
+        await activate(connector)
+        history.goBack()
     }
 
     const Logo = wallet.logo
