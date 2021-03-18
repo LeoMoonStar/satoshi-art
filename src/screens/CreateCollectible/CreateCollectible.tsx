@@ -1,12 +1,12 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 import { LeftArrowIcon } from 'shared/icons'
 import multipleCollectible from 'shared/images/multipleCollectible.svg'
 import singleCollectible from 'shared/images/singleCollectible.svg'
 
 import Layout from 'shared/Layout'
 import useStyles from './CreateCollectible.style'
-import { useTranslation } from 'react-i18next'
 
 export default function CreateCollectible(): JSX.Element {
     const classes = useStyles()
