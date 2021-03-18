@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { IconButton, Button } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import Avatar from 'shared/Avatar'
 import { LikeIcon, SaveIcon, ViewsIcon, ThreeDotsIcon } from 'shared/icons'
@@ -7,7 +8,6 @@ import artistAvatar from 'shared/images/artist/avatar.jpg'
 import nftImage from 'shared/images/nft.svg'
 
 import useStyles from './ArtistDetails.style'
-import { useTranslation } from 'react-i18next'
 
 export default function ArtistDetails(): JSX.Element {
     const classes = useStyles()
