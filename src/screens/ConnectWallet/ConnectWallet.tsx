@@ -5,7 +5,7 @@ import Wallets from './Wallets'
 
 import useStyles from './ConnectWallet.style'
 
-function ConnectWallet(): JSX.Element {
+export default function ConnectWallet(): JSX.Element {
     const classes = useStyles()
 
     return (
@@ -19,5 +19,3 @@ function ConnectWallet(): JSX.Element {
         </div>
     )
 }
-
-export default ConnectWallet
