@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import useStyles from './FooterMenu.style'
 
@@ -31,6 +32,7 @@ const foooterMenu = [
 
 function FooterMenu(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div>
@@ -41,7 +43,7 @@ function FooterMenu(): JSX.Element {
                         className={classes.link}
                         href={menuItem.url}
                     >
-                        {menuItem.label}
+                        {t(menuItem.label)}
                     </a>
                 )
             })}

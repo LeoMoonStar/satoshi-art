@@ -8,6 +8,7 @@ import {
     Tabs,
     Theme,
 } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 import { ReactComponent as SaveIcon } from 'shared/icons/save.svg'
 import { ReactComponent as ExpandIcon } from 'shared/icons/expand.svg'
 import { ReactComponent as DotsIcon } from 'shared/icons/dots.svg'
@@ -66,6 +67,7 @@ const TokenDetails = (): JSX.Element => {
     const [tab, selectTab] = useState(TabVariants.INFO)
 
     const classes = useStyles()
+    const { t } = useTranslation()
 
     const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => {
         selectTab(newValue)
@@ -156,8 +158,7 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                     <div className={classes.descriptionContainer}>
                         <Typography variant="h4">
-                            There is no description provided for this
-                            collectible
+                            {t('thereIsNoDscr')}
                         </Typography>
                     </div>
                 </div>
@@ -181,7 +182,7 @@ const TokenDetails = (): JSX.Element => {
                             disableRipple
                             selected={tab === value}
                             value={value}
-                            label={label}
+                            label={t(label)}
                         />
                     ))}
                 </Tabs>
@@ -192,7 +193,9 @@ const TokenDetails = (): JSX.Element => {
                 <Grid>
                     <div className={classes.highestBidInfoContainer}>
                         <div className={classes.highestBidContainer}>
-                            <Typography variant="h6">Highest bid by</Typography>
+                            <Typography variant="h6">
+                                {t('highestBidBy')}
+                            </Typography>
                             <Typography
                                 variant="h6"
                                 className={classes.walletAddress}
@@ -212,16 +215,18 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                     <div className={classes.buttonsContainer}>
                         <Button
-                            label={'Buy now'}
+                            label={t('buyNow')}
                             className={classes.buyButton}
                         />
                         <Button
-                            label={'Place a bid'}
+                            label={t('placeABid')}
                             className={classes.placeBidButton}
                         />
                     </div>
                     <div className={classes.serviceFeeInfoContainer}>
-                        <Typography variant="h6">Service fee 2.5%.</Typography>
+                        <Typography variant="h6">
+                            {t('serviceFee', { fee: '2.5' })}
+                        </Typography>
                         <Typography
                             variant="h6"
                             className={classes.serviceCryptoFee}
