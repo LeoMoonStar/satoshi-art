@@ -6,33 +6,33 @@ import singleCollectible from 'shared/images/singleCollectible.svg'
 
 import Layout from 'shared/Layout'
 import useStyles from './CreateCollectible.style'
+import { useTranslation } from 'react-i18next'
 
-function Product(): JSX.Element {
+export default function CreateCollectible(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
+
     return (
         <Layout>
             <div className={classes.container}>
                 <div className={classes.contentCard}>
                     <Button className={classes.goBack}>
-                        <LeftArrowIcon /> Go Back
+                        <LeftArrowIcon /> {t('goBack')}
                     </Button>
-                    <h1 className={classes.title}>Create collectible</h1>
+                    <h1 className={classes.title}>{t('Create collectible')}</h1>
 
                     <div className={classes.content}>
-                        Choose “Single” if you want your collectible to be one
-                        of a kind or “Multiple” if you want to sell one
-                        collectible multiple times
+                        {t('chooseSingleIfYouWantYourCollectible')}
                     </div>
 
                     <div className={classes.additionalInfo}>
-                        We do not own your private keys and cannot access your
-                        funds without your confirmation.
+                        {t('createCollectibleAdditionalInfo')}
                     </div>
                 </div>
                 <div className={classes.cards}>
                     <button type="button" className={classes.card}>
                         <img src={singleCollectible} alt="" />
-                        <h3 className={classes.cardTitle}>Single</h3>
+                        <h3 className={classes.cardTitle}>{t('Single')}</h3>
                     </button>
 
                     <button type="button" className={classes.card}>
@@ -44,5 +44,3 @@ function Product(): JSX.Element {
         </Layout>
     )
 }
-
-export default Product
