@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: '100%',
+            paddingTop: 50,
         },
         logo: {
             marginLeft: 68,
