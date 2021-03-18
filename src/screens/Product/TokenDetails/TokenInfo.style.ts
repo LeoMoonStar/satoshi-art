@@ -1,6 +1,14 @@
 import { makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => {
+    const artistLinkStyles = {
+        textDecoration: 'none',
+        color: '#000',
+        '&:hover': {
+            textDecoration: 'underline',
+        },
+    }
+
     return {
         container: {
             display: 'flex',
@@ -10,17 +18,20 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexDirection: 'row',
             marginTop: 18,
+            ...artistLinkStyles,
         },
         creatorContainer: {
             display: 'flex',
             flexDirection: 'row',
             margin: '18px 0px 26px 0px',
+            ...artistLinkStyles,
         },
         collectionContainer: {
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'row',
             marginTop: 25,
+            ...artistLinkStyles,
         },
         divider: {
             height: 1,

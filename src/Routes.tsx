@@ -10,13 +10,13 @@ function Routes(): JSX.Element {
         <Suspense fallback={null}>
             <BrowserRouter>
                 <Switch>
-                    <Route path={`/productpage`}>
+                    <Route path="/productpage">
                         <Product />
                     </Route>
-                    <Route path={`/connect`}>
+                    <Route path="/connect">
                         <ConnectWallet />
                     </Route>
-                    <Route path={`/artist`}>
+                    <Route path="/artists/:id">
                         <Artist />
                     </Route>
                 </Switch>
