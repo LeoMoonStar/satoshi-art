@@ -23,5 +23,8 @@
   "placeABid": "Place a bid",
   "serviceFee": "Service fee {{ fee }}%.",
   "Owner": "Owner",
-  "Creator": "Creator"
+  "Creator": "Creator",
+  "Follow": "Follow",
+  "Like": "Like",
+  "View": "View"
 }

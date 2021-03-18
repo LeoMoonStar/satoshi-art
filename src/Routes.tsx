@@ -3,17 +3,21 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import Product from 'screens/Product'
 import ConnectWallet from 'screens/ConnectWallet'
+import Artist from 'screens/Artist'
 
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
             <BrowserRouter>
                 <Switch>
-                    <Route path={`/productpage`}>
+                    <Route path="/productpage">
                         <Product />
                     </Route>
-                    <Route path={`/connect`}>
+                    <Route path="/connect">
                         <ConnectWallet />
+                    </Route>
+                    <Route path="/artists/:id">
+                        <Artist />
                     </Route>
                 </Switch>
             </BrowserRouter>

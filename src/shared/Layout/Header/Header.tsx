@@ -2,12 +2,14 @@ import React from 'react'
 import { Input } from '@material-ui/core'
 import Button from 'shared/Button'
 
-import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
 import ConnectButton from 'shared/ConnectButton'
-import { ReactComponent as SearchIcon1 } from 'shared/icons/searchIcons/searchIcon1.svg'
-import { ReactComponent as SearchIcon2 } from 'shared/icons/searchIcons/searchIcon2.svg'
-import { ReactComponent as SearchIcon3 } from 'shared/icons/searchIcons/searchIcon3.svg'
-import { ReactComponent as SearchIcon4 } from 'shared/icons/searchIcons/searchIcon4.svg'
+import {
+    LogoIcon,
+    SearchIcon1,
+    SearchIcon2,
+    SearchIcon3,
+    SearchIcon4,
+} from 'shared/icons'
 import useStyles from './Header.style'
 
 function Header(): JSX.Element {

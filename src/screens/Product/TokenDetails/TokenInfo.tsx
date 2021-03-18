@@ -1,8 +1,9 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import { ReactComponent as OwnerIndicator } from 'shared/icons/ownerIndicator.svg'
-import { ReactComponent as CreatorIndicator } from 'shared/icons/creatorIndicator.svg'
+import { Link } from 'react-router-dom'
+
+import Avatar from 'shared/Avatar'
 import useStyles from './TokenInfo.style'
 
 export const TokenInfo = (): JSX.Element => {
@@ -12,20 +13,14 @@ export const TokenInfo = (): JSX.Element => {
     return (
         <div className={classes.container}>
             <div>
-                <div className={classes.ownerContainer}>
+                <Link to="/artists/1" className={classes.ownerContainer}>
                     <div className={classes.imageWrapper}>
-                        <img
-                            className={classes.profilePhoto}
-                            src={
-                                'https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240'
-                            }
-                            alt={'Profile photo'}
+                        <Avatar
+                            size={48}
+                            alt="Profile photo"
+                            status="premium"
+                            image="https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240"
                         />
-                        <div className={classes.iconContainer}>
-                            <div className={classes.iconWrapper}>
-                                <OwnerIndicator />
-                            </div>
-                        </div>
                     </div>
                     <div className={classes.artistInfo}>
                         <Typography
@@ -36,21 +31,15 @@ export const TokenInfo = (): JSX.Element => {
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
-                </div>
-                <div className={classes.creatorContainer}>
+                </Link>
+                <Link to="/artists/1" className={classes.creatorContainer}>
                     <div className={classes.imageWrapper}>
-                        <img
-                            className={classes.profilePhoto}
-                            src={
-                                'https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240'
-                            }
-                            alt={'Profile photo'}
+                        <Avatar
+                            size={48}
+                            alt="Profile photo"
+                            status="premium"
+                            image="https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240"
                         />
-                        <div className={classes.iconContainer}>
-                            <div className={classes.iconWrapper}>
-                                <CreatorIndicator />
-                            </div>
-                        </div>
                     </div>
                     <div className={classes.artistInfo}>
                         <Typography
@@ -61,16 +50,14 @@ export const TokenInfo = (): JSX.Element => {
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
-                </div>
+                </Link>
             </div>
             <div className={classes.divider} />
-            <div className={classes.collectionContainer}>
-                <img
-                    className={classes.profilePhoto}
-                    src={
-                        'https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240'
-                    }
-                    alt={'Profile photo'}
+            <Link to="/artists/1" className={classes.collectionContainer}>
+                <Avatar
+                    size={48}
+                    alt="Profile photo"
+                    image="https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240"
                 />
                 <div className={classes.artistInfo}>
                     <Typography
@@ -81,7 +68,7 @@ export const TokenInfo = (): JSX.Element => {
                     </Typography>
                     <Typography variant="h3">Fimbim</Typography>
                 </div>
-            </div>
+            </Link>
         </div>
     )
 }
