@@ -5,7 +5,7 @@ import Footer from './Footer'
 import useStyles from './Layout.style'
 
 type ILayoutProps = {
-    children: JSX.Element
+    children: React.ReactNode
 }
 
 function Layout({ children }: ILayoutProps): JSX.Element {

@@ -4,7 +4,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { Typography, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
-import { ReactComponent as LogoIcon } from 'shared/icons/logoHeader.svg'
+import { LogoIcon } from 'shared/icons'
 
 import useStyles from './Wallets.style'
 import WalletOption from '../WalletOption'

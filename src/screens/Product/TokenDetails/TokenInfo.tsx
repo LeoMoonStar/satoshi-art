@@ -1,8 +1,7 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import { ReactComponent as OwnerIndicator } from 'shared/icons/ownerIndicator.svg'
-import { ReactComponent as CreatorIndicator } from 'shared/icons/creatorIndicator.svg'
+import { OwnerIndicator, CreatorIndicator } from 'shared/icons'
 import useStyles from './TokenInfo.style'
 
 export const TokenInfo = (): JSX.Element => {
