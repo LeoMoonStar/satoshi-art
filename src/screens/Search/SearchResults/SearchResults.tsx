@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import SearchHeader from '../SearchHeader'
 import Works from 'shared/Works'
 
