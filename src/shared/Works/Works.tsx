@@ -33,13 +33,13 @@ function ProductsList(): JSX.Element {
                                 <h2 className={classes.name}>Fresh Meat #F</h2>
                                 <div className={classes.actionButtons}>
                                     <IconButton
-                                        title={t('Like')}
+                                        title={t('like')}
                                         className={classes.actionButton}
                                     >
                                         <SaveIcon />
                                     </IconButton>
                                     <IconButton
-                                        title={t('View')}
+                                        title={t('view')}
                                         className={classes.actionButton}
                                     >
                                         <ViewsIcon />

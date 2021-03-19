@@ -19,7 +19,7 @@ export default function CreateCollectible(): JSX.Element {
                     <Button className={classes.goBack}>
                         <LeftArrowIcon /> {t('goBack')}
                     </Button>
-                    <h1 className={classes.title}>{t('Create collectible')}</h1>
+                    <h1 className={classes.title}>{t('createCollectible')}</h1>
 
                     <div className={classes.content}>
                         {t('chooseSingleIfYouWantYourCollectible')}
@@ -32,12 +32,12 @@ export default function CreateCollectible(): JSX.Element {
                 <div className={classes.cards}>
                     <button type="button" className={classes.card}>
                         <img src={singleCollectible} alt="" />
-                        <h3 className={classes.cardTitle}>{t('Single')}</h3>
+                        <h3 className={classes.cardTitle}>{t('single')}</h3>
                     </button>
 
                     <button type="button" className={classes.card}>
                         <img src={multipleCollectible} alt="" />
-                        <h3 className={classes.cardTitle}>Multiple</h3>
+                        <h3 className={classes.cardTitle}>{t('multiple')}</h3>
                     </button>
                 </div>
             </div>

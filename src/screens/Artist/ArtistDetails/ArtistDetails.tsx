@@ -36,7 +36,7 @@ export default function ArtistDetails(): JSX.Element {
                             220
                         </div>
                         <Button className={classes.followButton}>
-                            {t('Follow')}
+                            {t('follow')}
                         </Button>
                     </div>
                 </div>

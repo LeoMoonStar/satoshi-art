@@ -22,14 +22,15 @@
   "buyNow": "Buy now",
   "placeABid": "Place a bid",
   "serviceFee": "Service fee {{ fee }}%.",
-  "Owner": "Owner",
-  "Creator": "Creator",
-  "Follow": "Follow",
-  "Like": "Like",
-  "View": "View",
-  "Create collectible": "Create collectible",
+  "owner": "Owner",
+  "creator": "Creator",
+  "follow": "Follow",
+  "like": "Like",
+  "view": "View",
+  "createCollectible": "Create collectible",
   "chooseSingleIfYouWantYourCollectible": "Choose “Single” if you want your collectible to be one of a kind or “Multiple” if you want to sell one collectible multiple times",
   "createCollectibleAdditionalInfo": "We do not own your private keys and cannot access your funds without your confirmation.",
-  "Single": "Single",
-  "Multiple": "Multiple"
+  "single": "Single",
+  "multiple": "Multiple",
+  "create": "Create"
 }

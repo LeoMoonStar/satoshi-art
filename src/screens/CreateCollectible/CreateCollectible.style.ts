@@ -23,8 +23,8 @@ const useStyles = makeStyles(() => {
             marginTop: 33,
         },
         goBack: {
-            marinRight: 'auto',
-            fontSIze: 20,
+            marginRight: 'auto',
+            fontSize: 20,
             fontWeight: 600,
             textTransform: 'initial',
             '& svg': {
