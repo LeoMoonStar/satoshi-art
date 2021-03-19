@@ -76,8 +76,14 @@ const useStyles = makeStyles((theme) => {
         crossBtn: {
             fontWeight: 300,
             margin: '0 12px 0 12px',
+            border: 'none',
+            backgroundColor: theme.palette.primary.main,
             fontSize: 20,
             cursor: 'pointer',
+
+            '&:focus': {
+                outline: 'none',
+            },
         },
         clearBtn: {
             color: '#3E85F0',

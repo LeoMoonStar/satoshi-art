@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Input, Divider, Chip, Select, MenuItem } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import useStyles from './SearchHeader.style'
 
@@ -30,6 +31,7 @@ const tags: TagType[] = [
 
 const SearchHeader = (): JSX.Element => {
     const classes = useStyles()
+    const { t } = useTranslation()
     const [selectedTags, setSelectedTags] = useState([tags[0]])
 
     const addTag = (tag: TagType) => {
@@ -67,7 +69,9 @@ const SearchHeader = (): JSX.Element => {
             </div>
             <div className={classes.filters}>
                 <div className={classes.selectedTagsList}>
-                    <div className={classes.resultsCount}>7.943 results</div>
+                    <div className={classes.resultsCount}>
+                        {t('resultsCnt', { cnt: '7.943' })}
+                    </div>
                     <div className={classes.tags}>
                         {selectedTags.map((tag, index) => (
                             <div className={classes.chosenTag} key={tag.id}>
@@ -75,18 +79,18 @@ const SearchHeader = (): JSX.Element => {
                                     <Divider orientation="vertical" />
                                 )}
                                 <span>{tag.title}</span>
-                                <span
+                                <button
                                     onClick={() => removeTag(tag)}
                                     className={classes.crossBtn}
                                 >
                                     x
-                                </span>
+                                </button>
                             </div>
                         ))}
                     </div>
                     {selectedTags.length >= 1 && (
                         <button onClick={clearAll} className={classes.clearBtn}>
-                            Clear All
+                            {t('clearAll')}
                         </button>
                     )}
                 </div>
@@ -115,7 +119,7 @@ const SearchHeader = (): JSX.Element => {
                         }}
                         disableUnderline
                     >
-                        <MenuItem value="default">All items</MenuItem>
+                        <MenuItem value="default">{t('allItems')}</MenuItem>
                         <MenuItem value="Option1">Option1</MenuItem>
                         <MenuItem value="Option2">Option2</MenuItem>
                         <MenuItem value="Option3">Option3</MenuItem>
@@ -143,7 +147,7 @@ const SearchHeader = (): JSX.Element => {
                         }}
                         disableUnderline
                     >
-                        <MenuItem value="default">Sort By</MenuItem>
+                        <MenuItem value="default">{t('sortBy')}</MenuItem>
                         <MenuItem value="Option1">Option1</MenuItem>
                         <MenuItem value="Option2">Option2</MenuItem>
                         <MenuItem value="Option3">Option3</MenuItem>

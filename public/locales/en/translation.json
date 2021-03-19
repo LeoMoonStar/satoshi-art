@@ -26,5 +26,9 @@
   "Creator": "Creator",
   "Follow": "Follow",
   "Like": "Like",
-  "View": "View"
+  "View": "View",
+  "clearAll": "Clear all",
+  "resultsCnt": " {{ cnt }} results",
+  "allItems": "All items",
+  "sortBy": "Sort by"
 }
