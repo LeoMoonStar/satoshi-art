@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => {
             color: theme.palette.primary.main,
             borderRadius: 40,
         },
+        createLink: {
+            textDecoration: 'none',
+        },
         createBtn: {
             width: 157,
             height: 40,

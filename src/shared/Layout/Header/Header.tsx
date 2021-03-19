@@ -1,7 +1,9 @@
 import React from 'react'
 import { Input } from '@material-ui/core'
-import Button from 'shared/Button'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
+import Button from 'shared/Button'
 import ConnectButton from 'shared/ConnectButton'
 import {
     LogoIcon,
@@ -14,6 +16,7 @@ import useStyles from './Header.style'
 
 function Header(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.container}>
@@ -41,7 +44,9 @@ function Header(): JSX.Element {
 
                 <ConnectButton />
 
-                <Button label={'Create'} className={classes.createBtn} />
+                <Link to="/create-collectible" className={classes.createLink}>
+                    <Button label={t('create')} className={classes.createBtn} />
+                </Link>
             </div>
         </div>
     )

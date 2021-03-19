@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Product from 'screens/Product'
 import ConnectWallet from 'screens/ConnectWallet'
 import Artist from 'screens/Artist'
+import CreateCollectible from 'screens/CreateCollectible'
 
 function Routes(): JSX.Element {
     return (
@@ -18,6 +19,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/artists/:id">
                         <Artist />
+                    </Route>
+                    <Route path="/create-collectible">
+                        <CreateCollectible />
                     </Route>
                 </Switch>
             </BrowserRouter>
