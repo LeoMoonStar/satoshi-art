@@ -137,14 +137,16 @@ const useStyles = makeStyles((theme) => {
                 paddingBottom: 12,
             },
             '& li:hover': {
-                background: indigo[100],
+                color: theme.palette.primary.main,
+                background: theme.custom.common.purpleColor,
             },
             '& li.Mui-selected': {
-                color: 'white',
-                background: indigo[400],
+                color: theme.palette.primary.main,
+                background: theme.custom.common.purpleColor,
             },
             '& li.Mui-selected:hover': {
-                background: indigo[500],
+                color: theme.palette.primary.main,
+                background: theme.custom.common.purpleColor,
             },
         },
     }
