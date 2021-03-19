@@ -1,7 +1,9 @@
 import React from 'react'
 import { Input, Modal } from '@material-ui/core'
-import Button from 'shared/Button'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
+import Button from 'shared/Button'
 import ConnectButton from 'shared/ConnectButton'
 import Followers from 'shared/Followers'
 import {
@@ -28,6 +30,7 @@ function getModalStyle() {
 
 function Header(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
     const [modalStyle] = React.useState(getModalStyle)
     const [open, setOpen] = React.useState(false)
 
@@ -65,8 +68,10 @@ function Header(): JSX.Element {
 
                 <ConnectButton />
 
-                <Button label={'Create'} className={classes.createBtn} />
-                {/* @TODO: Temporary button*/}
+                <Link to="/create-collectible" className={classes.createLink}>
+                    <Button label={t('create')} className={classes.createBtn} />
+                </Link>
+                {/* @TODO: Move btn and modal to the right places*/}
                 <Button onClick={handleOpen} label="Followers/Following" />
                 <Modal
                     open={open}

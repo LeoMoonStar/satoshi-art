@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            height: '100%',
+            paddingTop: 50,
         },
         logo: {
             marginLeft: 68,
@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.custom.common.pinkColor,
             color: theme.palette.primary.main,
             borderRadius: 40,
+        },
+        createLink: {
+            textDecoration: 'none',
         },
         createBtn: {
             width: 157,
