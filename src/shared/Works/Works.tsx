@@ -1,8 +1,9 @@
 import React from 'react'
 import { IconButton, Button } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import { SaveIcon, ViewsIcon, LoaderIcon } from 'shared/icons'
+import { SaveIcon, ViewsIcon } from 'shared/icons'
 import Avatar from 'shared/Avatar'
+import Loader from 'shared/Loader'
 import preview from 'shared/images/artist/work.jpg'
 import artistAvatar from 'shared/images/artist/avatar.jpg'
 
@@ -61,9 +62,7 @@ function ProductsList(): JSX.Element {
                 ))}
             </div>
 
-            <div className={classes.loader}>
-                <LoaderIcon />
-            </div>
+            <Loader />
         </div>
     )
 }

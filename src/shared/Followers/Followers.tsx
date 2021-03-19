@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Tab, Tabs, Divider } from '@material-ui/core'
+import { Tab, Tabs } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import Loader from 'shared/Loader'
 import FollowersUser from './FollowersUser'
 import FollowersGallery from './FollowersGallery'
 import useStyles from './Followers.style'
@@ -21,7 +22,7 @@ const tabs = [
     },
 ]
 
-const Followers = () => {
+const Followers = (): JSX.Element => {
     const classes = useStyles()
     const { t } = useTranslation()
     const [tab, selectTab] = useState(TabVariants.FOLLOWERS)
@@ -32,7 +33,7 @@ const Followers = () => {
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                <div>
+                <div className={classes.tabsWrapper}>
                     <Tabs
                         value={tab}
                         onChange={handleTab}
@@ -45,11 +46,11 @@ const Followers = () => {
                         {tabs.map(({ label, value }) => (
                             <Tab
                                 key={`${label}_${Math.random()}`}
-                                // classes={{
-                                //     root: classes.styledTab,
-                                //     selected: classes.selectedTab,
-                                // }}
                                 disableRipple
+                                classes={{
+                                    root: classes.styledTab,
+                                    selected: classes.selectedTab,
+                                }}
                                 selected={tab === value}
                                 value={value}
                                 label={t(label)}
@@ -57,16 +58,18 @@ const Followers = () => {
                         ))}
                     </Tabs>
                 </div>
-                <button className={classes.closeBtn}>x</button>
             </div>
             <div>
-                <Divider />
-                <div>
+                <div className={classes.row}>
                     <FollowersUser />
                     <FollowersGallery />
                 </div>
-                <Divider />
+                <div className={classes.row}>
+                    <FollowersUser />
+                    <FollowersGallery />
+                </div>
             </div>
+            <Loader />
         </div>
     )
 }

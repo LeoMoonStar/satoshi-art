@@ -76,6 +76,12 @@ function Header(): JSX.Element {
                 >
                     <div style={modalStyle}>
                         <Followers />
+                        <button
+                            onClick={handleClose}
+                            className={classes.closeBtn}
+                        >
+                            x
+                        </button>
                     </div>
                 </Modal>
             </div>

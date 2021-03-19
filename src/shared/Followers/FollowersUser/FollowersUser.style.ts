@@ -33,9 +33,11 @@ const useStyles = makeStyles((theme) => {
         },
         socialBtn: {
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'baseline',
             color: theme.custom.common.darkerGrayColor,
-
+            '& span': {
+                marginLeft: 5,
+            },
             '&:first-of-type': {
                 marginRight: 20,
             },
