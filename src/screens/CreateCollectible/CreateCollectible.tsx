@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
+
 import { LeftArrowIcon } from 'shared/icons'
 import multipleCollectible from 'shared/images/multipleCollectible.svg'
 import singleCollectible from 'shared/images/singleCollectible.svg'
@@ -11,12 +13,15 @@ import useStyles from './CreateCollectible.style'
 export default function CreateCollectible(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+    const history = useHistory()
+
+    const handleGoBack = () => history.goBack()
 
     return (
         <Layout>
             <div className={classes.container}>
                 <div className={classes.contentCard}>
-                    <Button className={classes.goBack}>
+                    <Button className={classes.goBack} onClick={handleGoBack}>
                         <LeftArrowIcon /> {t('goBack')}
                     </Button>
                     <h1 className={classes.title}>{t('createCollectible')}</h1>
