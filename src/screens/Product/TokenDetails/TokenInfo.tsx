@@ -27,7 +27,7 @@ export const TokenInfo = (): JSX.Element => {
                             variant="subtitle1"
                             className={classes.artistRole}
                         >
-                            {t('Owner')}
+                            {t('owner')}
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
@@ -46,7 +46,7 @@ export const TokenInfo = (): JSX.Element => {
                             variant="subtitle1"
                             className={classes.artistRole}
                         >
-                            {t('Creator')}
+                            {t('creator')}
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
