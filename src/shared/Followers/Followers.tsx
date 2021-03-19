@@ -68,6 +68,18 @@ const Followers = (): JSX.Element => {
                     <FollowersUser />
                     <FollowersGallery />
                 </div>
+                <div className={classes.row}>
+                    <FollowersUser />
+                    <FollowersGallery />
+                </div>
+                <div className={classes.row}>
+                    <FollowersUser />
+                    <FollowersGallery />
+                </div>
+                <div className={classes.row}>
+                    <FollowersUser />
+                    <FollowersGallery />
+                </div>
             </div>
             <Loader />
         </div>

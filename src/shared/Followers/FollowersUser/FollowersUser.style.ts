@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => {
             color: theme.custom.common.purpleColor,
             borderRadius: 40,
             marginLeft: 10,
+            textTransform: 'none',
         },
         info: {
             color: theme.custom.common.darkerGrayColor,
@@ -29,11 +30,10 @@ const useStyles = makeStyles((theme) => {
         },
         socialBtns: {
             display: 'flex',
-            alignItems: 'center',
         },
         socialBtn: {
             display: 'flex',
-            alignItems: 'baseline',
+            alignItems: 'center',
             color: theme.custom.common.darkerGrayColor,
             '& span': {
                 marginLeft: 5,
