@@ -32,5 +32,9 @@
   "createCollectibleAdditionalInfo": "We do not own your private keys and cannot access your funds without your confirmation.",
   "single": "Single",
   "multiple": "Multiple",
-  "create": "Create"
+  "create": "Create",
+  "clearAll": "Clear all",
+  "resultsCnt": " {{ cnt }} results",
+  "allItems": "All items",
+  "sortBy": "Sort by"
 }

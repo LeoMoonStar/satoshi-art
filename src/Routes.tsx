@@ -5,6 +5,7 @@ import Product from 'screens/Product'
 import ConnectWallet from 'screens/ConnectWallet'
 import Artist from 'screens/Artist'
 import CreateCollectible from 'screens/CreateCollectible'
+import Search from 'screens/Search'
 
 function Routes(): JSX.Element {
     return (
@@ -22,6 +23,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/create-collectible">
                         <CreateCollectible />
+                    </Route>
+                    <Route path="/search">
+                        <Search />
                     </Route>
                 </Switch>
             </BrowserRouter>

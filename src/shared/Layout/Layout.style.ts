@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => {
             background: theme.palette.primary.main,
         },
         header: {
-            minHeight: 130,
             position: 'sticky',
             top: 0,
             backgroundColor: theme.palette.primary.main,
@@ -18,6 +17,7 @@ const useStyles = makeStyles((theme) => {
         },
         content: {
             flex: '1 0 auto',
+            paddingTop: 45,
         },
         footer: {
             background: 'black',
