@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             color: theme.custom.common.darkerGrayColor,
+            textDecoration: 'none',
             '& span': {
                 marginLeft: 5,
             },

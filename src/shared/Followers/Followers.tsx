@@ -4,19 +4,19 @@ import { useTranslation } from 'react-i18next'
 import FollowersList from './FollowersList'
 import useStyles from './Followers.style'
 
-enum TabVariants {
-    FOLLOWERS = 0,
-    FOLLOWING = 1,
+export enum TabVariants {
+    Followers = 0,
+    Following = 1,
 }
 
 const tabs = [
     {
         label: 'Followers',
-        value: TabVariants.FOLLOWERS,
+        value: TabVariants.Followers,
     },
     {
         label: 'Following',
-        value: TabVariants.FOLLOWING,
+        value: TabVariants.Following,
     },
 ]
 
@@ -74,10 +74,14 @@ const followings = [
     },
 ]
 
-const Followers = (): JSX.Element => {
+type FollowersProp = {
+    active: TabVariants
+}
+
+const Followers: React.FC<FollowersProp> = ({ active }): JSX.Element => {
     const classes = useStyles()
     const { t } = useTranslation()
-    const [tab, selectTab] = useState(TabVariants.FOLLOWERS)
+    const [tab, selectTab] = useState(active)
 
     const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => {
         selectTab(newValue)
@@ -94,9 +98,9 @@ const Followers = (): JSX.Element => {
                         },
                     }}
                 >
-                    {tabs.map(({ label, value }) => (
+                    {tabs.map(({ label, value }, index) => (
                         <Tab
-                            key={`${label}_${Math.random()}`}
+                            key={index}
                             disableRipple
                             classes={{
                                 root: classes.styledTab,
@@ -109,12 +113,16 @@ const Followers = (): JSX.Element => {
                     ))}
                 </Tabs>
             </div>
-            {tab === TabVariants.FOLLOWERS && (
-                <FollowersList users={followers} />
-            )}
-            {tab === TabVariants.FOLLOWING && (
-                <FollowersList users={followings} />
-            )}
+            {
+                {
+                    [TabVariants.Followers]: (
+                        <FollowersList users={followers} />
+                    ),
+                    [TabVariants.Following]: (
+                        <FollowersList users={followings} />
+                    ),
+                }[tab]
+            }
         </div>
     )
 }
