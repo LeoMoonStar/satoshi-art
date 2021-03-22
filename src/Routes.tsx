@@ -6,12 +6,16 @@ import ConnectWallet from 'screens/ConnectWallet'
 import Artist from 'screens/Artist'
 import CreateCollectible from 'screens/CreateCollectible'
 import Search from 'screens/Search'
+import Home from 'screens/Home'
 
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
             <BrowserRouter>
                 <Switch>
+                    <Route path="/home">
+                        <Home />
+                    </Route>
                     <Route path="/productpage">
                         <Product />
                     </Route>
