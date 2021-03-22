@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(() => {
+const useStyles = makeStyles((theme) => {
     return {
         container: {
             width: '100%',
@@ -57,7 +57,7 @@ const useStyles = makeStyles(() => {
             border: '1px solid #FF0099',
             borderRadius: 20,
             '& svg': {
-                stroke: '#FF0099',
+                stroke: theme.custom.common.pinkColor,
             },
         },
         notifiesCount: {
@@ -70,7 +70,7 @@ const useStyles = makeStyles(() => {
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: '50%',
-            backgroundColor: '#FF0099',
+            backgroundColor: theme.custom.common.pinkColor,
             color: '#fff',
         },
     }

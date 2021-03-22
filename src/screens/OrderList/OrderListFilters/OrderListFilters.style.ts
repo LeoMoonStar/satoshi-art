@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(() => {
+const useStyles = makeStyles((theme) => {
     return {
         container: {
             width: '100%',
@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => {
             fontWeight: 600,
         },
         infoText: {
-            color: '#C4C4C4',
+            color: theme.custom.common.grayColor,
         },
         selectIcon: {
             marginRight: 10,
