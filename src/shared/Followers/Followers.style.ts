@@ -4,8 +4,10 @@ const useStyles = makeStyles((theme) => {
     return {
         container: {
             backgroundColor: theme.palette.primary.main,
-            borderRadius: 30,
-            padding: 20,
+            borderRadius: 20,
+            minWidth: 1000,
+            border: '1px solid #E5E5E5',
+            padding: '32px 27px 40px 31px',
 
             '&:focus': {
                 outline: 0,
@@ -13,48 +15,24 @@ const useStyles = makeStyles((theme) => {
         },
         header: {
             display: 'flex',
-        },
-        tabsWrapper: {
-            flex: 1,
-        },
-        closeBtn: {
-            alignSelf: 'flex-start',
-            backgroundColor: theme.palette.primary.main,
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: 20,
-            fontWeight: 400,
+            paddingLeft: 40,
         },
         styledTab: {
+            minHeight: 0,
             textTransform: 'none',
             minWidth: 'max-content',
-            padding: '0px 15px 0px 5px',
+            padding: 0,
+            marginRight: 26,
             color: theme.custom.common.blackColor,
             opacity: 1,
-            fontWeight: 800,
+            fontWeight: 600,
+            fontSize: 16,
             '&:hover': {
                 color: theme.custom.common.pinkColor,
             },
         },
         selectedTab: {
             color: theme.custom.common.pinkColor,
-        },
-        row: {
-            display: 'flex',
-            padding: '20px 0',
-            borderBottom: `1px solid ${theme.custom.common.purpleColor}`,
-
-            '&:first-of-type': {
-                borderTop: `1px solid ${theme.custom.common.purpleColor}`,
-            },
-        },
-        loader: {
-            width: '100%',
-            margin: '16px 0',
-            textAlign: 'center',
-            '& svg': {
-                animation: '$loader 2s linear infinite',
-            },
         },
     }
 })

@@ -5,6 +5,9 @@ const useStyles = makeStyles((theme) => {
         noData: {
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
+            maxWidth: 585,
             color: theme.palette.primary.main,
             backgroundColor: theme.custom.common.grayColor,
             borderRadius: 15,
@@ -13,13 +16,15 @@ const useStyles = makeStyles((theme) => {
         },
         imgRow: {
             display: 'flex',
+            alignItems: 'center',
+            maxWidth: 585,
         },
         img: {
-            width: 150,
-            height: 100,
+            width: 109,
+            height: 83,
             marginLeft: 10,
 
-            '&:fist-child': {
+            '&:first-child': {
                 margin: 0,
             },
         },

@@ -65,8 +65,8 @@ const useStyles = makeStyles((theme) => {
             cursor: 'pointer',
             fontSize: 20,
             fontWeight: 400,
-            top: 20,
-            right: 20,
+            top: 21,
+            right: 23,
 
             '&:focus': {
                 outline: 0,

@@ -1,35 +1,16 @@
 import React from 'react'
 import useStyles from './FollowersGallery.style'
 
-const images = [
-    {
-        id: 1,
-        src:
-            'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg',
-    },
-    {
-        id: 2,
-        src:
-            'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg',
-    },
-    {
-        id: 3,
-        src:
-            'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg',
-    },
-    {
-        id: 4,
-        src:
-            'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg',
-    },
-    {
-        id: 5,
-        src:
-            'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg',
-    },
-]
+type ImageType = {
+    id: number
+    src: string
+}
 
-const FollowersGallery = (): JSX.Element => {
+const FollowersGallery = ({
+    images,
+}: {
+    images: Array<ImageType>
+}): JSX.Element => {
     const classes = useStyles()
     if (!images.length) {
         return (

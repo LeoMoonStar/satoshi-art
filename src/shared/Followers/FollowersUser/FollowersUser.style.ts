@@ -4,28 +4,33 @@ const useStyles = makeStyles((theme) => {
     return {
         container: {
             display: 'flex',
+            marginRight: 40,
         },
         bio: {
-            marginLeft: 20,
+            marginLeft: 17,
         },
         name: {
             display: 'flex',
             alignItems: 'center',
             color: theme.custom.common.purpleColor,
-            fontWeight: 400,
-            fontSize: 24,
+            fontWeight: 600,
+            fontSize: 20,
         },
         actionBtn: {
-            height: 20,
+            width: 68,
+            height: 17,
             border: `1px solid ${theme.custom.common.purpleColor}`,
             background: theme.palette.primary.main,
             color: theme.custom.common.purpleColor,
-            borderRadius: 40,
-            marginLeft: 10,
+            borderRadius: 100,
+            marginLeft: 8,
+            fontSize: 9,
+            fontWeight: 600,
             textTransform: 'none',
         },
         info: {
             color: theme.custom.common.darkerGrayColor,
+            fontSize: 11,
             marginBottom: 20,
         },
         socialBtns: {

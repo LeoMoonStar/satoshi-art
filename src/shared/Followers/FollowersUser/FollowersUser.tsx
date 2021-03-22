@@ -1,11 +1,11 @@
 import React from 'react'
 import Button from 'shared/Button'
 import Avatar from 'shared/Avatar'
-import { LikeIcon, ViewsIcon } from 'shared/icons'
+import { GreySaveIcon, ViewsIcon } from 'shared/icons'
 import artistAvatar from 'shared/images/artist/avatar.jpg'
 import useStyles from './FollowersUser.style'
 
-const FollowersUser = (): JSX.Element => {
+const FollowersUser = ({ name }: { name: string }): JSX.Element => {
     const classes = useStyles()
 
     return (
@@ -18,7 +18,7 @@ const FollowersUser = (): JSX.Element => {
             />
             <div className={classes.bio}>
                 <div className={classes.name}>
-                    <div>Fimbim</div>
+                    <div>{name}</div>
                     <Button className={classes.actionBtn}>Following</Button>
                 </div>
                 <div className={classes.info}>
@@ -27,7 +27,7 @@ const FollowersUser = (): JSX.Element => {
                 </div>
                 <div className={classes.socialBtns}>
                     <div className={classes.socialBtn}>
-                        <LikeIcon />
+                        <GreySaveIcon />
                         <span>21.0k</span>
                     </div>
                     <div className={classes.socialBtn}>
