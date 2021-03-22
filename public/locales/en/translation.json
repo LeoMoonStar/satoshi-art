@@ -36,5 +36,7 @@
   "clearAll": "Clear all",
   "resultsCnt": " {{ cnt }} results",
   "allItems": "All items",
-  "sortBy": "Sort by"
+  "sortBy": "Sort by",
+  "Followers": "Followers",
+  "Following": "Following"
 }
