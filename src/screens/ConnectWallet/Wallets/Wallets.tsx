@@ -9,14 +9,15 @@ import {
     Checkbox,
 } from '@material-ui/core'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
+
+import { useWallets } from 'hooks/useWallets'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
 import { LogoIcon } from 'shared/icons'
 
 import useStyles from './Wallets.style'
 import WalletOption from '../WalletOption'
-import { useWallets } from 'hooks/useWallets'
 
 function Wallets(): JSX.Element {
     const [open, setOpen] = useState<boolean>(false)
@@ -92,13 +93,16 @@ function Wallets(): JSX.Element {
             <Modal open={open} onClose={() => setOpen(false)}>
                 <div className={classes.termsModal}>
                     <div className={classes.termsModalTitle}>
-                        Satoshi.ART Terms of Service
+                        {t('termsOfServiceDomain', { domain: 'Satoshi.ART' })}
                     </div>
                     <p className={classes.termsModalDscr}>
-                        Please take a few minutes to read and understand{' '}
-                        <a href="#">Satoshi.ART Terms of Service</a>. To
-                        continue, you’ll need to accept the Terms of Service by
-                        checking the box.
+                        <Trans
+                            i18nKey="termsOfServiceDomainInfo"
+                            values={{
+                                domain: 'Satoshi.ART',
+                            }}
+                            components={{ 1: <a href="#" /> }}
+                        />
                     </p>
                     <form className={classes.termsModalForm}>
                         <FormControl
@@ -115,7 +119,7 @@ function Wallets(): JSX.Element {
                                             name="age"
                                         />
                                     }
-                                    label="I am at least 13 years old"
+                                    label={t('atLeast13YearOld')}
                                 />
                                 <FormControlLabel
                                     control={
@@ -125,14 +129,16 @@ function Wallets(): JSX.Element {
                                             name="terms"
                                         />
                                     }
-                                    label="I accept the Satoshi.ART terms of service"
+                                    label={t('acceptTermsOfService', {
+                                        domain: 'Satoshi.ART',
+                                    })}
                                 />
                             </FormGroup>
                         </FormControl>
                         <Button
                             disabled={error}
                             className={classes.termsModalBtn}
-                            label={'Go to Download Page'}
+                            label={t('goToDownloadPage')}
                         />
                     </form>
                 </div>

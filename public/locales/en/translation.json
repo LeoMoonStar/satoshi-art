@@ -71,5 +71,10 @@
   "serviceFee": "Service fee",
   "totalBidAmount": "Total bid amount",
   "cancel": "Cancel",
-  "checkout": "Checkout"
+  "checkout": "Checkout",
+  "termsOfServiceDomain": "{{domain}} Terms of Service",
+  "termsOfServiceDomainInfo": "Please take a few minutes to read and understand <1>{{domain}}</1> Terms of Service. To continue, you’ll need to accept the Terms of Service by checking the box.",
+  "atLeast13YearOld": "I am at least 13 years old",
+  "acceptTermsOfService": "I accept the {{domain}} terms of service",
+  "goToDownloadPage": "Go to Download Page"
 }
