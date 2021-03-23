@@ -58,5 +58,8 @@
   "cost": "Cost",
   "artName": "Art name",
   "artist": "Artist",
-  "date": "Date"
+  "date": "Date",
+  "sortBy": "Sort by",
+  "Followers": "Followers",
+  "Following": "Following"
 }
