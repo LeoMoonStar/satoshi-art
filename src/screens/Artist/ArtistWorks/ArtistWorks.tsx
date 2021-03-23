@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Button, IconButton } from '@material-ui/core'
+import Modal from 'shared/Modal'
 import Works from 'shared/Works'
+import Followers, { TabVariants } from 'shared/Followers'
 import { FilterIcon } from 'shared/icons'
 
 import useStyles from './ArtistWorks.style'
@@ -17,13 +19,24 @@ const categories: CategoryType[] = [
     { id: 3, title: 'Created' },
     { id: 4, title: 'Liked', isEmpty: true },
     { id: 5, title: 'Activity', isEmpty: true },
-    { id: 6, title: 'Following', isEmpty: true },
 ]
 
 export default function ArtistWorks(): JSX.Element {
+    const [open, setOpen] = useState(false)
+    const [active, setActive] = useState(TabVariants.Following)
     const [selectedCategory, setSelectedCategory] = useState<CategoryType>(
         categories[0]
     )
+
+    const openModal = (activeType: number) => {
+        setActive(activeType)
+        setOpen(true)
+    }
+
+    const closeModal = () => {
+        setOpen(false)
+        setActive(0)
+    }
 
     const classes = useStyles()
     return (
@@ -32,7 +45,6 @@ export default function ArtistWorks(): JSX.Element {
                 <div className={classes.selectedCategory}>
                     {selectedCategory.title} <span>55 Views</span>
                 </div>
-
                 <nav className={classes.navigation}>
                     {categories.map((category) => (
                         <Button
@@ -43,12 +55,21 @@ export default function ArtistWorks(): JSX.Element {
                             {category.title}
                         </Button>
                     ))}
+                    <Button onClick={() => openModal(TabVariants.Following)}>
+                        Following
+                    </Button>
+                    <Button onClick={() => openModal(TabVariants.Followers)}>
+                        Followers
+                    </Button>
                 </nav>
                 <IconButton className={classes.filterButton}>
                     <FilterIcon />
                 </IconButton>
             </div>
             <Works />
+            <Modal open={open} onClose={closeModal}>
+                <Followers active={active} />
+            </Modal>
         </div>
     )
 }
