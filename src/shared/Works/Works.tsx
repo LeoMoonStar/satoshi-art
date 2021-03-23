@@ -11,7 +11,15 @@ import useStyles from './Works.style'
 
 const works = Array.from({ length: 12 }, (_, index) => index)
 
-function ProductsList(): JSX.Element {
+type WorksListProps = {
+    borderWidth?: number
+    variant?: 'none' | 'rounded'
+}
+
+export default function WorksList({
+    borderWidth = 1,
+    variant = 'none',
+}: WorksListProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -20,8 +28,15 @@ function ProductsList(): JSX.Element {
             <div className={classes.grid}>
                 {works.map((work) => (
                     <div className={classes.work} key={work}>
-                        <img src={preview} className={classes.preview} alt="" />
-                        <div className={classes.info}>
+                        <img
+                            src={preview}
+                            style={{
+                                borderRadius: variant === 'rounded' ? 30 : 0,
+                            }}
+                            className={classes.preview}
+                            alt=""
+                        />
+                        <div className={classes.info} style={{ borderWidth }}>
                             <div className={classes.authorAvatar}>
                                 <Avatar
                                     size={60}
@@ -66,5 +81,3 @@ function ProductsList(): JSX.Element {
         </div>
     )
 }
-
-export default ProductsList

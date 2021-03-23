@@ -14,7 +14,7 @@ function Routes(): JSX.Element {
         <Suspense fallback={null}>
             <BrowserRouter>
                 <Switch>
-                    <Route path="/">
+                    <Route path="/" exact>
                         <Home />
                     </Route>
                     <Route path="/productpage">
