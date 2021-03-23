@@ -19,6 +19,7 @@ import {
 } from 'shared/icons'
 import Button from 'shared/Button'
 import { TokenInfo } from './TokenInfo'
+import BidModal from './BidModal'
 import useStyles from './TokenDetails.style'
 
 const IconWrapper = styled(Grid)(
@@ -67,7 +68,7 @@ const tabs = [
 
 const TokenDetails = (): JSX.Element => {
     const [tab, selectTab] = useState(TabVariants.INFO)
-
+    const [isBidModal, setBidModal] = useState<boolean>(false)
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -221,13 +222,14 @@ const TokenDetails = (): JSX.Element => {
                             className={classes.buyButton}
                         />
                         <Button
+                            onClick={() => setBidModal(true)}
                             label={t('placeABid')}
                             className={classes.placeBidButton}
                         />
                     </div>
                     <div className={classes.serviceFeeInfoContainer}>
                         <Typography variant="h6">
-                            {t('serviceFee', { fee: '2.5' })}
+                            {t('serviceFeeProgress', { fee: '2.5' })}
                         </Typography>
                         <Typography
                             variant="h6"
@@ -244,6 +246,7 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                 </Grid>
             </div>
+            {isBidModal && <BidModal onClose={() => setBidModal(false)} />}
         </div>
     )
 }
