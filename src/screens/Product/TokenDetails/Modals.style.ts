@@ -53,7 +53,7 @@ const useStyles = makeStyles(() => {
                 fontSize: 13,
                 marginTop: 6,
                 fontWeight: 500,
-                '&:placeholder': {
+                '&::placeholder': {
                     color: '#7E7E7E',
                 },
             },
