@@ -41,7 +41,7 @@ const tags: TagType[] = [
     { id: 11, title: 'Black power' },
 ]
 
-const PopperMy = function (props: PopperProps) {
+const SearchPopper = function (props: PopperProps) {
     return (
         <Popper
             {...props}
@@ -87,7 +87,7 @@ const SearchHeader = (): JSX.Element => {
                         root: classes.autocomplete,
                         popper: classes.dropdown,
                     }}
-                    PopperComponent={PopperMy}
+                    PopperComponent={SearchPopper}
                     disableClearable
                     options={artists.map((option) => option.title)}
                     renderOption={(value) => (
