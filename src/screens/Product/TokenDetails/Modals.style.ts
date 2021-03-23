@@ -41,6 +41,19 @@ const useStyles = makeStyles(() => {
             color: '#7E7E7E',
             marginBottom: 24,
         },
+        priceRow: {
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            padding: '4px 0 8px',
+            borderBottom: '1px solid rgba(0, 0, 0, 0.42)',
+        },
+        priceValueType: {
+            fontWeight: 600,
+            color: '#7E7E7E',
+        },
         fieldGroup: {
             width: '100%',
             marginBottom: 14,
@@ -48,8 +61,10 @@ const useStyles = makeStyles(() => {
             '& .MuiInputBase-input': {
                 fontSize: 13,
                 marginTop: 6,
-                color: '#7E7E7E',
                 fontWeight: 500,
+                '&:placeholder': {
+                    color: '#7E7E7E',
+                },
             },
             '& label.Mui-focused': {
                 color: '#000',
@@ -126,4 +141,5 @@ const useStyles = makeStyles(() => {
         },
     }
 })
+
 export default useStyles

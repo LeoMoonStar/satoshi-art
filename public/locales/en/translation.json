@@ -70,5 +70,6 @@
   "yourBalance": "Your balance",
   "serviceFee": "Service fee",
   "totalBidAmount": "Total bid amount",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "checkout": "Checkout"
 }

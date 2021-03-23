@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import { Close } from '@material-ui/icons'
 
-import useStyles from './BidModal.style'
+import useStyles from './Modals.style'
 
 type BidModalProps = {
     onClose: () => void
@@ -46,7 +46,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                     <InputLabel shrink htmlFor="bid">
                         {t('yourBid')}
                     </InputLabel>
-                    <Input id="bid" />
+                    <Input id="bid" placeholder="0.2" />
                     <div className={classes.inputHelpText}>ETH</div>
                 </FormControl>
 
@@ -55,7 +55,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                         {t('enterQuantity')}{' '}
                         <small>({t('countAvailable', { count: 24 })})</small>
                     </InputLabel>
-                    <Input id="quantity" />
+                    <Input id="quantity" placeholder="1" />
                 </FormControl>
                 <ul className={classes.additionalInfo}>
                     <li>
