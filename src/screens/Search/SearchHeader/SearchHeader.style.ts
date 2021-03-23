@@ -56,20 +56,21 @@ const useStyles = makeStyles((theme) => {
             '&[aria-expanded="true"] .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
                 borderRadius: '20px 20px 0 0',
             },
-        },
-        searchInput: {
-            height: 53,
-            width: '100%',
-            border: `1px solid ${theme.custom.common.grayColor}`,
-            borderRadius: 60,
-            '& input': {
-                paddingLeft: '67px !important',
+            '& .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
+                paddingLeft: 67,
+
                 '&::placeholder': {
                     color: theme.custom.common.grayColor,
                     fontSize: 14,
                     opacity: 1,
                 },
             },
+        },
+        searchInput: {
+            height: 53,
+            width: '100%',
+            border: `1px solid ${theme.custom.common.grayColor}`,
+            borderRadius: 60,
         },
         resultsCount: {
             fontSize: 20,

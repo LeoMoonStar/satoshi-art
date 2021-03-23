@@ -90,15 +90,12 @@ const SearchHeader = (): JSX.Element => {
                     PopperComponent={PopperMy}
                     disableClearable
                     options={artists.map((option) => option.title)}
-                    renderOption={(value) => {
-                        console.log({ value })
-                        return (
-                            <>
-                                <SearchIcon4 />
-                                {value}
-                            </>
-                        )
-                    }}
+                    renderOption={(value) => (
+                        <>
+                            <SearchIcon4 />
+                            {value}
+                        </>
+                    )}
                     renderInput={(params) => (
                         <TextField
                             {...params}
