@@ -1,15 +1,8 @@
 import React from 'react'
 import { useTranslation, Trans } from 'react-i18next'
-import {
-    Modal,
-    FormControl,
-    InputLabel,
-    Input,
-    Button,
-    IconButton,
-} from '@material-ui/core'
-import { Close } from '@material-ui/icons'
+import { FormControl, InputLabel, Input, Button } from '@material-ui/core'
 
+import Modal from 'shared/Modal'
 import useStyles from './Modals.style'
 
 type BidModalProps = {
@@ -24,13 +17,6 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
         <Modal open className={classes.modal} onClose={onClose}>
             <form className={classes.container}>
                 <h2 className={classes.title}>{t('placeABid')}</h2>
-                <IconButton
-                    className={classes.closeButton}
-                    title={t('close')}
-                    onClick={onClose}
-                >
-                    <Close />
-                </IconButton>
                 <div className={classes.intro}>
                     <Trans
                         i18nKey="youAreAboutToPlaceABidFor"

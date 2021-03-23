@@ -12,15 +12,6 @@ const useStyles = makeStyles(() => {
             outline: 0,
             borderRadius: 20,
         },
-        closeButton: {
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            minWidth: 48,
-            '& svg': {
-                width: 16,
-            },
-        },
         modal: {
             display: 'flex',
             justifyContent: 'center',

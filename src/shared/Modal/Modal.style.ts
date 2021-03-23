@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     wrapper: {
         top: `50%`,
         left: `50%`,
@@ -10,13 +10,13 @@ const useStyles = makeStyles((theme) => ({
     },
     closeBtn: {
         position: 'absolute',
-        backgroundColor: theme.palette.primary.main,
-        border: 'none',
-        cursor: 'pointer',
-        fontSize: 20,
-        fontWeight: 400,
-        top: 21,
-        right: 23,
+        top: 6,
+        right: 6,
+        minWidth: 48,
+
+        '& svg': {
+            width: 16,
+        },
 
         '&:focus': {
             outline: 0,
