@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Input, Divider, Chip, Select, MenuItem } from '@material-ui/core'
+import { TextField, Divider, Chip, Select, MenuItem } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useTranslation } from 'react-i18next'
 
 import useStyles from './SearchHeader.style'
@@ -10,6 +11,13 @@ type TagType = {
     id: number
     title: string
 }
+const artists = [
+    { title: 'rihanna' },
+    { title: 'lady gaga' },
+    { title: 'miley cyrus' },
+    { title: 'billie elish' },
+    { title: 'rihanna' },
+]
 
 const tags: TagType[] = [
     { id: 1, title: 'Beyoncé' },
@@ -55,14 +63,40 @@ const SearchHeader = (): JSX.Element => {
             />
             {/*@TODO: the same input will be on the home page, use a shared*/}
             <div className={classes.searchWrapper}>
-                <Input
-                    type="search"
-                    placeholder="beyoncé live"
+                <Autocomplete
+                    freeSolo
+                    debug
                     classes={{
-                        root: classes.searchInput,
+                        popper: classes.dropdown,
                     }}
-                    disableUnderline
+                    disableClearable
+                    options={artists.map((option) => option.title)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            classes={{
+                                root: classes.searchInputWrapper,
+                            }}
+                            InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                                type: 'search',
+                                placeholder: 'beyoncé live',
+                                classes: {
+                                    root: classes.searchInput,
+                                },
+                            }}
+                        />
+                    )}
                 />
+                {/*<Input*/}
+                {/*    type="search"*/}
+                {/*    placeholder="beyoncé live"*/}
+                {/*    classes={{*/}
+                {/*        root: classes.searchInput,*/}
+                {/*    }}*/}
+                {/*    disableUnderline*/}
+                {/*/>*/}
                 <div className={classes.searchIcon}>
                     <SearchIcon4 />
                 </div>

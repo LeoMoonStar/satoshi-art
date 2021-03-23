@@ -10,12 +10,11 @@ const useStyles = makeStyles((theme) => {
         },
         searchIcon: {
             position: 'absolute',
-            justifyContent: 'space-between',
             transform: 'translate(0, -50%)',
             top: '50%',
             left: 21,
             display: 'flex',
-            width: 190,
+            zIndex: 9999,
 
             '& svg': {
                 width: 20,
@@ -25,16 +24,31 @@ const useStyles = makeStyles((theme) => {
         divider: {
             backgroundColor: theme.custom.common.grayColor,
         },
+        searchInputWrapper: {},
+        dropdown: {
+            marginTop: -25,
+
+            '& .MuiPaper-root': {
+                boxShadow: 'none',
+                borderRadius: '0 0 20px 20px',
+                border: `1px solid ${theme.custom.common.grayColor}`,
+                borderWidth: '0 1px 1px 1px',
+
+                '& .MuiAutocomplete-option': {
+                    paddingLeft: 67,
+                    color: theme.custom.common.grayColor,
+                    fontSize: 14,
+                },
+            },
+        },
         searchInput: {
             height: 53,
             width: '100%',
             border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 60,
-            marginRight: 12,
-            paddingLeft: 15,
 
             '& input': {
-                paddingLeft: 67,
+                paddingLeft: '67px !important',
                 '&::placeholder': {
                     color: theme.custom.common.grayColor,
                     fontSize: 14,
