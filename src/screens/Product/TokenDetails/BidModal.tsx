@@ -22,7 +22,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
 
     return (
         <Modal open className={classes.modal} onClose={onClose}>
-            <div className={classes.container}>
+            <form className={classes.container}>
                 <h2 className={classes.title}>{t('placeABid')}</h2>
                 <IconButton
                     className={classes.closeButton}
@@ -80,7 +80,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                         {t('cancel')}
                     </Button>
                 </div>
-            </div>
+            </form>
         </Modal>
     )
 }
