@@ -1,18 +1,23 @@
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 import { WalletInfo } from 'hooks/useWallets'
 import Button from 'shared/Button'
 import useStyles from './WalletOption.style'
 
 type OptionProps = {
     wallet: WalletInfo
+    openTerms: () => void
 }
 
-const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
+const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
     const classes = useStyles()
-    const history = useHistory()
+    {
+        /* todo: uncomment history later if needed */
+    }
+
+    // const history = useHistory()
 
     const { activate } = useWeb3React<Web3Provider>()
 
@@ -22,7 +27,8 @@ const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
     const connectWallet = async () => {
         const connector = wallet.createConnector()
         await activate(connector)
-        history.goBack()
+        openTerms()
+        // history.goBack()
     }
 
     const Logo = wallet.logo
