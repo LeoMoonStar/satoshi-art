@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { TextField, Divider, Chip, Select, MenuItem } from '@material-ui/core'
+import {
+    TextField,
+    Divider,
+    Chip,
+    Select,
+    MenuItem,
+    Popper,
+    PopperProps,
+} from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useTranslation } from 'react-i18next'
 
@@ -33,6 +41,16 @@ const tags: TagType[] = [
     { id: 11, title: 'Black power' },
 ]
 
+const PopperMy = function (props: PopperProps) {
+    return (
+        <Popper
+            {...props}
+            style={{ width: '672px' }}
+            placement="bottom-start"
+        />
+    )
+}
+
 {
     /*@TODO: Move tags and select into a separate components */
 }
@@ -65,18 +83,25 @@ const SearchHeader = (): JSX.Element => {
             <div className={classes.searchWrapper}>
                 <Autocomplete
                     freeSolo
-                    debug
                     classes={{
+                        root: classes.autocomplete,
                         popper: classes.dropdown,
                     }}
+                    PopperComponent={PopperMy}
                     disableClearable
                     options={artists.map((option) => option.title)}
+                    renderOption={(value) => {
+                        console.log({ value })
+                        return (
+                            <>
+                                <SearchIcon4 />
+                                {value}
+                            </>
+                        )
+                    }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            classes={{
-                                root: classes.searchInputWrapper,
-                            }}
                             InputProps={{
                                 ...params.InputProps,
                                 disableUnderline: true,
@@ -89,14 +114,6 @@ const SearchHeader = (): JSX.Element => {
                         />
                     )}
                 />
-                {/*<Input*/}
-                {/*    type="search"*/}
-                {/*    placeholder="beyoncé live"*/}
-                {/*    classes={{*/}
-                {/*        root: classes.searchInput,*/}
-                {/*    }}*/}
-                {/*    disableUnderline*/}
-                {/*/>*/}
                 <div className={classes.searchIcon}>
                     <SearchIcon4 />
                 </div>

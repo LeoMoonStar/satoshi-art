@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => {
             top: '50%',
             left: 21,
             display: 'flex',
-            zIndex: 9999,
+            zIndex: 998,
 
             '& svg': {
                 width: 20,
@@ -24,10 +24,9 @@ const useStyles = makeStyles((theme) => {
         divider: {
             backgroundColor: theme.custom.common.grayColor,
         },
-        searchInputWrapper: {},
         dropdown: {
             marginTop: -20,
-
+            zIndex: 997,
             '& .MuiPaper-root': {
                 boxShadow: 'none',
                 margin: 0,
@@ -35,13 +34,27 @@ const useStyles = makeStyles((theme) => {
                     borderRadius: '0 0 20px 20px',
                     border: `1px solid ${theme.custom.common.grayColor}`,
                     borderWidth: '0 1px 1px 1px',
-                    paddingTop: 10,
+                    padding: '10px 0 0 0',
                 },
                 '& .MuiAutocomplete-option': {
-                    paddingLeft: 67,
+                    padding: '8px 0',
                     color: theme.custom.common.grayColor,
                     fontSize: 14,
+
+                    '& svg': {
+                        width: 20,
+                        height: 20,
+                        marginLeft: 21,
+                        marginRight: 26,
+                    },
                 },
+            },
+        },
+        autocomplete: {
+            width: 672,
+
+            '&[aria-expanded="true"] .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
+                borderRadius: '20px 20px 0 0',
             },
         },
         searchInput: {
@@ -49,7 +62,6 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 60,
-
             '& input': {
                 paddingLeft: '67px !important',
                 '&::placeholder': {
