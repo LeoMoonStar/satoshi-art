@@ -7,13 +7,14 @@ import Artist from 'screens/Artist'
 import CreateCollectible from 'screens/CreateCollectible'
 import Search from 'screens/Search'
 import Home from 'screens/Home'
+import OrderList from 'screens/OrderList'
 
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
             <BrowserRouter>
                 <Switch>
-                    <Route path="/home">
+                    <Route path="/">
                         <Home />
                     </Route>
                     <Route path="/productpage">
@@ -30,6 +31,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/search">
                         <Search />
+                    </Route>
+                    <Route path="/dashboard/order-list">
+                        <OrderList />
                     </Route>
                 </Switch>
             </BrowserRouter>
