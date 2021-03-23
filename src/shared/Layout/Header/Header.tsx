@@ -8,7 +8,7 @@ import ConnectButton from 'shared/ConnectButton'
 import {
     LogoIcon,
     SearchIcon1,
-    SearchIcon2,
+    BellIcon,
     SearchIcon3,
     SearchIcon4,
 } from 'shared/icons'
@@ -35,7 +35,7 @@ function Header(): JSX.Element {
                         />
                         <div className={classes.searchIcons}>
                             <SearchIcon1 />
-                            <SearchIcon2 />
+                            <BellIcon />
                             <SearchIcon3 />
                             <SearchIcon4 />
                         </div>
