@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.palette.primary.main,
             position: 'relative',
             margin: '-27px 0 60px 136px',
-            width: 674,
+            width: 672,
         },
         searchIcon: {
             position: 'absolute',
@@ -26,14 +26,17 @@ const useStyles = makeStyles((theme) => {
         },
         searchInputWrapper: {},
         dropdown: {
-            marginTop: -25,
+            marginTop: -20,
 
             '& .MuiPaper-root': {
                 boxShadow: 'none',
-                borderRadius: '0 0 20px 20px',
-                border: `1px solid ${theme.custom.common.grayColor}`,
-                borderWidth: '0 1px 1px 1px',
-
+                margin: 0,
+                '& .MuiAutocomplete-listbox': {
+                    borderRadius: '0 0 20px 20px',
+                    border: `1px solid ${theme.custom.common.grayColor}`,
+                    borderWidth: '0 1px 1px 1px',
+                    paddingTop: 10,
+                },
                 '& .MuiAutocomplete-option': {
                     paddingLeft: 67,
                     color: theme.custom.common.grayColor,
