@@ -79,6 +79,66 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             marginBottom: 60,
         },
+        termsModal: {
+            width: 318,
+            height: 400,
+            padding: '27px 64px 32px 63px',
+            background: '#FFFFFF',
+            borderRadius: 20,
+            border: `1px solid ${theme.custom.common.grayColor}`,
+            textAlign: 'center',
+        },
+        termsModalTitle: {
+            color: theme.custom.common.blackColor,
+            fontWeight: 800,
+            fontSize: 30,
+            paddingBottom: 21,
+            borderBottom: '1px solid #6A2FE74D',
+            lineHeight: '38px',
+        },
+        termsModalDscr: {
+            fontSize: 16,
+            margin: '20px 0 24px 0',
+            lineHeight: '22px',
+            color: '#7E7E7E',
+            fontWeight: 400,
+
+            '& a': {
+                fontWeight: 600,
+                color: 'inherit',
+                textDecoration: 'none',
+            },
+        },
+        termsModalForm: {
+            '& label': {
+                fontSize: 14,
+                color: '#7E7E7E',
+                marginRight: 0,
+                marginTop: 12,
+                '&:first-child': {
+                    marginTop: 0,
+                },
+                '& .MuiCheckbox-root': {
+                    width: 16,
+                    height: 16,
+                    padding: 1,
+                },
+                '& .MuiTypography-root': {
+                    fontSize: 'inherit',
+                    marginLeft: 11,
+                },
+            },
+        },
+        termsModalBtn: {
+            width: 189,
+            height: 40,
+            fontSize: 13,
+            marginTop: 24,
+            lineHeight: '16px',
+            backgroundColor: theme.custom.common.pinkColor,
+            color: theme.palette.primary.main,
+            borderRadius: 60,
+        },
     }
 })
 export default useStyles
