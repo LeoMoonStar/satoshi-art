@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => {
             borderRadius: 40,
             marginRight: 12,
             paddingLeft: 15,
-            zIndex: 9999,
             color: theme.palette.primary.main,
         },
         subscribeBtn: {
