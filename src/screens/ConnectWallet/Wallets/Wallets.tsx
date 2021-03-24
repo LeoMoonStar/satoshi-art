@@ -4,7 +4,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { Typography, Divider } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
-import { LogoIcon } from 'shared/icons'
+import { LogoHeader } from 'shared/icons'
 
 import useStyles from './Wallets.style'
 import WalletOption from '../WalletOption'
@@ -19,7 +19,7 @@ function Wallets(): JSX.Element {
         <div className={classes.container}>
             <div className={classes.walletsModal}>
                 <div className={classes.modalHeader}>
-                    <LogoIcon />
+                    <LogoHeader />
                 </div>
                 <div className={classes.content}>
                     <div className={classes.info}>

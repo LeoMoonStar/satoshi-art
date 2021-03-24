@@ -1,0 +1,181 @@
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => {
+    return {
+        settings: {
+            width: 568,
+        },
+        title: {
+            display: 'inline-block',
+            fontWeight: 800,
+            fontSize: 30,
+            lineHeight: '38px',
+            borderBottom: '1px solid #6A2FE74D',
+            paddingBottom: 7,
+            marginBottom: 20,
+        },
+        upload: {
+            marginBottom: 32,
+        },
+        uploadWrapper: {
+            color: theme.custom.common.darkerGrayColor,
+            fontSize: 18,
+            lineHeight: '23px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 166,
+            textAlign: 'center',
+            border: '1px dashed #7E7E7E',
+            borderRadius: 20,
+        },
+        subtitle: {
+            fontWeight: 600,
+            fontSize: 18,
+            lineHeight: '23px',
+            marginBottom: 24,
+        },
+        chooseBtn: {
+            width: 136,
+            color: theme.custom.common.pinkColor,
+            border: `1px solid ${theme.custom.common.pinkColor}`,
+            marginTop: 38,
+            borderRadius: 60,
+        },
+        controls: {
+            width: '100%',
+        },
+        switchLabel: {
+            margin: '0 0 32px 0',
+            '& .MuiFormControlLabel-label': {
+                flex: 1,
+                color: '#7E7E7E',
+                '& span': {
+                    display: 'block',
+                    fontSize: 16,
+                    fontWeight: 400,
+                    lineHeight: '22px',
+                    marginTop: 5,
+
+                    '&:first-child': {
+                        display: 'block',
+                        fontSize: 18,
+                        margin: 0,
+                        lineHeight: '23px',
+                        fontWeight: 600,
+                    },
+                },
+            },
+        },
+        labelText: {
+            display: 'block',
+
+            '& span': {
+                display: 'block',
+            },
+        },
+        onSale: {
+            color: theme.custom.common.pinkColor,
+        },
+        price: {
+            color: theme.custom.common.blackColor,
+        },
+        unlock: {
+            background: 'linear-gradient(left, #6A2FE7, #FF0099)',
+            '-webkit-background-clip': 'text',
+            '-webkit-text-fill-color': 'transparent',
+        },
+        cards: {
+            display: 'flex',
+        },
+        collectionType: {
+            marginBottom: 32,
+        },
+        card: {
+            width: 148,
+            height: 160,
+            border: '1px solid #E5E5E5',
+            borderRadius: 20,
+            marginLeft: 20,
+
+            '&:first-child': {
+                marginLeft: 0,
+            },
+            '& span': {
+                display: 'block',
+            },
+        },
+        cardName: {
+            fontWeight: 600,
+            fontSize: 16,
+            lineHeight: '16px',
+            color: theme.custom.common.blackColor,
+        },
+        cardDscr: {
+            color: theme.custom.common.darkerGrayColor,
+            fontSize: 12,
+            lineHeight: '15px',
+        },
+        propertiesWrapper: {
+            width: 438,
+            marginBottom: 60,
+        },
+        input: {
+            marginBottom: 32,
+            '& .MuiInput-root': {
+                width: '100%',
+                borderBottom: '1px solid #7E7E7E4D',
+            },
+            '& span': {
+                display: 'block',
+                marginTop: 8,
+                lineHeight: '16px',
+                fontSize: 12,
+                color: theme.custom.common.grayColor,
+            },
+            '& input+span': {
+                fontSize: 16,
+            },
+        },
+        label: {
+            fontWeight: 600,
+            fontSize: 18,
+            lineHeight: '23px',
+            color: theme.custom.common.blackColor,
+            marginBottom: 24,
+        },
+        sizes: {
+            display: 'flex',
+            justifyContent: 'space-between',
+
+            '& .MuiInput-root': {
+                width: 197,
+            },
+        },
+        footer: {
+            width: 380,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            color: '#FFB800',
+            fontWeight: 600,
+            fontSize: 12,
+            '& button': {
+                width: 165,
+                fontSize: 13,
+                border: '1px solid transparent',
+                background: theme.custom.common.pinkColor,
+                color: theme.palette.primary.main,
+                borderRadius: 60,
+
+                '&:hover': {
+                    background: 'none',
+                    color: theme.custom.common.blackColor,
+                    border: `1px solid ${theme.custom.common.pinkColor}`,
+                },
+            },
+        },
+    }
+})
+export default useStyles
