@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
     workInfo: {
         width: '100%',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         fontSize: 13,
         fontWeight: 600,
         marginTop: 29,
@@ -72,12 +72,12 @@ const useStyles = makeStyles(() => ({
         margin: 0,
     },
     bidButton: {
-        margin: '0 -6px -6px auto',
+        margin: '0 -6px -9px auto',
         fontSize: 13,
         fontWeight: 600,
-        color: '#6A2FE7',
+        color: '#FF0099',
         textTransform: 'initial',
-        background: '-webkit-linear-gradient(#6A2FE7, #FF0099)',
+        background: '-webkit-linear-gradient(left, #6A2FE7, #FF0099)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
         '&:hover': {
