@@ -25,8 +25,6 @@
   "owner": "Owner",
   "creator": "Creator",
   "follow": "Follow",
-  "like": "Like",
-  "view": "View",
   "createCollectible": "Create collectible",
   "chooseSingleIfYouWantYourCollectible": "Choose “Single” if you want your collectible to be one of a kind or “Multiple” if you want to sell one collectible multiple times",
   "createCollectibleAdditionalInfo": "We do not own your private keys and cannot access your funds without your confirmation.",
@@ -73,5 +71,10 @@
   "cancel": "Cancel",
   "checkout": "Checkout",
   "wrongNetwork": "Wrong Network",
-  "wrongNetworkMsg": "Switch to Mainnet"
+  "wrongNetworkMsg": "Switch to Mainnet",
+  "termsOfServiceDomain": "{{domain}} Terms of Service",
+  "termsOfServiceDomainInfo": "Please take a few minutes to read and understand <1>{{domain}}</1> Terms of Service. To continue, you’ll need to accept the Terms of Service by checking the box.",
+  "atLeast13YearOld": "I am at least 13 years old",
+  "acceptTermsOfService": "I accept the {{domain}} terms of service",
+  "goToDownloadPage": "Go to Download Page"
 }
