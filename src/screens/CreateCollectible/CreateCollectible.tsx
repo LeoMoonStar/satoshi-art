@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button } from '@material-ui/core'
 import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router'
@@ -15,35 +15,6 @@ const CreateCollectible = (): JSX.Element => {
     const history = useHistory()
     const { type } = useParams<{ type: string }>()
 
-    const [collectible, setCollectible] = React.useState({
-        file: '',
-        settings: {
-            onSale: true,
-            price: false,
-            unlock: false,
-        },
-        collection: '',
-        fields: {
-            name: '',
-            description: '',
-            royalties: '',
-            properties: [
-                {
-                    name: '',
-                    value: '',
-                },
-            ],
-        },
-    })
-
-    const handleChange = (field: string, value: string | boolean) => {
-        setCollectible({
-            ...collectible,
-            [JSON.stringify(field)]: value,
-        })
-        console.log(collectible)
-    }
-
     const handleGoBack = () => history.goBack()
 
     return (
@@ -58,10 +29,7 @@ const CreateCollectible = (): JSX.Element => {
                     </div>
                 </div>
                 <div className={classes.form}>
-                    <CreateForm
-                        onChange={handleChange}
-                        collectible={collectible}
-                    />
+                    <CreateForm />
                     <Preview />
                 </div>
             </div>

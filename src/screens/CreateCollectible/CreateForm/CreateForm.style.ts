@@ -18,17 +18,30 @@ const useStyles = makeStyles((theme) => {
             marginBottom: 32,
         },
         uploadWrapper: {
+            position: 'relative',
             color: theme.custom.common.darkerGrayColor,
             fontSize: 18,
+            padding: '38px 0 32px 0',
             lineHeight: '23px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: 166,
             textAlign: 'center',
             border: '1px dashed #7E7E7E',
             borderRadius: 20,
+        },
+        closeBtn: {
+            position: 'absolute',
+            right: 10,
+            top: 10,
+        },
+        uploadPreview: {
+            width: 300,
+
+            '& img, & video': {
+                width: '100%',
+            },
         },
         subtitle: {
             fontWeight: 600,
@@ -105,6 +118,9 @@ const useStyles = makeStyles((theme) => {
             '& span': {
                 display: 'block',
             },
+        },
+        cardActive: {
+            border: '1px solid #2d81ff',
         },
         cardName: {
             fontWeight: 600,
