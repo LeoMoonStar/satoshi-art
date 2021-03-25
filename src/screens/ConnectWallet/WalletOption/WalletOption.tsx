@@ -11,10 +11,10 @@ import { setLoggedWith } from '../../../state/app/actions'
 
 type OptionProps = {
     wallet: WalletInfo
-    openTerms: () => void
+    openTerms?: () => void
 }
 
-const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
+const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
     const classes = useStyles()
     const history = useHistory()
 
@@ -29,7 +29,8 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
         await activate(connector)
         dispatch(setLoggedWith(wallet.name))
         history.goBack()
-        openTerms()
+        //disabled till backend will be ready
+        // openTerms()
     }
 
     const Logo = wallet.logo
