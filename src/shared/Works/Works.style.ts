@@ -88,6 +88,20 @@ const useStyles = makeStyles(() => ({
         marginLeft: '1ch',
         color: '#7E7E7E',
     },
+    seeAllButton: {
+        margin: '0 auto',
+        display: 'block',
+        minWidth: 157,
+        height: 53,
+        fontWeight: 600,
+        color: '#fff',
+        backgroundColor: '#FF0099',
+        borderRadius: 60,
+        textTransform: 'initial',
+        '&:hover': {
+            backgroundColor: '#FF009990',
+        },
+    },
 }))
 
 export default useStyles

@@ -5,14 +5,14 @@ import useStyles from './Avatar.style'
 type AvatarProps = {
     size?: number
     image: string
-    alt: string
+    alt?: string
     status?: string | null
 }
 
 export default function Avatar({
     size = 60,
     image,
-    alt,
+    alt = '',
     status = null,
 }: AvatarProps): JSX.Element {
     const classes = useStyles()

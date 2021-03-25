@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => {
             color: '#FF0099',
         },
         container: {
+            marginBottom: 120,
             height: '100%',
             width: '100%',
             boxSizing: 'border-box',

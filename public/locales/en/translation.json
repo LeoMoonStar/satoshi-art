@@ -71,5 +71,25 @@
   "serviceFee": "Service fee",
   "totalBidAmount": "Total bid amount",
   "cancel": "Cancel",
-  "checkout": "Checkout"
+  "checkout": "Checkout",
+  "howItWorks": "How it works",
+  "community": "Community",
+  "dropOfTheDay": "Drop of the Day",
+  "seeAll": "See All",
+  "allThe": "All the",
+  "inTheWorldNowTogetherHereForYou": "in the world, now together. Here for you.",
+  "exploreCollections": "Explore collections",
+  "seeAllHistory": "See all History",
+  "previousWeeklyIterations": "Previous Weekly Iterations",
+  "inTheWorldNowTogether": "in the world, now together",
+  "hereForYou": "Here for you.",
+  "recentlyCollected": "Recently Collected",
+  "topArtists": "Top Artists",
+  "recentSales": "Recent Sales",
+  "topCollectors": "Top Collectors",
+  "artworksOwned": "Artworks Owned",
+  "largestCollections": "Largest Collections",
+  "topSeller": "Top Seller",
+  "topBuyers": "Top Buyers"
+
 }

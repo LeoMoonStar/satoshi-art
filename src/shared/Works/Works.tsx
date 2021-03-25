@@ -14,11 +14,13 @@ const works = Array.from({ length: 12 }, (_, index) => index)
 type WorksListProps = {
     borderWidth?: number
     variant?: 'none' | 'rounded'
+    isLoading?: boolean
 }
 
 export default function WorksList({
     borderWidth = 1,
     variant = 'none',
+    isLoading = true,
 }: WorksListProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -77,7 +79,11 @@ export default function WorksList({
                 ))}
             </div>
 
-            <Loader />
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <Button className={classes.seeAllButton}>See All</Button>
+            )}
         </div>
     )
 }

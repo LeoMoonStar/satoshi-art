@@ -3,15 +3,37 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles((theme) => {
     return {
         container: {
+            position: 'relative',
+            zIndex: 1,
             height: '100%',
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
             boxSizing: 'border-box',
-            padding: `84px 76px 16px`,
+            padding: `12px 76px 16px`,
             background: theme.palette.primary.main,
+            overflow: 'hidden',
+        },
+        searchRow: {
+            width: '100%',
+            position: 'relative',
+            marginTop: -45,
+            '& > div': {
+                position: 'relative',
+                zIndex: 1,
+                marginLeft: 136,
+            },
+            '&::after': {
+                content: '""',
+                position: 'absolute',
+                top: '50%',
+                width: '100%',
+                height: 1,
+                backgroundColor: '#C4C4C4',
+            },
         },
         explore: {
+            position: 'relative',
             width: '100%',
             display: 'flex',
         },
@@ -40,17 +62,19 @@ const useStyles = makeStyles((theme) => {
             textDecoration: 'none',
         },
         exploreBlockSecond: {
-            position: 'relative',
             width: '50%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            '& img': {
+                zIndex: 1,
+            },
         },
         exploreShadow: {
             position: 'absolute',
-            top: -100,
-            right: -76,
+            top: -190,
+            right: 0,
         },
         introText: {
             position: 'relative',
