@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { MetamaskIcon } from '../shared/icons'
+import { MetamaskIcon } from 'shared/icons'
 import { useCurrentNetwork } from './useCurrentNetwork'
 
 //other types of connectors will be here

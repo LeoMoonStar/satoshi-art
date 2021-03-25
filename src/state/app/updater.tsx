@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 
-import { useEagerConnect, useInactiveListener } from '../../hooks'
+import { useEagerConnect, useInactiveListener } from 'hooks'
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
 
 export function useConnectWallet(): null {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AppState } from '../state'
+import { AppState } from 'state'
 import { useCurrentNetwork } from './useCurrentNetwork'
 
 export function useEagerConnect(): boolean {

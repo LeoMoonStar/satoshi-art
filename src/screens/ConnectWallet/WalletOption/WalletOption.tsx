@@ -6,8 +6,8 @@ import { WalletInfo } from 'hooks/useWallets'
 import Button from 'shared/Button'
 import useStyles from './WalletOption.style'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../state'
-import { setLoggedWith } from '../../../state/app/actions'
+import { AppDispatch } from 'state'
+import { setLoggedWith } from 'state/app/actions'
 
 type OptionProps = {
     wallet: WalletInfo
