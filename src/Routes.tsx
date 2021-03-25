@@ -7,10 +7,12 @@ import Artist from 'screens/Artist'
 import CreateCollectible from 'screens/CreateCollectible'
 import Search from 'screens/Search'
 import OrderList from 'screens/OrderList'
+import WrongNetworkModal from './shared/WrongNetwork'
 
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
+            <WrongNetworkModal />
             <BrowserRouter>
                 <Switch>
                     <Route path="/productpage">

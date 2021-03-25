@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { ReactComponent as MetamaskIcon } from 'shared/icons/metamask.svg'
+import { MetamaskIcon } from 'shared/icons'
+import { useCurrentNetwork } from './useCurrentNetwork'
 
 //other types of connectors will be here
 type SpecificWalletConnector = InjectedConnector
@@ -14,14 +15,10 @@ export interface WalletInfo<
     logo: React.FC<{ className?: string }>
 }
 
-const createInjected = () => {
-    return new InjectedConnector({
-        supportedChainIds: [1, 3],
-    })
-}
-
 //other wallets will be here after MVP
 function useSupportedWallets() {
+    const { createInjected } = useCurrentNetwork()
+
     const SUPPORTED_WALLETS: WalletInfo[] = [
         {
             name: 'Metamask',

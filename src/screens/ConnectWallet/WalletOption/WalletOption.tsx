@@ -1,17 +1,24 @@
 import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
+import { useHistory } from 'react-router-dom'
 import { WalletInfo } from 'hooks/useWallets'
 import Button from 'shared/Button'
 import useStyles from './WalletOption.style'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'state'
+import { changeLoggedWith } from 'state/app/actions'
 
 type OptionProps = {
     wallet: WalletInfo
-    openTerms: () => void
+    openTerms?: () => void
 }
 
-const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
+const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
     const classes = useStyles()
+    const history = useHistory()
+
+    const dispatch = useDispatch<AppDispatch>()
     const { activate } = useWeb3React<Web3Provider>()
 
     //@TODO: fix window type
@@ -20,7 +27,10 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
     const connectWallet = async () => {
         const connector = wallet.createConnector()
         await activate(connector)
-        openTerms()
+        dispatch(changeLoggedWith(wallet.name))
+        history.goBack()
+        //disabled till backend will be ready
+        // openTerms()
     }
 
     const Logo = wallet.logo

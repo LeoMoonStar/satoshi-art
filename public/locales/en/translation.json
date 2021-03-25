@@ -70,6 +70,8 @@
   "totalBidAmount": "Total bid amount",
   "cancel": "Cancel",
   "checkout": "Checkout",
+  "wrongNetwork": "Wrong Network",
+  "wrongNetworkMsg": "Switch to Mainnet",
   "termsOfServiceDomain": "{{domain}} Terms of Service",
   "termsOfServiceDomainInfo": "Please take a few minutes to read and understand <1>{{domain}}</1> Terms of Service. To continue, you’ll need to accept the Terms of Service by checking the box.",
   "atLeast13YearOld": "I am at least 13 years old",
