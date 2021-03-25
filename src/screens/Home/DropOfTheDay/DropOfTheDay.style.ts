@@ -181,7 +181,7 @@ const useStyles = makeStyles(() => {
         slideImage: {
             width: 262,
             height: 245,
-            objectFix: 'cover',
+            objectFit: 'cover',
             borderRadius: 20,
         },
         info: {
