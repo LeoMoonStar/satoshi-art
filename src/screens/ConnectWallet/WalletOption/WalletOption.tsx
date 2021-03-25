@@ -5,6 +5,9 @@ import { useHistory } from 'react-router-dom'
 import { WalletInfo } from 'hooks/useWallets'
 import Button from 'shared/Button'
 import useStyles from './WalletOption.style'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../../state'
+import { setLoggedWith } from '../../../state/app/actions'
 
 type OptionProps = {
     wallet: WalletInfo
@@ -14,6 +17,7 @@ const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
     const classes = useStyles()
     const history = useHistory()
 
+    const dispatch = useDispatch<AppDispatch>()
     const { activate } = useWeb3React<Web3Provider>()
 
     //@TODO: fix window type
@@ -22,6 +26,7 @@ const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
     const connectWallet = async () => {
         const connector = wallet.createConnector()
         await activate(connector)
+        dispatch(setLoggedWith(wallet.name))
         history.goBack()
     }
 
