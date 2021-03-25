@@ -7,7 +7,7 @@ import Button from 'shared/Button'
 import useStyles from './WalletOption.style'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'state'
-import { setLoggedWith } from 'state/app/actions'
+import { changeLoggedWith } from 'state/app/actions'
 
 type OptionProps = {
     wallet: WalletInfo
@@ -27,7 +27,7 @@ const WalletOption: React.FC<OptionProps> = ({ wallet }) => {
     const connectWallet = async () => {
         const connector = wallet.createConnector()
         await activate(connector)
-        dispatch(setLoggedWith(wallet.name))
+        dispatch(changeLoggedWith(wallet.name))
         history.goBack()
         //disabled till backend will be ready
         // openTerms()

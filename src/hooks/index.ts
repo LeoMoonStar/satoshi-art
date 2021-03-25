@@ -49,13 +49,13 @@ export function useEagerConnect(): boolean {
  * and out after checking what network they're on
  */
 export function useInactiveListener(suppress = false): void {
-    const { active, error, activate } = useWeb3React() // specifically using useWeb3React because of what this hook does
+    const { active, error, activate } = useWeb3React()
     const dispatch = useDispatch()
     const { createInjected } = useCurrentNetwork()
 
     useEffect(() => {
         const { ethereum } = window as any
-        if (ethereum && ethereum.on && !active && !error && !suppress) {
+        if (ethereum?.on && !active && !error && !suppress) {
             const injected = createInjected()
 
             const handleChainChanged = () => {
@@ -76,6 +76,5 @@ export function useInactiveListener(suppress = false): void {
                 }
             }
         }
-        return undefined
     }, [active, error, suppress, activate, dispatch, createInjected])
 }

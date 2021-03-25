@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { setLoggedWith } from './actions'
+import { changeLoggedWith } from './actions'
 
 export interface AppState {
     loggedInWith: string
@@ -10,7 +10,7 @@ const initialState: AppState = {
 }
 
 export default createReducer(initialState, (app) => {
-    app.addCase(setLoggedWith, (state, action) => {
+    app.addCase(changeLoggedWith, (state, action) => {
         state.loggedInWith = action.payload
     })
 })

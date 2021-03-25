@@ -27,7 +27,6 @@ interface EnhancedCurrentNetwork extends CurrentNetwork {
 
 export const useCurrentNetwork = (): EnhancedCurrentNetwork => {
     const { chainId } = useWeb3React<Web3Provider>()
-    console.log({ chainId })
     const currentNetwork: CurrentNetwork = useMemo(() => {
         if (chainId) {
             const selectedChain = Networks[chainId]
