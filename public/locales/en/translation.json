@@ -71,5 +71,7 @@
   "serviceFee": "Service fee",
   "totalBidAmount": "Total bid amount",
   "cancel": "Cancel",
-  "checkout": "Checkout"
+  "checkout": "Checkout",
+  "wrongNetwork": "Wrong Network",
+  "wrongNetworkMsg": "Switch to Mainnet"
 }
