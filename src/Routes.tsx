@@ -6,6 +6,7 @@ import ConnectWallet from 'screens/ConnectWallet'
 import Artist from 'screens/Artist'
 import CreateCollectible from 'screens/CreateCollectible'
 import Search from 'screens/Search'
+import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import WrongNetworkModal from './shared/WrongNetwork'
 
@@ -15,6 +16,9 @@ function Routes(): JSX.Element {
             <WrongNetworkModal />
             <BrowserRouter>
                 <Switch>
+                    <Route path="/" exact>
+                        <Home />
+                    </Route>
                     <Route path="/productpage">
                         <Product />
                     </Route>
