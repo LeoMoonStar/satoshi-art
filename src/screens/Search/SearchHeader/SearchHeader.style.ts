@@ -6,16 +6,15 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.palette.primary.main,
             position: 'relative',
             margin: '-27px 0 60px 136px',
-            width: 674,
+            width: 672,
         },
         searchIcon: {
             position: 'absolute',
-            justifyContent: 'space-between',
             transform: 'translate(0, -50%)',
             top: '50%',
             left: 21,
             display: 'flex',
-            width: 190,
+            zIndex: 998,
 
             '& svg': {
                 width: 20,
@@ -25,22 +24,53 @@ const useStyles = makeStyles((theme) => {
         divider: {
             backgroundColor: theme.custom.common.grayColor,
         },
-        searchInput: {
-            height: 53,
-            width: '100%',
-            border: `1px solid ${theme.custom.common.grayColor}`,
-            borderRadius: 60,
-            marginRight: 12,
-            paddingLeft: 15,
+        dropdown: {
+            marginTop: -20,
+            zIndex: 997,
+            '& .MuiPaper-root': {
+                boxShadow: 'none',
+                margin: 0,
+                '& .MuiAutocomplete-listbox': {
+                    borderRadius: '0 0 20px 20px',
+                    border: `1px solid ${theme.custom.common.grayColor}`,
+                    borderWidth: '0 1px 1px 1px',
+                    padding: '10px 0 0 0',
+                },
+                '& .MuiAutocomplete-option': {
+                    padding: '8px 0',
+                    color: theme.custom.common.grayColor,
+                    fontSize: 14,
 
-            '& input': {
+                    '& svg': {
+                        width: 20,
+                        height: 20,
+                        marginLeft: 21,
+                        marginRight: 26,
+                    },
+                },
+            },
+        },
+        autocomplete: {
+            width: 672,
+
+            '&[aria-expanded="true"] .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
+                borderRadius: '20px 20px 0 0',
+            },
+            '& .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
                 paddingLeft: 67,
+
                 '&::placeholder': {
                     color: theme.custom.common.grayColor,
                     fontSize: 14,
                     opacity: 1,
                 },
             },
+        },
+        searchInput: {
+            height: 53,
+            width: '100%',
+            border: `1px solid ${theme.custom.common.grayColor}`,
+            borderRadius: 60,
         },
         resultsCount: {
             fontSize: 20,

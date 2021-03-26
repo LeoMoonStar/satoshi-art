@@ -10,9 +10,10 @@ function Button({
     className,
     label,
     onClick,
+    ...rest
 }: CustomProps): JSX.Element {
     return (
-        <MUIButton className={className} onClick={onClick}>
+        <MUIButton className={className} onClick={onClick} {...rest}>
             {label || children}
         </MUIButton>
     )
