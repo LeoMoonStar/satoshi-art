@@ -61,6 +61,8 @@
   "date": "Date",
   "close": "Close",
   "youAreAboutToPlaceABidFor": "You are about to place a bid for <1>{{name}}</1>  by <1>{{author}}</1>",
+  "youAreAboutToPurchase": "You are about to purchase <1>{{name}}</1>  by <1>{{author}}</1>",
+  "proceedToPayment": "Proceed to payment",
   "by": "by",
   "yourBid": "Your bid",
   "enterQuantity": "Enter quantity",
