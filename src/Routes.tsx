@@ -26,7 +26,7 @@ function Routes(): JSX.Element {
                     <Route exact path="/create-collectible">
                         <CreateCollectibleType />
                     </Route>
-                    <Route path="/create-collectible/:type">
+                    <Route path="/create-collectible/:type(single|multiple)/">
                         <CreateCollectible />
                     </Route>
                     <Route path="/search">

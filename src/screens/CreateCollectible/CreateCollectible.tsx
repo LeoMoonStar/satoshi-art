@@ -8,15 +8,14 @@ import { LeftArrowIcon } from 'shared/icons'
 
 import useStyles from './CreateCollectible.style'
 import CreateForm from './CreateForm'
-import Preview from './Preview'
 
 const CreateCollectible = (): JSX.Element => {
     const classes = useStyles()
     const history = useHistory()
     const { type } = useParams<{ type: string }>()
 
-    const handleGoBack = () => history.goBack()
-
+    const handleGoBack = () => history.push('/create-collectible')
+    const isSingle = type === 'single'
     return (
         <Layout>
             <div className={classes.container}>
@@ -28,10 +27,7 @@ const CreateCollectible = (): JSX.Element => {
                         Create {type} collectible
                     </div>
                 </div>
-                <div className={classes.form}>
-                    <CreateForm />
-                    <Preview />
-                </div>
+                <CreateForm isSingle={isSingle} />
             </div>
         </Layout>
     )

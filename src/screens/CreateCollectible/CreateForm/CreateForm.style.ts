@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => {
     return {
+        form: {
+            display: 'flex',
+        },
         settings: {
             width: 568,
         },
@@ -58,7 +61,12 @@ const useStyles = makeStyles((theme) => {
         },
         controls: {
             width: '100%',
+
+            '& label, & div': {
+                width: '100%',
+            },
         },
+        switchWrapper: {},
         switchLabel: {
             margin: '0 0 32px 0',
             '& .MuiFormControlLabel-label': {

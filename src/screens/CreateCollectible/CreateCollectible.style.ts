@@ -17,9 +17,6 @@ const useStyles = makeStyles(() => {
                 marginRight: 7,
             },
         },
-        form: {
-            display: 'flex',
-        },
         settings: {
             width: 568,
         },
