@@ -11,7 +11,17 @@ import useStyles from './Works.style'
 
 const works = Array.from({ length: 12 }, (_, index) => index)
 
-function ProductsList(): JSX.Element {
+type WorksListProps = {
+    borderWidth?: number
+    variant?: 'none' | 'rounded'
+    isLoading?: boolean
+}
+
+export default function WorksList({
+    borderWidth = 1,
+    variant = 'none',
+    isLoading = true,
+}: WorksListProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -20,8 +30,15 @@ function ProductsList(): JSX.Element {
             <div className={classes.grid}>
                 {works.map((work) => (
                     <div className={classes.work} key={work}>
-                        <img src={preview} className={classes.preview} alt="" />
-                        <div className={classes.info}>
+                        <img
+                            src={preview}
+                            style={{
+                                borderRadius: variant === 'rounded' ? 30 : 0,
+                            }}
+                            className={classes.preview}
+                            alt=""
+                        />
+                        <div className={classes.info} style={{ borderWidth }}>
                             <div className={classes.authorAvatar}>
                                 <Avatar
                                     size={60}
@@ -34,13 +51,11 @@ function ProductsList(): JSX.Element {
                                 <h2 className={classes.name}>Fresh Meat #F</h2>
                                 <div className={classes.actionButtons}>
                                     <IconButton
-                                        title={t('like')}
                                         className={classes.actionButton}
                                     >
                                         <SaveIcon />
                                     </IconButton>
                                     <IconButton
-                                        title={t('view')}
                                         className={classes.actionButton}
                                     >
                                         <ViewsIcon />
@@ -62,9 +77,11 @@ function ProductsList(): JSX.Element {
                 ))}
             </div>
 
-            <Loader />
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <Button className={classes.seeAllButton}>See All</Button>
+            )}
         </div>
     )
 }
-
-export default ProductsList

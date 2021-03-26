@@ -97,21 +97,23 @@ const useStyles = makeStyles(() => {
             },
         },
         buttonFilled: {
-            width: 170,
-            marginLeft: 35,
+            minWidth: 170,
             lineHeight: '40px',
             padding: 0,
             color: '#fff',
             borderRadius: 60,
             backgroundColor: '#ff0099',
             textTransform: 'initial',
-            '&:hover': {
+            '&:not(:disabled):hover': {
                 backgroundColor: '#ff009990',
+            },
+            '&:disabled': {
+                backgroundColor: '#C4C4C4',
+                color: '#fff',
             },
         },
         buttonOutlined: {
-            width: 170,
-            marginLeft: 35,
+            minWidth: 170,
             lineHeight: '40px',
             padding: 0,
             color: '#ff0099',
@@ -129,6 +131,13 @@ const useStyles = makeStyles(() => {
             gap: 10,
             marginTop: 20,
             flexDirection: 'column',
+        },
+        errorMessage: {
+            margin: '16px 0 4px',
+            width: '100%',
+            textAlign: 'center',
+            color: 'red',
+            fontWeight: 600,
         },
     }
 })

@@ -6,7 +6,6 @@ import {
     FormControlLabel,
     IconButton,
     Input,
-    Popover,
     Switch,
 } from '@material-ui/core'
 import { Close } from '@material-ui/icons'
