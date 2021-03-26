@@ -19,7 +19,7 @@ export default function BuyModal({ onClose }: BidModalProps): JSX.Element {
                 <h2 className={classes.title}>{t('checkout')}</h2>
                 <div className={classes.intro}>
                     <Trans
-                        i18nKey="youAreAboutToPlaceABidFor"
+                        i18nKey="youAreAboutToPurchase"
                         values={{
                             name:
                                 'Invisible Doge | #0038 Weensy  Card Collection',
@@ -53,7 +53,7 @@ export default function BuyModal({ onClose }: BidModalProps): JSX.Element {
                 </ul>
                 <div className={classes.buttons}>
                     <Button className={classes.buttonFilled}>
-                        {t('placeABid')}
+                        {t('proceedToPayment')}
                     </Button>
                     <Button
                         className={classes.buttonOutlined}
