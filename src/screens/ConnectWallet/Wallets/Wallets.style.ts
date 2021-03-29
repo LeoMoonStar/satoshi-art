@@ -133,10 +133,12 @@ const useStyles = makeStyles((theme) => {
             width: 189,
             height: 40,
             fontSize: 13,
+            fontWeight: 600,
             marginTop: 24,
             lineHeight: '16px',
             backgroundColor: theme.custom.common.pinkColor,
             color: theme.palette.primary.main,
+            textTransform: 'none',
             borderRadius: 60,
         },
     }
