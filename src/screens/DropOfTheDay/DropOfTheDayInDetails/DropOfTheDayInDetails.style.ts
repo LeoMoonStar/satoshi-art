@@ -6,16 +6,19 @@ const useStyles = makeStyles(() => {
             width: '100%',
             boxSizing: 'border-box',
             padding: '0 235px',
+            marginBottom: 110,
         },
         info: {
-            width: 569,
+            width: 568,
         },
         title: {
+            margin: '0 32px 0',
             fontWeight: 800,
             fontSize: 36,
             color: '#7E7E7E',
         },
         content: {
+            whiteSpace: 'pre-wrap',
             fontSize: 16,
             color: '#7E7E7E',
             '& p': {
@@ -24,6 +27,7 @@ const useStyles = makeStyles(() => {
             '& span': {
                 color: '#FF0099',
                 '& a': {
+                    fontWeight: 800,
                     color: '#FF0099',
                     '&:hover': {
                         fontWeight: 600,

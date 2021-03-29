@@ -19,6 +19,7 @@ const useStyles = makeStyles(() => {
             marginTop: -60,
             width: '100%',
             display: 'flex',
+            alignItems: 'flex-start',
             borderRadius: 20,
             padding: '60px 100px',
             backgroundColor: '#4D0ED2',
@@ -33,6 +34,7 @@ const useStyles = makeStyles(() => {
             lineHeight: '32px',
         },
         title: {
+            margin: '20px 0 8px',
             fontSize: 30,
             fontWeight: 800,
             color: '#FF0099',
@@ -48,10 +50,11 @@ const useStyles = makeStyles(() => {
             fontSize: 16,
             color: '#fff',
             '& ul': {
+                margin: '20px 0',
+                paddingLeft: 25,
                 listStyleImage: `url(${arrowOfListImage})`,
-                margin: '24px 0',
                 '& li': {
-                    marginBottom: '.5em',
+                    marginBottom: '.4em',
                 },
             },
         },
@@ -63,7 +66,6 @@ const useStyles = makeStyles(() => {
                 border: '1px solid #fff',
             },
         },
-        productPage: {},
         additionalInfo: {
             color: '#fff',
         },

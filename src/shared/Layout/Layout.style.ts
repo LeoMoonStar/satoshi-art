@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => {
         },
         content: {
             flex: '1 0 auto',
-            paddingTop: 45,
         },
         footer: {
             background: 'black',

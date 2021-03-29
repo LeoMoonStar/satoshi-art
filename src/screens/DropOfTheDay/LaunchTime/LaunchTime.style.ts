@@ -36,11 +36,12 @@ const useStyles = makeStyles(() => {
             flexDirection: 'column',
             alignItems: 'flexStart',
             '& b': {
+                width: '2ch',
                 display: 'block',
                 fontSize: 80,
                 fontWeight: 800,
                 lineHeight: '66px',
-                letterSpacing: '-4%',
+                letterSpacing: '-0.04em',
                 color: '#fff',
             },
             '& span': {
@@ -58,7 +59,12 @@ const useStyles = makeStyles(() => {
             color: '#fff',
             textAlign: 'center',
             '& a': {
+                fontWeight: 800,
+                textDecoration: 'none',
                 color: '#FF0099',
+                '&:hover': {
+                    textDecoration: 'underline',
+                },
             },
         },
     }

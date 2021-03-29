@@ -95,5 +95,22 @@
   "termsOfServiceDomainInfo": "Please take a few minutes to read and understand <1>{{domain}}</1> Terms of Service. To continue, you’ll need to accept the Terms of Service by checking the box.",
   "atLeast13YearOld": "I am at least 13 years old",
   "acceptTermsOfService": "I accept the {{domain}} terms of service",
-  "goToDownloadPage": "Go to Download Page"
+  "goToDownloadPage": "Go to Download Page",
+  "specialEdition": "Special Edition",
+  "productPage": "Product Page",
+  "days": "Days",
+  "hours": "Hours",
+  "minutes": "Min ",
+  "seconds": "Sec",
+  "theNextActionWillBeAvailableOn": "The next auction will be available on",
+  "launchTime": "Launch Time",
+  "viewAuction": "View Auction",
+  "countOfCount": "{{value1}} of {{value2}}",
+  "auctionDetails": "Auction Details",
+  "auctionDetailsContent": " Bid to win Limited Edition Brad Pitt NFTscelebrating Pitt’s greatest cinema moments!\n The auction is now open and will run for 48hrs  ending on Saturday (4/2/21) at Ipm ET\n All editions will be sold to the highest bidder, English auction style`\n • Users may place bids across multiple products and editions as soon as the auction begins\n • At the end of the auction, each of the 349 highest  qualifying bids across all editions will, following receipt of payment, promptly receive their commemorative NFT`s in their crypto wallet! All auctions are subject to the auction terms and conditions, a link to which can be found below.",
+  "howToBuy": "How to Buy",
+  "howToBuyContent": "The Brad Pitt’s NFT Collection is being offered exclusively on  Satoshi.ART with a public auction that is now open and will end on Saturday, April 2nd at 7pm ET.\n Any bids made in the Last 10 minutes of the auction will extend each edition auction by 10 additional minutes.\n You will need to setup a MetaMask Wallet to participate in the auction. In order to bid you must pay using Ethereum, the auction will not accept credit cards.",
+  "howToBuyAdditionalContent": "To learn more about purchasing NFTs on Satoshi.ART please click <a href=\"\">HERE</a>.  Video instructions detailing how to setup your MetaMask Wallet are available <a href=\"\">HERE</a>. For full auction terms and conditions, please click <a href=\"\">HERE</a>.",
+  "authenticVerification": "Authentic Verification",
+  "authenticVerificationContent": " Each Limited Edition NFT card is marked with a  unique serial number with guaranteed scarcity and  protected ownership guaranteed by the blockchain. On each card you will find the card`s edition number.\n For instance - When you own the Pittfull#1 NFT, you are the only person in the world with this digital collectible!"
 }

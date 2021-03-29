@@ -5,7 +5,6 @@ const useStyles = makeStyles(() => {
         container: {
             width: '100%',
             boxSizing: 'border-box',
-            paddingRight: 37,
         },
     }
 })

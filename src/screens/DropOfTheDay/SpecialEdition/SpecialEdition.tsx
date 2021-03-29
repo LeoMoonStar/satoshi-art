@@ -1,13 +1,14 @@
 import React from 'react'
 import Button from 'shared/Button'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import specialEditionImage from 'shared/images/dropOfTheDay/specialEdition.png'
 import useStyles from './SpecialEditon.style'
 
 export default function LaunchTime(): JSX.Element {
     const classes = useStyles()
-    // const { t } = useTranslation()
+    const { t } = useTranslation()
 
     return (
         <section className={classes.container}>
@@ -19,7 +20,7 @@ export default function LaunchTime(): JSX.Element {
                 />
                 <div className={classes.infoWrapper}>
                     <div className={classes.titleOfSection}>
-                        Special Edition
+                        {t('specialEdition')}
                     </div>
                     <h2 className={classes.title}>
                         I’m Jack’s wasted life NFT (1-of-1)
@@ -51,7 +52,7 @@ export default function LaunchTime(): JSX.Element {
                         Etiam iaculis, nulla eu sodales sagittis.
                     </div>
                     <Link to="/" className={classes.linkAsButton}>
-                        <Button variant="action">Product Page</Button>
+                        <Button variant="action">{t('productPage')}</Button>
                     </Link>
                 </div>
             </div>

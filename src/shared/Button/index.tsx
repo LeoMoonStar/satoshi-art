@@ -6,6 +6,7 @@ import cx from 'classnames'
 const useStyles = makeStyles(() => {
     return {
         action: {
+            minWidth: 157,
             lineHeight: '40px',
             padding: 0,
             color: '#fff',
@@ -27,7 +28,6 @@ const useStyles = makeStyles(() => {
 interface CustomProps extends ButtonProps {
     label?: string
     variant?: any // todo: any
-    minWidth?: number
 }
 // todo: reuse this button where you need it
 
@@ -36,7 +36,6 @@ function Button({
     className,
     label,
     onClick,
-    minWidth = 157,
     variant = 'none',
     ...rest
 }: CustomProps): JSX.Element {
@@ -47,7 +46,6 @@ function Button({
         <MUIButton
             className={cx(className, classes[key])}
             onClick={onClick}
-            style={{ minWidth }}
             {...rest}
         >
             {label || children}

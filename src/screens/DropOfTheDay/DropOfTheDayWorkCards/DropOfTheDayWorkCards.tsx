@@ -1,5 +1,5 @@
 import React from 'react'
-// import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import Button from 'shared/Button'
 import card1 from 'shared/images/dropOfTheDay/card1.png'
@@ -17,7 +17,7 @@ const items = [
 
 export default function OrderListFilters(): JSX.Element {
     const classes = useStyles()
-    // const { t } = useTranslation()
+    const { t } = useTranslation()
 
     return (
         <section className={classes.container}>
@@ -26,7 +26,9 @@ export default function OrderListFilters(): JSX.Element {
                     <img src={image} alt="" />
                     <div className={classes.header}>
                         <h2 className={classes.title}>Pittful#1</h2>
-                        <div className={classes.count}>1 of 100</div>
+                        <div className={classes.count}>
+                            {t('countOfCount', { value1: 2, value2: 10 })}
+                        </div>
                     </div>
                     <div className={classes.subTitle}>Brad’s Vault</div>
                     <ul className={classes.list}>
@@ -43,7 +45,7 @@ export default function OrderListFilters(): JSX.Element {
                         fullWidth
                         variant="action"
                     >
-                        Buy Now
+                        {t('buyNow')}
                     </Button>
                 </div>
             ))}

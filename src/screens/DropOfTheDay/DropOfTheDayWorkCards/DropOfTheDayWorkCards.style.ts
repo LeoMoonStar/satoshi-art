@@ -28,6 +28,7 @@ const useStyles = makeStyles(() => {
             alignItems: 'flex-end',
         },
         title: {
+            letterSpacing: '-0.04em',
             margin: 0,
             fontWeight: 600,
             fontSize: 30,
@@ -36,6 +37,7 @@ const useStyles = makeStyles(() => {
         count: {
             fontWeight: 600,
             fontSize: 16,
+            letterSpacing: '-0.04em',
             color: '#7E7E7E',
         },
         subTitle: {
@@ -43,6 +45,7 @@ const useStyles = makeStyles(() => {
             margin: '16px 0 15px',
             fontWeight: 600,
             fontSize: 20,
+            letterSpacing: '-0.04em',
             color: '#4D0ED2',
         },
         list: {
