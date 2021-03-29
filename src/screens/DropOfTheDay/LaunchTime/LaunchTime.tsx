@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import useStyles from './LaunchTime.style'
 
-const getTimeDurationInCharsToTargetTime = (date: any) => {
+const getTimeDurationInCharsToTargetTime = (date: Date) => {
     let timeDiff = date.getTime() - new Date().getTime()
 
     const days = Math.floor(timeDiff / 86400000)
