@@ -9,14 +9,7 @@ import {
     Theme,
 } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import {
-    SaveIcon,
-    ExpandIcon,
-    DotsIcon,
-    LikeIcon,
-    ViewsIcon,
-    GreySaveIcon,
-} from 'shared/icons'
+import { SaveIcon, ExpandIcon } from 'shared/icons'
 import Button from 'shared/Button'
 import { TokenInfo } from './TokenInfo'
 import BidModal from './BidModal'
@@ -35,12 +28,15 @@ const IconWrapper = styled(Grid)(
     })
 )
 
-const InfoIconWrapper = styled(Grid)(
-    ({ lastIcon }: { lastIcon?: boolean }) => ({
-        display: 'flex',
-        marginRight: lastIcon ? 0 : 30,
-    })
-)
+{
+    /* TODO: Hidden for MVP */
+}
+// const InfoIconWrapper = styled(Grid)(
+//     ({ lastIcon }: { lastIcon?: boolean }) => ({
+//         display: 'flex',
+//         marginRight: lastIcon ? 0 : 30,
+//     })
+// )
 
 enum TabVariants {
     INFO = 0,
@@ -100,6 +96,8 @@ const TokenDetails = (): JSX.Element => {
                                 <ExpandIcon />
                             </IconButton>
                         </IconWrapper>
+                        {/* TODO: Hidden for MVP */}
+                        {/*
                         <IconWrapper
                             item
                             alignItems="center"
@@ -110,9 +108,11 @@ const TokenDetails = (): JSX.Element => {
                                 <DotsIcon />
                             </IconButton>
                         </IconWrapper>
+                        */}
                     </div>
                 </div>
-                <div className={classes.socialActivityContainer}>
+                {/* TODO: Hidden for MVP */}
+                {/*<div className={classes.socialActivityContainer}>
                     <InfoIconWrapper item direction="row" alignItems="center">
                         <GreySaveIcon />{' '}
                         <Typography
@@ -145,7 +145,7 @@ const TokenDetails = (): JSX.Element => {
                             220
                         </Typography>
                     </InfoIconWrapper>
-                </div>
+                </div>*/}
             </div>
             <div className={classes.tokenDetailsContainer}>
                 <div>

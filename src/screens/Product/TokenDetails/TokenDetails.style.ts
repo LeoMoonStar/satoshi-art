@@ -70,6 +70,10 @@ const useStyles = makeStyles((theme) => {
         },
         highestBidInfoContainer: {
             marginTop: 50,
+
+            '& h6': {
+                color: theme.custom.common.grayColor,
+            },
         },
         highestBidContainer: {
             display: 'flex',
@@ -95,13 +99,20 @@ const useStyles = makeStyles((theme) => {
             borderRadius: 40,
         },
         placeBidButton: {
+            position: 'relative',
             width: 204,
             height: 40,
             marginLeft: 20,
-            backgroundColor: 'transparent',
-            border: `1px solid ${theme.custom.common.pinkColor}`,
+            boxSizing: 'border-box',
+            textTransform: 'initial',
             borderRadius: 40,
-            color: theme.custom.common.pinkColor,
+            border: `1px solid ${theme.custom.common.purpleColor}`,
+            '& span': {
+                color: '#FF0099',
+                background: '-webkit-linear-gradient(left, #6A2FE7, #FF0099)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+            },
         },
         serviceFeeInfoContainer: {
             display: 'flex',
