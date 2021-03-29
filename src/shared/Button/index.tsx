@@ -21,6 +21,22 @@ const useStyles = makeStyles(() => {
                 color: '#fff',
             },
         },
+        outlined: {
+            width: 157,
+            lineHeight: '40px',
+            padding: 0,
+            color: '#ff0099',
+            borderRadius: 60,
+            border: '1px solid #ff0099',
+            textTransform: 'initial',
+            '&:not(:disabled):hover': {
+                backgroundColor: '#ff009920',
+            },
+            '&:disabled': {
+                border: '1px solid #C4C4C4',
+                color: '#C4C4C4',
+            },
+        },
         none: {},
     }
 })

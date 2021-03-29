@@ -122,17 +122,7 @@ const useStyles = makeStyles(() => ({
         right: 0,
     },
     followButton: {
-        minWidth: 157,
         marginLeft: 35,
-        lineHeight: '40px',
-        padding: 0,
-        color: '#fff',
-        borderRadius: 60,
-        backgroundColor: '#ff0099',
-        textTransform: 'initial',
-        '&:hover': {
-            backgroundColor: '#ff009990',
-        },
     },
 }))
 

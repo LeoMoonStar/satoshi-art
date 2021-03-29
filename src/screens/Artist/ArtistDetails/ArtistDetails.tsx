@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { IconButton, Button } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
+import Button from 'shared/Button'
 import Avatar from 'shared/Avatar'
 import { LikeIcon, SaveIcon, ViewsIcon, ThreeDotsIcon } from 'shared/icons'
 import artistAvatar from 'shared/images/artist/avatar.jpg'
@@ -35,7 +36,10 @@ export default function ArtistDetails(): JSX.Element {
                             <LikeIcon />
                             220
                         </div>
-                        <Button className={classes.followButton}>
+                        <Button
+                            variant="action"
+                            className={classes.followButton}
+                        >
                             {t('follow')}
                         </Button>
                     </div>

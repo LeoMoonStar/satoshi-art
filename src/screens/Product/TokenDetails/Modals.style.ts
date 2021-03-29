@@ -97,30 +97,12 @@ const useStyles = makeStyles(() => {
             },
         },
         buttonFilled: {
-            width: 170,
+            minWidth: 170,
             marginLeft: 35,
-            lineHeight: '40px',
-            padding: 0,
-            color: '#fff',
-            borderRadius: 60,
-            backgroundColor: '#ff0099',
-            textTransform: 'initial',
-            '&:hover': {
-                backgroundColor: '#ff009990',
-            },
         },
         buttonOutlined: {
-            width: 170,
+            minWidth: 170,
             marginLeft: 35,
-            lineHeight: '40px',
-            padding: 0,
-            color: '#ff0099',
-            borderRadius: 60,
-            border: '1px solid #ff0099',
-            textTransform: 'initial',
-            '&:hover': {
-                backgroundColor: '#ff009920',
-            },
         },
         buttons: {
             width: '100%',

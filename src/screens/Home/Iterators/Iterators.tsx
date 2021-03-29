@@ -31,7 +31,7 @@ export default function Iterators(): JSX.Element {
                     <h3 className={classes.name}>Ryan Reynolds</h3>
                 </div>
                 <div className={classes.buttonRow}>
-                    <Button>{t('seeAllHistory')}</Button>
+                    <Button variant="action">{t('seeAllHistory')}</Button>
                 </div>
             </div>
         </section>
