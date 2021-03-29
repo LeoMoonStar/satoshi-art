@@ -14,6 +14,7 @@ import Button from 'shared/Button'
 import { TokenInfo } from './TokenInfo'
 import BidModal from './BidModal'
 import BuyModal from './BuyModal'
+import FSModal from './FSModal'
 
 import useStyles from './TokenDetails.style'
 
@@ -64,10 +65,14 @@ const tabs = [
     },
 ]
 
+const productImgSrc =
+    'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg'
+
 const TokenDetails = (): JSX.Element => {
     const [tab, selectTab] = useState(TabVariants.INFO)
     const [isBidModal, setBidModal] = useState<boolean>(false)
     const [isBuyModal, setBuyModal] = useState<boolean>(false)
+    const [isFSModal, setFSModal] = useState<boolean>(false)
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -80,9 +85,7 @@ const TokenDetails = (): JSX.Element => {
                 <div className={classes.imageWrapper}>
                     <img
                         className={classes.tokenImage}
-                        src={
-                            'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg'
-                        }
+                        src={productImgSrc}
                         alt={'Token image'}
                     />
                     <div className={classes.iconsContainer}>
@@ -91,7 +94,12 @@ const TokenDetails = (): JSX.Element => {
                                 <SaveIcon />
                             </IconButton>
                         </IconWrapper>
-                        <IconWrapper item alignItems="center" justify="center">
+                        <IconWrapper
+                            onClick={() => setFSModal(true)}
+                            item
+                            alignItems="center"
+                            justify="center"
+                        >
                             <IconButton>
                                 <ExpandIcon />
                             </IconButton>
@@ -231,6 +239,7 @@ const TokenDetails = (): JSX.Element => {
                             className={classes.placeBidButton}
                         />
                     </div>
+
                     <div className={classes.serviceFeeInfoContainer}>
                         <Typography variant="h6">
                             {t('serviceFeeProgress', { fee: '2.5' })}
@@ -252,6 +261,12 @@ const TokenDetails = (): JSX.Element => {
             </div>
             {isBidModal && <BidModal onClose={() => setBidModal(false)} />}
             {isBuyModal && <BuyModal onClose={() => setBuyModal(false)} />}
+            {isFSModal && (
+                <FSModal
+                    src={productImgSrc}
+                    onClose={() => setFSModal(false)}
+                />
+            )}
         </div>
     )
 }

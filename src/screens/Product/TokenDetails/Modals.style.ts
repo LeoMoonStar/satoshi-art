@@ -139,6 +139,48 @@ const useStyles = makeStyles(() => {
             color: 'red',
             fontWeight: 600,
         },
+        fsModal: {
+            backgroundColor: 'rgb(18, 18, 18)',
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        collectibleWrapper: {
+            display: 'flex',
+            flex: '1 0 auto',
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            maxWidth: '100%',
+            padding: 20,
+        },
+        collectibleItem: {
+            maxWidth: 600,
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+
+            '& img': {
+                width: '100%',
+            },
+        },
+        fsModalHeader: {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: '20px 16px',
+        },
+        fsModalFooter: {
+            padding: '20px 16px',
+            color: '#fff',
+            fontWeight: 700,
+            fontSize: 16,
+
+            '& span': {
+                color: '#ffffff80',
+            },
+            '& a': {
+                color: 'inherit',
+                textDecoration: 'none',
+            },
+        },
     }
 })
 
