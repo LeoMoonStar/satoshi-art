@@ -14,10 +14,7 @@ const SliderLeft = ({ currentSlide, slideCount, ...props }: any) => {
     return (
         <button
             {...props}
-            className={
-                'slick-prev slick-arrow' +
-                (currentSlide === 0 ? ' slick-disabled' : '')
-            }
+            className="slick-prev slick-arrow"
             aria-hidden="true"
             aria-disabled={currentSlide === 0}
             type="button"
@@ -31,10 +28,7 @@ const SliderRight = ({ currentSlide, slideCount, ...props }: any) => {
     return (
         <button
             {...props}
-            className={
-                'slick-next slick-arrow' +
-                (currentSlide === slideCount - 1 ? ' slick-disabled' : '')
-            }
+            className="slick-next slick-arrow"
             aria-hidden="true"
             aria-disabled={currentSlide === slideCount - 1}
             type="button"
@@ -111,7 +105,7 @@ export default function DropOfTheDaySlider({
                                 </div>
                                 <Button
                                     className={classes.seeAll}
-                                    variant="action"
+                                    variantCustom="action"
                                 >
                                     {t('seeAll')}
                                 </Button>

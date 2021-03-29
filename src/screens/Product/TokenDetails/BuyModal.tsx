@@ -53,11 +53,14 @@ export default function BuyModal({ onClose }: BidModalProps): JSX.Element {
                     </li>
                 </ul>
                 <div className={classes.buttons}>
-                    <Button variant="action" className={classes.buttonFilled}>
+                    <Button
+                        variantCustom="action"
+                        className={classes.buttonFilled}
+                    >
                         {t('placeABid')}
                     </Button>
                     <Button
-                        variant="outlined"
+                        variantCustom="outlined"
                         className={classes.buttonOutlined}
                         onClick={onClose}
                     >

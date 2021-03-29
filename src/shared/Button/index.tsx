@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import MUIButton, { ButtonProps } from '@material-ui/core/Button'
 import cx from 'classnames'
 
+type Variants = 'action' | 'outlined'
+
 const useStyles = makeStyles(() => {
     return {
         action: {
@@ -43,24 +45,25 @@ const useStyles = makeStyles(() => {
 
 interface CustomProps extends ButtonProps {
     label?: string
-    variant?: any // todo: any
+    variantCustom?: Variants
 }
-// todo: reuse this button where you need it
 
 function Button({
     children,
     className,
     label,
     onClick,
-    variant = 'none',
+    variantCustom,
     ...rest
 }: CustomProps): JSX.Element {
-    const classes = useStyles()
-    const key: keyof typeof classes = variant
+    const variantClassName = useStyles()
 
     return (
         <MUIButton
-            className={cx(className, classes[key])}
+            className={cx(
+                className,
+                variantClassName[variantCustom as Variants]
+            )}
             onClick={onClick}
             {...rest}
         >

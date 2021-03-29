@@ -18,7 +18,7 @@ export default function TheSeries(): JSX.Element {
                 <Link to="/">
                     <LogoHeaderWhiteIcon />
                 </Link>
-                <Button variant="action">{t('viewAuction')}</Button>
+                <Button variantCustom="action">{t('viewAuction')}</Button>
             </div>
             <article className={classes.article}>
                 <h2 className={classes.title}>Brad Pitt</h2>

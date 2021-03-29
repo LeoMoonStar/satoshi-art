@@ -82,7 +82,7 @@ export default function WorksList({
             {isLoading ? (
                 <Loader />
             ) : (
-                <Button variant="action" className={classes.seeAllButton}>
+                <Button variantCustom="action" className={classes.seeAllButton}>
                     See All
                 </Button>
             )}

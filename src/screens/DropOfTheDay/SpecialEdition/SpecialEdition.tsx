@@ -1,8 +1,8 @@
 import React from 'react'
-import Button from 'shared/Button'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
+import Button from 'shared/Button'
 import specialEditionImage from 'shared/images/dropOfTheDay/specialEdition.png'
 import useStyles from './SpecialEditon.style'
 
@@ -52,7 +52,9 @@ export default function LaunchTime(): JSX.Element {
                         Etiam iaculis, nulla eu sodales sagittis.
                     </div>
                     <Link to="/" className={classes.linkAsButton}>
-                        <Button variant="action">{t('productPage')}</Button>
+                        <Button variantCustom="action">
+                            {t('productPage')}
+                        </Button>
                     </Link>
                 </div>
             </div>

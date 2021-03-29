@@ -43,7 +43,7 @@ export default function OrderListFilters(): JSX.Element {
                     <Button
                         className={classes.buyNow}
                         fullWidth
-                        variant="action"
+                        variantCustom="action"
                     >
                         {t('buyNow')}
                     </Button>

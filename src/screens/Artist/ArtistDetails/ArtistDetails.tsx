@@ -37,7 +37,7 @@ export default function ArtistDetails(): JSX.Element {
                             220
                         </div>
                         <Button
-                            variant="action"
+                            variantCustom="action"
                             className={classes.followButton}
                         >
                             {t('follow')}
