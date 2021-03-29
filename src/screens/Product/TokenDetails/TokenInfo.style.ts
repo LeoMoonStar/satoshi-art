@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => {
         textDecoration: 'none',
         color: '#000',
         '&:hover': {
-            textDecoration: 'underline',
+            cursor: 'pointer',
         },
     }
 
