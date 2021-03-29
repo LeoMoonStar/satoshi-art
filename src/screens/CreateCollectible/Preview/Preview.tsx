@@ -1,30 +1,30 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import Avatar from 'shared/Avatar'
 import avatar from 'shared/images/artist/avatar.jpg'
 import useStyles from './Preview.style'
 
 type PreviewProps = {
-    imgSrc: string | undefined
+    fileSrc?: string
     fields: {
-        name: string | undefined
-        copiesCount?: number | undefined
-        unlockContent?: string | undefined
-        price?: number | undefined
+        name?: string
+        copiesCount?: number
+        unlockContent?: string
+        price?: number
     }
     isSingle: boolean
 }
 
-const Preview = ({ imgSrc, fields, isSingle }: PreviewProps): JSX.Element => {
+const Preview = ({ fileSrc, fields, isSingle }: PreviewProps): JSX.Element => {
     const classes = useStyles()
-    const isFieldsNotEmpty = Object.values(fields).some(
-        (field) => field !== undefined
-    )
+    const { t } = useTranslation()
+    const isFieldsNotEmpty = Object.values(fields).some((field) => field)
     return (
         <div className={classes.previewWrapper}>
             <div className={classes.lockableContent}>
                 <div className={classes.subtitle}>Preview</div>
                 <div className={classes.previewArea}>
-                    {imgSrc || isFieldsNotEmpty ? (
+                    {fileSrc || isFieldsNotEmpty ? (
                         <div className={classes.content}>
                             <div className={classes.references}>
                                 <Avatar size={26} image={avatar} alt="John" />
@@ -32,8 +32,8 @@ const Preview = ({ imgSrc, fields, isSingle }: PreviewProps): JSX.Element => {
                                 <Avatar size={26} image={avatar} alt="John" />
                             </div>
                             <div className={classes.previewImgWrapper}>
-                                {imgSrc && (
-                                    <img src={imgSrc} alt="preview-image" />
+                                {fileSrc && (
+                                    <img src={fileSrc} alt="preview-image" />
                                 )}
                             </div>
                             <div className={classes.previewDscr}>
@@ -52,12 +52,12 @@ const Preview = ({ imgSrc, fields, isSingle }: PreviewProps): JSX.Element => {
                                         </span>
                                     )}
                                 </div>
-                                <div>No bids yet</div>
+                                <div> {t('noBidsYet')}</div>
                             </div>
                         </div>
                     ) : (
                         <div className={classes.placeholder}>
-                            Preview of your new collectible
+                            {t('previewOfYourNewCollectible')}
                         </div>
                     )}
                 </div>

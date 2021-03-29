@@ -9,6 +9,7 @@ import {
     Switch,
 } from '@material-ui/core'
 import { Close } from '@material-ui/icons'
+import { useTranslation, Trans } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { LogoIcon, PlusCircle } from 'shared/icons'
 
@@ -21,9 +22,9 @@ type PropertyType = {
 }
 
 type PreviewType = {
-    [key: string]: string | undefined
-    coverSrc?: string | undefined
-    type: string | undefined
+    fileSrc: string
+    coverSrc?: string
+    type: string
 }
 
 interface ICollectibleForm {
@@ -58,6 +59,7 @@ const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg,'
 
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const classes = useStyles()
+    const { t } = useTranslation()
     const {
         register,
         handleSubmit,
@@ -72,19 +74,20 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     })
 
     const [preview, setPreview] = useState<PreviewType>({
-        fileSrc: undefined,
-        coverSrc: undefined,
-        type: undefined,
+        fileSrc: '',
+        coverSrc: '',
+        type: '',
     })
 
     const onSubmit = (data: ICollectibleForm) => {
+        {
+            /* todo: will be changed after implement functionality */
+        }
+
         console.log(data)
     }
 
-    const handleFileChange = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        path: string
-    ) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files
 
         if (!fileList) return
@@ -93,24 +96,26 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
         const src = URL.createObjectURL(file)
         const type = file.type.split('/')[0]
+        console.log(e.target.name)
         setPreview({
             ...preview,
-            [path]: src,
-            type: path === 'coverSrc' ? preview.type : type,
+            [e.target.name]: src,
+            type: e.target.name === 'coverSrc' ? preview.type : type,
         })
     }
 
     const clearFile = () => {
         setPreview({
-            fileSrc: undefined,
-            coverSrc: undefined,
-            type: undefined,
+            fileSrc: '',
+            coverSrc: '',
+            type: '',
         })
     }
 
     const clearCover = () => {
-        setPreview({ ...preview, coverSrc: undefined })
+        setPreview({ ...preview, coverSrc: '' })
     }
+
     const previewFields = watch([
         'name',
         'copiesCount',
@@ -123,14 +128,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={classes.settings}>
                     <div className={classes.upload}>
-                        <div className={classes.subtitle}>Upload file</div>
+                        <div className={classes.subtitle}>
+                            {t('uploadFile')}
+                        </div>
                         <div className={classes.uploadWrapper}>
                             <input
                                 accept={VALID_FILE_TYPES}
                                 className={classes.input}
-                                onChange={(e) => handleFileChange(e, 'fileSrc')}
+                                onChange={handleFileChange}
                                 ref={register}
-                                name="file"
+                                name="fileSrc"
                                 id="uploadFile"
                                 type="file"
                                 hidden
@@ -145,7 +152,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                             component="span"
                                             className={classes.chooseBtn}
                                         >
-                                            Choose File
+                                            {t('chooseFile')}
                                         </Button>
                                     </label>
                                 </div>
@@ -174,16 +181,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     </div>
                     {(preview.type === 'video' || preview.type === 'audio') && (
                         <div className={classes.upload}>
-                            <div className={classes.subtitle}>Upload cover</div>
+                            <div className={classes.subtitle}>
+                                {t('uploadCover')}
+                            </div>
                             <div className={classes.uploadWrapper}>
                                 <input
                                     accept={VAlID_COVER_TYPES}
                                     className={classes.input}
-                                    onChange={(e) =>
-                                        handleFileChange(e, 'coverSrc')
-                                    }
+                                    onChange={handleFileChange}
                                     ref={register}
-                                    name="cover"
+                                    name="coverSrc"
                                     id="uploadCover"
                                     type="file"
                                     hidden
@@ -198,7 +205,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                                 component="span"
                                                 className={classes.chooseBtn}
                                             >
-                                                Choose File
+                                                {t('chooseFile')}
                                             </Button>
                                         </label>
                                     </div>
@@ -241,10 +248,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     label={
                                         <span>
                                             <span className={classes.onSale}>
-                                                Put on sale
+                                                {t('putOnSale')}
                                             </span>
                                             <span>
-                                                You’ll receive bids on this item
+                                                {t('youWillReceiveBids')}
                                             </span>
                                         </span>
                                     }
@@ -268,11 +275,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     label={
                                         <span>
                                             <span className={classes.price}>
-                                                Instant sale price
+                                                {t('instantSalePrice')}
                                             </span>
                                             <span>
-                                                Enter the price for which the
-                                                item will be instantly sold
+                                                {t(
+                                                    'enterThePriceForInstantlySold'
+                                                )}
                                             </span>
                                         </span>
                                     }
@@ -285,9 +293,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                             name="price"
                                             disableUnderline
                                         />
-                                        <span>Service fee 2.5%</span>
                                         <span>
-                                            You will receive 0 ETH $0.00
+                                            {' '}
+                                            {t('serviceFeeProgress', {
+                                                fee: '2.5',
+                                            })}
+                                        </span>
+                                        <span>
+                                            {t('youWillReceiveCnt', {
+                                                count: 0,
+                                                currency: 'ETH',
+                                                amount: '0,00',
+                                            })}
                                         </span>
                                     </div>
                                 )}
@@ -305,11 +322,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 label={
                                     <span>
                                         <span className={classes.unlock}>
-                                            Unlock once purchased
+                                            {t('unlockOncePurchased')}
                                         </span>
                                         <span>
-                                            Content will be unlocked after
-                                            successful transaction
+                                            {t('unlockOncePurchasedContent')}
                                         </span>
                                     </span>
                                 }
@@ -323,7 +339,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                         disableUnderline
                                     />
                                     <span>
-                                        Tip: Markdown syntax is supported
+                                        markDownIsSupported
+                                        {t('markdownIsSupported')}
                                     </span>
                                 </div>
                             )}
@@ -331,6 +348,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     </FormControl>
                     <div className={classes.collectionType}>
                         <div className={classes.subtitle}>
+                            {t('chooseCollection')}
                             Choose collection
                         </div>
                         <div className={classes.cards}>
@@ -349,7 +367,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     >
                                         <PlusCircle />
                                         <span className={classes.cardName}>
-                                            Create
+                                            {t('create')}
                                         </span>
                                         <span className={classes.cardDscr}>
                                             ERC-721
@@ -384,8 +402,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     </div>
                     <div className={classes.propertiesWrapper}>
                         <div className={classes.input}>
-                            <div className={classes.label}>Name</div>
+                            <label htmlFor="name" className={classes.label}>
+                                {t('name')}
+                            </label>
                             <Input
+                                id="name"
                                 placeholder="e. g. “Redeemable T-Shirt with logo”"
                                 name="name"
                                 inputRef={register}
@@ -394,8 +415,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             />
                         </div>
                         <div className={classes.input}>
-                            <div className={classes.label}>Description</div>
+                            <label
+                                htmlFor="description"
+                                className={classes.label}
+                            >
+                                {t('description')}
+                            </label>
                             <Input
+                                id="description"
                                 placeholder="e. g. “After purchasing you’ll be able to get the real Tee”"
                                 inputRef={register}
                                 name="description"
@@ -403,10 +430,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             />
                             <span>With preserved line-breaks</span>
                         </div>
-                        <div className={!isSingle ? classes.sizes : ''}>
+                        <div className={clsx({ [classes.sizes]: !isSingle })}>
                             <div className={classes.input}>
-                                <div className={classes.label}>Royalties</div>
+                                <label
+                                    htmlFor="royalties"
+                                    className={classes.label}
+                                >
+                                    {t('royalties')}
+                                </label>
                                 <Input
+                                    id="royalties"
                                     defaultValue="10"
                                     inputRef={register}
                                     disableUnderline
@@ -414,14 +447,24 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     name="royalties"
                                     endAdornment={<span>%</span>}
                                 />
-                                <span>Suggested: 10%, 20%, 30%</span>
+                                <span>
+                                    {t('suggestedPercentages', {
+                                        value1: 10,
+                                        value2: 20,
+                                        value3: 30,
+                                    })}
+                                </span>
                             </div>
                             {!isSingle && (
                                 <div className={classes.input}>
-                                    <div className={classes.label}>
-                                        Number of copies
-                                    </div>
+                                    <label
+                                        htmlFor="copiesCount"
+                                        className={classes.label}
+                                    >
+                                        {t('numberOfCopies')}
+                                    </label>
                                     <Input
+                                        id="copiesCount"
                                         placeholder="e. g. 10"
                                         inputRef={register}
                                         disableUnderline
@@ -429,16 +472,20 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                         name="copiesCount"
                                         endAdornment={<span>%</span>}
                                     />
-                                    <span>Suggested: 10%, 20%, 30%</span>
+                                    <span> {t('numberOfCopies')}</span>
                                 </div>
                             )}
                         </div>
                         <div className={classes.input}>
-                            <div className={classes.label}>
-                                Properties<span>(Optional)</span>
-                            </div>
+                            <label htmlFor="size" className={classes.label}>
+                                <Trans
+                                    i18nKey="propertiesOptional"
+                                    components={{ 1: <span /> }}
+                                />
+                            </label>
                             <div className={classes.sizes}>
                                 <Input
+                                    id="size"
                                     placeholder="e. g. Size"
                                     disableUnderline
                                 />
@@ -447,13 +494,17 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                         </div>
                     </div>
                     <div className={classes.footer}>
-                        <Button type="submit">Create item</Button>
-                        <div>Unsaved changes</div>
+                        <Button type="submit">{t('createItem')}</Button>
+                        <div>{t('unsavedChanges')}</div>
                     </div>
                 </div>
             </form>
             <Preview
-                imgSrc={preview.fileSrc || preview.coverSrc}
+                fileSrc={
+                    preview.type === 'image'
+                        ? preview.fileSrc
+                        : preview.coverSrc
+                }
                 fields={previewFields}
                 isSingle={isSingle}
             />

@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom'
 
 import Button from 'shared/Button'
 import ConnectButton from 'shared/ConnectButton'
-import { LogoIcon } from 'shared/icons'
+import { FullLogo } from 'shared/icons'
 import useStyles from './HeaderFull.style'
 
 const navItems = [
@@ -21,7 +21,7 @@ export default function HeaderFull(): JSX.Element {
         <header className={classes.container}>
             <div className={classes.topRow}>
                 <div className={classes.logo}>
-                    <LogoIcon />
+                    <FullLogo />
                 </div>
 
                 <nav className={classes.navigation}>

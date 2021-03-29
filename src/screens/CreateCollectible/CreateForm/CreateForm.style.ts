@@ -164,6 +164,8 @@ const useStyles = makeStyles((theme) => {
         },
         label: {
             fontWeight: 600,
+            display: 'block',
+            cursor: 'pointer',
             fontSize: 18,
             lineHeight: '23px',
             color: theme.custom.common.blackColor,
