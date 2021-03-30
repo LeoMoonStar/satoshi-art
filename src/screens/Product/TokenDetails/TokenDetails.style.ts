@@ -110,6 +110,7 @@ const useStyles = makeStyles((theme) => {
             backgroundImage: `url(${gradientBg})`,
             backgroundSize: 'cover',
             '& span': {
+                display: 'inline-block',
                 color: '#FF0099',
                 background: '-webkit-linear-gradient(left, #6A2FE7, #FF0099)',
                 WebkitBackgroundClip: 'text',
