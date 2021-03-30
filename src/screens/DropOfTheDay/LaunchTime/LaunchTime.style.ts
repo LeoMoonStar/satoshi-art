@@ -29,12 +29,12 @@ const useStyles = makeStyles(() => {
             marginTop: 40,
             display: 'flex',
             color: '#fff',
-            gap: 54,
         },
         col: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flexStart',
+            margin: '0 27px',
             '& b': {
                 width: '2ch',
                 display: 'block',

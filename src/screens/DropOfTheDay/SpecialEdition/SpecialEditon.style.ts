@@ -14,6 +14,7 @@ const useStyles = makeStyles(() => {
         image: {
             width: 468,
             borderRadius: 20,
+            marginRight: 100,
         },
         specialEditionCard: {
             marginTop: -60,
@@ -23,7 +24,6 @@ const useStyles = makeStyles(() => {
             borderRadius: 20,
             padding: '60px 100px',
             backgroundColor: '#4D0ED2',
-            gap: 100,
         },
         infoWrapper: {},
         titleOfSection: {
