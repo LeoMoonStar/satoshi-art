@@ -1,7 +1,6 @@
 import React from 'react'
 import { Typography } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import useStyles from './TokenInfo.style'
@@ -13,7 +12,7 @@ export const TokenInfo = (): JSX.Element => {
     return (
         <div className={classes.container}>
             <div>
-                <Link to="/artists/1" className={classes.ownerContainer}>
+                <div className={classes.ownerContainer}>
                     <div className={classes.imageWrapper}>
                         <Avatar
                             size={48}
@@ -31,8 +30,8 @@ export const TokenInfo = (): JSX.Element => {
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
-                </Link>
-                <Link to="/artists/1" className={classes.creatorContainer}>
+                </div>
+                <div className={classes.creatorContainer}>
                     <div className={classes.imageWrapper}>
                         <Avatar
                             size={48}
@@ -50,10 +49,10 @@ export const TokenInfo = (): JSX.Element => {
                         </Typography>
                         <Typography variant="h3">Fimbim</Typography>
                     </div>
-                </Link>
+                </div>
             </div>
             <div className={classes.divider} />
-            <Link to="/artists/1" className={classes.collectionContainer}>
+            <div className={classes.collectionContainer}>
                 <Avatar
                     size={48}
                     alt="Profile photo"
@@ -68,7 +67,7 @@ export const TokenInfo = (): JSX.Element => {
                     </Typography>
                     <Typography variant="h3">Fimbim</Typography>
                 </div>
-            </Link>
+            </div>
         </div>
     )
 }

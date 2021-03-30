@@ -11,10 +11,10 @@ import {
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { useTranslation, Trans } from 'react-i18next'
 
+import { FullLogo } from 'shared/icons'
 import { useWallets } from 'hooks/useWallets'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
-import { LogoIcon } from 'shared/icons'
 
 import useStyles from './Wallets.style'
 import WalletOption from '../WalletOption'
@@ -43,7 +43,7 @@ function Wallets(): JSX.Element {
         <div className={classes.container}>
             <div className={classes.walletsModal}>
                 <div className={classes.modalHeader}>
-                    <LogoIcon />
+                    <FullLogo />
                 </div>
                 <div className={classes.content}>
                     <div className={classes.info}>

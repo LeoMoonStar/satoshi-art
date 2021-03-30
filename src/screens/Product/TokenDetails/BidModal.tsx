@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { FormControl, InputLabel, Input } from '@material-ui/core'
 
@@ -13,6 +13,18 @@ type BidModalProps = {
 export default function BidModal({ onClose }: BidModalProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+
+    // todo: Temp solution to demonstrate error handling
+    //  I think we should use formik and yup for error handling in future
+    const yourBalance = 22.237
+    const [error, setError] = useState<string | null>(null)
+    const handleChange = ({
+        target: { name, value },
+    }: React.ChangeEvent<HTMLInputElement>) => {
+        if (name === 'bid') {
+            setError(Number(value) > yourBalance ? 'Not enough funds' : null)
+        }
+    }
 
     return (
         <Modal open className={classes.modal} onClose={onClose}>
@@ -33,7 +45,12 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                     <InputLabel shrink htmlFor="bid">
                         {t('yourBid')}
                     </InputLabel>
-                    <Input id="bid" placeholder="0.2" />
+                    <Input
+                        id="bid"
+                        name="bid"
+                        placeholder="0.2"
+                        onChange={handleChange}
+                    />
                     <div className={classes.inputHelpText}>ETH</div>
                 </FormControl>
 
@@ -46,7 +63,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                 </FormControl>
                 <ul className={classes.additionalInfo}>
                     <li>
-                        {t('yourBalance')} <b>0.237 ETH</b>
+                        {t('yourBalance')} <b>{yourBalance} ETH</b>
                     </li>
                     <li>
                         {t('serviceFee')} <b>0.005 ETH</b>
@@ -60,6 +77,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                     <Button
                         variantCustom="action"
                         className={classes.buttonFilled}
+                        disabled={!!error}
                     >
                         {t('placeABid')}
                     </Button>
@@ -71,6 +89,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                         {t('cancel')}
                     </Button>
                 </div>
+                {error && <div className={classes.errorMessage}>{error}</div>}
             </form>
         </Modal>
     )

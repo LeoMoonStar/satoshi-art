@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { LogoIcon, HouseIcon, OrderDetailsIcon, LogOutIcon } from 'shared/icons'
+import { FullLogo, HouseIcon, OrderDetailsIcon, LogOutIcon } from 'shared/icons'
 import useStyles from './Sidebar.style'
 
 const navItems = [
@@ -27,7 +27,7 @@ function Header(): JSX.Element {
     return (
         <div className={classes.container}>
             <Link to="/" className={classes.brand}>
-                <LogoIcon />
+                <FullLogo />
             </Link>
             <nav>
                 {navItems.map(({ id, label, href, Icon }) => (

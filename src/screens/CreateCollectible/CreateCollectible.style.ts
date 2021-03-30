@@ -4,25 +4,11 @@ const useStyles = makeStyles(() => {
     return {
         container: {
             width: '100%',
-            display: 'flex',
             boxSizing: 'border-box',
-            padding: '60px 136px 100px',
-        },
-        title: {
-            width: '100%',
-            margin: '18px 0 20px',
-            paddingBottom: 16,
-            fontSize: 30,
-            lineHeight: '37px',
-            fontWeight: 800,
-            borderBottom: '1px solid #6A2FE730',
-            letterSpacing: '-0.04em',
-        },
-        contentCard: {
-            width: 292,
-            marginTop: 33,
+            padding: '147px 236px 100px',
         },
         goBack: {
+            display: 'block',
             marginRight: 'auto',
             fontSize: 20,
             fontWeight: 600,
@@ -31,46 +17,17 @@ const useStyles = makeStyles(() => {
                 marginRight: 7,
             },
         },
-        content: {
-            fontSize: 16,
-            lineHeight: '22px',
-            color: '#7E7E7E',
-            marginBottom: 38,
+        settings: {
+            width: 568,
         },
-        additionalInfo: {
-            lineHeight: '16px',
-            fontSize: 12,
-            color: '#7E7E7E',
-        },
-        cards: {
-            display: 'flex',
-            gap: 32,
-            marginLeft: 'auto',
-        },
-        card: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            width: 368,
-            height: 405,
-            boxSizing: 'border-box',
-            border: '1px solid #E5E5E5',
-            borderRadius: 20,
-            cursor: 'pointer',
-            backgroundColor: 'transparent',
-            transition: '.25s transform',
-            '& img': {
-                marginTop: 52,
-            },
-            '&:hover': {
-                transform: 'scale(1.03,1.03)',
-            },
-        },
-        cardTitle: {
-            width: '100%',
-            fontSize: 18,
-            margin: '33px 0',
-            textAlign: 'center',
+        title: {
+            display: 'inline-block',
+            fontWeight: 800,
+            fontSize: 30,
+            lineHeight: '38px',
+            borderBottom: '1px solid #6A2FE74D',
+            paddingBottom: 7,
+            marginBottom: 20,
         },
     }
 })

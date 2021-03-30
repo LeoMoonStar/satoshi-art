@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import Button from 'shared/Button'
 import ConnectButton from 'shared/ConnectButton'
 import {
-    LogoIcon,
+    FullLogo,
     SearchIcon1,
     BellIcon,
     SearchIcon3,
@@ -21,7 +21,7 @@ function Header(): JSX.Element {
     return (
         <div className={classes.container}>
             <div className={classes.logo}>
-                <LogoIcon />
+                <FullLogo />
             </div>
             <div className={classes.controls}>
                 <div className={classes.searchWrapper}>
