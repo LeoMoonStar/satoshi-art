@@ -13,16 +13,35 @@ const useStyles = makeStyles((theme) => {
         bottomFooter: {
             height: 240,
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'space-between',
+            alignItems: 'center',
+            justifyContent: 'space-between',
             marginLeft: 74,
             marginRight: 74,
         },
-        bottomFooterSection: {
+        leftBottomCol: {
             display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            height: '100%',
+            flexWrap: 'wrap',
+            flexDirection: 'column',
+            gap: 33,
+        },
+        rightBottomCol: {
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'column',
+            gap: 38,
+        },
+        socialLinks: {
+            display: 'flex',
+            gap: 13,
+            '& > a': {
+                textDecoration: 'none',
+                '&:hover': {
+                    opacity: 0.9,
+                },
+            },
+        },
+        copyright: {
+            color: '#fff',
         },
         footerSplitter: {
             height: 1,
@@ -31,9 +50,10 @@ const useStyles = makeStyles((theme) => {
         emailInput: {
             height: 46,
             width: 400,
+            fontSize: 13,
+            marginRight: 4,
             border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 40,
-            marginRight: 12,
             paddingLeft: 15,
             color: theme.palette.primary.main,
         },
@@ -43,10 +63,17 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.palette.primary.main,
             color: 'black',
             borderRadius: 40,
+            textTransform: 'initial',
             '&:hover': {
                 color: theme.palette.primary.main,
                 border: `1px solid ${theme.custom.common.grayColor}`,
             },
+        },
+        subscribeToOurNewsLetter: {
+            marginRight: 16,
+            fontSize: 30,
+            fontWeight: 800,
+            letterSpacing: '-0.04em',
         },
     }
 })

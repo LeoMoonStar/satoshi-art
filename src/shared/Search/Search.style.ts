@@ -5,6 +5,7 @@ const useStyles = makeStyles((theme) => {
         searchWrapper: {
             backgroundColor: theme.palette.primary.main,
             position: 'relative',
+            display: 'block',
             width: 674,
         },
         searchIcon: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => {
             left: 21,
             display: 'flex',
             width: 190,
+            cursor: 'pointer',
 
             '& svg': {
                 width: 20,
@@ -27,10 +29,10 @@ const useStyles = makeStyles((theme) => {
             border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 60,
             marginRight: 12,
-            paddingLeft: 15,
+            padding: '0 15px',
 
             '& input': {
-                paddingLeft: 67,
+                paddingLeft: 52,
                 '&::placeholder': {
                     color: theme.custom.common.grayColor,
                     fontSize: 14,

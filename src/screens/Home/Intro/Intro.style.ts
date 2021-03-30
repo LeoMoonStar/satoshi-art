@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             position: 'relative',
             marginTop: -45,
-            '& > div': {
+            paddingLef: '0 136px',
+            '& > label': {
                 position: 'relative',
                 zIndex: 1,
                 marginLeft: 136,

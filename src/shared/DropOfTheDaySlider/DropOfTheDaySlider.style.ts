@@ -95,7 +95,7 @@ const useStyles = makeStyles(() => {
         workInfo: {
             width: '100%',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-end',
             fontSize: 13,
             fontWeight: 600,
             marginTop: 6,
@@ -109,7 +109,7 @@ const useStyles = makeStyles(() => {
         },
         bidButton: {
             width: 'initial',
-            margin: '0 -6px -6px auto',
+            margin: '0 -6px -9px auto',
             fontSize: 13,
             fontWeight: 600,
             color: '#FF0099',
