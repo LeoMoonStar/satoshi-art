@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 
 import Button from 'shared/Button'
+import UserMenu from 'shared/UserMenu'
 import ConnectButton from 'shared/ConnectButton'
 import { FullLogo } from 'shared/icons'
+
 import useStyles from './HeaderFull.style'
 
 const navItems = [
@@ -45,6 +47,7 @@ export default function HeaderFull(): JSX.Element {
                             className={classes.createBtn}
                         />
                     </Link>
+                    <UserMenu />
                 </div>
             </div>
         </header>

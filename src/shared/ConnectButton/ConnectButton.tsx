@@ -1,36 +1,27 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { NavLink } from 'react-router-dom'
 import Button from 'shared/Button'
-import { shortAddress } from 'utils/helpers'
 import useStyles from './ConnectButton.style'
 
-const ConnectButton = (): JSX.Element => {
+const ConnectButton = (): JSX.Element | null => {
     const classes = useStyles()
 
     const { account } = useWeb3React<Web3Provider>()
-    const userAddress = useMemo(() => {
-        if (!!account) {
-            return shortAddress(account, 10)
-        }
-    }, [account])
+
+    if (account) {
+        return null
+    }
 
     return (
         <div>
-            {!!account ? (
+            <NavLink to={'/connect'} className={classes.linkStyle}>
                 <Button
                     className={classes.connectWalletBtn}
-                    label={userAddress}
+                    label={'Connect Wallet'}
                 />
-            ) : (
-                <NavLink to={'/connect'} className={classes.linkStyle}>
-                    <Button
-                        className={classes.connectWalletBtn}
-                        label={'Connect Wallet'}
-                    />
-                </NavLink>
-            )}
+            </NavLink>
         </div>
     )
 }
