@@ -98,16 +98,8 @@ const useStyles = makeStyles(() => ({
     seeAllButton: {
         margin: '0 auto',
         display: 'block',
-        minWidth: 157,
         height: 53,
         fontWeight: 600,
-        color: '#fff',
-        backgroundColor: '#FF0099',
-        borderRadius: 60,
-        textTransform: 'initial',
-        '&:hover': {
-            backgroundColor: '#FF009990',
-        },
     },
 }))
 

@@ -10,25 +10,36 @@ type HeaderVariants = 'none' | 'full'
 type ILayoutProps = {
     children: React.ReactNode
     headerVariant?: HeaderVariants
+    isHeaderVisible?: boolean
 }
 
 function Layout({
     children,
     headerVariant = 'none',
+    isHeaderVisible = true,
 }: ILayoutProps): JSX.Element {
     const classes = useStyles()
 
     return (
         <div className={classes.container}>
             <div className={classes.header}>
-                {
-                    {
-                        full: <HeaderFull />,
-                        none: <Header />,
-                    }[headerVariant]
-                }
+                {isHeaderVisible && (
+                    <>
+                        {
+                            {
+                                full: <HeaderFull />,
+                                none: <Header />,
+                            }[headerVariant]
+                        }
+                    </>
+                )}
             </div>
-            <div className={classes.content}>{children}</div>
+            <div
+                style={{ paddingTop: isHeaderVisible ? 45 : 0 }}
+                className={classes.content}
+            >
+                {children}
+            </div>
             <footer className={classes.footer}>
                 <Footer />
             </footer>

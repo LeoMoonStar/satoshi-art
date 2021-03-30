@@ -1,6 +1,8 @@
 import React from 'react'
-import { IconButton, Button } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
+
+import Button from 'shared/Button'
 import { SaveIcon, ViewsIcon } from 'shared/icons'
 import Avatar from 'shared/Avatar'
 import Loader from 'shared/Loader'
@@ -80,7 +82,9 @@ export default function WorksList({
             {isLoading ? (
                 <Loader />
             ) : (
-                <Button className={classes.seeAllButton}>See All</Button>
+                <Button variantCustom="action" className={classes.seeAllButton}>
+                    See All
+                </Button>
             )}
         </div>
     )

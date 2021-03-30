@@ -98,31 +98,11 @@ const useStyles = makeStyles(() => {
         },
         buttonFilled: {
             minWidth: 170,
-            lineHeight: '40px',
-            padding: 0,
-            color: '#fff',
-            borderRadius: 60,
-            backgroundColor: '#ff0099',
-            textTransform: 'initial',
-            '&:not(:disabled):hover': {
-                backgroundColor: '#ff009990',
-            },
-            '&:disabled': {
-                backgroundColor: '#C4C4C4',
-                color: '#fff',
-            },
+            marginLeft: 35,
         },
         buttonOutlined: {
             minWidth: 170,
-            lineHeight: '40px',
-            padding: 0,
-            color: '#ff0099',
-            borderRadius: 60,
-            border: '1px solid #ff0099',
-            textTransform: 'initial',
-            '&:hover': {
-                backgroundColor: '#ff009920',
-            },
+            marginLeft: 35,
         },
         buttons: {
             width: '100%',

@@ -1,7 +1,8 @@
 import React from 'react'
 import { useTranslation, Trans } from 'react-i18next'
-import { FormControl, InputLabel, Input, Button } from '@material-ui/core'
+import { FormControl, InputLabel, Input } from '@material-ui/core'
 
+import Button from 'shared/Button'
 import Modal from 'shared/Modal'
 import useStyles from './Modals.style'
 
@@ -52,10 +53,14 @@ export default function BuyModal({ onClose }: BidModalProps): JSX.Element {
                     </li>
                 </ul>
                 <div className={classes.buttons}>
-                    <Button className={classes.buttonFilled}>
+                    <Button
+                        variantCustom="action"
+                        className={classes.buttonFilled}
+                    >
                         {t('proceedToPayment')}
                     </Button>
                     <Button
+                        variantCustom="outlined"
                         className={classes.buttonOutlined}
                         onClick={onClose}
                     >
