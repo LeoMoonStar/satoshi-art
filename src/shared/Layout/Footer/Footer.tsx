@@ -53,7 +53,9 @@ function Footer({ justifyTopRow = 'space-between' }: FooterProps): JSX.Element {
             <div className={classes.bottomFooter}>
                 <div className={classes.leftBottomCol}>
                     <SatoshiArtIcon />
-                    <FooterMenu />
+                    <div className={classes.footerMenu}>
+                        <FooterMenu />
+                    </div>
                 </div>
                 <div className={classes.rightBottomCol}>
                     <div className={classes.socialLinks}>

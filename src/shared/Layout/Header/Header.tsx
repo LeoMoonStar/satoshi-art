@@ -20,9 +20,9 @@ function Header(): JSX.Element {
 
     return (
         <div className={classes.container}>
-            <div className={classes.logo}>
+            <Link to="/" className={classes.logo}>
                 <FullLogo />
-            </div>
+            </Link>
             <div className={classes.controls}>
                 <div className={classes.searchWrapper}>
                     <div className={classes.search}>

@@ -22,18 +22,19 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             flexWrap: 'wrap',
             flexDirection: 'column',
-            gap: 33,
         },
         rightBottomCol: {
             display: 'flex',
             flexWrap: 'wrap',
             flexDirection: 'column',
-            gap: 38,
         },
         socialLinks: {
             display: 'flex',
-            gap: 13,
+            marginBottom: 38,
             '& > a': {
+                '&:not(:first-child)': {
+                    marginLeft: 13,
+                },
                 textDecoration: 'none',
                 '&:hover': {
                     opacity: 0.9,
@@ -74,6 +75,9 @@ const useStyles = makeStyles((theme) => {
             fontSize: 30,
             fontWeight: 800,
             letterSpacing: '-0.04em',
+        },
+        footerMenu: {
+            marginTop: 33,
         },
     }
 })

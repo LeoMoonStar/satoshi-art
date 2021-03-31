@@ -54,9 +54,6 @@ const useStyles = makeStyles(() => {
                 '&:before': {
                     display: 'none',
                 },
-                '&:hover': {
-                    stroke: '#FFB800',
-                },
             },
         },
         slide: {
