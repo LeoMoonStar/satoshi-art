@@ -3,8 +3,6 @@ import {
     Stepper,
     Step,
     StepLabel,
-    StepConnector,
-    withStyles,
     StepIconProps,
     CircularProgress,
 } from '@material-ui/core'
@@ -18,29 +16,6 @@ import useStyles from './ProgressModal.style'
 function getSteps() {
     return ['Approval', 'Token', 'Sign', 'Complete']
 }
-
-const MyConnector = withStyles({
-    alternativeLabel: {
-        top: 7,
-        left: 'calc(-50% + 7px)',
-        right: 'calc(50% + 7px)',
-    },
-    active: {
-        '& $line': {
-            backgroundColor: '#FF0099',
-        },
-    },
-    completed: {
-        '& $line': {
-            backgroundColor: '#FF0099',
-        },
-    },
-    line: {
-        height: 1,
-        border: 0,
-        backgroundColor: '#C4C4C4',
-    },
-})(StepConnector)
 
 function MyStepCircle(props: StepIconProps) {
     const classes = useStyles()
@@ -75,7 +50,9 @@ export default function ProgressModal({
                 <Stepper
                     alternativeLabel
                     activeStep={activeStep}
-                    connector={<MyConnector />}
+                    classes={{
+                        root: classes.stepper,
+                    }}
                 >
                     {steps.map((label) => (
                         <Step key={label}>

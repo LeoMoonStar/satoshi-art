@@ -83,6 +83,19 @@ const useStyles = makeStyles((theme) => {
         loader: {
             flexShrink: 0,
         },
+        stepper: {
+            '& .MuiStepConnector-alternativeLabel': {
+                top: 7,
+                left: 'calc(-50% + 7px)',
+                right: 'calc(50% + 7px)',
+
+                '&.MuiStepConnector-active ': {
+                    '& .MuiStepConnector-line': {
+                        borderColor: '#FF0099',
+                    },
+                },
+            },
+        },
     }
 })
 
