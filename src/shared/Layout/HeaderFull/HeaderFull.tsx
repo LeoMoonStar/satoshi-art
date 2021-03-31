@@ -22,9 +22,9 @@ export default function HeaderFull(): JSX.Element {
     return (
         <header className={classes.container}>
             <div className={classes.topRow}>
-                <div className={classes.logo}>
+                <Link to="/" className={classes.logo}>
                     <FullLogo />
-                </div>
+                </Link>
 
                 <nav className={classes.navigation}>
                     {navItems.map(({ id, label, href }) => (

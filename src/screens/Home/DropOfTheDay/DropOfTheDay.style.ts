@@ -55,6 +55,14 @@ const useStyles = makeStyles(() => {
             padding: '0 50px',
             boxSizing: 'border-box',
             width: 'calc(100% - 510px)',
+            '& .slick-arrow:hover': {
+                '& circle': {
+                    fill: '#fff',
+                },
+                '& path': {
+                    fill: '#7E7E7E',
+                },
+            },
         },
         colorsDissolving: {
             position: 'absolute',
