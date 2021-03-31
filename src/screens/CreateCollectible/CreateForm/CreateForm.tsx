@@ -86,7 +86,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             /* todo: will be changed after implement functionality */
         }
 
-        console.log(data)
         setIsSubmitModal(true)
     }
 

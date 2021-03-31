@@ -13,9 +13,7 @@ import Button from 'shared/Button'
 import { CheckIcon } from 'shared/icons'
 import useStyles from './ProgressModal.style'
 
-function getSteps() {
-    return ['Approval', 'Token', 'Sign', 'Complete']
-}
+const CONNECTION_STEPS = ['Approval', 'Token', 'Sign', 'Complete']
 
 function MyStepCircle(props: StepIconProps) {
     const classes = useStyles()
@@ -41,7 +39,6 @@ export default function ProgressModal({
 }: ProgressModalProps): JSX.Element {
     const classes = useStyles()
     const [activeStep] = useState<number>(0)
-    const steps = getSteps()
 
     return (
         <Modal open={open} onClose={onClose}>
@@ -54,7 +51,7 @@ export default function ProgressModal({
                         root: classes.stepper,
                     }}
                 >
-                    {steps.map((label) => (
+                    {CONNECTION_STEPS.map((label) => (
                         <Step key={label}>
                             <StepLabel
                                 classes={{
