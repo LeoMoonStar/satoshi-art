@@ -13,12 +13,14 @@ const useStyles = makeStyles(() => {
             width: '100%',
             display: 'flex',
             justifyContent: 'space-around',
-            gap: 3,
         },
         col: {
             width: 390,
             display: 'flex',
             flexWrap: 'wrap',
+            '&:not(:first-child)': {
+                marginLeft: 3,
+            },
         },
         subTitle: {
             color: '#7E7E7E',
