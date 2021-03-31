@@ -4,6 +4,7 @@ import HeaderFull from './HeaderFull'
 import Header from './Header'
 import Footer from './Footer'
 import useStyles from './Layout.style'
+import { JustifyTopRowFooter } from './Footer/Footer'
 
 type HeaderVariants = 'none' | 'full'
 
@@ -11,12 +12,14 @@ type ILayoutProps = {
     children: React.ReactNode
     headerVariant?: HeaderVariants
     isHeaderVisible?: boolean
+    justifyTopRowFooter?: JustifyTopRowFooter
 }
 
 function Layout({
     children,
     headerVariant = 'none',
     isHeaderVisible = true,
+    justifyTopRowFooter,
 }: ILayoutProps): JSX.Element {
     const classes = useStyles()
 
@@ -41,7 +44,7 @@ function Layout({
                 {children}
             </div>
             <footer className={classes.footer}>
-                <Footer />
+                <Footer justifyTopRow={justifyTopRowFooter} />
             </footer>
         </div>
     )

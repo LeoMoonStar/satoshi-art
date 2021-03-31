@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import Button from 'shared/Button'
+import UserMenu from 'shared/UserMenu'
 import ConnectButton from 'shared/ConnectButton'
 import {
     FullLogo,
@@ -20,9 +21,9 @@ function Header(): JSX.Element {
 
     return (
         <div className={classes.container}>
-            <div className={classes.logo}>
+            <Link to="/" className={classes.logo}>
                 <FullLogo />
-            </div>
+            </Link>
             <div className={classes.controls}>
                 <div className={classes.searchWrapper}>
                     <div className={classes.search}>
@@ -47,6 +48,7 @@ function Header(): JSX.Element {
                 <Link to="/create-collectible" className={classes.createLink}>
                     <Button label={t('create')} className={classes.createBtn} />
                 </Link>
+                <UserMenu />
             </div>
         </div>
     )
