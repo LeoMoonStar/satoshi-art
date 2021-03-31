@@ -9,7 +9,6 @@ import {
     IconButton,
 } from '@material-ui/core'
 import { Close } from '@material-ui/icons'
-import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
@@ -21,14 +20,24 @@ import { LeftArrowIcon } from 'shared/icons'
 
 import useStyles from './SupportForm.style'
 
+const ISSUES_THEMES = [
+    'brokenImageOrVideo',
+    'itemNotDisplayed',
+    'other',
+    'questionOrComment',
+    'securityVulnerability',
+    'verificationIssueOrQuestion',
+]
+
 export default function SupportForm(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
-    const { register, handleSubmit, watch, errors } = useForm()
-    const [files, setFiles] = useState<any[]>([])
+    const [files, setFiles] = useState<File[]>([])
 
-    const handleFilesChange = (e: any) => {
-        setFiles((prevFiles) => [...Array.from(e.target.files), ...prevFiles])
+    const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newFiles: File[] = Array.from(e.target.files as FileList)
+
+        setFiles((prevFiles) => [...newFiles, ...prevFiles])
     }
 
     return (
@@ -36,32 +45,32 @@ export default function SupportForm(): JSX.Element {
             <section className={classes.container}>
                 <div className={classes.leftCol}>
                     <Link className={classes.goBack} to="/">
-                        <LeftArrowIcon /> Back to home pgae
+                        <LeftArrowIcon /> {t('backToHomePage')}
                     </Link>
-                    <h2 className={classes.mainTitle}>Submit a Request</h2>
-                    <form action="" className={classes.form}>
+                    <h2 className={classes.mainTitle}>{t('submitARequest')}</h2>
+                    <form className={classes.form}>
                         <FormControl className={classes.fieldGroup}>
-                            <label htmlFor="emailAddress">
-                                Your Email Address
+                            <label htmlFor="email">
+                                {t('yourEmailAddress')}
                             </label>
-                            <Input
-                                id="emailAddress"
-                                name="emailAddress"
-                                ref={register}
-                            />
+                            <Input id="email" name="email" />
+                            <small className={classes.inputError}>
+                                {t('fieldIsRequired')}
+                            </small>
                         </FormControl>
 
                         <FormControl className={classes.fieldGroup}>
                             <label htmlFor="issue">
-                                What do you need help with?
+                                {t('whatDoYouNeedToHelpWith')}
                             </label>
-                            <Select id="issue" name="issue" ref={register}>
-                                <MenuItem>Broken Image/Video</MenuItem>
-                                <MenuItem>Item Not Displayed</MenuItem>
-                                <MenuItem>Other</MenuItem>
-                                <MenuItem>Question/Comment</MenuItem>
-                                <MenuItem>Security Vulnerability</MenuItem>
-                                <MenuItem>Verification Issue/Question</MenuItem>
+                            <Select id="issue" name="issue">
+                                {ISSUES_THEMES.map(
+                                    (issue: string, index: number) => (
+                                        <MenuItem value={index} key={index}>
+                                            {t(issue)}
+                                        </MenuItem>
+                                    )
+                                )}
                             </Select>
                             <FormHelperText>
                                 Please select your issue above
@@ -70,48 +79,39 @@ export default function SupportForm(): JSX.Element {
 
                         <FormControl className={classes.fieldGroup}>
                             <label htmlFor="issueSubject">Issue Subject</label>
-                            <Input
-                                id="issueSubject"
-                                name="issueSubject"
-                                ref={register}
-                            />
+                            <Input id="issueSubject" name="issueSubject" />
                             <FormHelperText>
-                                Please provide a one-line description of the
-                                issue you`re currently facing.
+                                {t('pleaseProvideAOneLineDescriptionIssue')}
                             </FormHelperText>
                         </FormControl>
 
                         <FormControl className={classes.fieldGroup}>
-                            <label htmlFor="yourAddress">Your Address</label>
-                            <Input
-                                id="yourAddress"
-                                name="yourAddress"
-                                ref={register}
-                            />
+                            <label htmlFor="yourAddress">
+                                {t('yourAddress')}
+                            </label>
+                            <Input id="yourAddress" name="yourAddress" />
                         </FormControl>
 
                         <FormControl className={classes.fieldGroup}>
                             <label htmlFor="describe">
-                                Please describe the problem in as much detail as
-                                possible.
+                                {t('pleaseDescribeTheProblemInAsMuchDetailAs')}
                             </label>
                             <TextField
                                 multiline
                                 id="describe"
                                 name="describe"
                                 className={classes.textField}
-                                ref={register}
                             />
                         </FormControl>
                         <FormControl className={classes.fieldGroup}>
                             <label htmlFor="files">
-                                Attachments (optional)
+                                {t('attachmentsOptional')}
                             </label>
                             <label
                                 htmlFor="files"
                                 className={classes.filesLabel}
                             >
-                                <span>Add or drop files here</span>
+                                <span>{t('addOrDropFilesHere')}</span>
                                 <input
                                     multiple
                                     id="files"
@@ -129,9 +129,11 @@ export default function SupportForm(): JSX.Element {
                                 </div>
                             ))}
                         </FormControl>
-                        <Button variantCustom="action">Submit</Button>
+                        <Button variantCustom="action" type="submit">
+                            {t('submit')}
+                        </Button>
                         <div className={classes.recaptchaWrapper}>
-                            <ReCAPTCHA sitekey="Your client site key" />
+                            <ReCAPTCHA sitekey="SomeKey" />
                         </div>
                     </form>
                 </div>

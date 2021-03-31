@@ -6,10 +6,18 @@ const useStyles = makeStyles(() => {
         container: {
             width: '100%',
             display: 'flex',
+            marginTop: -45,
         },
         leftCol: {
             flex: '1 1 833px',
             padding: '0 129px 94px 236px',
+        },
+        inputError: {
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            marginTop: 4,
+            color: 'red',
         },
         rightCol: {
             position: 'relative',
@@ -41,6 +49,10 @@ const useStyles = makeStyles(() => {
                     display: 'none',
                 },
             },
+            '& .MuiSelect-selectMenu': {
+                display: 'flex',
+                alignItems: 'center',
+            },
             '& .MuiSelect-icon': {
                 right: 8,
             },
@@ -66,13 +78,15 @@ const useStyles = makeStyles(() => {
             },
         },
         mainTitle: {
+            minWidth: 359,
+            display: 'inline-block',
             margin: 0,
             paddingBottom: 16,
             lineHeight: '30px',
             fontSize: 30,
             fontWeight: 800,
             letterSpacing: '-0.04em',
-            borderBottom: '1px solid #6A2FE703',
+            borderBottom: '1px solid #6A2FE730',
         },
         filesLabel: {
             display: 'flex',
