@@ -138,5 +138,6 @@
   "createItem": "Create Item",
   "unsavedChanges": "Unsaved changes",
   "noBidsYet": "No bids yet",
-  "previewOfYourNewCollectible": "Preview of your new collectible"
+  "previewOfYourNewCollectible": "Preview of your new collectible",
+  "searchByCreatorCollectibleOrCollection": "1Search by creator, collectible or collection"
 }

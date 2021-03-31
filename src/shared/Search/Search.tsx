@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import useStyles from './Search.style'
 
@@ -7,12 +8,14 @@ import { SearchIcon4 } from 'shared/icons'
 
 const Search = (): JSX.Element => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
-        <div className={classes.searchWrapper}>
+        <label htmlFor="searchField" className={classes.searchWrapper}>
             <Input
+                id="searchField"
                 type="search"
-                placeholder="Search by creator, collectible or collection"
+                placeholder={t('searchByCreatorCollectibleOrCollection')}
                 classes={{
                     root: classes.searchInput,
                 }}
@@ -21,7 +24,7 @@ const Search = (): JSX.Element => {
             <div className={classes.searchIcon}>
                 <SearchIcon4 />
             </div>
-        </div>
+        </label>
     )
 }
 

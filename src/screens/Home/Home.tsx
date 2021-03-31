@@ -11,7 +11,7 @@ import Iterators from './Iterators'
 
 function Home(): JSX.Element {
     return (
-        <Layout headerVariant="full">
+        <Layout headerVariant="full" justifyTopRowFooter="center">
             <Intro />
             <DropOfTheDay />
             <Iterators />

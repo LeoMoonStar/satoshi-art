@@ -6,6 +6,7 @@ import Button from 'shared/Button'
 import { SaveIcon, ViewsIcon } from 'shared/icons'
 import Avatar from 'shared/Avatar'
 import Loader from 'shared/Loader'
+import TextGradient from 'shared/TexGradient'
 import preview from 'shared/images/artist/work.jpg'
 import artistAvatar from 'shared/images/artist/avatar.jpg'
 
@@ -71,7 +72,9 @@ export default function WorksList({
                                 0.25 ETH
                                 <span className={classes.count}>1 of 1</span>
                                 <Button className={classes.bidButton}>
-                                    {t('placeABid')}
+                                    <TextGradient colors="#FF0099, #6A2FE7">
+                                        {t('placeABid')}
+                                    </TextGradient>
                                 </Button>
                             </div>
                         </div>
