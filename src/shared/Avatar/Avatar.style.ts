@@ -21,6 +21,11 @@ const useStyles = makeStyles(() => ({
         marginTop: '-0.05em',
         marginRight: '-0.05em',
     },
+    pointer: {
+        '&:hover': {
+            cursor: 'pointer',
+        },
+    },
 }))
 
 export default useStyles
