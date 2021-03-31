@@ -38,8 +38,8 @@ const UserMenu = (): JSX.Element | null => {
     useEffect(() => {
         async function getBalance() {
             if (library && account) {
-                const bigNumber = await library.getBalance(account)
-                setBalance(ethers.utils.formatEther(bigNumber))
+                const userEthBalance = await library.getBalance(account)
+                setBalance(ethers.utils.formatEther(userEthBalance))
             }
         }
         getBalance()
@@ -56,7 +56,7 @@ const UserMenu = (): JSX.Element | null => {
     }
 
     return (
-        <div>
+        <div className={classes.userMenu}>
             <div ref={anchorElRef}>
                 <Avatar
                     size={40}

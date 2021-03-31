@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => {
     return {
+        userMenu: {
+            marginLeft: 10,
+        },
         popover: {
             '& .MuiPopover-paper': {
                 width: 284,
