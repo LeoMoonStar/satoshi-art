@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from '@material-ui/core'
 import artistStatus from 'shared/images/artist/artistStatus.png'
 import useStyles from './Avatar.style'
 
@@ -22,37 +21,21 @@ export default function Avatar({
 
     return (
         <>
-            {onClick ? (
-                <Button
-                    className={classes.container}
-                    style={{ fontSize: size }}
-                    onClick={onClick}
-                >
-                    {status && (
-                        <img
-                            className={classes.status}
-                            src={artistStatus}
-                            alt={status}
-                        />
-                    )}
-                    <img className={classes.image} src={image} alt={alt} />
-                </Button>
-            ) : (
-                <div
-                    className={classes.container}
-                    style={{ fontSize: size }}
-                    onClick={onClick}
-                >
-                    {status && (
-                        <img
-                            className={classes.status}
-                            src={artistStatus}
-                            alt={status}
-                        />
-                    )}
-                    <img className={classes.image} src={image} alt={alt} />
-                </div>
-            )}
+            <div
+                role={onClick ? 'button' : 'presentation'}
+                className={classes.container}
+                style={{ fontSize: size }}
+                onClick={onClick}
+            >
+                {status && (
+                    <img
+                        className={classes.status}
+                        src={artistStatus}
+                        alt={status}
+                    />
+                )}
+                <img className={classes.image} src={image} alt={alt} />
+            </div>
         </>
     )
 }

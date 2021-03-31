@@ -1,5 +1,9 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Popover } from '@material-ui/core'
+import { ethers } from 'ethers'
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import { shortAddress } from 'utils/helpers'
 import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
@@ -13,9 +17,6 @@ import {
 import avatar from 'shared/images/artist/avatar.jpg'
 
 import useStyles from './UserMenu.styled'
-import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
-import { shortAddress } from '../../utils/helpers'
 
 {
     /*TODO: Add relevant links path */
@@ -31,8 +32,19 @@ const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
     const anchorElRef = useRef<HTMLDivElement>(null)
     const [isOpen, setOpen] = useState<boolean>(false)
+    const [balance, setBalance] = useState('')
+    const { account, library } = useWeb3React<Web3Provider>()
 
-    const { account } = useWeb3React<Web3Provider>()
+    useEffect(() => {
+        async function getBalance() {
+            if (library && account) {
+                const bigNumber = await library.getBalance(account)
+                setBalance(ethers.utils.formatEther(bigNumber))
+            }
+        }
+        getBalance()
+    }, [account, library])
+
     const userAddress = useMemo(() => {
         if (!!account) {
             return shortAddress(account, 10)
@@ -81,7 +93,7 @@ const UserMenu = (): JSX.Element | null => {
                             <BalanceIcon />
                             <div className={classes.balance}>
                                 <span>Balance</span>
-                                <span>0.237 ETH $140.47 USD</span>
+                                <span>{balance} ETH $140.47 USD</span>
                             </div>
                         </li>
                     </ul>
