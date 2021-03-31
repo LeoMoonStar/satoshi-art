@@ -60,7 +60,6 @@ const useStyles = makeStyles(() => {
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
-            gap: 5,
         },
         header: {
             width: '100%',
@@ -77,13 +76,15 @@ const useStyles = makeStyles(() => {
             minWidth: 42,
             marginRight: -12,
             display: 'flex',
-            gap: 5,
             marginLeft: 'auto',
         },
         actionButton: {
             width: 28,
             height: 28,
             padding: 2,
+            '&:not(:first-child)': {
+                marginLeft: 5,
+            },
             '& svg path': {
                 fill: '#c4c4c4 !important',
                 stroke: 'transparent !important',

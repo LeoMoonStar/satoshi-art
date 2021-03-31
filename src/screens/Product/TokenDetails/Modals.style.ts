@@ -101,6 +101,7 @@ const useStyles = makeStyles(() => {
             marginLeft: 35,
         },
         buttonOutlined: {
+            marginTop: 10,
             minWidth: 170,
             marginLeft: 35,
         },
@@ -108,7 +109,6 @@ const useStyles = makeStyles(() => {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            gap: 10,
             marginTop: 20,
             flexDirection: 'column',
         },
