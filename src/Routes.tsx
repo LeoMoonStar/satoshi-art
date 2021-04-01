@@ -11,6 +11,7 @@ import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
 import SupportForm from 'screens/SupportForm'
+import Privacy from 'screens/Privacy'
 import WrongNetworkModal from './shared/WrongNetwork'
 
 function Routes(): JSX.Element {
@@ -48,6 +49,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/support-form">
                         <SupportForm />
+                    </Route>
+                    <Route path="/privacy">
+                        <Privacy />
                     </Route>
                 </Switch>
             </BrowserRouter>
