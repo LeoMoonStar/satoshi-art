@@ -10,7 +10,7 @@ const foooterMenu = [
     },
     {
         label: 'Privacy',
-        url: '',
+        url: '/privacy',
     },
     {
         label: 'Community',
