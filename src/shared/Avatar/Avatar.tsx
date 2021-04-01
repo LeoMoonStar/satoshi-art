@@ -2,7 +2,6 @@ import React from 'react'
 import clsx from 'clsx'
 import artistStatus from 'shared/images/artist/artistStatus.png'
 import useStyles from './Avatar.style'
-import { Button } from '@material-ui/core'
 
 type AvatarProps = {
     size?: number
