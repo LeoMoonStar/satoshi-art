@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => {
             width: 568,
         },
         title: {
-            margin: '0 32px 0',
+            margin: '0 0 24px',
             fontWeight: 800,
             fontSize: 36,
             color: '#7E7E7E',
