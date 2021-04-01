@@ -2,11 +2,11 @@ import React from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import Layout from 'shared/Layout'
 
 import { LeftArrowIcon } from 'shared/icons'
 
 import useStyles from './Privacy.style'
-import Layout from '../../shared/Layout'
 
 export default function Privacy(): JSX.Element {
     const history = useHistory()
