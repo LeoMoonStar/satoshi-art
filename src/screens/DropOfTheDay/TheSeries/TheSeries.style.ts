@@ -14,7 +14,24 @@ const useStyles = makeStyles(() => {
             boxSizing: 'border-box',
             paddingRight: 110,
         },
-        rightCol: {},
+        rightCol: {
+            '& .slick-arrow': {
+                '& path': {
+                    fill: '#7E7E7E',
+                },
+                '& circle': {
+                    stroke: '#7E7E7E',
+                },
+            },
+            '& .slick-arrow:hover': {
+                '& circle': {
+                    fill: '#7E7E7E',
+                },
+                '& path': {
+                    fill: '#fff',
+                },
+            },
+        },
         mainTitle: {
             margin: '0 0 24px',
             fontSize: 36,

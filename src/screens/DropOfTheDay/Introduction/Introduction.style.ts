@@ -42,13 +42,14 @@ const useStyles = makeStyles(() => {
             fontWeight: 800,
         },
         content: {
+            width: 533,
             fontWeight: 600,
             lineHeight: '25px',
             letterSpacing: '-0.04em',
             fontSize: 20,
         },
         pageTitle: {
-            top: 260,
+            bottom: 0,
             left: 30,
             fontWeight: 800,
             fontSize: 30,
