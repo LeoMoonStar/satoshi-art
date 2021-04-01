@@ -12,9 +12,10 @@ import { Close } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { LogoIcon, PlusCircle } from 'shared/icons'
+import Preview from '../Preview'
+import ProgressModal from '../ProgressModal'
 
 import useStyles from './CreateForm.style'
-import Preview from '../Preview'
 
 type PropertyType = {
     name: string
@@ -60,6 +61,7 @@ const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg,'
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const classes = useStyles()
     const { t } = useTranslation()
+    const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const {
         register,
         handleSubmit,
@@ -84,7 +86,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             /* todo: will be changed after implement functionality */
         }
 
-        console.log(data)
+        setIsSubmitModal(true)
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -507,6 +509,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 }
                 fields={previewFields}
                 isSingle={isSingle}
+            />
+            <ProgressModal
+                open={isSubmitModal}
+                onClose={() => setIsSubmitModal(!isSubmitModal)}
             />
         </div>
     )

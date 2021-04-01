@@ -44,8 +44,10 @@ const useStyles = makeStyles(() => {
         },
         cards: {
             display: 'flex',
-            gap: 32,
             marginLeft: 'auto',
+            '& a:not(:first-child)': {
+                marginLeft: 32,
+            },
         },
         card: {
             display: 'flex',

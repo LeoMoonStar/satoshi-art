@@ -30,14 +30,15 @@ const useStyles = makeStyles((theme) => {
         },
         navigation: {
             display: 'flex',
-            gap: 30,
             marginLeft: 69,
             fontSize: 13,
             fontWeight: 600,
             '& a': {
                 color: '#C4C4C4',
                 textDecoration: 'none',
-
+                '&:not(:first-child)': {
+                    marginLeft: 30,
+                },
                 '&:hover': {
                     color: '#000',
                 },

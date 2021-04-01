@@ -17,8 +17,9 @@ const Search = ({ className = '', placeholder }: SearchProps): JSX.Element => {
     const { t } = useTranslation()
 
     return (
-        <div className={cx(classes.searchWrapper, className)}>
+        <label htmlFor="searchField" className={cx(classes.searchWrapper, className)}>
             <Input
+                id="searchField"
                 type="search"
                 placeholder={placeholder || t('search')}
                 classes={{
@@ -29,7 +30,7 @@ const Search = ({ className = '', placeholder }: SearchProps): JSX.Element => {
             <div className={classes.searchIcon}>
                 <SearchIcon4 />
             </div>
-        </div>
+        </label>
     )
 }
 

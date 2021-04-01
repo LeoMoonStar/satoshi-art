@@ -54,16 +54,12 @@ const useStyles = makeStyles(() => {
                 '&:before': {
                     display: 'none',
                 },
-                '&:hover': {
-                    stroke: '#FFB800',
-                },
             },
         },
         slide: {
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
-            gap: 5,
         },
         header: {
             width: '100%',
@@ -80,13 +76,15 @@ const useStyles = makeStyles(() => {
             minWidth: 42,
             marginRight: -12,
             display: 'flex',
-            gap: 5,
             marginLeft: 'auto',
         },
         actionButton: {
             width: 28,
             height: 28,
             padding: 2,
+            '&:not(:first-child)': {
+                marginLeft: 5,
+            },
             '& svg path': {
                 fill: '#c4c4c4 !important',
                 stroke: 'transparent !important',
@@ -95,7 +93,7 @@ const useStyles = makeStyles(() => {
         workInfo: {
             width: '100%',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-end',
             fontSize: 13,
             fontWeight: 600,
             marginTop: 6,
@@ -109,7 +107,7 @@ const useStyles = makeStyles(() => {
         },
         bidButton: {
             width: 'initial',
-            margin: '0 -6px -6px auto',
+            margin: '0 -6px -9px auto',
             fontSize: 13,
             fontWeight: 600,
             color: '#FF0099',

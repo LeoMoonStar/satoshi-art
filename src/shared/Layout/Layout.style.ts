@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => {
         },
         footer: {
             background: 'black',
+            borderRadius: '20px 20px 0 0',
             width: '100%',
             flex: '0 0 auto',
             height: 480,

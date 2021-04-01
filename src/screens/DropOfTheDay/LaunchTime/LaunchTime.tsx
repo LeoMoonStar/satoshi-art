@@ -6,6 +6,10 @@ import useStyles from './LaunchTime.style'
 const getTimeDurationInCharsToTargetTime = (date: Date) => {
     let timeDiff = date.getTime() - new Date().getTime()
 
+    if (timeDiff < 0) {
+        return { days: '00', hours: '00', minutes: '00', seconds: '00' }
+    }
+
     const days = Math.floor(timeDiff / 86400000)
     timeDiff -= days * 86400000
 
