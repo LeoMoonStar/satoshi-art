@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => {
             color: theme.custom.common.blackColor,
         },
         unlock: {
-            background: 'linear-gradient(left, #6A2FE7, #FF0099)',
+            background: 'linear-gradient(to right, #6A2FE7 5%, #FF0099 20%)',
             '-webkit-background-clip': 'text',
             '-webkit-text-fill-color': 'transparent',
         },
@@ -152,7 +152,7 @@ const useStyles = makeStyles((theme) => {
                 borderBottom: '1px solid #7E7E7E4D',
             },
             '& span': {
-                display: 'block',
+                display: 'inline-block',
                 marginTop: 8,
                 lineHeight: '16px',
                 fontSize: 12,
@@ -208,28 +208,22 @@ const useStyles = makeStyles((theme) => {
             padding: 0,
 
             '& .MuiSwitch-switchBase': {
-                padding: 2,
-                color: theme.palette.grey[500],
-                '&$checked': {
-                    transform: 'translateX(12px)',
-                    color: theme.palette.common.white,
-                    '& + $track': {
-                        opacity: 1,
-                        backgroundColor: theme.palette.primary.main,
-                        borderColor: theme.palette.primary.main,
-                    },
+                color: '#ffffff',
+                padding: 4,
+                '&.Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: '#FF0099',
+                    opacity: 1,
                 },
             },
             '& .MuiSwitch-thumb': {
-                width: 12,
-                height: 12,
+                width: 16,
+                height: 16,
                 boxShadow: 'none',
             },
             '& .MuiSwitch-track': {
-                border: `1px solid ${theme.custom.common.pinkColor}`,
-                borderRadius: 16 / 2,
+                borderRadius: 16,
                 opacity: 1,
-                backgroundColor: theme.palette.common.white,
+                backgroundColor: '#FF009926',
             },
         },
     }

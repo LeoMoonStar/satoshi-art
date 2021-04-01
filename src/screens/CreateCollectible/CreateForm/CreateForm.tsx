@@ -12,6 +12,9 @@ import { Close } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { LogoIcon, PlusCircle } from 'shared/icons'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
 
@@ -44,6 +47,23 @@ interface ICollectibleForm {
     properties: Array<PropertyType>
 }
 
+const schema = yup.object().shape({
+    name: yup.string().required('"Title" is not allowed to be empty'),
+    file: yup
+        .mixed()
+        .required('A file is required')
+        .test(
+            'fileSize',
+            'File too large',
+            (value) => value && value.size <= 31457280
+        ),
+    cover: yup.string().when('file', {
+        is: true,
+        then: yup.string().required(),
+        otherwise: yup.string(),
+    }),
+})
+
 const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
 const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg,'.concat(
     VAlID_COVER_TYPES
@@ -68,7 +88,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         setValue,
         control,
         watch,
+        formState: { errors },
     } = useForm<ICollectibleForm>({
+        resolver: yupResolver(schema),
         defaultValues: {
             onSale: true,
             collection: 'sart',
@@ -95,15 +117,15 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         if (!fileList) return
 
         const file = fileList[0]
-
-        const src = URL.createObjectURL(file)
-        const type = file.type.split('/')[0]
-        console.log(e.target.name)
-        setPreview({
-            ...preview,
-            [e.target.name]: src,
-            type: e.target.name === 'coverSrc' ? preview.type : type,
-        })
+        if (file.size < 31457280) {
+            const src = URL.createObjectURL(file)
+            const type = file.type.split('/')[0]
+            setPreview({
+                ...preview,
+                [e.target.name]: src,
+                type: e.target.name === 'coverSrc' ? preview.type : type,
+            })
+        }
     }
 
     const clearFile = () => {
@@ -124,7 +146,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         'unlockContent',
         'price',
     ])
-
+    console.log('errors', errors)
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -227,6 +249,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             </div>
                         </div>
                     )}
+                    {errors.file && <p>{errors.file.message}</p>}
 
                     <FormControl className={classes.controls}>
                         <Controller
@@ -424,9 +447,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 placeholder="e. g. “Redeemable T-Shirt with logo”"
                                 name="name"
                                 inputRef={register}
-                                required
                                 disableUnderline
                             />
+                            {errors.name && <p>{errors.name.message}</p>}
                         </div>
                         <div className={classes.input}>
                             <label
@@ -457,7 +480,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     defaultValue="10"
                                     inputRef={register}
                                     disableUnderline
-                                    required
                                     name="royalties"
                                     endAdornment={<span>%</span>}
                                 />
@@ -482,7 +504,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                         placeholder="e. g. 10"
                                         inputRef={register}
                                         disableUnderline
-                                        required
                                         name="copiesCount"
                                         endAdornment={<span>%</span>}
                                     />
