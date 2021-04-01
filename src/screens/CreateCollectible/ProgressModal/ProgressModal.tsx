@@ -6,7 +6,7 @@ import {
     StepIconProps,
     CircularProgress,
 } from '@material-ui/core'
-import clsx from 'classnames'
+import clsx from 'clsx'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
 

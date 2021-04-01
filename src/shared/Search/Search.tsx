@@ -17,7 +17,10 @@ const Search = ({ className = '', placeholder }: SearchProps): JSX.Element => {
     const { t } = useTranslation()
 
     return (
-        <label htmlFor="searchField" className={cx(classes.searchWrapper, className)}>
+        <label
+            htmlFor="searchField"
+            className={cx(classes.searchWrapper, className)}
+        >
             <Input
                 id="searchField"
                 type="search"
