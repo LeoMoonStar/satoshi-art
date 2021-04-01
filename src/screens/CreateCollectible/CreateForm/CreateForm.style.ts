@@ -202,6 +202,36 @@ const useStyles = makeStyles((theme) => {
                 },
             },
         },
+        switch: {
+            width: 47,
+            height: 24,
+            padding: 0,
+
+            '& .MuiSwitch-switchBase': {
+                padding: 2,
+                color: theme.palette.grey[500],
+                '&$checked': {
+                    transform: 'translateX(12px)',
+                    color: theme.palette.common.white,
+                    '& + $track': {
+                        opacity: 1,
+                        backgroundColor: theme.palette.primary.main,
+                        borderColor: theme.palette.primary.main,
+                    },
+                },
+            },
+            '& .MuiSwitch-thumb': {
+                width: 12,
+                height: 12,
+                boxShadow: 'none',
+            },
+            '& .MuiSwitch-track': {
+                border: `1px solid ${theme.custom.common.pinkColor}`,
+                borderRadius: 16 / 2,
+                opacity: 1,
+                backgroundColor: theme.palette.common.white,
+            },
+        },
     }
 })
 export default useStyles

@@ -234,6 +234,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 <FormControlLabel
                                     control={
                                         <Switch
+                                            classes={{
+                                                root: classes.switch,
+                                            }}
                                             inputRef={register}
                                             onChange={(e) =>
                                                 props.onChange(e.target.checked)
@@ -264,6 +267,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 <FormControlLabel
                                     control={
                                         <Switch
+                                            classes={{
+                                                root: classes.switch,
+                                            }}
                                             inputRef={register}
                                             name="instantPrice"
                                         />
@@ -313,7 +319,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                         <div>
                             <FormControlLabel
                                 control={
-                                    <Switch inputRef={register} name="unlock" />
+                                    <Switch
+                                        classes={{
+                                            root: classes.switch,
+                                        }}
+                                        inputRef={register}
+                                        name="unlock"
+                                    />
                                 }
                                 classes={{
                                     root: classes.switchLabel,
