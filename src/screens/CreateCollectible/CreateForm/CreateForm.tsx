@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import {
     Button,
@@ -8,10 +8,18 @@ import {
     Input,
     Switch,
 } from '@material-ui/core'
+import { Contract } from '@ethersproject/contracts'
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import { useDispatch } from 'react-redux'
+
 import { Close } from '@material-ui/icons'
-import { useTranslation, Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Controller, useForm } from 'react-hook-form'
 import { LogoIcon, PlusCircle } from 'shared/icons'
+import Satoshi721 from 'abis/Satoshi721.json'
+import { addTransaction } from 'state/transactions/actions'
+import { Satoshi721ABI } from 'utils/erc721'
 
 import useStyles from './CreateForm.style'
 import Preview from '../Preview'
@@ -58,6 +66,7 @@ const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg,'
 }
 
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
+    const dispatch = useDispatch()
     const classes = useStyles()
     const { t } = useTranslation()
     const {
@@ -73,17 +82,89 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         },
     })
 
+    const { account, library, chainId } = useWeb3React<Web3Provider>()
+
+    const [contract, setContract] = useState<any>()
+
+    const tokenDataMock = {
+        name: 'Token Test Data',
+        description:
+            'Friendly OpenSea Creature that enjoys long swims in the ocean.',
+        image:
+            'https://i.pinimg.com/736x/2d/dc/25/2ddc25914e2ae0db5311ffa41781dda1.jpg',
+    }
+
+    const getKeyValue = <T extends Record<string, unknown>, U extends keyof T>(
+        obj: T
+    ) => (key: U) => obj[key]
+    const networkData = getKeyValue(Satoshi721.networks)(chainId as any)
+
+    useEffect(() => {
+        if (library && networkData) {
+            console.log({ networkData })
+            const address = networkData.address
+            const contract = new Contract(
+                address,
+                Satoshi721ABI,
+                library.getSigner()
+            )
+            setContract(contract)
+        }
+    }, [library, networkData, chainId])
+
+    const createItem = async (instantPrice: boolean, onSale: boolean) => {
+        //@TODO: get data for methods from API
+        if (onSale) {
+            if (instantPrice) {
+                return await contract.CreateAndPutOnAuction(
+                    JSON.stringify(tokenDataMock), //tokenURI
+                    0, //startDate
+                    10, //auction duration
+                    10, //royalties assigned to the token by the creator, in bps
+                    { from: account }
+                )
+            }
+            return await contract.createAndPutOnSale(
+                JSON.stringify(tokenDataMock),
+                1000, //price in wei of the token
+                10, //royalties assigned to the token by the creator, in bps
+                {
+                    from: account,
+                }
+            )
+        }
+        //based on task description not need for phase 1
+        // return await contract.createItem(
+        //     JSON.stringify(tokenDataMock),
+        //     1000, //price in wei of the token
+        //     10, //royalties assigned to the token by the creator, in bps
+        //     {
+        //         from: account,
+        //     }
+        // )
+    }
+
     const [preview, setPreview] = useState<PreviewType>({
         fileSrc: '',
         coverSrc: '',
         type: '',
     })
 
-    const onSubmit = (data: ICollectibleForm) => {
+    const onSubmit = async (data: ICollectibleForm) => {
         {
             /* todo: will be changed after implement functionality */
         }
+        if (!chainId) {
+            return
+        }
 
+        const response = await createItem(data.instantPrice, data.onSale)
+        dispatch(
+            addTransaction({
+                hash: response.hash,
+                chainId,
+            })
+        )
         console.log(data)
     }
 
