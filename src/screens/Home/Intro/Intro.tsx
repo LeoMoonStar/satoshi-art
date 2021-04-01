@@ -17,7 +17,9 @@ export default function PopularWorks(): JSX.Element {
     return (
         <section>
             <div className={classes.searchRow}>
-                <Search />
+                <Search
+                    placeholder={t('searchByCreatorCollectibleOrCollection')}
+                />
             </div>
             <div className={classes.container}>
                 <div className={classes.explore}>

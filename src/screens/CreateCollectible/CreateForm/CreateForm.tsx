@@ -81,7 +81,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         type: '',
     })
 
-    const onSubmit = (data: ICollectibleForm) => {
+    const onSubmit = () => {
         {
             /* todo: will be changed after implement functionality */
         }
