@@ -62,7 +62,11 @@ export function useTransactionsUpdater(): void {
                                         tokenId,
                                         chainId,
                                         hash: tx.hash,
-                                        receipt,
+                                        receipt: {
+                                            ...receipt,
+                                            gasUsed: receipt.gasUsed.toString(),
+                                            cumulativeGasUsed: receipt.cumulativeGasUsed.toString(),
+                                        },
                                         dropped: false,
                                     })
                                 )
