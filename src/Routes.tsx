@@ -10,6 +10,8 @@ import Search from 'screens/Search'
 import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
+import UserDashboard from 'screens/UserDashboard'
+
 import WrongNetworkModal from './shared/WrongNetwork'
 
 function Routes(): JSX.Element {
@@ -44,6 +46,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/drop-of-the-day">
                         <DropOfTheDay />
+                    </Route>
+                    <Route path="/dashboard/user">
+                        <UserDashboard />
                     </Route>
                 </Switch>
             </BrowserRouter>

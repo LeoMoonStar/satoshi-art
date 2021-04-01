@@ -73,6 +73,11 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: theme.custom.common.pinkColor,
             color: '#fff',
         },
+        paperNotification: {
+            borderRadius: 20,
+            border: '1px solid #C4C4C4',
+            backgroundColor: '#fff',
+        },
     }
 })
 export default useStyles

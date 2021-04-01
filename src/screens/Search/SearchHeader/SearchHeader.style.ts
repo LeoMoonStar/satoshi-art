@@ -8,6 +8,14 @@ const useStyles = makeStyles((theme) => {
             margin: '-27px 0 60px 136px',
             width: 672,
         },
+        select2: {
+            top: 10,
+            right: 40,
+            position: 'absolute',
+            '&::before': {
+                display: 'none',
+            },
+        },
         searchIcon: {
             position: 'absolute',
             transform: 'translate(0, -50%)',

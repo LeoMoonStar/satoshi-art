@@ -9,7 +9,7 @@ const navItems = [
     {
         id: 1,
         label: 'dashboard',
-        href: '/dashboard/dashboard-list',
+        href: '/dashboard/user',
         Icon: HouseIcon,
     },
     {
