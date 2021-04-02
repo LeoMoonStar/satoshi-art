@@ -9,10 +9,7 @@ import {
     Input,
 } from '@material-ui/core'
 import { Close } from '@material-ui/icons'
-import {
-    useTranslation,
-    // Trans
-} from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import {
     // Controller,
     useForm,
@@ -52,30 +49,77 @@ interface ICollectibleForm {
     properties: Array<PropertyType>
 }
 
+const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'.split(',')
+const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg'.split(
+    ','
+)
+const ALL_SUPPORTED_TYPES = [...VAlID_COVER_TYPES, ...VALID_FILE_TYPES]
+
+const FILE_SIZE = 31457280
+
 const schema = yup.object().shape({
     name: yup.string().required('"Title" is not allowed to be empty'),
     file: yup
         .mixed()
         .required('A file is required')
-        .test('fileSize', 'File too large', (value) => {
-            console.log('fileSize', value)
-            return value && value.size >= 31457280
-        }),
-    cover: yup.string().when('file', {
-        is: true,
-        then: yup.string().required('"Cover" is required'),
+        .test(
+            'fileSize',
+            'File is required',
+            (value) => value && value.hasOwnProperty(0)
+        )
+        .test(
+            'fileRequired',
+            'File too large',
+            (value) =>
+                value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
+        )
+        .test(
+            'fileFormat',
+            'Unsupported Format',
+            (value) =>
+                value &&
+                value.hasOwnProperty(0) &&
+                ALL_SUPPORTED_TYPES.includes(value[0].type)
+        ),
+    cover: yup.mixed().when('file', {
+        is: (file: FileList) => {
+            return (
+                file &&
+                file.hasOwnProperty(0) &&
+                VALID_FILE_TYPES.includes(file[0].type)
+            )
+        },
+        then: yup
+            .mixed()
+            .required('A file is required')
+            .test(
+                'coverRequired',
+                'Cover is required',
+                (value) => value && value.hasOwnProperty(0)
+            )
+            .test(
+                'coverSize',
+                'File too large',
+                (value) =>
+                    value &&
+                    value.hasOwnProperty(0) &&
+                    value[0].size <= FILE_SIZE
+            )
+            .test(
+                'coverFormat',
+                'Unsupported Format',
+                (value) =>
+                    value &&
+                    value.hasOwnProperty(0) &&
+                    VAlID_COVER_TYPES.includes(value[0].type)
+            ),
     }),
     royalties: yup
         .number()
-        .min(0)
-        .max(10)
-        .required('Royalties" must be less than or equal to 10'),
+        .min(0, 'Min is 0')
+        .max(10, 'Max is 10')
+        .required('Royalties must be less than or equal to 10'),
 })
-
-const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
-const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg,'.concat(
-    VAlID_COVER_TYPES
-)
 
 {
     /* TODO: Refactoring:
@@ -93,8 +137,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const {
         register,
         handleSubmit,
-        // setValue,
-        control,
+        setValue,
+        // control,
         watch,
         formState: { errors },
     } = useForm<ICollectibleForm>({
@@ -102,6 +146,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         defaultValues: {
             onSale: true,
             collection: 'sart',
+            file: undefined,
         },
     })
 
@@ -111,34 +156,35 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         type: '',
     })
 
-    const onSubmit = (data: ICollectibleForm) => {
+    const onSubmit = () => {
         {
             /* todo: will be changed after implement functionality */
         }
 
         setIsSubmitModal(true)
-        console.log('data', data)
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files
 
         if (!fileList) return
-        setValue(e.target.name, fileList)
 
         const file = fileList[0]
-        if (file.size < 31457280) {
-            const src = URL.createObjectURL(file)
-            const type = file.type.split('/')[0]
-            setPreview({
-                ...preview,
-                [e.target.name]: src,
-                type: e.target.name === 'cover' ? preview.type : type,
-            })
-        }
+        const src = URL.createObjectURL(file)
+        const type = file.type.split('/')[0]
+        setPreview({
+            ...preview,
+            [e.target.name]: src,
+            type: e.target.name === 'cover' ? preview.type : type,
+        })
+    }
+
+    const handleRoyalties = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.name, e.target.value.split(/\D/).join(''))
     }
 
     const clearFile = () => {
+        setValue('file', null)
         setPreview({
             file: '',
             cover: '',
@@ -147,6 +193,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     }
 
     const clearCover = () => {
+        setValue('cover', null)
         setPreview({ ...preview, cover: '' })
     }
 
@@ -156,6 +203,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         'unlockContent',
         'price',
     ])
+    console.log({ errors })
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -164,14 +212,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                         <div className={classes.subtitle}>
                             {t('uploadFile')}
                         </div>
-                        <div className={classes.uploadWrapper}>
+                        <div
+                            className={clsx(classes.uploadWrapper, {
+                                [classes.uploadError]: errors.file,
+                            })}
+                        >
                             <input
-                                accept={VALID_FILE_TYPES}
+                                accept={ALL_SUPPORTED_TYPES.join()}
                                 className={classes.input}
-                                onChange={handleFileChange}
                                 ref={register}
-                                name="file"
+                                onChange={handleFileChange}
                                 id="uploadFile"
+                                name="file"
                                 type="file"
                                 hidden
                             />
@@ -212,15 +264,23 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             )}
                         </div>
                     </div>
-                    {errors.file && <p>{errors.file.message}</p>}
+                    {errors.file && (
+                        <p className={classes.textError}>
+                            {errors.file.message}
+                        </p>
+                    )}
                     {(preview.type === 'video' || preview.type === 'audio') && (
                         <div className={classes.upload}>
                             <div className={classes.subtitle}>
                                 {t('uploadCover')}
                             </div>
-                            <div className={classes.uploadWrapper}>
+                            <div
+                                className={clsx(classes.uploadWrapper, {
+                                    [classes.uploadError]: errors.cover,
+                                })}
+                            >
                                 <input
-                                    accept={VAlID_COVER_TYPES}
+                                    accept={VAlID_COVER_TYPES.join()}
                                     className={classes.input}
                                     onChange={handleFileChange}
                                     ref={register}
@@ -259,8 +319,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             </div>
                         </div>
                     )}
-                    {errors.cover && <p>{errors.cover.message}</p>}
-
+                    {errors.cover && (
+                        <p className={classes.textError}>
+                            {errors.cover.message}
+                        </p>
+                    )}
                     {/*<FormControl className={classes.controls}>*/}
                     {/*    <Controller*/}
                     {/*        name="onSale"*/}
@@ -293,7 +356,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     {/*            />*/}
                     {/*        )}*/}
                     {/*    />*/}
-
                     {/*    {watch('onSale') && (*/}
                     {/*        <div>*/}
                     {/*            <FormControlLabel*/}
@@ -436,7 +498,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     {/*    </div>*/}
                     {/*</div>*/}
                     <div className={classes.propertiesWrapper}>
-                        <div className={classes.input}>
+                        <div
+                            className={clsx(classes.input, {
+                                [classes.inputError]: errors.name,
+                            })}
+                        >
                             <label htmlFor="name" className={classes.label}>
                                 {t('name')}
                             </label>
@@ -447,14 +513,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 inputRef={register}
                                 disableUnderline
                             />
-                            {errors.name && <p>{errors.name.message}</p>}
+                            {errors.name && (
+                                <p className={classes.textError}>
+                                    {errors.name.message}
+                                </p>
+                            )}
                         </div>
                         <div className={classes.input}>
                             <label
                                 htmlFor="description"
                                 className={classes.label}
                             >
-                                {t('description')}
+                                <Trans
+                                    i18nKey="descriptionOptional"
+                                    components={{ 1: <span /> }}
+                                />
                             </label>
                             <Input
                                 id="description"
@@ -466,7 +539,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             <span>With preserved line-breaks</span>
                         </div>
                         <div className={clsx({ [classes.sizes]: !isSingle })}>
-                            <div className={classes.input}>
+                            <div
+                                className={clsx(classes.input, {
+                                    [classes.inputError]: errors.royalties,
+                                })}
+                            >
                                 <label
                                     htmlFor="royalties"
                                     className={classes.label}
@@ -476,6 +553,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 <Input
                                     id="royalties"
                                     defaultValue="10"
+                                    onChange={handleRoyalties}
                                     inputRef={register}
                                     disableUnderline
                                     name="royalties"
@@ -487,7 +565,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     })}
                                 </span>
                                 {errors.royalties && (
-                                    <p>{errors.royalties.message}</p>
+                                    <p className={classes.textError}>
+                                        {errors.royalties.message}
+                                    </p>
                                 )}
                             </div>
                             {!isSingle && (
@@ -529,7 +609,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     </div>
                     <div className={classes.footer}>
                         <Button type="submit">{t('createItem')}</Button>
-                        <div>{t('unsavedChanges')}</div>
+                        {/*<div>{t('unsavedChanges')}</div>*/}
                     </div>
                 </div>
             </form>

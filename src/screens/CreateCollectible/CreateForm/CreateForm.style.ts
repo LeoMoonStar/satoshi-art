@@ -226,6 +226,17 @@ const useStyles = makeStyles((theme) => {
                 backgroundColor: '#FF009926',
             },
         },
+        uploadError: {
+            border: '1px solid #FF0000',
+        },
+        textError: {
+            color: '#FF0000',
+        },
+        inputError: {
+            '& .MuiInput-root': {
+                borderBottom: '1px solid #FF0000',
+            },
+        },
     }
 })
 export default useStyles

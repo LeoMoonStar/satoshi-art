@@ -147,6 +147,7 @@
   "pleaseProvideAOneLineDescriptionIssue": "Please provide a one-line description of the issue you`re currently facing.",
   "yourAddress": "Your Address",
   "pleaseDescribeTheProblemInAsMuchDetailAs": "Please describe the problem in as much detail as possible.",
+  "descriptionOptional": "Description <1>(Optional)<1>",
   "attachmentsOptional": "Attachments (optional)",
   "addOrDropFilesHere": "Add or drop files here",
   "submit": "Submit",
