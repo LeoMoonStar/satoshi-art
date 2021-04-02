@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Popover } from '@material-ui/core'
+import { IconButton, Popover } from '@material-ui/core'
 import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
@@ -83,7 +83,13 @@ const UserMenu = (): JSX.Element | null => {
                 <div>
                     <div className={classes.nickName}>
                         {userAddress}
-                        <CopyIcon />
+                        <IconButton
+                            onClick={() =>
+                                navigator.clipboard.writeText(account)
+                            }
+                        >
+                            <CopyIcon />
+                        </IconButton>
                     </div>
                     <Link to="/" className={classes.profileLink}>
                         Set display name
