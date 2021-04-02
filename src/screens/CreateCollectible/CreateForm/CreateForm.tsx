@@ -26,8 +26,8 @@ type PropertyType = {
 }
 
 type PreviewType = {
-    fileSrc: string
-    coverSrc?: string
+    file: string
+    cover?: string
     type: string
 }
 
@@ -52,16 +52,19 @@ const schema = yup.object().shape({
     file: yup
         .mixed()
         .required('A file is required')
-        .test(
-            'fileSize',
-            'File too large',
-            (value) => value && value.size <= 31457280
-        ),
+        .test('fileSize', 'File too large', (value) => {
+            console.log('fileSize', value)
+            return value && value.size >= 31457280
+        }),
     cover: yup.string().when('file', {
         is: true,
-        then: yup.string().required(),
-        otherwise: yup.string(),
+        then: yup.string().required('"Cover" is required'),
     }),
+    royalties: yup
+        .number()
+        .min(0)
+        .max(10)
+        .required('Royalties" must be less than or equal to 10'),
 })
 
 const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
@@ -98,23 +101,25 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     })
 
     const [preview, setPreview] = useState<PreviewType>({
-        fileSrc: '',
-        coverSrc: '',
+        file: '',
+        cover: '',
         type: '',
     })
 
-    const onSubmit = () => {
+    const onSubmit = (data: ICollectibleForm) => {
         {
             /* todo: will be changed after implement functionality */
         }
 
         setIsSubmitModal(true)
+        console.log('data', data)
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files
 
         if (!fileList) return
+        setValue(e.target.name, fileList)
 
         const file = fileList[0]
         if (file.size < 31457280) {
@@ -123,21 +128,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             setPreview({
                 ...preview,
                 [e.target.name]: src,
-                type: e.target.name === 'coverSrc' ? preview.type : type,
+                type: e.target.name === 'cover' ? preview.type : type,
             })
         }
     }
 
     const clearFile = () => {
         setPreview({
-            fileSrc: '',
-            coverSrc: '',
+            file: '',
+            cover: '',
             type: '',
         })
     }
 
     const clearCover = () => {
-        setPreview({ ...preview, coverSrc: '' })
+        setPreview({ ...preview, cover: '' })
     }
 
     const previewFields = watch([
@@ -146,7 +151,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         'unlockContent',
         'price',
     ])
-    console.log('errors', errors)
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -161,12 +165,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 className={classes.input}
                                 onChange={handleFileChange}
                                 ref={register}
-                                name="fileSrc"
+                                name="file"
                                 id="uploadFile"
                                 type="file"
                                 hidden
                             />
-                            {!preview.fileSrc ? (
+                            {!preview.file ? (
                                 <div>
                                     <div>
                                         PNG, GIF, WEBP, MP4 or MP3. Max 30mb.
@@ -183,17 +187,17 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             ) : (
                                 <div className={classes.uploadPreview}>
                                     {preview.type === 'image' && (
-                                        <img src={preview.fileSrc} />
+                                        <img src={preview.file} />
                                     )}
                                     {preview.type === 'audio' && (
-                                        <audio src={preview.fileSrc} controls />
+                                        <audio src={preview.file} controls />
                                     )}
                                     {preview.type === 'video' && (
-                                        <video src={preview.fileSrc} controls />
+                                        <video src={preview.file} controls />
                                     )}
                                 </div>
                             )}
-                            {preview.fileSrc && (
+                            {preview.file && (
                                 <IconButton
                                     className={classes.closeBtn}
                                     onClick={clearFile}
@@ -203,6 +207,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             )}
                         </div>
                     </div>
+                    {errors.file && <p>{errors.file.message}</p>}
                     {(preview.type === 'video' || preview.type === 'audio') && (
                         <div className={classes.upload}>
                             <div className={classes.subtitle}>
@@ -214,12 +219,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     className={classes.input}
                                     onChange={handleFileChange}
                                     ref={register}
-                                    name="coverSrc"
+                                    name="cover"
                                     id="uploadCover"
                                     type="file"
                                     hidden
                                 />
-                                {!preview.coverSrc ? (
+                                {!preview.cover ? (
                                     <div>
                                         <div>
                                             JPG, PNG, GIF or WEBP. Max 30mb.
@@ -235,10 +240,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     </div>
                                 ) : (
                                     <div className={classes.uploadPreview}>
-                                        <img src={preview.coverSrc} />
+                                        <img src={preview.cover} />
                                     </div>
                                 )}
-                                {preview.coverSrc && (
+                                {preview.cover && (
                                     <IconButton
                                         className={classes.closeBtn}
                                         onClick={clearCover}
@@ -249,7 +254,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             </div>
                         </div>
                     )}
-                    {errors.file && <p>{errors.file.message}</p>}
+                    {errors.cover && <p>{errors.cover.message}</p>}
 
                     <FormControl className={classes.controls}>
                         <Controller
@@ -486,10 +491,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 <span>
                                     {t('suggestedPercentages', {
                                         value1: 10,
-                                        value2: 20,
-                                        value3: 30,
                                     })}
                                 </span>
+                                {errors.royalties && (
+                                    <p>{errors.royalties.message}</p>
+                                )}
                             </div>
                             {!isSingle && (
                                 <div className={classes.input}>
@@ -536,9 +542,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </form>
             <Preview
                 fileSrc={
-                    preview.type === 'image'
-                        ? preview.fileSrc
-                        : preview.coverSrc
+                    preview.type === 'image' ? preview.file : preview.cover
                 }
                 fields={previewFields}
                 isSingle={isSingle}
