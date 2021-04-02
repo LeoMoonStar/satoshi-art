@@ -3,6 +3,21 @@ import backgroundImage from 'shared/images/supportForm/bg.jpg'
 
 const useStyles = makeStyles(() => {
     return {
+        supportText: {
+            width: 600,
+            maxWidth: '100%',
+            margin: '100px auto',
+            fontSize: 24,
+            textAlign: 'center',
+            color: '#7E7E7E',
+            lineHeight: '1.6em',
+            '& a': {
+                color: '#FF0099',
+                '&:hover': {
+                    textDecoration: 'none',
+                },
+            },
+        },
         container: {
             width: '100%',
             display: 'flex',
@@ -24,6 +39,10 @@ const useStyles = makeStyles(() => {
             flex: '2 1 607px',
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: 'cover',
+            '& img': {
+                objectFit: 'cover',
+                height: '100%',
+            },
         },
         fieldGroup: {
             width: '100%',
