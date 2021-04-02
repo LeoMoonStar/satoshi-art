@@ -3,25 +3,34 @@ import { makeStyles } from '@material-ui/core/styles'
 import MUIButton, { ButtonProps } from '@material-ui/core/Button'
 import cx from 'clsx'
 
-type Variants = 'action' | 'outlined'
+type Variants = 'action' | 'outlined' | 'linkButton'
+
+const commonButtonsStyles = (color: string): any => {
+    return {
+        minWidth: 157,
+        lineHeight: '40px',
+        padding: 0,
+        color: '#fff',
+        borderRadius: 60,
+        backgroundColor: color,
+        textTransform: 'initial',
+        '&:not(:disabled):hover': {
+            backgroundColor: `${color}90`,
+        },
+        '&:disabled': {
+            backgroundColor: '#C4C4C4',
+            color: '#fff',
+        },
+    }
+}
 
 const useStyles = makeStyles(() => {
     return {
         action: {
-            minWidth: 157,
-            lineHeight: '40px',
-            padding: 0,
-            color: '#fff',
-            borderRadius: 60,
-            backgroundColor: '#ff0099',
-            textTransform: 'initial',
-            '&:not(:disabled):hover': {
-                backgroundColor: '#ff009990',
-            },
-            '&:disabled': {
-                backgroundColor: '#C4C4C4',
-                color: '#fff',
-            },
+            ...commonButtonsStyles('#ff0099'),
+        },
+        linkButton: {
+            ...commonButtonsStyles('#5113D5'),
         },
         outlined: {
             width: 157,

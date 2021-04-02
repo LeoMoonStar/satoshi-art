@@ -1,31 +1,13 @@
 import React, { useState } from 'react'
-import {
-    TextField,
-    Divider,
-    Chip,
-    Select,
-    MenuItem,
-    Popper,
-    PopperProps,
-} from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
+import { Divider, Chip, Select, MenuItem } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import useStyles from './SearchHeader.style'
-
-import { SearchIcon4 } from 'shared/icons'
 
 type TagType = {
     id: number
     title: string
 }
-const artists = [
-    { title: 'rihanna' },
-    { title: 'lady gaga' },
-    { title: 'miley cyrus' },
-    { title: 'billie elish' },
-    { title: 'rihanna' },
-]
 
 const tags: TagType[] = [
     { id: 1, title: 'Beyoncé' },
@@ -40,16 +22,6 @@ const tags: TagType[] = [
     { id: 10, title: 'Hip hop' },
     { id: 11, title: 'Black power' },
 ]
-
-const SearchPopper = function (props: PopperProps) {
-    return (
-        <Popper
-            {...props}
-            style={{ width: '672px' }}
-            placement="bottom-start"
-        />
-    )
-}
 
 {
     /*@TODO: Move tags and select into a separate components */
@@ -74,47 +46,6 @@ const SearchHeader = (): JSX.Element => {
 
     return (
         <div>
-            <Divider
-                classes={{
-                    root: classes.divider,
-                }}
-            />
-            {/*@TODO: the same input will be on the home page, use a shared*/}
-            <div className={classes.searchWrapper}>
-                <Autocomplete
-                    freeSolo
-                    classes={{
-                        root: classes.autocomplete,
-                        popper: classes.dropdown,
-                    }}
-                    PopperComponent={SearchPopper}
-                    disableClearable
-                    options={artists.map((option) => option.title)}
-                    renderOption={(value) => (
-                        <>
-                            <SearchIcon4 />
-                            {value}
-                        </>
-                    )}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            InputProps={{
-                                ...params.InputProps,
-                                disableUnderline: true,
-                                type: 'search',
-                                placeholder: 'beyoncé live',
-                                classes: {
-                                    root: classes.searchInput,
-                                },
-                            }}
-                        />
-                    )}
-                />
-                <div className={classes.searchIcon}>
-                    <SearchIcon4 />
-                </div>
-            </div>
             <div className={classes.filters}>
                 <div className={classes.selectedTagsList}>
                     <div className={classes.resultsCount}>
