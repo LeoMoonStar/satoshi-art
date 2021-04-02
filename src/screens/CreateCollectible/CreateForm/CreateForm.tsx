@@ -58,7 +58,7 @@ const ALL_SUPPORTED_TYPES = [...VAlID_COVER_TYPES, ...VALID_FILE_TYPES]
 const FILE_SIZE = 31457280
 
 const schema = yup.object().shape({
-    name: yup.string().required('"Title" is not allowed to be empty'),
+    name: yup.string().required('You need to enter the name'),
     file: yup
         .mixed()
         .required('A file is required')
@@ -69,7 +69,7 @@ const schema = yup.object().shape({
         )
         .test(
             'fileRequired',
-            'File too large',
+            'The file is too big. You need to upload a smaller one',
             (value) =>
                 value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
         )
@@ -99,7 +99,7 @@ const schema = yup.object().shape({
             )
             .test(
                 'coverSize',
-                'File too large',
+                'The file is too big. You need to upload a smaller one',
                 (value) =>
                     value &&
                     value.hasOwnProperty(0) &&
@@ -197,13 +197,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         setPreview({ ...preview, cover: '' })
     }
 
+    const isErrors = () => Object.keys(errors).length >= 1
+
     const previewFields = watch([
         'name',
         'copiesCount',
         'unlockContent',
         'price',
     ])
-    console.log({ errors })
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -608,9 +609,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                         {/*</div>*/}
                     </div>
                     <div className={classes.footer}>
-                        <Button type="submit">{t('createItem')}</Button>
+                        <Button disabled={isErrors()} type="submit">
+                            {t('createItem')}
+                        </Button>
                         {/*<div>{t('unsavedChanges')}</div>*/}
                     </div>
+                    {isErrors() && (
+                        <p className={classes.textError}>
+                            There were some issues. Please see above what you
+                            need to fix and try again. The button will be
+                            enabled after you apply your changes.
+                        </p>
+                    )}
                 </div>
             </form>
             <Preview
