@@ -13,20 +13,8 @@ const foooterMenu = [
         url: '/privacy',
     },
     {
-        label: 'Community',
-        url: '',
-    },
-    {
         label: 'Help',
-        url: '',
-    },
-    {
-        label: 'Cookie preferences',
-        url: '',
-    },
-    {
-        label: 'Blog',
-        url: '',
+        url: '/support-form',
     },
 ]
 
