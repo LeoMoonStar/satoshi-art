@@ -1,9 +1,9 @@
 import React from 'react'
-import { IconButton } from '@material-ui/core'
+// import { IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
 import Button from 'shared/Button'
-import { SaveIcon, ViewsIcon } from 'shared/icons'
+// import { SaveIcon, ViewsIcon } from 'shared/icons'
 import Avatar from 'shared/Avatar'
 import Loader from 'shared/Loader'
 import TextGradient from 'shared/TexGradient'
@@ -52,18 +52,18 @@ export default function WorksList({
                             </div>
                             <div className={classes.infoHead}>
                                 <h2 className={classes.name}>Fresh Meat #F</h2>
-                                <div className={classes.actionButtons}>
-                                    <IconButton
-                                        className={classes.actionButton}
-                                    >
-                                        <SaveIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        className={classes.actionButton}
-                                    >
-                                        <ViewsIcon />
-                                    </IconButton>
-                                </div>
+                                {/*<div className={classes.actionButtons}>*/}
+                                {/*    <IconButton*/}
+                                {/*        className={classes.actionButton}*/}
+                                {/*    >*/}
+                                {/*        <SaveIcon />*/}
+                                {/*    </IconButton>*/}
+                                {/*    <IconButton*/}
+                                {/*        className={classes.actionButton}*/}
+                                {/*    >*/}
+                                {/*        <ViewsIcon />*/}
+                                {/*    </IconButton>*/}
+                                {/*</div>*/}
                             </div>
                             <div className={classes.authorInfo}>
                                 <a href="">@Fimbim</a> 124.56x3 ETH
