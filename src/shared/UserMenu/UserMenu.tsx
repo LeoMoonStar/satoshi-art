@@ -4,15 +4,15 @@ import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { shortAddress } from 'utils/helpers'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import {
     CopyIcon,
     BalanceIcon,
-    ProfileIcon,
-    ItemsIcon,
-    DisconnectIcon,
+    // ProfileIcon,
+    // ItemsIcon,
+    // DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
 
@@ -22,11 +22,11 @@ import useStyles from './UserMenu.styled'
     /*TODO: Add relevant links path */
 }
 
-const userLinks = [
-    { title: 'My items', icon: <ItemsIcon /> },
-    { title: 'Edit Profile', icon: <ProfileIcon /> },
-    { title: 'Disconnect', icon: <DisconnectIcon /> },
-]
+// const userLinks = [
+//     { title: 'My items', icon: <ItemsIcon /> },
+//     { title: 'Edit Profile', icon: <ProfileIcon /> },
+//     { title: 'Disconnect', icon: <DisconnectIcon /> },
+// ]
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
@@ -91,9 +91,9 @@ const UserMenu = (): JSX.Element | null => {
                             <CopyIcon />
                         </IconButton>
                     </div>
-                    <Link to="/" className={classes.profileLink}>
-                        Set display name
-                    </Link>
+                    {/*<Link to="/" className={classes.profileLink}>*/}
+                    {/*    Set display name*/}
+                    {/*</Link>*/}
                     <ul className={classes.balances}>
                         <li>
                             <BalanceIcon />
@@ -103,16 +103,16 @@ const UserMenu = (): JSX.Element | null => {
                             </div>
                         </li>
                     </ul>
-                    <ul className={classes.links}>
-                        {userLinks.map((link, index) => (
-                            <li key={index}>
-                                <Link to="/">
-                                    {link.icon}
-                                    <span>{link.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {/*<ul className={classes.links}>*/}
+                    {/*    {userLinks.map((link, index) => (*/}
+                    {/*        <li key={index}>*/}
+                    {/*            <Link to="/">*/}
+                    {/*                {link.icon}*/}
+                    {/*                <span>{link.title}</span>*/}
+                    {/*            </Link>*/}
+                    {/*        </li>*/}
+                    {/*    ))}*/}
+                    {/*</ul>*/}
                 </div>
             </Popover>
         </div>
