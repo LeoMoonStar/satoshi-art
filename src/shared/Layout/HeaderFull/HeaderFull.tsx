@@ -9,11 +9,7 @@ import { FullLogo } from 'shared/icons'
 
 import useStyles from './HeaderFull.style'
 
-const navItems = [
-    { id: 1, label: 'howItWorks', href: '/' },
-    { id: 2, label: 'community', href: '/' },
-    { id: 3, label: 'Following', href: '/' },
-]
+const navItems = [{ id: 1, label: 'howItWorks', href: '/' }]
 
 export default function HeaderFull(): JSX.Element {
     const classes = useStyles()
