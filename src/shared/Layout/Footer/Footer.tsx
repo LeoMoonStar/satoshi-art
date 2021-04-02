@@ -2,14 +2,7 @@ import React from 'react'
 import { Input } from '@material-ui/core'
 import Button from 'shared/Button'
 import { useTranslation } from 'react-i18next'
-import {
-    TwitterIcon,
-    FacebookIcon,
-    InstagramIcon,
-    LinkedinIcon,
-    SatoshiArtIcon,
-    YoutubeIcon,
-} from 'shared/icons'
+import { TwitterIcon, InstagramIcon, SatoshiArtIcon } from 'shared/icons'
 import TextGradient from 'shared/TexGradient'
 
 import FooterMenu from './FooterMenu'
@@ -60,35 +53,14 @@ function Footer({ justifyTopRow = 'space-between' }: FooterProps): JSX.Element {
                 <div className={classes.rightBottomCol}>
                     <div className={classes.socialLinks}>
                         <a
-                            href="https://twitter.com"
+                            href="https://twitter.com/thesatoshiart"
                             target="_blank"
                             rel="noreferrer"
                         >
                             <TwitterIcon />
                         </a>
                         <a
-                            href="https://youtube.com"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            <YoutubeIcon />
-                        </a>
-                        <a
-                            href="https://linkedin.com"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            <LinkedinIcon />
-                        </a>
-                        <a
-                            href="https://facebook.com"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            <FacebookIcon />
-                        </a>
-                        <a
-                            href="https://instagram.com"
+                            href="https://www.instagram.com/satoshi.art/"
                             target="_blank"
                             rel="noreferrer"
                         >
