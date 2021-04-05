@@ -6,41 +6,21 @@ import useStyles from './WarningMobileResolutions.style'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
 
-const PATHS_OF_NOT_RESPONSIVE_PAGES: string[] = [
-    '/$',
-    'productpage',
-    '/connect',
-    '/artists/\\d',
-    '/create-collectible$',
-    '/create-collectible/(single|multiple)',
-    '/search',
-    '/dashboard/order-list',
-    '/drop-of-the-day',
-    '/support-form',
-    '/privacy',
-]
-
 export default function WarningMobileResolutions(): JSX.Element {
     const [isOpen, setOpen] = useState<boolean>(false)
     const history = useHistory()
     const { t } = useTranslation()
 
     useEffect(() => {
-        if (window.innerWidth >= 1366) {
+        if (
+            window.innerWidth >= 1366 ||
+            sessionStorage.getItem('isConfirmedWarningMobileResolutions')
+        ) {
             return
         }
 
-        const isNotResponsivePage = PATHS_OF_NOT_RESPONSIVE_PAGES.some(
-            (routeRegExpTemplate) => {
-                const regExp = new RegExp(routeRegExpTemplate)
-
-                return regExp.test(history.location.pathname)
-            }
-        )
-
-        if (isNotResponsivePage) {
-            setOpen(true)
-        }
+        sessionStorage.setItem('isConfirmedWarningMobileResolutions', '1')
+        setOpen(true)
     }, [history])
 
     const classes = useStyles()

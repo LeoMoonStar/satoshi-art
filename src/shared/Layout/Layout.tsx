@@ -4,7 +4,6 @@ import Header from '../Header'
 import Footer from './Footer'
 import useStyles from './Layout.style'
 import { JustifyTopRowFooter } from './Footer/Footer'
-import WarningMobileResolutions from './WarningMobileResoultions'
 
 type HeaderVariants = 'none' | 'full'
 
@@ -57,7 +56,6 @@ function Layout({
             <footer className={classes.footer}>
                 <Footer justifyTopRow={justifyTopRowFooter} />
             </footer>
-            <WarningMobileResolutions />
         </div>
     )
 }
