@@ -144,6 +144,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         // )
     }
 
+    //the third step of item creation(sign sell order step)
+    // const createSignature = async () => {
+    //     const hexMessage = 'test message'
+    //     const signedMessage = await library?.send('personal_sign', [
+    //         hexMessage,
+    //         account,
+    //     ])
+    //     console.log({ signedMessage })
+    // }
+
     const [preview, setPreview] = useState<PreviewType>({
         fileSrc: '',
         coverSrc: '',
