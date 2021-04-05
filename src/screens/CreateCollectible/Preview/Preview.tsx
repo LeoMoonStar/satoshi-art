@@ -15,7 +15,11 @@ type PreviewProps = {
     isSingle: boolean
 }
 
-const Preview = ({ fileSrc, fields }: PreviewProps): JSX.Element => {
+const Preview = ({
+    // isSingle,
+    fileSrc,
+    fields,
+}: PreviewProps): JSX.Element => {
     const classes = useStyles()
     const { t } = useTranslation()
     const isFieldsNotEmpty = Object.values(fields).some((field) => field)
@@ -26,11 +30,11 @@ const Preview = ({ fileSrc, fields }: PreviewProps): JSX.Element => {
                 <div className={classes.previewArea}>
                     {fileSrc || isFieldsNotEmpty ? (
                         <div className={classes.content}>
-                            {/*<div className={classes.references}>
-                                <Avatar size={26} image={avatar} alt="John" />
-                                <Avatar size={26} image={avatar} alt="John" />
-                                <Avatar size={26} image={avatar} alt="John" />
-                            </div>*/}
+                            {/*<div className={classes.references}>*/}
+                            {/*    <Avatar size={26} image={avatar} alt="John" />*/}
+                            {/*    <Avatar size={26} image={avatar} alt="John" />*/}
+                            {/*    <Avatar size={26} image={avatar} alt="John" />*/}
+                            {/*</div>*/}
                             <div className={classes.previewImgWrapper}>
                                 {fileSrc && (
                                     <img src={fileSrc} alt="preview-image" />
@@ -38,21 +42,21 @@ const Preview = ({ fileSrc, fields }: PreviewProps): JSX.Element => {
                             </div>
                             <div className={classes.previewDscr}>
                                 <div>{fields.name}</div>
-                                {/*<div>
-                                    {fields.price
-                                        ? fields.price
-                                        : 'Not for sale'}{' '}
-                                    {isSingle ? (
-                                        <span>1 of 1</span>
-                                    ) : (
-                                        <span>
-                                            {fields.copiesCount
-                                                ? `${fields.copiesCount} of ${fields.copiesCount}`
-                                                : '0 in stock'}
-                                        </span>
-                                    )}
-                                </div>
-                                <div> {t('noBidsYet')}</div>*/}
+                                {/*<div>*/}
+                                {/*    {fields.price*/}
+                                {/*        ? fields.price*/}
+                                {/*        : 'Not for sale'}{' '}*/}
+                                {/*    {isSingle ? (*/}
+                                {/*        <span>1 of 1</span>*/}
+                                {/*    ) : (*/}
+                                {/*        <span>*/}
+                                {/*            {fields.copiesCount*/}
+                                {/*                ? `${fields.copiesCount} of ${fields.copiesCount}`*/}
+                                {/*                : '0 in stock'}*/}
+                                {/*        </span>*/}
+                                {/*    )}*/}
+                                {/*</div>*/}
+                                {/*<div> {t('noBidsYet')}</div>*/}
                             </div>
                         </div>
                     ) : (
@@ -62,7 +66,7 @@ const Preview = ({ fileSrc, fields }: PreviewProps): JSX.Element => {
                     )}
                 </div>
             </div>
-            {fields.unlockContent && (
+            {!!fields.unlockContent && (
                 <div className={classes.unlockableContent}>
                     <span>{fields.unlockContent}</span>
                 </div>

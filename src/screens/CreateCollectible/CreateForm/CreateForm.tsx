@@ -144,7 +144,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         defaultValues: {
             onSale: true,
             collection: 'sart',
-            file: undefined,
         },
     })
 

@@ -1,7 +1,6 @@
 import React from 'react'
 
-import HeaderFull from './HeaderFull'
-import Header from './Header'
+import Header from '../Header'
 import Footer from './Footer'
 import useStyles from './Layout.style'
 import { JustifyTopRowFooter } from './Footer/Footer'
@@ -13,32 +12,43 @@ type ILayoutProps = {
     headerVariant?: HeaderVariants
     isHeaderVisible?: boolean
     justifyTopRowFooter?: JustifyTopRowFooter
+    containerPaddingTop?: number
+    headerBackground?: string
+    positionHeader?: 'sticky' | 'absolute'
+    inverseHeader?: boolean
+    hasHeaderDivider?: boolean
 }
 
 function Layout({
     children,
-    headerVariant = 'none',
+    positionHeader = 'sticky',
+    containerPaddingTop = 45,
+    headerBackground = '#fff',
+    inverseHeader = false,
     isHeaderVisible = true,
+    hasHeaderDivider = true,
     justifyTopRowFooter,
 }: ILayoutProps): JSX.Element {
     const classes = useStyles()
 
     return (
         <div className={classes.container}>
-            <div className={classes.header}>
+            <div
+                className={classes.header}
+                style={{
+                    backgroundColor: headerBackground,
+                    position: positionHeader,
+                }}
+            >
                 {isHeaderVisible && (
-                    <>
-                        {
-                            {
-                                full: <HeaderFull />,
-                                none: <Header />,
-                            }[headerVariant]
-                        }
-                    </>
+                    <Header
+                        hasDivider={hasHeaderDivider}
+                        inverseHeader={inverseHeader}
+                    />
                 )}
             </div>
             <div
-                style={{ paddingTop: isHeaderVisible ? 45 : 0 }}
+                style={{ paddingTop: containerPaddingTop }}
                 className={classes.content}
             >
                 {children}

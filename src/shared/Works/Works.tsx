@@ -1,12 +1,12 @@
 import React from 'react'
 // import { IconButton } from '@material-ui/core'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 
 import Button from 'shared/Button'
 // import { SaveIcon, ViewsIcon } from 'shared/icons'
 import Avatar from 'shared/Avatar'
 import Loader from 'shared/Loader'
-import TextGradient from 'shared/TexGradient'
+// import TextGradient from 'shared/TexGradient'
 import preview from 'shared/images/artist/work.jpg'
 import artistAvatar from 'shared/images/artist/avatar.jpg'
 
@@ -26,7 +26,7 @@ export default function WorksList({
     isLoading = true,
 }: WorksListProps): JSX.Element {
     const classes = useStyles()
-    const { t } = useTranslation()
+    // const { t } = useTranslation()
 
     return (
         <div>
@@ -71,11 +71,11 @@ export default function WorksList({
                             <div className={classes.workInfo}>
                                 0.25 ETH
                                 <span className={classes.count}>1 of 1</span>
-                                <Button className={classes.bidButton}>
-                                    <TextGradient colors="#FF0099, #6A2FE7">
-                                        {t('placeABid')}
-                                    </TextGradient>
-                                </Button>
+                                {/*<Button className={classes.bidButton}>*/}
+                                {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
+                                {/*        {t('placeABid')}*/}
+                                {/*    </TextGradient>*/}
+                                {/*</Button>*/}
                             </div>
                         </div>
                     </div>

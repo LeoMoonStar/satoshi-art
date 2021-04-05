@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Sidebar from './Sidebar'
-import Header from './Header'
+import Header from '../Header'
 
 import useStyles from './DashboardLayout.style'
 
@@ -15,12 +15,12 @@ export default function DashboardLayout({
     const classes = useStyles()
 
     return (
-        <div className={classes.container}>
-            <Sidebar />
-            <div>
-                <Header />
+        <>
+            <Header />
+            <div className={classes.container}>
+                <Sidebar />
                 {children}
             </div>
-        </div>
+        </>
     )
 }
