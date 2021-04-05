@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import useStyles from './Search.style'
 
-import { SearchIcon4 } from 'shared/icons'
+import { SearchIcon } from 'shared/icons'
 
 type SearchProps = {
     className?: string
@@ -31,7 +31,7 @@ const Search = ({ className = '', placeholder }: SearchProps): JSX.Element => {
                 disableUnderline
             />
             <div className={classes.searchIcon}>
-                <SearchIcon4 />
+                <SearchIcon />
             </div>
         </label>
     )

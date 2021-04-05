@@ -14,25 +14,6 @@ const useStyles = makeStyles((theme) => {
             background: theme.palette.primary.main,
             overflow: 'hidden',
         },
-        searchRow: {
-            width: '100%',
-            position: 'relative',
-            marginTop: -45,
-            paddingLeft: '0 136px',
-            '& > label': {
-                position: 'relative',
-                zIndex: 1,
-                marginLeft: 136,
-            },
-            '&::after': {
-                content: '""',
-                position: 'absolute',
-                top: '50%',
-                width: '100%',
-                height: 1,
-                backgroundColor: '#C4C4C4',
-            },
-        },
         explore: {
             position: 'relative',
             width: '100%',
