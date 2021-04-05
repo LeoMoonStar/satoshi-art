@@ -24,11 +24,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
-import Satoshi721 from 'abis/Satoshi721.json'
-import { Satoshi721ABI } from 'utils/erc721'
+import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import { addTransaction } from 'state/transactions/actions'
 
 import useStyles from './CreateForm.style'
+import { percentageToBasicPoints } from '../../../utils/helpers'
 
 type PropertyType = {
     name: string
@@ -140,6 +140,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const dispatch = useDispatch()
     const classes = useStyles()
     const { t } = useTranslation()
+    const { account, library, chainId } = useWeb3React<Web3Provider>()
+    const networkData = useSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const {
         register,
@@ -156,8 +158,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         },
     })
 
-    const { account, library, chainId } = useWeb3React<Web3Provider>()
-
     const [contract, setContract] = useState<any>()
 
     const tokenDataMock = {
@@ -168,14 +168,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             'https://i.pinimg.com/736x/2d/dc/25/2ddc25914e2ae0db5311ffa41781dda1.jpg',
     }
 
-    const getKeyValue = <T extends Record<string, unknown>, U extends keyof T>(
-        obj: T
-    ) => (key: U) => obj[key]
-    const networkData = getKeyValue(Satoshi721.networks)(chainId as any)
-
     useEffect(() => {
         if (library && networkData) {
-            console.log({ networkData })
             const address = networkData.address
             const contract = new Contract(
                 address,
@@ -186,36 +180,36 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [library, networkData, chainId])
 
-    const createItem = async (instantPrice: boolean, onSale: boolean) => {
+    const createItem = async (royaltiesInBp: number) => {
         //@TODO: get data for methods from API
-        if (onSale) {
-            if (instantPrice) {
-                return await contract.CreateAndPutOnAuction(
-                    JSON.stringify(tokenDataMock), //tokenURI
-                    0, //startDate
-                    10, //auction duration
-                    10, //royalties assigned to the token by the creator, in bps
-                    { from: account }
-                )
-            }
-            return await contract.createAndPutOnSale(
-                JSON.stringify(tokenDataMock),
-                1000, //price in wei of the token
-                10, //royalties assigned to the token by the creator, in bps
-                {
-                    from: account,
-                }
-            )
-        }
-        //based on task description not need for phase 1
-        // return await contract.createItem(
-        //     JSON.stringify(tokenDataMock),
-        //     1000, //price in wei of the token
-        //     10, //royalties assigned to the token by the creator, in bps
-        //     {
-        //         from: account,
+
+        //phase 1 includes only createItem method
+        // if (onSale) {
+        //     if (instantPrice) {
+        //         return await contract.CreateAndPutOnAuction(
+        //             JSON.stringify(tokenDataMock), //tokenURI
+        //             0, //startDate
+        //             10, //auction duration
+        //             10, //royalties assigned to the token by the creator, in bps
+        //             { from: account }
+        //         )
         //     }
-        // )
+        //     return await contract.createAndPutOnSale(
+        //         JSON.stringify(tokenDataMock),
+        //         1000, //price in wei of the token
+        //         10, //royalties assigned to the token by the creator, in bps
+        //         {
+        //             from: account,
+        //         }
+        //     )
+        // }
+        return await contract.createItem(
+            JSON.stringify(tokenDataMock),
+            royaltiesInBp, //royalties assigned to the token by the creator, in bps
+            {
+                from: account,
+            }
+        )
     }
 
     //the third step of item creation(sign sell order step)
@@ -235,6 +229,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     })
 
     const onSubmit = async (data: ICollectibleForm) => {
+        const royaltiesInBasicPoint = percentageToBasicPoints(data.royalties)
         {
             /* todo: will be changed after implement functionality */
         }
@@ -242,7 +237,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             return
         }
 
-        const response = await createItem(data.instantPrice, data.onSale)
+        const response = await createItem(royaltiesInBasicPoint)
         dispatch(
             addTransaction({
                 hash: response.hash,

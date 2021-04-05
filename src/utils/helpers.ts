@@ -13,4 +13,6 @@ export function shortAddress(address: string, slashIndex = 10): string {
     )
 }
 
-// export function percentageToBasicPoints(percentage) {}
+export function percentageToBasicPoints(royaltiesPercentage: number): number {
+    return royaltiesPercentage * 100
+}
