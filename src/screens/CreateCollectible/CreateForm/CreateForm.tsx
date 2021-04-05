@@ -503,7 +503,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     </div>
                     <div className={classes.footer}>
                         <Button type="submit">{t('createItem')}</Button>
-                        <div>{t('unsavedChanges')}</div>
+                        {/*<div>{t('unsavedChanges')}</div>*/}
                     </div>
                 </div>
             </form>

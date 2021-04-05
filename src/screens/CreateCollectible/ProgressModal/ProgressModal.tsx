@@ -13,7 +13,7 @@ import Button from 'shared/Button'
 import { CheckIcon } from 'shared/icons'
 import useStyles from './ProgressModal.style'
 
-const CONNECTION_STEPS = ['Approval', 'Token', 'Sign', 'Complete']
+const CONNECTION_STEPS = ['Approval', 'Token', 'Complete']
 
 function MyStepCircle(props: StepIconProps) {
     const classes = useStyles()
@@ -90,16 +90,6 @@ export default function ProgressModal({
                             <div className={classes.stepTitle}>
                                 <span>Upload files & Mint token</span>
                                 <span>Call contract method</span>
-                            </div>
-                        </div>
-                        <Button>Start</Button>
-                    </div>
-                    <div className={classes.step}>
-                        <div className={classes.stepDescription}>
-                            <CheckIcon />
-                            <div className={classes.stepTitle}>
-                                <span>Sign sell order</span>
-                                <span>Sign sell order using your wallet</span>
                             </div>
                         </div>
                         <Button>Start</Button>

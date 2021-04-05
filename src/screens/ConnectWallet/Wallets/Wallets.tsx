@@ -66,15 +66,6 @@ function Wallets(): JSX.Element {
                             }}
                         />
                         <Typography
-                            className={classes.description}
-                            variant="h6"
-                        >
-                            {t('cnWithOneOfProviders')}{' '}
-                            <span className={classes.walletInfo}>
-                                {t('whatIsWallet')}
-                            </span>
-                        </Typography>
-                        <Typography
                             className={classes.privateRules}
                             variant="h6"
                         >
