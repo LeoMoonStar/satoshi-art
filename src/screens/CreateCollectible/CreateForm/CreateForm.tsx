@@ -49,11 +49,9 @@ interface ICollectibleForm {
     properties: Array<PropertyType>
 }
 
-const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'.split(',')
-const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg'.split(
-    ','
-)
-const ALL_SUPPORTED_TYPES = [...VAlID_COVER_TYPES, ...VALID_FILE_TYPES]
+const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
+const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg'
+const ALL_SUPPORTED_TYPES = `${VAlID_COVER_TYPES},${VALID_FILE_TYPES}`
 
 const FILE_SIZE = 31457280
 
@@ -68,7 +66,7 @@ const schema = yup.object().shape({
             (value) => value && value.hasOwnProperty(0)
         )
         .test(
-            'fileRequired',
+            'fileSize',
             'The file is too big. You need to upload a smaller one',
             (value) =>
                 value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
@@ -93,12 +91,12 @@ const schema = yup.object().shape({
             .mixed()
             .required('A file is required')
             .test(
-                'coverRequired',
+                'fileRequired',
                 'Cover is required',
                 (value) => value && value.hasOwnProperty(0)
             )
             .test(
-                'coverSize',
+                'fileSize',
                 'The file is too big. You need to upload a smaller one',
                 (value) =>
                     value &&
@@ -106,7 +104,7 @@ const schema = yup.object().shape({
                     value[0].size <= FILE_SIZE
             )
             .test(
-                'coverFormat',
+                'fileFormat',
                 'Unsupported Format',
                 (value) =>
                     value &&
@@ -219,7 +217,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             })}
                         >
                             <input
-                                accept={ALL_SUPPORTED_TYPES.join()}
+                                accept={ALL_SUPPORTED_TYPES}
                                 className={classes.input}
                                 ref={register}
                                 onChange={handleFileChange}
@@ -281,7 +279,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 })}
                             >
                                 <input
-                                    accept={VAlID_COVER_TYPES.join()}
+                                    accept={VAlID_COVER_TYPES}
                                     className={classes.input}
                                     onChange={handleFileChange}
                                     ref={register}
