@@ -10,17 +10,16 @@ const useStyles = makeStyles((theme) => {
             background: theme.palette.primary.main,
         },
         header: {
-            position: 'sticky',
+            width: '100%',
             top: 0,
-            backgroundColor: theme.palette.primary.main,
-            zIndex: 999,
+            zIndex: 9,
         },
         content: {
             flex: '1 0 auto',
-            paddingTop: 45,
         },
         footer: {
             background: 'black',
+            borderRadius: '20px 20px 0 0',
             width: '100%',
             flex: '0 0 auto',
             height: 480,

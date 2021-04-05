@@ -76,17 +76,6 @@ const useStyles = makeStyles(() => ({
         fontSize: 13,
         fontWeight: 600,
         color: '#FF0099',
-        '& span': {
-            // todo: maybe make sens create a TextGradient component
-            /*  hack: The text gradient functionality will be supported by safari
-             only if you paste it directly to element that contain the text,
-             and set display: inline-block rule to this element */
-            display: 'inline-block',
-            textTransform: 'initial',
-            backgroundImage: 'linear-gradient(left, #6A2FE7, #FF0099)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-        },
         '&:hover': {
             opacity: '.8',
         },
@@ -98,16 +87,8 @@ const useStyles = makeStyles(() => ({
     seeAllButton: {
         margin: '0 auto',
         display: 'block',
-        minWidth: 157,
         height: 53,
         fontWeight: 600,
-        color: '#fff',
-        backgroundColor: '#FF0099',
-        borderRadius: 60,
-        textTransform: 'initial',
-        '&:hover': {
-            backgroundColor: '#FF009990',
-        },
     },
 }))
 

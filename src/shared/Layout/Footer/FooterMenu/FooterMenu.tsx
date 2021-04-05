@@ -3,30 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import useStyles from './FooterMenu.style'
 
-const foooterMenu = [
-    {
-        label: 'More Satoshi',
-        url: '',
-    },
+const footerMenu = [
     {
         label: 'Privacy',
-        url: '',
-    },
-    {
-        label: 'Community',
-        url: '',
+        url: '/privacy',
     },
     {
         label: 'Help',
-        url: '',
-    },
-    {
-        label: 'Cookie preferences',
-        url: '',
-    },
-    {
-        label: 'Blog',
-        url: '',
+        url: '/support-form',
     },
 ]
 
@@ -36,7 +20,7 @@ function FooterMenu(): JSX.Element {
 
     return (
         <div>
-            {foooterMenu.map((menuItem, index) => {
+            {footerMenu.map((menuItem, index) => {
                 return (
                     <a
                         key={`${menuItem.label}-${index}`}

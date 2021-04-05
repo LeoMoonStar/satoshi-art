@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import Search from 'shared/Search'
 import Button from 'shared/Button'
 import nftImg from 'shared/images/NFT.png'
 import escalasImg from 'shared/images/escalas.png'
@@ -16,9 +15,6 @@ export default function PopularWorks(): JSX.Element {
 
     return (
         <section>
-            <div className={classes.searchRow}>
-                <Search />
-            </div>
             <div className={classes.container}>
                 <div className={classes.explore}>
                     <div className={classes.exploreBlock}>

@@ -12,3 +12,5 @@ export function shortAddress(address: string, slashIndex = 10): string {
         address.slice(addressLength - 4, addressLength)
     )
 }
+
+// export function percentageToBasicPoints(percentage) {}

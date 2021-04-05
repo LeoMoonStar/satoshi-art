@@ -9,6 +9,9 @@ import CreateCollectible from 'screens/CreateCollectible'
 import Search from 'screens/Search'
 import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
+import DropOfTheDay from 'screens/DropOfTheDay'
+import SupportForm from 'screens/SupportForm'
+import Privacy from 'screens/Privacy'
 import WrongNetworkModal from './shared/WrongNetwork'
 
 function Routes(): JSX.Element {
@@ -40,6 +43,15 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/dashboard/order-list">
                         <OrderList />
+                    </Route>
+                    <Route path="/drop-of-the-day">
+                        <DropOfTheDay />
+                    </Route>
+                    <Route path="/support-form">
+                        <SupportForm />
+                    </Route>
+                    <Route path="/privacy">
+                        <Privacy />
                     </Route>
                 </Switch>
             </BrowserRouter>
