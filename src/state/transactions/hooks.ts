@@ -30,83 +30,74 @@ export function useTransactionsUpdater(): void {
 
     useEffect(() => {
         ;(async () => {
-            if (library && chainId && pendingTransactions.length > 0) {
-                for (const tx of pendingTransactions) {
-                    library
-                        .getTransactionReceipt(tx.hash)
-                        .then(async (receipt) => {
-                            if (receipt === null) {
-                                //transaction still in queue for mining
-                                if (
-                                    (await library.getTransaction(tx.hash)) ===
-                                    null
-                                ) {
-                                    //transaction was dropped by user, he speeds up tx for example
-                                    dispatch(
-                                        finalizeTransaction({
-                                            tokenId: null,
-                                            chainId,
-                                            hash: tx.hash,
-                                            receipt: {
-                                                status: 0,
-                                            },
-                                            dropped: true,
-                                        })
-                                    )
-                                }
-                            } else {
-                                //transaction was mined
-                                if (transactions) {
-                                    const tokenType = transactions[tx.hash].type
-                                    //logs contains 2 events 'Transver' and 'Approval', each contains tokenId
-                                    //@TODO: fix hardcode
-                                    const logFromReceipt =
-                                        tokenType === TokenType.SINGLE
-                                            ? ethersUtils.parseLog(
-                                                  receipt.logs[0]
-                                              )
-                                            : ethers1155Utils.parseLog(
-                                                  receipt.logs[0]
-                                              )
-                                    const tokenId =
-                                        tokenType === TokenType.SINGLE
-                                            ? logFromReceipt.args[
-                                                  'tokenId'
-                                              ].toString()
-                                            : logFromReceipt.args[
-                                                  'id'
-                                              ].toString()
-                                    const copiesNumber =
-                                        tokenType === TokenType.MULTIPLE
-                                            ? logFromReceipt.args[
-                                                  'value'
-                                              ].toString()
-                                            : null
-                                    dispatch(
-                                        finalizeTransaction({
-                                            tokenId,
-                                            copiesNumber,
-                                            chainId,
-                                            hash: tx.hash,
-                                            receipt: {
-                                                ...receipt,
-                                                gasUsed: receipt.gasUsed.toString(),
-                                                cumulativeGasUsed: receipt.cumulativeGasUsed.toString(),
-                                            },
-                                            dropped: false,
-                                        })
-                                    )
-                                }
+            if (!library || !chainId || !(pendingTransactions.length > 0)) {
+                return
+            }
+            for (const tx of pendingTransactions) {
+                library
+                    .getTransactionReceipt(tx.hash)
+                    .then(async (receipt) => {
+                        if (receipt === null) {
+                            //transaction still in queue for mining
+                            if (
+                                (await library.getTransaction(tx.hash)) === null
+                            ) {
+                                //transaction was dropped by user, he speeds up tx for example
+                                dispatch(
+                                    finalizeTransaction({
+                                        tokenId: null,
+                                        chainId,
+                                        hash: tx.hash,
+                                        receipt: {
+                                            status: 0,
+                                        },
+                                        dropped: true,
+                                    })
+                                )
                             }
-                        })
-                        .catch((err: any) => {
-                            console.error(
-                                'something went wrong with receiving tx receipt:',
-                                tx,
-                                err
+                        } else {
+                            //transaction was mined
+                            if (!transactions) {
+                                return
+                            }
+                            const tokenType = transactions[tx.hash].type
+                            //logs contains 2 events 'Transver' and 'Approval', each contains tokenId
+                            //@TODO: fix hardcode
+                            const logFromReceipt =
+                                tokenType === TokenType.SINGLE
+                                    ? ethersUtils.parseLog(receipt.logs[0])
+                                    : ethers1155Utils.parseLog(receipt.logs[0])
+                            const tokenId =
+                                tokenType === TokenType.SINGLE
+                                    ? logFromReceipt.args['tokenId'].toString()
+                                    : logFromReceipt.args['id'].toString()
+                            const copiesNumber =
+                                tokenType === TokenType.MULTIPLE
+                                    ? logFromReceipt.args['value'].toString()
+                                    : null
+                            dispatch(
+                                finalizeTransaction({
+                                    tokenId,
+                                    copiesNumber,
+                                    chainId,
+                                    hash: tx.hash,
+                                    receipt: {
+                                        ...receipt,
+                                        gasUsed: receipt.gasUsed.toString(),
+                                        cumulativeGasUsed: receipt.cumulativeGasUsed.toString(),
+                                    },
+                                    dropped: false,
+                                })
                             )
-                        })
-                }
+                        }
+                    })
+                    .catch((err: any) => {
+                        console.error(
+                            'something went wrong with receiving tx receipt:',
+                            tx,
+                            err
+                        )
+                    })
             }
         })()
     }, [

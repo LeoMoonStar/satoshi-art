@@ -1,6 +1,7 @@
 import { ethers } from 'ethers'
 import { Interface } from 'ethers/lib/utils'
 import Satoshi721 from 'abis/Satoshi721.json'
+import { getKeyValue } from 'utils/helpers'
 
 export const Satoshi721ABI = Satoshi721.abi
 
@@ -12,9 +13,6 @@ export interface NetworkData {
 }
 
 export const useSmartContractNetworkData = (chainId?: number): NetworkData => {
-    const getKeyValue = <T extends Record<string, unknown>, U extends keyof T>(
-        obj: T
-    ) => (key: U) => obj[key]
     return getKeyValue(Satoshi721.networks)(chainId as any)
 }
 

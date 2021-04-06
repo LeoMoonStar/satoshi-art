@@ -16,3 +16,10 @@ export function shortAddress(address: string, slashIndex = 10): string {
 export function percentageToBasicPoints(royaltiesPercentage: number): number {
     return royaltiesPercentage * 100
 }
+
+export const getKeyValue = <
+    T extends Record<string, unknown>,
+    U extends keyof T
+>(
+    obj: T
+) => (key: U) => obj[key]
