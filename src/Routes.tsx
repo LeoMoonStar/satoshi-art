@@ -12,12 +12,14 @@ import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
 import SupportForm from 'screens/SupportForm'
 import Privacy from 'screens/Privacy'
-import WrongNetworkModal from './shared/WrongNetwork'
+import WrongNetworkModal from 'shared/WrongNetwork'
+import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
             <WrongNetworkModal />
+            <WarningMobileResolutions />
             <BrowserRouter>
                 <Switch>
                     <Route path="/" exact>
