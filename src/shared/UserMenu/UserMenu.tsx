@@ -4,7 +4,6 @@ import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { shortAddress } from 'utils/helpers'
-// import { useUser } from 'hooks/useUser'
 
 // import { Link } from 'react-router-dom'
 
@@ -32,7 +31,7 @@ import useStyles from './UserMenu.styled'
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
-    const isAuthorized = localStorage.getItem('isAuthorized') || 'false'
+    const isAuthorized = localStorage.getItem('isAuthorized')
     const anchorElRef = useRef<HTMLDivElement>(null)
     const [isOpen, setOpen] = useState<boolean>(false)
     const [balance, setBalance] = useState('')
@@ -54,7 +53,7 @@ const UserMenu = (): JSX.Element | null => {
         }
     }, [account])
 
-    if (isAuthorized === 'false' || !account) {
+    if (!isAuthorized || !account) {
         return null
     }
 
@@ -88,7 +87,6 @@ const UserMenu = (): JSX.Element | null => {
                         {userAddress}
                         <IconButton
                             onClick={() =>
-                                account &&
                                 navigator.clipboard.writeText(account)
                             }
                         >

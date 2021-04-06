@@ -45,7 +45,7 @@ function Wallets(): JSX.Element {
     const onSubmit = async () => {
         if (account) {
             // await addUser(account)
-            localStorage.setItem('isAuthorized', 'true')
+            localStorage.setItem('isAuthorized', '1')
             history.push('/')
         }
     }

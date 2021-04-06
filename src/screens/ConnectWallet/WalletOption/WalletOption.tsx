@@ -19,22 +19,22 @@ type OptionProps = {
 const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
     const classes = useStyles()
     const history = useHistory()
-    const [isCntBtnTriggered, setIsCntBtnTriggered] = useState<boolean>(false)
+    const [isConnectTriggered, setIsConnectTriggered] = useState<boolean>(false)
     const dispatch = useDispatch<AppDispatch>()
 
-    const isAuthorized = localStorage.getItem('isAuthorized') || 'false'
+    const isAuthorized = localStorage.getItem('isAuthorized')
     const { activate, account } = useWeb3React<Web3Provider>()
 
     //@TODO: fix window type
     const hasInjectedProvider = (window as any).ethereum
 
     const connectWallet = async () => {
-        setIsCntBtnTriggered(true)
+        setIsConnectTriggered(true)
         const connector = wallet.createConnector()
         await activate(connector)
         dispatch(changeLoggedWith(wallet.name))
-        setIsCntBtnTriggered(false)
-        if (isAuthorized === 'true') {
+        setIsConnectTriggered(false)
+        if (isAuthorized) {
             history.push('/')
         }
     }
@@ -44,12 +44,10 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms }) => {
         //     await checkUser(account).catch(() => openTerms())
         // }
 
-        if (account && isCntBtnTriggered) {
-            if (isAuthorized === 'false') {
-                openTerms()
-            }
+        if (account && isConnectTriggered && !isAuthorized) {
+            openTerms()
         }
-    }, [account, isCntBtnTriggered, isAuthorized, openTerms])
+    }, [account, isConnectTriggered, isAuthorized, openTerms])
 
     const Logo = wallet.logo
 

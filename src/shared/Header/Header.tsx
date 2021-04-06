@@ -9,7 +9,6 @@ import cx from 'clsx'
 
 import Button from 'shared/Button'
 import UserMenu from 'shared/UserMenu'
-// import { useUser } from 'hooks/useUser'
 import { FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'shared/icons'
 
 import useStyles from './Header.style'
@@ -42,7 +41,7 @@ export default function Header({
 }: HeaderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
-    const isAuthorized = localStorage.getItem('isAuthorized') || 'false'
+    const isAuthorized = localStorage.getItem('isAuthorized')
     const { account } = useWeb3React<Web3Provider>()
 
     return (
@@ -101,7 +100,7 @@ export default function Header({
                             <Button>{t('howItWorks')}</Button>
                         </Link>
 
-                        {account && isAuthorized === 'true' ? (
+                        {account && isAuthorized ? (
                             <>
                                 <Link
                                     to="/create-collectible"
