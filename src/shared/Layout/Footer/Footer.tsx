@@ -1,26 +1,26 @@
 import React from 'react'
-import { Input } from '@material-ui/core'
-import Button from 'shared/Button'
-import { useTranslation } from 'react-i18next'
+// import { Input } from '@material-ui/core'
+// import Button from 'shared/Button'
+// import { useTranslation } from 'react-i18next'
 import { TwitterIcon, InstagramIcon, SatoshiArtIcon } from 'shared/icons'
-import TextGradient from 'shared/TexGradient'
+// import TextGradient from 'shared/TexGradient'
 
 import FooterMenu from './FooterMenu'
 import useStyles from './Footer.style'
 
 export type JustifyTopRowFooter = 'center' | 'space-between'
 
-type FooterProps = {
-    justifyTopRow?: JustifyTopRowFooter
-}
+// type FooterProps = {
+//     justifyTopRow?: JustifyTopRowFooter
+// }
 
-function Footer({ justifyTopRow = 'space-between' }: FooterProps): JSX.Element {
+function Footer(): JSX.Element {
     const classes = useStyles()
-    const { t } = useTranslation()
+    // const { t } = useTranslation()
 
     return (
         <>
-            <div
+            {/*<div
                 className={classes.topFooter}
                 style={{ justifyContent: justifyTopRow }}
             >
@@ -41,7 +41,7 @@ function Footer({ justifyTopRow = 'space-between' }: FooterProps): JSX.Element {
                         className={classes.subscribeBtn}
                     />
                 </div>
-            </div>
+            </div>*/}
             <div className={classes.footerSplitter} />
             <div className={classes.bottomFooter}>
                 <div className={classes.leftBottomCol}>
