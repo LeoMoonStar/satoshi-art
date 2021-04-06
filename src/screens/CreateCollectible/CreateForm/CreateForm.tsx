@@ -33,6 +33,7 @@ import {
     use1155EngineSmartContractNetworkData,
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
+import { TokenType } from 'state/transactions/actions'
 
 import useStyles from './CreateForm.style'
 
@@ -132,10 +133,7 @@ const schema = yup.object().shape({
         .max(10, 'Max is 10')
         .typeError('You need to enter number')
         .required('Royalties must be less than or equal to 10'),
-    copiesCount: yup
-        .number()
-        .typeError('You need to enter number')
-        .required('You need to enter numbers of copies'),
+    copiesCount: yup.number().typeError('You need to enter number'),
 })
 
 {
@@ -254,15 +252,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         //     )
         // }
         if (isSingle) {
-            return await singleContract.createItem(
+            const singleTokenResponse = await singleContract.createItem(
                 JSON.stringify(tokenDataMock),
                 royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
                 {
                     from: account,
                 }
             )
+            return {
+                response: singleTokenResponse,
+                tokenType: TokenType.SINGLE,
+            }
         }
-        return await erc1155contract.createItem(
+        const multipleTokenResponse = await erc1155contract.createItem(
             engine1155contract.address,
             formData.copiesCount, //number of copies
             royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
@@ -270,6 +272,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 from: account,
             }
         )
+        return {
+            response: multipleTokenResponse,
+            tokenType: TokenType.MULTIPLE,
+        }
     }
 
     //the third step of item creation(sign sell order step)
@@ -297,9 +303,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
 
         setIsSubmitModal(true)
-        const response = await createItem(data)
+        const { response, tokenType } = await createItem(data)
         dispatch(
             addTransaction({
+                type: tokenType,
                 hash: response.hash,
                 chainId,
             })

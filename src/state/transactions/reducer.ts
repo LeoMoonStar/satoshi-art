@@ -27,11 +27,18 @@ export default createReducer(initialState, (transactions) => {
             }
         })
         .addCase(finalizeTransaction, (state, action) => {
-            const { chainId, hash, receipt, tokenId } = action.payload
+            const {
+                chainId,
+                hash,
+                receipt,
+                tokenId,
+                copiesNumber,
+            } = action.payload
             state.transactions[chainId][hash] = {
                 ...state.transactions[chainId][hash],
                 receipt,
                 tokenId,
+                copiesNumber,
             }
         })
 })
