@@ -12,7 +12,11 @@ import Intro from './Intro'
 
 function Home(): JSX.Element {
     return (
-        <Layout headerVariant="full" justifyTopRowFooter="center">
+        <Layout
+            headerVariant="full"
+            // justifyTopRowFooter="center"
+        >
+            1
             <Intro />
             {/*<DropOfTheDay />*/}
             {/*<Iterators />*/}

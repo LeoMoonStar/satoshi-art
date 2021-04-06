@@ -16,7 +16,7 @@ export default function DropOfTheDay(): JSX.Element {
             headerBackground="transparent"
             inverseHeader
             positionHeader="absolute"
-            justifyTopRowFooter="center"
+            // justifyTopRowFooter="center"
         >
             <Introduction />
             <TopSeries />
