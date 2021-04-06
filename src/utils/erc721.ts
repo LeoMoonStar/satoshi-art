@@ -1,9 +1,10 @@
 import { ethers } from 'ethers'
+import { Interface } from 'ethers/lib/utils'
 import Satoshi721 from 'abis/Satoshi721.json'
 
 export const Satoshi721ABI = Satoshi721.abi
 
-interface NetworkData {
+export interface NetworkData {
     address: string
     transactionHash: string
     links: any
@@ -17,8 +18,6 @@ export const useSmartContractNetworkData = (chainId?: number): NetworkData => {
     return getKeyValue(Satoshi721.networks)(chainId as any)
 }
 
-//@TODO: add return type
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function useEthersUtils() {
+export function useEthersUtils(): Interface {
     return new ethers.utils.Interface(Satoshi721ABI)
 }

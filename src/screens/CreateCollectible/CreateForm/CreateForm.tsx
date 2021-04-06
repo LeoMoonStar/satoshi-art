@@ -26,9 +26,15 @@ import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import { addTransaction } from 'state/transactions/actions'
+import { percentageToBasicPoints } from 'utils/helpers'
+import {
+    Engine1155ABI,
+    Satoshi1155ABI,
+    use1155EngineSmartContractNetworkData,
+    use1155SmartContractNetworkData,
+} from 'utils/erc1155'
 
 import useStyles from './CreateForm.style'
-import { percentageToBasicPoints } from '../../../utils/helpers'
 
 type PropertyType = {
     name: string
@@ -124,7 +130,12 @@ const schema = yup.object().shape({
         .number()
         .min(0, 'Min is 0')
         .max(10, 'Max is 10')
+        .typeError('You need to enter number')
         .required('Royalties must be less than or equal to 10'),
+    copiesCount: yup
+        .number()
+        .typeError('You need to enter number')
+        .required('You need to enter numbers of copies'),
 })
 
 {
@@ -141,7 +152,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const classes = useStyles()
     const { t } = useTranslation()
     const { account, library, chainId } = useWeb3React<Web3Provider>()
-    const networkData = useSmartContractNetworkData(chainId)
+    const erc721NetworkData = useSmartContractNetworkData(chainId)
+    const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
+    const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const {
         register,
@@ -158,7 +171,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         },
     })
 
-    const [contract, setContract] = useState<any>()
+    const [singleContract, setSingleContract] = useState<any>()
+    const [erc1155contract, setErc1155contract] = useState<any>()
+    const [engine1155contract, setEngine1155contract] = useState<any>()
+
+    const engineAddress = engine1155NetworkData?.address
 
     const tokenDataMock = {
         name: 'Token Test Data',
@@ -169,18 +186,51 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     }
 
     useEffect(() => {
-        if (library && networkData) {
-            const address = networkData.address
-            const contract = new Contract(
-                address,
-                Satoshi721ABI,
-                library.getSigner()
-            )
-            setContract(contract)
+        if (isSingle) {
+            if (library && erc721NetworkData) {
+                const address = erc721NetworkData.address
+                const singleContract = new Contract(
+                    address,
+                    Satoshi721ABI,
+                    library.getSigner()
+                )
+                setSingleContract(singleContract)
+            }
         }
-    }, [library, networkData, chainId])
+    }, [erc721NetworkData, isSingle, library])
 
-    const createItem = async (royaltiesInBp: number) => {
+    useEffect(() => {
+        if (!isSingle) {
+            if (library && erc1155NetworkData && engine1155NetworkData) {
+                const erc1155Address = erc1155NetworkData.address
+                const engine1155Contract = new Contract(
+                    erc1155Address,
+                    Engine1155ABI,
+                    library.getSigner()
+                )
+                setEngine1155contract(engine1155Contract)
+                const erc1155Contract = new Contract(
+                    engine1155Contract.address,
+                    Satoshi1155ABI,
+                    library.getSigner()
+                )
+                setErc1155contract(erc1155Contract)
+            }
+        }
+    }, [
+        library,
+        erc721NetworkData,
+        chainId,
+        isSingle,
+        erc1155NetworkData,
+        engine1155NetworkData,
+        engineAddress,
+    ])
+
+    const createItem = async (formData: ICollectibleForm) => {
+        const royaltiesInBasicPoint = percentageToBasicPoints(
+            formData.royalties
+        )
         //@TODO: get data for methods from API
 
         //phase 1 includes only createItem method
@@ -203,9 +253,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         //         }
         //     )
         // }
-        return await contract.createItem(
-            JSON.stringify(tokenDataMock),
-            royaltiesInBp, //royalties assigned to the token by the creator, in bps
+        if (isSingle) {
+            return await singleContract.createItem(
+                JSON.stringify(tokenDataMock),
+                royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
+                {
+                    from: account,
+                }
+            )
+        }
+        return await erc1155contract.createItem(
+            engine1155contract.address,
+            formData.copiesCount, //number of copies
+            royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
             {
                 from: account,
             }
@@ -229,7 +289,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     })
 
     const onSubmit = async (data: ICollectibleForm) => {
-        const royaltiesInBasicPoint = percentageToBasicPoints(data.royalties)
         {
             /* todo: will be changed after implement functionality */
         }
@@ -237,15 +296,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             return
         }
 
-        const response = await createItem(royaltiesInBasicPoint)
+        setIsSubmitModal(true)
+        const response = await createItem(data)
         dispatch(
             addTransaction({
                 hash: response.hash,
                 chainId,
             })
         )
-        console.log(data)
-        setIsSubmitModal(true)
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -263,7 +321,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         })
     }
 
-    const handleRoyalties = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.name, e.target.value.split(/\D/).join(''))
     }
 
@@ -638,7 +696,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 <Input
                                     id="royalties"
                                     defaultValue="10"
-                                    onChange={handleRoyalties}
+                                    onChange={handleNumberInput}
                                     inputRef={register}
                                     disableUnderline
                                     name="royalties"
@@ -667,11 +725,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                         id="copiesCount"
                                         placeholder="e. g. 10"
                                         inputRef={register}
+                                        onChange={handleNumberInput}
                                         disableUnderline
                                         name="copiesCount"
-                                        endAdornment={<span>%</span>}
                                     />
                                     <span> {t('numberOfCopies')}</span>
+                                    {errors.copiesCount && (
+                                        <p className={classes.textError}>
+                                            {errors.copiesCount.message}
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>
