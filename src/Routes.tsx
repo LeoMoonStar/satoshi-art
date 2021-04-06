@@ -10,14 +10,16 @@ import Search from 'screens/Search'
 import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
-import SupportForm from 'screens/SupportForm'
+import Support from 'screens/Support'
 import Privacy from 'screens/Privacy'
-import WrongNetworkModal from './shared/WrongNetwork'
+import WrongNetworkModal from 'shared/WrongNetwork'
+import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
             <WrongNetworkModal />
+            <WarningMobileResolutions />
             <BrowserRouter>
                 <Switch>
                     <Route path="/" exact>
@@ -47,8 +49,8 @@ function Routes(): JSX.Element {
                     <Route path="/drop-of-the-day">
                         <DropOfTheDay />
                     </Route>
-                    <Route path="/support-form">
-                        <SupportForm />
+                    <Route path="/support">
+                        <Support />
                     </Route>
                     <Route path="/privacy">
                         <Privacy />
