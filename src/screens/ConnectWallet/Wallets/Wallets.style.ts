@@ -45,11 +45,18 @@ const useStyles = makeStyles((theme) => {
         },
         backBtn: {
             textDecoration: 'none',
+            textTransform: 'none',
             display: 'inline-flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
             color: 'black',
             marginBottom: 40,
+            '& .MuiButton-label h5': {
+                fontWeight: 600,
+                marginLeft: 7,
+                fontSize: 20,
+                lineHeight: '25px',
+            },
         },
         backBtnText: {
             fontSize: 30,

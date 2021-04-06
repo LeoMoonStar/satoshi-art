@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import {
     Typography,
     Divider,
@@ -49,6 +49,7 @@ function Wallets(): JSX.Element {
             history.push('/')
         }
     }
+    const handleGoBack = () => history.goBack()
 
     const { age, terms } = fields
     const error = [age, terms].filter((v) => v).length !== 2
@@ -60,13 +61,13 @@ function Wallets(): JSX.Element {
                 </div>
                 <div className={classes.content}>
                     <div className={classes.info}>
-                        <NavLink
+                        <Button
                             className={classes.backBtn}
-                            to={'/productpage'}
+                            onClick={handleGoBack}
                         >
                             <ArrowBackIcon />
                             <Typography variant="h5">{t('goBack')}</Typography>
-                        </NavLink>
+                        </Button>
                         <Typography
                             className={classes.backBtnText}
                             variant="h2"
