@@ -27,6 +27,7 @@ import {
 } from 'screens/InfoPages'
 import WrongNetworkModal from 'shared/WrongNetwork'
 import WarningMobileResolutions from 'shared/WarningMobileResoultions'
+import Collection from 'screens/Collection'
 import { getWhiteListedStatus } from 'state/app/selectors'
 
 const PrivateRoute = (props: RouteProps) => {
@@ -73,6 +74,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <DevelopRoute path="/artists/:id">
                         <Artist />
+                    </DevelopRoute>
+                    <DevelopRoute path="/collections/:id">
+                        <Collection />
                     </DevelopRoute>
                     <DevelopRoute path="/search">
                         <Search />

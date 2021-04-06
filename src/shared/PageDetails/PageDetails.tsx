@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import clsx from 'clsx'
 import { IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
@@ -8,9 +9,25 @@ import { LikeIcon, SaveIcon, ViewsIcon, ThreeDotsIcon } from 'shared/icons'
 import artistAvatar from 'shared/images/artist/avatar.jpg'
 import nftImage from 'shared/images/nft.svg'
 
-import useStyles from './ArtistDetails.style'
+import useStyles from './PageDetails.style'
 
-export default function ArtistDetails(): JSX.Element {
+type ProfileType = {
+    title: string
+    name: string
+    hash: string
+    dscr: string
+    url: string
+}
+
+interface PageDetailsProps {
+    profile: ProfileType
+    center?: boolean
+}
+
+export default function PageDetails({
+    profile,
+    center,
+}: PageDetailsProps): JSX.Element {
     const classes = useStyles()
     const [isOpenActions, setIsOpenActions] = useState<boolean>()
     const { t } = useTranslation()
@@ -18,7 +35,7 @@ export default function ArtistDetails(): JSX.Element {
     const handleToggleActions = () => {
         setIsOpenActions(!isOpenActions)
     }
-
+    console.log(center)
     return (
         <>
             <div className={classes.intro}>
@@ -51,7 +68,11 @@ export default function ArtistDetails(): JSX.Element {
                     alt=""
                     className={classes.nftBackgroundImage}
                 />
-                <div className={classes.container}>
+                <div
+                    className={clsx(classes.container, {
+                        [classes.center]: center,
+                    })}
+                >
                     <div>
                         <div className={classes.artistInfoWrapper}>
                             <Avatar
@@ -77,16 +98,14 @@ export default function ArtistDetails(): JSX.Element {
                             </div>
                         </div>
                         <div className={classes.artistInfoList}>
-                            <div>Artist</div>
-                            <div className={classes.name}>Fimbim</div>
-                            <div className={classes.code}>
-                                0x83fa662610b20...7495
-                            </div>
+                            <div>{profile.title}</div>
+                            <div className={classes.name}>{profile.name}</div>
+                            <div className={classes.code}>{profile.hash}</div>
                             <div className={classes.helpText}>
-                                Relax Pepe collections. Stay tuned for new NFTs
+                                {profile.dscr}
                             </div>
                             <a href="" className={classes.linkToWebPage}>
-                                fimbim.com.br
+                                {profile.url}
                             </a>
                         </div>
                     </div>
