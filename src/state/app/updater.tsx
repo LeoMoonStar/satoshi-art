@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useWeb3React } from '@web3-react/core'
 
 import { useEagerConnect, useInactiveListener } from 'hooks'
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
+import { checkUserWhitelisted } from 'api/user'
+import { changeWhitelistedStatus } from './actions'
 
-export function useConnectWallet(): Web3ReactContextInterface {
+export function useConnectWallet(): void {
     const triedEager = useEagerConnect()
     const { createNetwork } = useCurrentNetwork()
-    const web3 = useWeb3React()
-    const { active, activate, error } = web3
+    const { active, activate, error } = useWeb3React()
 
     // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
     useEffect(() => {
@@ -20,5 +21,17 @@ export function useConnectWallet(): Web3ReactContextInterface {
     }, [triedEager, error, active, activate, createNetwork])
 
     useInactiveListener(!triedEager)
-    return web3
+}
+
+export const useUserWhiteListChecking = (): void => {
+    const dispatch = useDispatch()
+    const { account } = useWeb3React()
+
+    useEffect(() => {
+        if (!account) return
+
+        checkUserWhitelisted(account).then((res) => {
+            dispatch(changeWhitelistedStatus(res.isWhitelisted))
+        })
+    }, [dispatch, account])
 }
