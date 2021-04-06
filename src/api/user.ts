@@ -1,4 +1,4 @@
-import axios from 'utils/axios'
+import axios from './axios'
 
 export const addUser = (hash: string): Promise<void> =>
     axios.post(`users/${hash}`)

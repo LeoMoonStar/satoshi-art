@@ -1,7 +1,7 @@
-import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+aimport Axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 const config: AxiosRequestConfig = {
-    baseURL: process.env.REACT_APP_API,
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
