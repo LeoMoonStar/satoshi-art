@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import {
     Typography,
     Divider,
@@ -10,16 +10,20 @@ import {
 } from '@material-ui/core'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { useTranslation, Trans } from 'react-i18next'
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
 
 import { FullLogo } from 'shared/icons'
 import { useWallets } from 'hooks/useWallets'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
-
+// import { addUser } from 'api/user'
 import useStyles from './Wallets.style'
 import WalletOption from '../WalletOption'
 
 function Wallets(): JSX.Element {
+    const { account } = useWeb3React<Web3Provider>()
+
     const [open, setOpen] = useState<boolean>(false)
     const [fields, setFields] = React.useState({
         age: false,
@@ -27,6 +31,7 @@ function Wallets(): JSX.Element {
     })
     const classes = useStyles()
     const wallets = useWallets()
+    const history = useHistory()
     const { t } = useTranslation()
 
     const openTerms = () => {
@@ -35,6 +40,14 @@ function Wallets(): JSX.Element {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFields({ ...fields, [event.target.name]: event.target.checked })
+    }
+
+    const onSubmit = async () => {
+        if (account) {
+            // await addUser(account)
+            localStorage.setItem('isAuthorized', '1')
+            history.push('/')
+        }
     }
 
     const { age, terms } = fields
@@ -127,6 +140,7 @@ function Wallets(): JSX.Element {
                             </FormGroup>
                         </FormControl>
                         <Button
+                            onClick={onSubmit}
                             disabled={error}
                             className={classes.termsModalBtn}
                             label={t('goToDownloadPage')}

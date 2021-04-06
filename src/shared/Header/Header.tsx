@@ -1,10 +1,10 @@
 import React from 'react'
 import { TextField, Popper, PopperProps } from '@material-ui/core'
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
 import cx from 'clsx'
 
 import Button from 'shared/Button'
@@ -41,6 +41,7 @@ export default function Header({
 }: HeaderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+    const isAuthorized = localStorage.getItem('isAuthorized')
     const { account } = useWeb3React<Web3Provider>()
 
     return (
@@ -99,7 +100,7 @@ export default function Header({
                             <Button>{t('howItWorks')}</Button>
                         </Link>
 
-                        {account ? (
+                        {account && isAuthorized ? (
                             <>
                                 <Link
                                     to="/create-collectible"

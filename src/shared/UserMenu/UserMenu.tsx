@@ -4,6 +4,7 @@ import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { shortAddress } from 'utils/helpers'
+
 // import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
@@ -30,6 +31,7 @@ import useStyles from './UserMenu.styled'
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
+    const isAuthorized = localStorage.getItem('isAuthorized')
     const anchorElRef = useRef<HTMLDivElement>(null)
     const [isOpen, setOpen] = useState<boolean>(false)
     const [balance, setBalance] = useState('')
@@ -37,13 +39,13 @@ const UserMenu = (): JSX.Element | null => {
 
     useEffect(() => {
         async function getBalance() {
-            if (library && account) {
+            if (library && account && isAuthorized) {
                 const userEthBalance = await library.getBalance(account)
                 setBalance(ethers.utils.formatEther(userEthBalance))
             }
         }
         getBalance()
-    }, [account, library])
+    }, [account, library, isAuthorized])
 
     const userAddress = useMemo(() => {
         if (!!account) {
@@ -51,7 +53,7 @@ const UserMenu = (): JSX.Element | null => {
         }
     }, [account])
 
-    if (!account) {
+    if (!isAuthorized || !account) {
         return null
     }
 
