@@ -3,6 +3,8 @@ import Slider from 'react-slick'
 import { IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 import cx from 'clsx'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
 import bradPitPaintImage from 'shared/images/home/bradPitPaint.png'
 import Avatar from 'shared/Avatar'

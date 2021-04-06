@@ -1,7 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 
 import colorsDissolvingImage from 'shared/images/home/colorsDissolving.png'
 import bradPitImage from 'shared/images/home/bradPit.png'
