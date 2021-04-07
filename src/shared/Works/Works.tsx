@@ -11,7 +11,6 @@ import Loader from 'shared/Loader'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
 import preview from 'shared/images/artist/work.jpg'
 
-import { getFileUrl } from 'utils/helpers'
 import { Token } from 'api/tokens'
 import useStyles from './Works.style'
 
@@ -38,9 +37,7 @@ export default function WorksList({
                     return (
                         <div className={classes.work} key={id}>
                             <img
-                                // todo: temp solution we have an issue with images on the API part
-                                // src={getFileUrl(payload.cover ?? payload.file)}
-                                src={preview}
+                                src={payload.cover ?? payload.file}
                                 style={{
                                     borderRadius:
                                         variant === 'rounded' ? 30 : 0,
