@@ -23,9 +23,8 @@ export default function Privacy(): JSX.Element {
                     <LeftArrowIcon /> {t('translation:backToHomePage')}
                 </Button>
                 <div className={classes.contentContainer}>
-                    <div className={classes.centeredTextWithSpace}>
-                        <h1>PRIVACY POLICY</h1>
-                    </div>
+                    <h1>PRIVACY POLICY</h1>
+                    <br />
                     <b>Last updated: April 6, 2021</b>
                     <br />
                     <br />
