@@ -41,7 +41,6 @@ import {
     updateMetaData,
     MetaDataType,
 } from 'api/createItem'
-import { getFileUrl } from 'utils/helpers'
 import useStyles from './CreateForm.style'
 
 type PropertyType = {
@@ -309,8 +308,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             description: data.description,
             copiesCount: data.copiesCount,
             royalties: data.royalties,
-            file: getFileUrl(fileResponse.url),
-            cover: coverResponse ? getFileUrl(coverResponse.url) : undefined,
+            file: fileResponse.url,
+            cover: coverResponse ? coverResponse.url : undefined,
             status: 'pending',
             type: isSingle ? TokenType.SINGLE : TokenType.MULTIPLE,
         }

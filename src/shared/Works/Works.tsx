@@ -10,7 +10,6 @@ import Loader from 'shared/Loader'
 // import preview from 'shared/images/artist/work.jpg'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
 
-import { getFileUrl } from 'utils/helpers'
 import { Token } from 'api/tokens'
 import useStyles from './Works.style'
 
@@ -37,7 +36,7 @@ export default function WorksList({
                     return (
                         <div className={classes.work} key={id}>
                             <img
-                                src={getFileUrl(payload.cover ?? payload.file)}
+                                src={payload.cover ?? payload.file}
                                 style={{
                                     borderRadius:
                                         variant === 'rounded' ? 30 : 0,
