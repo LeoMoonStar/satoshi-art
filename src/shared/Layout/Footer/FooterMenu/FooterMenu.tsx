@@ -13,6 +13,10 @@ const footerMenu = [
         url: '/privacy',
     },
     {
+        label: 'Cookie Privacy',
+        url: '/cookie-privacy',
+    },
+    {
         label: 'Support',
         url: '/support',
     },

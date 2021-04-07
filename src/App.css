@@ -1,41 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
 
-.App {
-    text-align: center;
-    height: 100%;
-    width: 100%;
+.cc_dialog.standalone.dark {
+    top: auto;
+    bottom: 0;
+    box-sizing: border-box;
+    padding: 30px;
+    background-color: #5113d5e3;
+    color: #ffffff;
+    height: 232px;
 }
-
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+body .dark.cc_dialog button.cc_b_ok {
+    background-color: #ff0099;
+    color: #ffffff;
+    border-radius: 20px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
-}
-
-.App-header {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.App-link {
-    color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+body .dark.cc_dialog button.cc_b_cp {
+    border-radius: 20px;
 }
