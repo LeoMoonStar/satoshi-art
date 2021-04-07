@@ -34,6 +34,7 @@ import {
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
 import { TokenType } from 'state/transactions/actions'
+import { uploadFile } from 'api/createItem'
 
 import useStyles from './CreateForm.style'
 
@@ -46,6 +47,8 @@ type PreviewType = {
     file: string
     cover?: string
     type: string
+    fileBackendUrl: string
+    coverBackendUrl?: string
 }
 
 interface ICollectibleForm {
@@ -292,6 +295,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         file: '',
         cover: '',
         type: '',
+        fileBackendUrl: '',
+        coverBackendUrl: '',
     })
 
     const onSubmit = async (data: ICollectibleForm) => {
@@ -313,7 +318,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         )
     }
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = e.target.files
 
         if (!fileList) return
@@ -321,10 +326,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         const file = fileList[0]
         const src = URL.createObjectURL(file)
         const type = file.type.split('/')[0]
+        const formData = new FormData()
+        formData.append('files', file)
+        const fileResponse = await uploadFile(formData)
         setPreview({
             ...preview,
             [e.target.name]: src,
             type: e.target.name === 'cover' ? preview.type : type,
+            fileBackendUrl:
+                e.target.name === 'cover'
+                    ? preview.fileBackendUrl
+                    : fileResponse[0].url,
+            coverBackendUrl:
+                e.target.name === 'cover'
+                    ? fileResponse[0].url
+                    : preview.coverBackendUrl,
         })
     }
 
@@ -338,12 +354,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             file: '',
             cover: '',
             type: '',
+            fileBackendUrl: '',
+            coverBackendUrl: '',
         })
     }
 
     const clearCover = () => {
         setValue('cover', null)
-        setPreview({ ...preview, cover: '' })
+        setPreview({ ...preview, cover: '', coverBackendUrl: '' })
     }
 
     const isErrors = () => Object.keys(errors).length >= 1
