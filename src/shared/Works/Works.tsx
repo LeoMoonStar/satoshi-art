@@ -9,7 +9,6 @@ import Loader from 'shared/Loader'
 // import TextGradient from 'shared/TexGradient'
 // import preview from 'shared/images/artist/work.jpg'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
-import preview from 'shared/images/artist/work.jpg'
 
 import { Token } from 'api/tokens'
 import useStyles from './Works.style'
