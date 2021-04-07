@@ -23,19 +23,14 @@ export default function SatoshiArt(): JSX.Element {
                 </Button>
                 <div className={classes.contentContainer}>
                     <div>
-                        <p>{t('s-art-intro1')}</p>
-
+                        <h2>{t('s-art-intro1')}</h2>
                         <p>{t('s-art-p1')}</p>
-
                         <p>{t('s-art-p2')}</p>
-                        <br />
-                        <p>{t('s-art-intro2')}</p>
-                        <br />
+
+                        <h2>{t('s-art-intro2')}</h2>
                         <p style={{ lineHeight: '1.85em' }}>{t('s-art-p3')}</p>
 
-                        <p>{t('s-art-intro3')}</p>
-                        <br />
-
+                        <h2>{t('s-art-intro3')}</h2>
                         <p>{t('s-art-p4')}</p>
                     </div>
                 </div>
