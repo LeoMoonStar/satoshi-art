@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import Layout from 'shared/Layout'

@@ -5,7 +5,7 @@ import { NavLink, useHistory } from 'react-router-dom'
 
 import { LeftArrowIcon } from 'shared/icons'
 import multipleCollectible from 'shared/images/multipleCollectible.svg'
-import singleCollectible from 'shared/images/singleCollectible.svg'
+// import singleCollectible from 'shared/images/singleCollectible.svg'
 
 import Layout from 'shared/Layout'
 import useStyles from './CreateCollectibleType.style'
@@ -41,17 +41,17 @@ export default function CreateCollectibleType(): JSX.Element {
                     </div>
                 </div>
                 <div className={classes.cards}>
-                    <NavLink
-                        to={{
-                            pathname: '/create-collectible/single',
-                            state: { isAllowedGoBack: true },
-                        }}
-                    >
-                        <button type="button" className={classes.card}>
-                            <img src={singleCollectible} alt="" />
-                            <h3 className={classes.cardTitle}>{t('single')}</h3>
-                        </button>
-                    </NavLink>
+                    {/*<NavLink*/}
+                    {/*    to={{*/}
+                    {/*        pathname: '/create-collectible/single',*/}
+                    {/*        state: { isAllowedGoBack: true },*/}
+                    {/*    }}*/}
+                    {/*>*/}
+                    {/*    <button type="button" className={classes.card}>*/}
+                    {/*        <img src={singleCollectible} alt="" />*/}
+                    {/*        <h3 className={classes.cardTitle}>{t('single')}</h3>*/}
+                    {/*    </button>*/}
+                    {/*</NavLink>*/}
 
                     <NavLink
                         to={{
