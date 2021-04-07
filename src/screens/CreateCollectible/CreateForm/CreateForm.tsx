@@ -313,8 +313,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             royalties: data.royalties,
             file: fileResponse.url,
             cover: coverResponse ? coverResponse.url : undefined,
-            status: 'pending',
-            type: isSingle ? TokenType.SINGLE : TokenType.MULTIPLE,
         }
 
         const metaResponse = await uploadMetaData(metadata, account, type)
