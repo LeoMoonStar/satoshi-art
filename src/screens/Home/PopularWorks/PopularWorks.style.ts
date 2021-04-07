@@ -38,6 +38,27 @@ const useStyles = makeStyles(() => {
             marginLeft: 'auto',
             marginBottom: 32,
         },
+        newTokensContainer: {
+            width: 350,
+            padding: '32px 64px',
+            backgroundColor: '#fff',
+            '& button': {
+                margin: '0 8px',
+            },
+        },
+        newTokensTitle: {
+            fontSize: 30,
+            lineHeight: '30px',
+            textAlign: 'center',
+            fontWeight: 800,
+            borderBottom: '1px solid #6A2FE74D',
+            paddingBottom: 10,
+        },
+        newTokensContent: {
+            margin: '32px 8px',
+            fontSize: 16,
+            color: '#7E7E7E',
+        },
     }
 })
 export default useStyles

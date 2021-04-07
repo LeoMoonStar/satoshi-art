@@ -24,3 +24,7 @@ export const getKeyValue = <
     obj: T
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 ) => (key: U) => obj[key]
+
+export const getFileUrl = (fileUrl: string): string => {
+    return `${process.env.REACT_APP_API_URL}${fileUrl}`
+}
