@@ -10,6 +10,6 @@ export const checkUser = (hash: string): Promise<void> => {
 
 export const checkUserWhitelisted = (
     hash: string
-): Promise<{ isWhitelisted: boolean }> => {
+): Promise<{ is_whitelisted: boolean }> => {
     return axios.get(`isWhitelisted/${hash}`)
 }
