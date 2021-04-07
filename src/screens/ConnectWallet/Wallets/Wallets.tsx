@@ -144,7 +144,7 @@ function Wallets(): JSX.Element {
                             onClick={onSubmit}
                             disabled={error}
                             className={classes.termsModalBtn}
-                            label={t('goToDownloadPage')}
+                            label={t('connectWallet')}
                         />
                     </form>
                 </div>
