@@ -17,6 +17,34 @@ const useStyles = makeStyles(() => {
                 marginRight: 12,
             },
         },
+        list: {
+            '& span': {
+                marginTop: '1em',
+            },
+            '& span >  p': {
+                paddingLeft: '5ch !important',
+                position: 'relative',
+                '& > i': {
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    fontStyle: 'initial',
+                    fontSize: 12,
+                    display: 'inline-block',
+                },
+            },
+            '& > p': {
+                marginLeft: '7ch !important',
+                position: 'relative',
+                '& > i': {
+                    position: 'absolute',
+                    top: 0,
+                    fontStyle: 'initial',
+                    marginRight: '3ch',
+                    right: '100%',
+                },
+            },
+        },
         contentContainer: {
             color: '#7E7E7E',
             fontSize: 14,
@@ -58,6 +86,14 @@ const useStyles = makeStyles(() => {
         lastUpdated: {
             display: 'block',
             marginBottom: '44px',
+        },
+        whiteSpacePerLine: {
+            whiteSpace: 'pre-line',
+        },
+        centeredTextWithSpace: {
+            width: '100%',
+            margin: '48px 0 16px',
+            textAlign: 'center',
         },
     }
 })

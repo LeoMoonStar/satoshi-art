@@ -19,7 +19,7 @@ import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
 import Support from 'screens/Support'
-import { Privacy, SatoshiArt, CookiePrivacy } from 'screens/InfoPages'
+import { Privacy, SatoshiArt, TermsAndConditions, CookiePrivacy } from 'screens/InfoPages'
 import WrongNetworkModal from 'shared/WrongNetwork'
 import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 import { getWhiteListedStatus } from 'state/app/selectors'
@@ -63,6 +63,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/cooke-privacy">
                         <CookiePrivacy />
+                    </Route>
+                    <Route path="/terms-and-conditions">
+                        <TermsAndConditions />
                     </Route>
                     <DevelopRoute path="/artists/:id">
                         <Artist />

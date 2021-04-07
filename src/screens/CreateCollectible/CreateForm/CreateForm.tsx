@@ -295,6 +295,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         if (!chainId) {
             return
         }
+        if (!account) {
+            return
+        }
         setIsSubmitModal(true)
         const formData = new FormData()
         formData.append('files', data.file[0])
@@ -302,7 +305,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             formData.append('files', data.cover[0])
         }
         const [fileResponse, coverResponse] = await uploadFile(formData)
-
+        console.log(fileResponse)
+        console.log(coverResponse)
         const metadata = {
             name: data.name,
             description: data.description,
@@ -314,7 +318,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             type: isSingle ? TokenType.SINGLE : TokenType.MULTIPLE,
         }
 
-        const metaResponse = await uploadMetaData(metadata)
+        const metaResponse = await uploadMetaData(metadata, account)
         const { response, tokenType } = await createItem(metaResponse.payload)
         await updateMetaData(metaResponse.id, response.hash)
         dispatch(

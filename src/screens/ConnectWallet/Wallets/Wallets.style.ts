@@ -134,6 +134,9 @@ const useStyles = makeStyles((theme) => {
                     width: 16,
                     height: 16,
                     padding: 1,
+                    '&.Mui-checked': {
+                        color: '#FF0099',
+                    },
                 },
                 '& .MuiTypography-root': {
                     fontSize: 'inherit',
