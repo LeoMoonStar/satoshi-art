@@ -4,7 +4,6 @@ const useStyles = makeStyles((theme) => {
     return {
         container: {
             width: 392,
-            height: 496,
             background: '#ffffff',
             border: `1px solid ${theme.custom.common.grayColor}`,
             boxSizing: 'border-box',
@@ -45,7 +44,10 @@ const useStyles = makeStyles((theme) => {
             backgroundColor: '#FF0099',
         },
         stepsContent: {
-            padding: '0 35px 0 31px',
+            padding: '30px 35px 50px 31px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         step: {
             marginTop: 28,

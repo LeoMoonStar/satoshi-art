@@ -10,10 +10,10 @@ import clsx from 'clsx'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
 
-import { CheckIcon } from 'shared/icons'
+// import { CheckIcon } from 'shared/icons'
 import useStyles from './ProgressModal.style'
 
-const CONNECTION_STEPS = ['Approval', 'Token', 'Complete']
+const CONNECTION_STEPS = ['Token', 'Complete']
 
 function MyStepCircle(props: StepIconProps) {
     const classes = useStyles()
@@ -75,25 +75,22 @@ export default function ProgressModal({
                                 color="secondary"
                             />
                             <div className={classes.stepTitle}>
-                                <span>Approve</span>
-                                <span>
-                                    Approve perfoming transactions with your
-                                    wallet
-                                </span>
-                            </div>
-                        </div>
-                        <Button>In progress...</Button>
-                    </div>
-                    <div className={classes.step}>
-                        <div className={classes.stepDescription}>
-                            <CheckIcon />
-                            <div className={classes.stepTitle}>
                                 <span>Upload files & Mint token</span>
                                 <span>Call contract method</span>
                             </div>
                         </div>
-                        <Button>Start</Button>
+                        <Button>In progress...</Button>
                     </div>
+                    {/*<div className={classes.step}>*/}
+                    {/*    <div className={classes.stepDescription}>*/}
+                    {/*        <CheckIcon />*/}
+                    {/*        <div className={classes.stepTitle}>*/}
+                    {/*            <span>Upload files & Mint token</span>*/}
+                    {/*            <span>Call contract method</span>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*    <Button>In progress...</Button>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </Modal>
