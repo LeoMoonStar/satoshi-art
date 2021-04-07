@@ -1,36 +1,31 @@
 import React from 'react'
-// import { Popper, PopperProps } from '@material-ui/core'
+import { Popper, PopperProps, TextField } from '@material-ui/core'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { Web3Provider } from '@ethersproject/providers'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-// import Autocomplete from '@material-ui/lab/Autocomplete'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 // import cx from 'clsx'
 
 import { getWhiteListedStatus } from 'state/app/selectors'
 import Button from 'shared/Button'
 import UserMenu from 'shared/UserMenu'
-import { FullLogo, LogoHeaderWhiteIcon } from 'shared/icons'
+import { FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'shared/icons'
 
 import useStyles from './Header.style'
+/* TODO: replace with real data */
 
-// const artists = [
-//     { title: 'rihanna' },
-//     { title: 'lady gaga' },
-//     { title: 'miley cyrus' },
-//     { title: 'billie elish' },
-//     { title: 'rihanna' },
-// ]
-// const SearchPopper = function (props: PopperProps) {
-//     return (
-//         <Popper
-//             {...props}
-//             style={{ width: '672px' }}
-//             placement="bottom-start"
-//         />
-//     )
-// }
+const artists: any[] = []
+const SearchPopper = function (props: PopperProps) {
+    return (
+        <Popper
+            {...props}
+            style={{ width: '672px' }}
+            placement="bottom-start"
+        />
+    )
+}
 
 type HeaderProps = {
     inverseHeader?: boolean
@@ -57,42 +52,43 @@ export default function Header({
             </div>
             <div className={classes.bottomRow}>
                 <div className={classes.innerBottomRow}>
-                    {/*<div className={classes.searchWrapper}>*/}
-                    {/*    <Autocomplete*/}
-                    {/*        freeSolo*/}
-                    {/*        classes={{*/}
-                    {/*            root: classes.autocomplete,*/}
-                    {/*            popper: classes.dropdown,*/}
-                    {/*        }}*/}
-                    {/*        PopperComponent={SearchPopper}*/}
-                    {/*        disableClearable*/}
-                    {/*        options={artists.map((option) => option.title)}*/}
-                    {/*        renderOption={(value) => (*/}
-                    {/*            <>*/}
-                    {/*                <SearchIcon />*/}
-                    {/*                {value}*/}
-                    {/*            </>*/}
-                    {/*        )}*/}
-                    {/*        renderInput={(params) => (*/}
-                    {/*            <TextField*/}
-                    {/*                {...params}*/}
-                    {/*                InputProps={{*/}
-                    {/*                    ...params.InputProps,*/}
-                    {/*                    disableUnderline: true,*/}
-                    {/*                    type: 'search',*/}
-                    {/*                    placeholder:*/}
-                    {/*                        'by the artists, for the artists',*/}
-                    {/*                    classes: {*/}
-                    {/*                        root: classes.searchInput,*/}
-                    {/*                    },*/}
-                    {/*                }}*/}
-                    {/*            />*/}
-                    {/*        )}*/}
-                    {/*    />*/}
-                    {/*    <div className={classes.searchIcon}>*/}
-                    {/*        <SearchIcon />*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                    <div className={classes.searchWrapper}>
+                        <Autocomplete
+                            debug
+                            classes={{
+                                root: classes.autocomplete,
+                                popper: classes.dropdown,
+                            }}
+                            PopperComponent={SearchPopper}
+                            disableClearable
+                            options={artists}
+                            noOptionsText="No options"
+                            renderOption={(value) => (
+                                <>
+                                    <SearchIcon />
+                                    {value}
+                                </>
+                            )}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        disableUnderline: true,
+                                        type: 'search',
+                                        placeholder:
+                                            'by the artists, for the artists',
+                                        classes: {
+                                            root: classes.searchInput,
+                                        },
+                                    }}
+                                />
+                            )}
+                        />
+                        <div className={classes.searchIcon}>
+                            <SearchIcon />
+                        </div>
+                    </div>
 
                     <div className={classes.controls}>
                         {/*<Link*/}

@@ -20,7 +20,7 @@ import avatar from 'shared/images/artist/avatar.jpg'
 import useStyles from './UserMenu.styled'
 
 {
-    /*TODO: Add relevant links path */
+    /*TODO: Add relevant links path and Fix metamask-LOCK(disconnect) functionality   */
 }
 
 // const userLinks = [
@@ -54,7 +54,6 @@ const UserMenu = (): JSX.Element | null => {
             return shortAddress(account, 10)
         }
     }, [account])
-
     if (!isAuthorized || !account) {
         return null
     }

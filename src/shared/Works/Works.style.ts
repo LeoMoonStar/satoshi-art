@@ -13,6 +13,8 @@ const useStyles = makeStyles(() => ({
     },
     preview: {
         width: '100%',
+        objectFit: 'cover',
+        aspectRatio: '16:12',
     },
     authorInfo: {
         width: '100%',
