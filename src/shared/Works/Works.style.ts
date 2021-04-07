@@ -84,7 +84,7 @@ const useStyles = makeStyles(() => ({
         marginLeft: '1ch',
         color: '#7E7E7E',
     },
-    seeAllButton: {
+    showMoreButton: {
         margin: '0 auto',
         display: 'block',
         height: 53,

@@ -18,12 +18,16 @@ type WorksListProps = {
     borderWidth?: number
     variant?: 'none' | 'rounded'
     isLoading?: boolean
+    tokens?: any[] //todo: should be work
+    onShowMore?: () => void
 }
 
 export default function WorksList({
     borderWidth = 1,
     variant = 'none',
     isLoading = true,
+    tokens = [],
+    onShowMore,
 }: WorksListProps): JSX.Element {
     const classes = useStyles()
     // const { t } = useTranslation()
@@ -31,7 +35,7 @@ export default function WorksList({
     return (
         <div>
             <div className={classes.grid}>
-                {works.map((work) => (
+                {tokens.map((work) => (
                     <div className={classes.work} key={work}>
                         <img
                             src={preview}
@@ -85,8 +89,12 @@ export default function WorksList({
             {isLoading ? (
                 <Loader />
             ) : (
-                <Button variantCustom="action" className={classes.seeAllButton}>
-                    See All
+                <Button
+                    variantCustom="action"
+                    onClick={onShowMore}
+                    className={classes.showMoreButton}
+                >
+                    Show more
                 </Button>
             )}
         </div>
