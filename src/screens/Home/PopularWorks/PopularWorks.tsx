@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getTokens } from 'api/tokens'
+import { getTokens, Token } from 'api/tokens'
 // import { Button, IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
@@ -15,24 +15,17 @@ import useStyles from './PopularWorks.style'
 export default function PopularWorks(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
-    const [tokens, setTokens] = useState<any[]>([])
+    const [tokens, setTokens] = useState<Token[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
-    const [isExistNewTokens, setExistNewTokens] = useState<boolean>(true)
+    const [isExistNewTokens, setExistNewTokens] = useState<boolean>(false)
 
     useEffect(() => {
-        getTokens(0, 0).then((res) => {
+        // todo: We should implement error handling
+        getTokens().then((res) => {
             setTokens(res)
             setLoading(false)
         })
     }, [])
-
-    const handleShowMore = () => {
-        setLoading(true)
-        getTokens(0, 0).then((res) => {
-            setTokens([...tokens, ...res])
-            setLoading(false)
-        })
-    }
 
     return (
         <section className={classes.container}>
@@ -67,7 +60,6 @@ export default function PopularWorks(): JSX.Element {
                 </div>
             </Modal>
             <Works
-                onShowMore={handleShowMore}
                 tokens={tokens}
                 borderWidth={0}
                 isLoading={isLoading}

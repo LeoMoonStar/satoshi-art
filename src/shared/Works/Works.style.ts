@@ -33,7 +33,9 @@ const useStyles = makeStyles(() => ({
         alignItems: 'flex-end',
         fontSize: 13,
         fontWeight: 600,
-        marginTop: 29,
+        // marginTop: 29,
+        // temp
+        marginTop: 10,
     },
     info: {
         display: 'flex',
@@ -69,7 +71,9 @@ const useStyles = makeStyles(() => ({
         },
     },
     name: {
-        margin: 0,
+        // margin: 0,
+        // temp
+        margin: '10px 0 0 8px',
     },
     bidButton: {
         margin: '0 -6px -9px auto',

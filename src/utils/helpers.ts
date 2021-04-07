@@ -23,3 +23,7 @@ export const getKeyValue = <
 >(
     obj: T
 ) => (key: U) => obj[key]
+
+export const getFileUrl = (fileUrl: string): string => {
+    return `${process.env.REACT_APP_API_URL}${fileUrl}`
+}
