@@ -16,7 +16,6 @@ function Home(): JSX.Element {
             headerVariant="full"
             // justifyTopRowFooter="center"
         >
-            1
             <Intro />
             {/*<DropOfTheDay />*/}
             {/*<Iterators />*/}
