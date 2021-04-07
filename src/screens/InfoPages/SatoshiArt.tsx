@@ -8,7 +8,7 @@ import { LeftArrowIcon } from 'shared/icons'
 
 import useStyles from './InfoPages.style'
 
-export default function Privacy(): JSX.Element {
+export default function SatoshiArt(): JSX.Element {
     const history = useHistory()
     const classes = useStyles()
 
