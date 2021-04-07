@@ -22,4 +22,5 @@ export const getKeyValue = <
     U extends keyof T
 >(
     obj: T
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 ) => (key: U) => obj[key]
