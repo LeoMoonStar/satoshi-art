@@ -181,15 +181,15 @@ export default function Privacy(): JSX.Element {
                         <h2>The Digital Millennium Copyright Act</h2>
 
                         <p>
-                            The Digital Millennium Copyright Act (DMCA) sets
+                            The Digital Millennium Copyright Act (DMCA) sets
                             forth a Notification and Counter Notification
-                            process initiated by a party complaining of alleged
-                            copyright infringement on the SuperRare Platform. We
+                            process initiated by a party complaining of alleged
+                            copyright infringement on the SuperRare Platform. We
                             may share information of
-                            the notifying, counter-notifying party, and any
+                            the notifying, counter-notifying party, and any
                             involved third parties, such as a Collector, of an
-                            allegedly infringing artwork to facilitate
-                            communication between the relevant parties for the
+                            allegedly infringing artwork to facilitate
+                            communication between the relevant parties for the
                             purposes of complying with or resolving a DMCA
                             dispute or allegation of copyright infringement.
                         </p>

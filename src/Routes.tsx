@@ -19,7 +19,12 @@ import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
 import Support from 'screens/Support'
-import { Privacy, SatoshiArt, TermsAndConditions, CookiePrivacy } from 'screens/InfoPages'
+import {
+    Privacy,
+    SatoshiArt,
+    TermsAndConditions,
+    CookiePrivacy,
+} from 'screens/InfoPages'
 import WrongNetworkModal from 'shared/WrongNetwork'
 import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 import { getWhiteListedStatus } from 'state/app/selectors'
@@ -33,7 +38,6 @@ const PrivateRoute = (props: RouteProps) => {
 
     return <Route {...props} />
 }
-
 const DevelopRoute = (props: RouteProps) => {
     if (process.env.REACT_APP_SPECIAL_MODE === 'production') {
         return <Redirect to="/" />
@@ -61,7 +65,7 @@ function Routes(): JSX.Element {
                     <Route path="/about-satoshi-art">
                         <SatoshiArt />
                     </Route>
-                    <Route path="/cooke-privacy">
+                    <Route path="/cookie-privacy">
                         <CookiePrivacy />
                     </Route>
                     <Route path="/terms-and-conditions">
