@@ -6,12 +6,14 @@ import { AppDispatch } from 'state'
 
 import { useEagerConnect, useInactiveListener } from 'hooks'
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
-import { updateBlockNumber } from './actions'
+import { updateBlockNumber, changeWhitelistedStatus } from './actions'
+import { checkUserWhitelisted } from 'api/user'
 
-export function useConnectWallet(): null {
+export function useConnectWallet(): void {
     const triedEager = useEagerConnect()
     const { createNetwork } = useCurrentNetwork()
     const { active, activate, error } = useWeb3React()
+
     // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
     useEffect(() => {
         if (triedEager && !active && !error) {
@@ -21,7 +23,19 @@ export function useConnectWallet(): null {
     }, [triedEager, error, active, activate, createNetwork])
 
     useInactiveListener(!triedEager)
-    return null
+}
+
+export const useUserWhiteListChecking = (): void => {
+    const dispatch = useDispatch()
+    const { account } = useWeb3React()
+
+    useEffect(() => {
+        if (!account) return
+
+        checkUserWhitelisted(account).then((res) => {
+            dispatch(changeWhitelistedStatus(res.isWhitelisted))
+        })
+    }, [dispatch, account])
 }
 
 export function useUpdateBlockNumber(): void {

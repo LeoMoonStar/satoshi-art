@@ -1,12 +1,14 @@
 import React from 'react'
 import { TextField, Popper, PopperProps } from '@material-ui/core'
 import { useWeb3React } from '@web3-react/core'
+import { useSelector } from 'react-redux'
 import { Web3Provider } from '@ethersproject/providers'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import cx from 'clsx'
 
+import { getWhiteListedStatus } from 'state/app/selectors'
 import Button from 'shared/Button'
 import UserMenu from 'shared/UserMenu'
 import { FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'shared/icons'
@@ -42,6 +44,7 @@ export default function Header({
     const classes = useStyles()
     const { t } = useTranslation()
     const isAuthorized = localStorage.getItem('isAuthorized')
+    const isWhiteListed = useSelector<any, boolean>(getWhiteListedStatus)
     const { account } = useWeb3React<Web3Provider>()
 
     return (
@@ -102,15 +105,18 @@ export default function Header({
 
                         {account && isAuthorized ? (
                             <>
-                                <Link
-                                    to="/create-collectible"
-                                    className={classes.createLink}
-                                >
-                                    <Button
-                                        variantCustom="linkButton"
-                                        label={t('create')}
-                                    />
-                                </Link>
+                                {isWhiteListed && (
+                                    <Link
+                                        to="/create-collectible"
+                                        className={classes.createLink}
+                                    >
+                                        {}
+                                        <Button
+                                            variantCustom="linkButton"
+                                            label={t('create')}
+                                        />
+                                    </Link>
+                                )}
                                 {/*<div className={classes.controlButtonsWrapper}>*/}
                                 {/*    <IconButton>*/}
                                 {/*        <NavbarBurgerIcon />*/}
