@@ -80,7 +80,7 @@ export default function WorksList({
                                     {/*0.25 ETH*/}
                                     <span className={classes.count}>
                                         {type === 'multiple'
-                                            ? `1 of ${payload.copiesCount}`
+                                            ? `${payload.copiesCount} of ${payload.copiesCount}`
                                             : '1 of 1'}
                                     </span>
                                     {/*<Button className={classes.bidButton}>*/}

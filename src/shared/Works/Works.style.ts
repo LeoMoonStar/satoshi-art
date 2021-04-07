@@ -13,6 +13,8 @@ const useStyles = makeStyles(() => ({
     },
     preview: {
         width: '100%',
+        //add height for alignment name of token, probably will need to change it later
+        height: 400,
         objectFit: 'cover',
         aspectRatio: '16:12',
     },
