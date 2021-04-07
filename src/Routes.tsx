@@ -89,7 +89,10 @@ function Routes(): JSX.Element {
                     <PrivateRoute exact path="/create-collectible">
                         <CreateCollectibleType />
                     </PrivateRoute>
-                    <PrivateRoute path="/create-collectible/:type(single|multiple)/">
+                    <PrivateRoute
+                        exact
+                        path="/create-collectible/:type(multiple)/"
+                    >
                         <CreateCollectible />
                     </PrivateRoute>
                     <Route>
