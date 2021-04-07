@@ -45,6 +45,35 @@ const useStyles = makeStyles(() => {
                 },
             },
         },
+        listPrivacy: {
+            '& span': {
+                marginTop: '1em',
+            },
+            '& span >  p': {
+                paddingLeft: '4ch !important',
+                position: 'relative',
+                '& > i': {
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    fontStyle: 'initial',
+                    fontSize: 12,
+                    display: 'inline-block',
+                },
+            },
+            '& > p': {
+                marginLeft: '3.5ch !important',
+                position: 'relative',
+                '& > i': {
+                    fontWeight: 600,
+                    position: 'absolute',
+                    top: 0,
+                    fontStyle: 'initial',
+                    marginRight: '1.5ch',
+                    right: '100%',
+                },
+            },
+        },
         contentContainer: {
             color: '#7E7E7E',
             fontSize: 14,
