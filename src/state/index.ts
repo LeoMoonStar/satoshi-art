@@ -2,11 +2,13 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { save, load } from 'redux-localstorage-simple'
 
 import app from './app/reducer'
+import transactions from './transactions/reducer'
 
-const PERSISTED_KEYS: string[] = ['app']
+const PERSISTED_KEYS: string[] = ['app', 'transactions']
 
 export const reducer = {
     app,
+    transactions,
 }
 
 const store = configureStore({

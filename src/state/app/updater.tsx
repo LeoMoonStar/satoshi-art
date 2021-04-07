@@ -1,11 +1,13 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'state'
 
 import { useEagerConnect, useInactiveListener } from 'hooks'
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
+import { updateBlockNumber, changeWhitelistedStatus } from './actions'
 import { checkUserWhitelisted } from 'api/user'
-import { changeWhitelistedStatus } from './actions'
 
 export function useConnectWallet(): void {
     const triedEager = useEagerConnect()
@@ -34,4 +36,25 @@ export const useUserWhiteListChecking = (): void => {
             dispatch(changeWhitelistedStatus(res.isWhitelisted))
         })
     }, [dispatch, account])
+}
+
+export function useUpdateBlockNumber(): void {
+    const dispatch = useDispatch<AppDispatch>()
+    const { library } = useWeb3React<Web3Provider>()
+
+    const blockNumberUpdateEventHandler = useCallback(
+        (blockNumber: number) => {
+            dispatch(updateBlockNumber(blockNumber))
+        },
+        [dispatch]
+    )
+
+    useEffect(() => {
+        if (library) {
+            library.on('block', blockNumberUpdateEventHandler)
+            return () => {
+                library.removeListener('block', blockNumberUpdateEventHandler)
+            }
+        }
+    }, [library, blockNumberUpdateEventHandler])
 }

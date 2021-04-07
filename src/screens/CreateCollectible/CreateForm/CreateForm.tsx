@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import {
     Button,
@@ -8,6 +8,11 @@ import {
     IconButton,
     Input,
 } from '@material-ui/core'
+import { Contract } from '@ethersproject/contracts'
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import { useDispatch } from 'react-redux'
+
 import { Close } from '@material-ui/icons'
 import { useTranslation, Trans } from 'react-i18next'
 import {
@@ -19,6 +24,16 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
+import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
+import { addTransaction } from 'state/transactions/actions'
+import { percentageToBasicPoints } from 'utils/helpers'
+import {
+    Engine1155ABI,
+    Satoshi1155ABI,
+    use1155EngineSmartContractNetworkData,
+    use1155SmartContractNetworkData,
+} from 'utils/erc1155'
+import { TokenType } from 'state/transactions/actions'
 
 import useStyles from './CreateForm.style'
 
@@ -116,7 +131,9 @@ const schema = yup.object().shape({
         .number()
         .min(0, 'Min is 0')
         .max(10, 'Max is 10')
+        .typeError('You need to enter number')
         .required('Royalties must be less than or equal to 10'),
+    copiesCount: yup.number().typeError('You need to enter number'),
 })
 
 {
@@ -129,8 +146,13 @@ const schema = yup.object().shape({
 }
 
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
+    const dispatch = useDispatch()
     const classes = useStyles()
     const { t } = useTranslation()
+    const { account, library, chainId } = useWeb3React<Web3Provider>()
+    const erc721NetworkData = useSmartContractNetworkData(chainId)
+    const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
+    const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const {
         register,
@@ -147,18 +169,148 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         },
     })
 
+    const [singleContract, setSingleContract] = useState<any>()
+    const [erc1155contract, setErc1155contract] = useState<any>()
+    const [engine1155contract, setEngine1155contract] = useState<any>()
+
+    const engineAddress = engine1155NetworkData?.address
+
+    const tokenDataMock = {
+        name: 'Token Test Data',
+        description:
+            'Friendly OpenSea Creature that enjoys long swims in the ocean.',
+        image:
+            'https://i.pinimg.com/736x/2d/dc/25/2ddc25914e2ae0db5311ffa41781dda1.jpg',
+    }
+
+    useEffect(() => {
+        if (isSingle) {
+            if (library && erc721NetworkData) {
+                const address = erc721NetworkData.address
+                const singleContract = new Contract(
+                    address,
+                    Satoshi721ABI,
+                    library.getSigner()
+                )
+                setSingleContract(singleContract)
+            }
+        }
+    }, [erc721NetworkData, isSingle, library])
+
+    useEffect(() => {
+        if (!isSingle) {
+            if (library && erc1155NetworkData && engine1155NetworkData) {
+                const erc1155Address = erc1155NetworkData.address
+                const engine1155Contract = new Contract(
+                    erc1155Address,
+                    Engine1155ABI,
+                    library.getSigner()
+                )
+                setEngine1155contract(engine1155Contract)
+                const erc1155Contract = new Contract(
+                    engine1155Contract.address,
+                    Satoshi1155ABI,
+                    library.getSigner()
+                )
+                setErc1155contract(erc1155Contract)
+            }
+        }
+    }, [
+        library,
+        erc721NetworkData,
+        chainId,
+        isSingle,
+        erc1155NetworkData,
+        engine1155NetworkData,
+        engineAddress,
+    ])
+
+    const createItem = async (formData: ICollectibleForm) => {
+        const royaltiesInBasicPoint = percentageToBasicPoints(
+            formData.royalties
+        )
+        //@TODO: get data for methods from API
+
+        //phase 1 includes only createItem method
+        // if (onSale) {
+        //     if (instantPrice) {
+        //         return await contract.CreateAndPutOnAuction(
+        //             JSON.stringify(tokenDataMock), //tokenURI
+        //             0, //startDate
+        //             10, //auction duration
+        //             10, //royalties assigned to the token by the creator, in bps
+        //             { from: account }
+        //         )
+        //     }
+        //     return await contract.createAndPutOnSale(
+        //         JSON.stringify(tokenDataMock),
+        //         1000, //price in wei of the token
+        //         10, //royalties assigned to the token by the creator, in bps
+        //         {
+        //             from: account,
+        //         }
+        //     )
+        // }
+        if (isSingle) {
+            const singleTokenResponse = await singleContract.createItem(
+                JSON.stringify(tokenDataMock),
+                royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
+                {
+                    from: account,
+                }
+            )
+            return {
+                response: singleTokenResponse,
+                tokenType: TokenType.SINGLE,
+            }
+        }
+        const multipleTokenResponse = await erc1155contract.createItem(
+            engine1155contract.address,
+            formData.copiesCount, //number of copies
+            royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
+            {
+                from: account,
+            }
+        )
+        return {
+            response: multipleTokenResponse,
+            tokenType: TokenType.MULTIPLE,
+        }
+    }
+
+    //the third step of item creation(sign sell order step)
+    // const createSignature = async () => {
+    //     const hexMessage = 'test message'
+    //     const signedMessage = await library?.send('personal_sign', [
+    //         hexMessage,
+    //         account,
+    //     ])
+    //     console.log({ signedMessage })
+    // }
+
     const [preview, setPreview] = useState<PreviewType>({
         file: '',
         cover: '',
         type: '',
     })
 
-    const onSubmit = () => {
+    const onSubmit = async (data: ICollectibleForm) => {
         {
             /* todo: will be changed after implement functionality */
         }
+        if (!chainId) {
+            return
+        }
 
         setIsSubmitModal(true)
+        const { response, tokenType } = await createItem(data)
+        dispatch(
+            addTransaction({
+                type: tokenType,
+                hash: response.hash,
+                chainId,
+            })
+        )
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,7 +328,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         })
     }
 
-    const handleRoyalties = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.name, e.target.value.split(/\D/).join(''))
     }
 
@@ -551,7 +703,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 <Input
                                     id="royalties"
                                     defaultValue="10"
-                                    onChange={handleRoyalties}
+                                    onChange={handleNumberInput}
                                     inputRef={register}
                                     disableUnderline
                                     name="royalties"
@@ -580,11 +732,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                         id="copiesCount"
                                         placeholder="e. g. 10"
                                         inputRef={register}
+                                        onChange={handleNumberInput}
                                         disableUnderline
                                         name="copiesCount"
-                                        endAdornment={<span>%</span>}
                                     />
                                     <span> {t('numberOfCopies')}</span>
+                                    {errors.copiesCount && (
+                                        <p className={classes.textError}>
+                                            {errors.copiesCount.message}
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>
