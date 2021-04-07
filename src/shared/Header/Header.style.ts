@@ -63,6 +63,9 @@ const useStyles = makeStyles((theme) => {
             paddingRight: 8,
             border: `1px solid ${theme.custom.common.grayColor}`,
             borderRadius: 60,
+            '& .MuiAutocomplete-endAdornment': {
+                display: 'none',
+            },
         },
         dropdown: {
             marginTop: -16,
@@ -70,11 +73,16 @@ const useStyles = makeStyles((theme) => {
             '& .MuiPaper-root': {
                 boxShadow: 'none',
                 margin: 0,
-                '& .MuiAutocomplete-listbox': {
+                '& .MuiAutocomplete-listbox, .MuiAutocomplete-noOptions': {
                     borderRadius: '0 0 20px 20px',
                     border: `1px solid ${theme.custom.common.grayColor}`,
                     borderWidth: '0 1px 1px 1px',
                     padding: '10px 0 0 0',
+                },
+                '& .MuiAutocomplete-noOptions': {
+                    padding: '15px 0 15px 67px',
+                    color: theme.custom.common.grayColor,
+                    fontSize: 14,
                 },
                 '& .MuiAutocomplete-option': {
                     padding: '8px 0',
@@ -104,6 +112,7 @@ const useStyles = makeStyles((theme) => {
             },
         },
         searchWrapper: {
+            pointerEvents: 'none',
             backgroundColor: theme.palette.primary.main,
             position: 'relative',
             marginLeft: 200,

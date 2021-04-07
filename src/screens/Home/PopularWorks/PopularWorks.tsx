@@ -29,8 +29,12 @@ export default function PopularWorks(): JSX.Element {
 
     return (
         <section className={classes.container}>
-            <h3 className={classes.title}>{t('madeByTheArtists')}</h3>
-            <h2 className={classes.subTitle}>{t('forTheArtists')}</h2>
+            <h3 className={classes.title}>
+                {t('takeTimeToAppreciateTheArtWork')}
+            </h3>
+            <h2 className={classes.subTitle}>
+                {t('youWillBeAbleToBuyItSoon')}
+            </h2>
             {/*    <div className={classes.filters}>
                 <nav className={classes.navigation}>
                     {categories.map((category) => (
