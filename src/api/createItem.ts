@@ -16,8 +16,10 @@ export const uploadFile = (formData: FormData): Promise<Array<any>> =>
 
 export const uploadMetaData = (
     metadata: MetaDataType,
-    walletHash: string
-): Promise<any> => axios.post('/metadata', { payload: metadata, walletHash })
+    walletHash: string,
+    type: string
+): Promise<any> =>
+    axios.post('/metadata', { payload: metadata, walletHash, type })
 
 export const updateMetaData = (id: string, tx_hash: string): Promise<void> =>
     axios.put(`/metadata/${id}`, { tx_hash })

@@ -305,8 +305,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             formData.append('files', data.cover[0])
         }
         const [fileResponse, coverResponse] = await uploadFile(formData)
-        console.log(fileResponse)
-        console.log(coverResponse)
+        const type = isSingle ? TokenType.SINGLE : TokenType.MULTIPLE
         const metadata = {
             name: data.name,
             description: data.description,
@@ -318,7 +317,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             type: isSingle ? TokenType.SINGLE : TokenType.MULTIPLE,
         }
 
-        const metaResponse = await uploadMetaData(metadata, account)
+        const metaResponse = await uploadMetaData(metadata, account, type)
         const { response, tokenType } = await createItem(metaResponse.payload)
         await updateMetaData(metaResponse.id, response.hash)
         dispatch(
