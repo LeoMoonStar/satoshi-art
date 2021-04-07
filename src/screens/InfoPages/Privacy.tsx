@@ -6,7 +6,7 @@ import Layout from 'shared/Layout'
 
 import { LeftArrowIcon } from 'shared/icons'
 
-import useStyles from './Privacy.style'
+import useStyles from './InfoPages.style'
 
 export default function Privacy(): JSX.Element {
     const history = useHistory()
@@ -16,7 +16,7 @@ export default function Privacy(): JSX.Element {
     const handleGoBack = () => history.push('/')
 
     return (
-        <Layout isHeaderVisible={false}>
+        <Layout>
             <div className={classes.container}>
                 <Button className={classes.backBtn} onClick={handleGoBack}>
                     <LeftArrowIcon /> {t('backToHomePage')}

@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core'
 const useStyles = makeStyles(() => {
     return {
         container: {
-            padding: '100px 236px',
+            padding: '20px 236px 50px',
             flexDirection: 'row',
             marginBottom: 57,
         },

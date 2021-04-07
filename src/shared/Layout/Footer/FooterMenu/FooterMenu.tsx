@@ -5,6 +5,10 @@ import useStyles from './FooterMenu.style'
 
 const footerMenu = [
     {
+        label: 'About Satoshi.Art',
+        url: '/about-satoshi-art',
+    },
+    {
         label: 'Privacy',
         url: '/privacy',
     },
