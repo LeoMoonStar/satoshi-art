@@ -1,14 +1,15 @@
+import { TokenType } from 'state/transactions/actions'
 import axios from './axios'
 
 export type Token = {
     id: string
     metadata: {
-        type: 'single' | 'multiple'
+        type: TokenType
         payload: {
             name: string
             copiesCount: string // todo: Probably should has totalCount and currentCount
             description: string
-            cover: string
+            cover?: string
             file: string
         }
     }
