@@ -18,7 +18,7 @@ import Layout from 'shared/Layout'
 // import Button from 'shared/Button'
 import { LeftArrowIcon } from 'shared/icons'
 
-import useStyles from './SupportForm.style'
+import useStyles from './Support.style'
 
 // const ISSUES_THEMES = [
 //     'brokenImageOrVideo',
@@ -29,7 +29,7 @@ import useStyles from './SupportForm.style'
 //     'verificationIssueOrQuestion',
 // ]
 
-export default function SupportForm(): JSX.Element {
+export default function Support(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
     // const [files, setFiles] = useState<File[]>([])

@@ -34,26 +34,37 @@ const useStyles = makeStyles((theme) => {
         content: {
             height: 'calc(100% - 130px)',
             display: 'flex',
-            paddingLeft: 60,
-            paddingRight: 60,
+            paddingLeft: 67,
+            paddingRight: 68,
         },
         info: {
-            width: '50%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
         },
         backBtn: {
             textDecoration: 'none',
+            textTransform: 'none',
             display: 'inline-flex',
             justifyContent: 'flex-start',
             alignItems: 'center',
             color: 'black',
+            padding: 0,
             marginBottom: 40,
+            '&:hover': {
+                backgroundColor: '#ffffff',
+            },
+            '& .MuiButton-label h5': {
+                fontWeight: 600,
+                marginLeft: 7,
+                fontSize: 19,
+                lineHeight: '25px',
+            },
         },
         backBtnText: {
             fontSize: 30,
             fontWeight: 900,
+            letterSpacing: '-0.04em',
         },
         divider: {
             backgroundColor: theme.custom.common.purpleColor,
@@ -78,6 +89,7 @@ const useStyles = makeStyles((theme) => {
             justifyContent: 'space-around',
             alignItems: 'center',
             marginBottom: 60,
+            marginLeft: 56,
         },
         termsModal: {
             width: 318,
@@ -136,10 +148,16 @@ const useStyles = makeStyles((theme) => {
             fontWeight: 600,
             marginTop: 24,
             lineHeight: '16px',
+            border: '1px solid transparent',
             backgroundColor: theme.custom.common.pinkColor,
             color: theme.palette.primary.main,
             textTransform: 'none',
             borderRadius: 60,
+            '&:hover': {
+                border: `1px solid ${theme.custom.common.pinkColor}`,
+                backgroundColor: theme.palette.primary.main,
+                color: theme.custom.common.pinkColor,
+            },
         },
     }
 })

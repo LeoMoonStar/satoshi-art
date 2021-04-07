@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles'
 
+// TODO: Make footer height 480 when the newsletter sign up form returns
 const useStyles = makeStyles((theme) => {
     return {
         container: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => {
             borderRadius: '20px 20px 0 0',
             width: '100%',
             flex: '0 0 auto',
-            height: 480,
+            height: 240,
         },
     }
 })

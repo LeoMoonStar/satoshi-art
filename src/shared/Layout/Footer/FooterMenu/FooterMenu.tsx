@@ -9,8 +9,8 @@ const footerMenu = [
         url: '/privacy',
     },
     {
-        label: 'Help',
-        url: '/support-form',
+        label: 'Support',
+        url: '/support',
     },
 ]
 
