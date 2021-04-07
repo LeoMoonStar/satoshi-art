@@ -19,7 +19,7 @@ import Home from 'screens/Home'
 import OrderList from 'screens/OrderList'
 import DropOfTheDay from 'screens/DropOfTheDay'
 import Support from 'screens/Support'
-import { Privacy, SatoshiArt } from 'screens/InfoPages'
+import { Privacy, SatoshiArt, TermsAndConditions } from 'screens/InfoPages'
 import WrongNetworkModal from 'shared/WrongNetwork'
 import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 import { getWhiteListedStatus } from 'state/app/selectors'
@@ -60,6 +60,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <Route path="/about-satoshi-art">
                         <SatoshiArt />
+                    </Route>
+                    <Route path="/terms-and-conditions">
+                        <TermsAndConditions />
                     </Route>
                     <DevelopRoute path="/artists/:id">
                         <Artist />

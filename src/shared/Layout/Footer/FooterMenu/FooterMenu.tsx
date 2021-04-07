@@ -16,6 +16,10 @@ const footerMenu = [
         label: 'Support',
         url: '/support',
     },
+    {
+        label: 'Terms & Conditions',
+        url: '/terms-and-conditions',
+    },
 ]
 
 function FooterMenu(): JSX.Element {
