@@ -107,7 +107,10 @@ export default function Header({
                             <>
                                 {isWhiteListed && (
                                     <Link
-                                        to="/create-collectible"
+                                        to={{
+                                            pathname: '/create-collectible',
+                                            state: { isAllowedGoBack: true },
+                                        }}
                                         className={classes.createLink}
                                     >
                                         {}

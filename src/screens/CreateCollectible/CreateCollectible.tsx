@@ -11,11 +11,19 @@ import CreateForm from './CreateForm'
 
 const CreateCollectible = (): JSX.Element => {
     const classes = useStyles()
-    const history = useHistory()
+    const history = useHistory<{ isAllowedGoBack: boolean }>()
     const { type } = useParams<{ type: string }>()
 
-    const handleGoBack = () => history.push('/create-collectible')
+    const handleGoBack = () => {
+        if (history.location.state?.isAllowedGoBack) {
+            history.goBack()
+            return
+        }
+
+        history.push('/create-collectible')
+    }
     const isSingle = type === 'single'
+
     return (
         <Layout>
             <div className={classes.container}>

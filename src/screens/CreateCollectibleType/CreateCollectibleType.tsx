@@ -13,17 +13,23 @@ import useStyles from './CreateCollectibleType.style'
 export default function CreateCollectibleType(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
-    const history = useHistory()
+    const history = useHistory<{ isAllowedGoBack: boolean }>()
 
     const handleGoBack = () => history.goBack()
+    const isAllowedGoBack = history.location.state?.isAllowedGoBack
 
     return (
         <Layout>
             <div className={classes.container}>
                 <div className={classes.contentCard}>
-                    <Button className={classes.goBack} onClick={handleGoBack}>
-                        <LeftArrowIcon /> {t('goBack')}
-                    </Button>
+                    {isAllowedGoBack && (
+                        <Button
+                            className={classes.goBack}
+                            onClick={handleGoBack}
+                        >
+                            <LeftArrowIcon /> {t('goBack')}
+                        </Button>
+                    )}
                     <h1 className={classes.title}>{t('createCollectible')}</h1>
 
                     <div className={classes.content}>
@@ -35,14 +41,24 @@ export default function CreateCollectibleType(): JSX.Element {
                     </div>
                 </div>
                 <div className={classes.cards}>
-                    <NavLink to={'/create-collectible/single'}>
+                    <NavLink
+                        to={{
+                            pathname: '/create-collectible/single',
+                            state: { isAllowedGoBack: true },
+                        }}
+                    >
                         <button type="button" className={classes.card}>
                             <img src={singleCollectible} alt="" />
                             <h3 className={classes.cardTitle}>{t('single')}</h3>
                         </button>
                     </NavLink>
 
-                    <NavLink to={'/create-collectible/multiple'}>
+                    <NavLink
+                        to={{
+                            pathname: '/create-collectible/multiple',
+                            state: { isAllowedGoBack: true },
+                        }}
+                    >
                         <button type="button" className={classes.card}>
                             <img src={multipleCollectible} alt="" />
                             <h3 className={classes.cardTitle}>
