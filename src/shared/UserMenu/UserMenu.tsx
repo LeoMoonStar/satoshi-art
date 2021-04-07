@@ -1,6 +1,6 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { IconButton, Popover } from '@material-ui/core'
-// import { ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { shortAddress } from 'utils/helpers'
@@ -10,7 +10,7 @@ import { shortAddress } from 'utils/helpers'
 import Avatar from 'shared/Avatar'
 import {
     CopyIcon,
-    // BalanceIcon,
+    BalanceIcon,
     // ProfileIcon,
     // ItemsIcon,
     // DisconnectIcon,
@@ -34,18 +34,20 @@ const UserMenu = (): JSX.Element | null => {
     const isAuthorized = localStorage.getItem('isAuthorized')
     const anchorElRef = useRef<HTMLDivElement>(null)
     const [isOpen, setOpen] = useState<boolean>(false)
-    // const [balance, setBalance] = useState('')
-    const { account } = useWeb3React<Web3Provider>()
+    const [balance, setBalance] = useState('')
+    const { account, library } = useWeb3React<Web3Provider>()
 
-    // useEffect(() => {
-    //     async function getBalance() {
-    //         if (library && account && isAuthorized) {
-    //             const userEthBalance = await library.getBalance(account)
-    //             setBalance(ethers.utils.formatEther(userEthBalance))
-    //         }
-    //     }
-    //     getBalance()
-    // }, [account, library, isAuthorized])
+    useEffect(() => {
+        async function getBalance() {
+            if (library && account && isAuthorized) {
+                const userEthBalance = await library.getBalance(account)
+                setBalance(
+                    ethers.utils.formatEther(userEthBalance).substring(0, 5)
+                )
+            }
+        }
+        getBalance()
+    }, [account, library, isAuthorized])
 
     const userAddress = useMemo(() => {
         if (!!account) {
@@ -96,15 +98,15 @@ const UserMenu = (): JSX.Element | null => {
                     {/*<Link to="/" className={classes.profileLink}>*/}
                     {/*    Set display name*/}
                     {/*</Link>*/}
-                    {/*<ul className={classes.balances}>*/}
-                    {/*    <li>*/}
-                    {/*        <BalanceIcon />*/}
-                    {/*        <div className={classes.balance}>*/}
-                    {/*            <span>Balance</span>*/}
-                    {/*            <span>{balance} ETH $140.47 USD</span>*/}
-                    {/*        </div>*/}
-                    {/*    </li>*/}
-                    {/*</ul>*/}
+                    <ul className={classes.balances}>
+                        <li>
+                            <BalanceIcon />
+                            <div className={classes.balance}>
+                                <span>Balance</span>
+                                <span>{balance} ETH</span>
+                            </div>
+                        </li>
+                    </ul>
                     {/*<ul className={classes.links}>*/}
                     {/*    {userLinks.map((link, index) => (*/}
                     {/*        <li key={index}>*/}

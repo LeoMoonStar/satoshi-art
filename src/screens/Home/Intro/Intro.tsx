@@ -1,8 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import Button from 'shared/Button'
+// import Button from 'shared/Button'
 import nftImg from 'shared/images/NFT.png'
 import escalasImg from 'shared/images/escalas.png'
 import shadowImage from 'shared/images/home/shadowInIntro.png'
@@ -27,12 +27,12 @@ export default function PopularWorks(): JSX.Element {
                                 {t('inTheWorldNowTogetherHereForYou')}
                             </div>
                         </div>
-                        <Link to="/search" className={classes.exploreLink}>
-                            <Button
-                                label={t('exploreCollections')}
-                                className={classes.exploreButton}
-                            />
-                        </Link>
+                        {/*<Link to="/search" className={classes.exploreLink}>*/}
+                        {/*    <Button*/}
+                        {/*        label={t('exploreCollections')}*/}
+                        {/*        className={classes.exploreButton}*/}
+                        {/*    />*/}
+                        {/*</Link>*/}
                     </div>
                     <div className={classes.exploreBlockSecond}>
                         <img src={escalasImg} />

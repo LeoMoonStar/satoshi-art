@@ -93,6 +93,7 @@ const useStyles = makeStyles((theme) => {
         controls: {
             display: 'flex',
             marginRight: 72,
+            marginLeft: 'auto',
         },
         createLink: {
             marginRight: 12,
