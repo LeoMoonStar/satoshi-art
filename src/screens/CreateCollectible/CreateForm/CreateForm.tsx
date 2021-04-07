@@ -8,6 +8,7 @@ import {
     IconButton,
     Input,
 } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
 import { Contract } from '@ethersproject/contracts'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
@@ -34,8 +35,13 @@ import {
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
 import { TokenType } from 'state/transactions/actions'
-import { uploadFile } from 'api/createItem'
-
+import {
+    uploadFile,
+    uploadMetaData,
+    updateMetaData,
+    MetaDataType,
+} from 'api/createItem'
+import { getFileUrl } from 'utils/helpers'
 import useStyles from './CreateForm.style'
 
 type PropertyType = {
@@ -47,8 +53,6 @@ type PreviewType = {
     file: string
     cover?: string
     type: string
-    fileBackendUrl: string
-    coverBackendUrl?: string
 }
 
 interface ICollectibleForm {
@@ -151,6 +155,7 @@ const schema = yup.object().shape({
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const dispatch = useDispatch()
     const classes = useStyles()
+    const history = useHistory()
     const { t } = useTranslation()
     const { account, library, chainId } = useWeb3React<Web3Provider>()
     const erc721NetworkData = useSmartContractNetworkData(chainId)
@@ -177,14 +182,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const [engine1155contract, setEngine1155contract] = useState<any>()
 
     const engineAddress = engine1155NetworkData?.address
-
-    const tokenDataMock = {
-        name: 'Token Test Data',
-        description:
-            'Friendly OpenSea Creature that enjoys long swims in the ocean.',
-        image:
-            'https://i.pinimg.com/736x/2d/dc/25/2ddc25914e2ae0db5311ffa41781dda1.jpg',
-    }
 
     useEffect(() => {
         if (isSingle) {
@@ -228,10 +225,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         engineAddress,
     ])
 
-    const createItem = async (formData: ICollectibleForm) => {
-        const royaltiesInBasicPoint = percentageToBasicPoints(
-            formData.royalties
-        )
+    const createItem = async (payload: MetaDataType) => {
+        const royaltiesInBasicPoint = percentageToBasicPoints(payload.royalties)
         //@TODO: get data for methods from API
 
         //phase 1 includes only createItem method
@@ -256,7 +251,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         // }
         if (isSingle) {
             const singleTokenResponse = await singleContract.createItem(
-                JSON.stringify(tokenDataMock),
+                JSON.stringify(payload),
                 royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
                 {
                     from: account,
@@ -269,7 +264,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
         const multipleTokenResponse = await erc1155contract.createItem(
             engine1155contract.address,
-            formData.copiesCount, //number of copies
+            payload.copiesCount, //number of copies
             royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
             {
                 from: account,
@@ -295,20 +290,34 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         file: '',
         cover: '',
         type: '',
-        fileBackendUrl: '',
-        coverBackendUrl: '',
     })
 
     const onSubmit = async (data: ICollectibleForm) => {
-        {
-            /* todo: will be changed after implement functionality */
-        }
         if (!chainId) {
             return
         }
-
         setIsSubmitModal(true)
-        const { response, tokenType } = await createItem(data)
+        const formData = new FormData()
+        formData.append('files', data.file[0])
+        if (data.cover) {
+            formData.append('files', data.cover[0])
+        }
+        const [fileResponse, coverResponse] = await uploadFile(formData)
+
+        const metadata = {
+            name: data.name,
+            description: data.description,
+            copiesCount: data.copiesCount,
+            royalties: data.royalties,
+            file: getFileUrl(fileResponse.url),
+            cover: coverResponse ? getFileUrl(coverResponse.url) : undefined,
+            status: 'pending',
+            type: isSingle ? TokenType.SINGLE : TokenType.MULTIPLE,
+        }
+
+        const metaResponse = await uploadMetaData(metadata)
+        const { response, tokenType } = await createItem(metaResponse.payload)
+        await updateMetaData(metaResponse.id, response.hash)
         dispatch(
             addTransaction({
                 type: tokenType,
@@ -316,6 +325,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 chainId,
             })
         )
+        history.push('/')
     }
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -326,21 +336,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         const file = fileList[0]
         const src = URL.createObjectURL(file)
         const type = file.type.split('/')[0]
-        const formData = new FormData()
-        formData.append('files', file)
-        const fileResponse = await uploadFile(formData)
         setPreview({
             ...preview,
             [e.target.name]: src,
             type: e.target.name === 'cover' ? preview.type : type,
-            fileBackendUrl:
-                e.target.name === 'cover'
-                    ? preview.fileBackendUrl
-                    : fileResponse[0].url,
-            coverBackendUrl:
-                e.target.name === 'cover'
-                    ? fileResponse[0].url
-                    : preview.coverBackendUrl,
         })
     }
 
@@ -354,14 +353,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             file: '',
             cover: '',
             type: '',
-            fileBackendUrl: '',
-            coverBackendUrl: '',
         })
     }
 
     const clearCover = () => {
         setValue('cover', null)
-        setPreview({ ...preview, cover: '', coverBackendUrl: '' })
+        setPreview({ ...preview, cover: '' })
     }
 
     const isErrors = () => Object.keys(errors).length >= 1
