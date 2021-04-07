@@ -17,6 +17,7 @@ import BuyModal from './BuyModal'
 import FSModal from './FSModal'
 
 import useStyles from './TokenDetails.style'
+import ProgressModal from './ProgressModal'
 
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
@@ -73,6 +74,7 @@ const TokenDetails = (): JSX.Element => {
     const [isBidModal, setBidModal] = useState<boolean>(false)
     const [isBuyModal, setBuyModal] = useState<boolean>(false)
     const [isFSModal, setFSModal] = useState<boolean>(false)
+    const [isProgressModal, setIsProgressModal] = useState<boolean>(false)
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -259,13 +261,32 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                 </Grid>
             </div>
-            {isBidModal && <BidModal onClose={() => setBidModal(false)} />}
-            {isBuyModal && <BuyModal onClose={() => setBuyModal(false)} />}
+            {isBidModal && (
+                <BidModal
+                    onSubmit={() => {
+                        setIsProgressModal(true)
+                        setBidModal(false)
+                    }}
+                    onClose={() => setBidModal(false)}
+                />
+            )}
+            {isBuyModal && (
+                <BuyModal
+                    onSubmit={() => {
+                        setIsProgressModal(true)
+                        setBuyModal(false)
+                    }}
+                    onClose={() => setBuyModal(false)}
+                />
+            )}
             {isFSModal && (
                 <FSModal
                     src={productImgSrc}
                     onClose={() => setFSModal(false)}
                 />
+            )}
+            {isProgressModal && (
+                <ProgressModal onClose={() => setIsProgressModal(false)} />
             )}
         </div>
     )

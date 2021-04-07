@@ -32,7 +32,7 @@ export default function WarningMobileResolutions(): JSX.Element {
             open={isOpen}
         >
             <div className={classes.container}>
-                <h2 className={classes.title}>{t('hello')}</h2>
+                <h2 className={classes.title}>{t('hello!')}</h2>
                 <div className={classes.content}>
                     {t('thisPageIsBestViewedWithDesktopDevices')}
                 </div>

@@ -8,9 +8,13 @@ import useStyles from './Modals.style'
 
 type BidModalProps = {
     onClose: () => void
+    onSubmit: () => void
 }
 
-export default function BidModal({ onClose }: BidModalProps): JSX.Element {
+export default function BidModal({
+    onClose,
+    onSubmit,
+}: BidModalProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -75,6 +79,7 @@ export default function BidModal({ onClose }: BidModalProps): JSX.Element {
                 </ul>
                 <div className={classes.buttons}>
                     <Button
+                        onClick={onSubmit}
                         variantCustom="action"
                         className={classes.buttonFilled}
                         disabled={!!error}
