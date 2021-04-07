@@ -312,7 +312,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             file: getFileUrl(fileResponse.url),
             cover: coverResponse ? getFileUrl(coverResponse.url) : undefined,
             status: 'pending',
-            type: isSingle ? 'single' : 'multiple',
+            type: isSingle ? TokenType.SINGLE : TokenType.MULTIPLE,
         }
 
         const metaResponse = await uploadMetaData(metadata)
