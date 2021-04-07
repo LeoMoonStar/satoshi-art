@@ -9,6 +9,7 @@ import Loader from 'shared/Loader'
 // import TextGradient from 'shared/TexGradient'
 // import preview from 'shared/images/artist/work.jpg'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
+import preview from 'shared/images/artist/work.jpg'
 
 import { getFileUrl } from 'utils/helpers'
 import { Token } from 'api/tokens'
@@ -37,7 +38,9 @@ export default function WorksList({
                     return (
                         <div className={classes.work} key={id}>
                             <img
-                                src={getFileUrl(payload.cover ?? payload.file)}
+                                // todo: temp solution we have an issue with images on the API part
+                                // src={getFileUrl(payload.cover ?? payload.file)}
+                                src={preview}
                                 style={{
                                     borderRadius:
                                         variant === 'rounded' ? 30 : 0,
