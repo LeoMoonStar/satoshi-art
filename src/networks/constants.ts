@@ -27,7 +27,7 @@ const Networks: Network = {
         RPC_URI:
             'https://ropsten.infura.io/v3/' + process.env.REACT_APP_INFURA_KEY,
         name: 'Ethereum Testnet Ropsten',
-        accepted: true,
+        accepted: process.env.REACT_APP_SPECIAL_MODE !== 'production',
         testnet: true,
     },
     [RINKEBY_NETWORK_ID]: {
