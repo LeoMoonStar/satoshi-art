@@ -15,7 +15,7 @@ import useStyles from './WalletOption.style'
 type OptionProps = {
     wallet: WalletInfo
     openTerms: () => void
-    onRequestError: () => void
+    onRequestError: (e: any) => void
 }
 
 const WalletOption: React.FC<OptionProps> = ({
@@ -37,14 +37,17 @@ const WalletOption: React.FC<OptionProps> = ({
     const hasInjectedProvider = (window as any).ethereum
 
     const connectWallet = async () => {
-        setIsConnectTriggered(true)
-        const connector = wallet.createConnector()
-        await activate(connector, onRequestError)
-        dispatch(changeLoggedWith(wallet.name))
-        setIsConnectTriggered(false)
-
-        if (isPermittedToUseWallet) {
-            history.push('/')
+        try {
+            setIsConnectTriggered(true)
+            const connector = wallet.createConnector()
+            await activate(connector, undefined, true)
+            dispatch(changeLoggedWith(wallet.name))
+            setIsConnectTriggered(false)
+            if (isPermittedToUseWallet) {
+                history.push('/')
+            }
+        } catch (e) {
+            onRequestError(e)
         }
     }
 

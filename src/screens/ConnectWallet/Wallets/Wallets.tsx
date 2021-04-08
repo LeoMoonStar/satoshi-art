@@ -93,7 +93,9 @@ function Wallets(): JSX.Element {
                     <div className={classes.connectors}>
                         {/*@TODO: add array mapping when array will have more wallets*/}
                         <WalletOption
-                            onRequestError={() => setShowErrorModal(true)}
+                            onRequestError={() => {
+                                setShowErrorModal(true)
+                            }}
                             wallet={wallets[0]}
                             openTerms={openTerms}
                         />
@@ -103,11 +105,10 @@ function Wallets(): JSX.Element {
             <Modal open={isErrorModal} onClose={() => setShowErrorModal(false)}>
                 <div className={classes.errorModal}>
                     <div className={classes.errorModalTitle}>
-                        Something went wrong
+                        {t('oopsSomethingWentWrong')}
                     </div>
                     <div className={classes.errorModalContent}>
-                        Please try open {'"Metamask extenssion"'} manually in
-                        your browser.
+                        {t('pleaseTryConnectYourWalletManually')}
                     </div>
                     <Button
                         variantCustom="action"
