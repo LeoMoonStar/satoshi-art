@@ -8,8 +8,9 @@ import { useEagerConnect, useInactiveListener } from 'hooks'
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
 import { updateBlockNumber, changeWhitelistedStatus } from './actions'
 import { checkUserWhitelisted } from 'api/user'
+import { usePendingTransactions } from 'state/transactions/hooks'
 
-export function useConnectWallet(): void {
+export function useConnectWallet(): null {
     const triedEager = useEagerConnect()
     const { createNetwork } = useCurrentNetwork()
     const { active, activate, error } = useWeb3React()
@@ -23,6 +24,7 @@ export function useConnectWallet(): void {
     }, [triedEager, error, active, activate, createNetwork])
 
     useInactiveListener(!triedEager)
+    return null
 }
 
 export const useUserWhiteListChecking = (): void => {
@@ -41,6 +43,7 @@ export const useUserWhiteListChecking = (): void => {
 export function useUpdateBlockNumber(): void {
     const dispatch = useDispatch<AppDispatch>()
     const { library } = useWeb3React<Web3Provider>()
+    const pendingTransactions = usePendingTransactions()
 
     const blockNumberUpdateEventHandler = useCallback(
         (blockNumber: number) => {
@@ -50,11 +53,11 @@ export function useUpdateBlockNumber(): void {
     )
 
     useEffect(() => {
-        if (library) {
+        if (library && pendingTransactions.length > 0) {
             library.on('block', blockNumberUpdateEventHandler)
             return () => {
                 library.removeListener('block', blockNumberUpdateEventHandler)
             }
         }
-    }, [library, blockNumberUpdateEventHandler])
+    }, [library, blockNumberUpdateEventHandler, pendingTransactions.length])
 }
