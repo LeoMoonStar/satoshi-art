@@ -27,12 +27,14 @@ import {
 } from 'screens/InfoPages'
 import WrongNetworkModal from 'shared/WrongNetwork'
 import WarningMobileResolutions from 'shared/WarningMobileResoultions'
-import { getWhiteListedStatus } from 'state/app/selectors'
+import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
 
 const PrivateRoute = (props: RouteProps) => {
-    const isWhitelisted = useSelector<AppState, boolean>(getWhiteListedStatus)
+    const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
+        permittedToUseWalletAndWhiteListedSelector
+    )
 
-    if (!isWhitelisted) {
+    if (!isWhiteListedAndHasPermittedWallet) {
         return <Redirect to="/" />
     }
 

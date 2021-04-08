@@ -12,17 +12,21 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { useTranslation, Trans } from 'react-i18next'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
+import { useDispatch } from 'react-redux'
 
 import { FullLogo } from 'shared/icons'
 import { useWallets } from 'hooks/useWallets'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
+import { changePermittedToUseWallet } from 'state/app/actions'
 // import { addUser } from 'api/user'
 import useStyles from './Wallets.style'
 import WalletOption from '../WalletOption'
 
 function Wallets(): JSX.Element {
+    const dispatch = useDispatch()
     const { account } = useWeb3React<Web3Provider>()
+    const [isErrorModal, setShowErrorModal] = useState<boolean>(false)
 
     const [open, setOpen] = useState<boolean>(false)
     const [fields, setFields] = React.useState({
@@ -45,8 +49,8 @@ function Wallets(): JSX.Element {
     const onSubmit = async () => {
         if (account) {
             // await addUser(account)
-            localStorage.setItem('isAuthorized', '1')
-            history.push('/')
+            dispatch(changePermittedToUseWallet(true))
+            window.location.href = '/'
         }
     }
     const handleGoBack = () => history.goBack()
@@ -89,12 +93,31 @@ function Wallets(): JSX.Element {
                     <div className={classes.connectors}>
                         {/*@TODO: add array mapping when array will have more wallets*/}
                         <WalletOption
+                            onRequestError={() => setShowErrorModal(true)}
                             wallet={wallets[0]}
                             openTerms={openTerms}
                         />
                     </div>
                 </div>
             </div>
+            <Modal open={isErrorModal} onClose={() => setShowErrorModal(false)}>
+                <div className={classes.errorModal}>
+                    <div className={classes.errorModalTitle}>
+                        Something went wrong
+                    </div>
+                    <div className={classes.errorModalContent}>
+                        Please try open {'"Metamask extenssion"'} manually in
+                        your browser.
+                    </div>
+                    <Button
+                        variantCustom="action"
+                        className={classes.errorModalBtn}
+                        onClick={() => setShowErrorModal(false)}
+                    >
+                        Proceed
+                    </Button>
+                </div>
+            </Modal>
             <Modal open={open} onClose={() => setOpen(false)}>
                 <div className={classes.termsModal}>
                     <div className={classes.termsModalTitle}>
