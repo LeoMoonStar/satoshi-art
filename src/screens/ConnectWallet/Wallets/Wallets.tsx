@@ -50,7 +50,7 @@ function Wallets(): JSX.Element {
         if (account) {
             // await addUser(account)
             dispatch(changePermittedToUseWallet(true))
-            window.location.href = '/'
+            history.push('/')
         }
     }
     const handleGoBack = () => history.goBack()
