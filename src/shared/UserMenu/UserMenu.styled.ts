@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => {
         balances: {
             margin: '20px 0 0 0',
             padding: '0 0 18px 0',
-            borderBottom: '1px solid #C4C4C4',
+            // borderBottom: '1px solid #C4C4C4',
             listStyle: 'none',
 
             '& li': {

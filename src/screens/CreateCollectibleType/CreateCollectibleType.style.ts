@@ -45,6 +45,10 @@ const useStyles = makeStyles(() => {
         cards: {
             display: 'flex',
             marginLeft: 'auto',
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+
             '& a:not(:first-child)': {
                 marginLeft: 32,
             },

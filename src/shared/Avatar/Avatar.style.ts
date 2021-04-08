@@ -8,9 +8,11 @@ const useStyles = makeStyles(() => ({
         position: 'relative',
     },
     image: {
-        width: '1em',
-        height: '1em',
+        // width: '1em',
+        // height: '1em',
         borderRadius: '50%',
+        width: '100%',
+        height: '100%',
     },
     status: {
         position: 'absolute',

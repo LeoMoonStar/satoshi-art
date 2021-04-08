@@ -3,36 +3,34 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(() => {
     return {
         group: {
+            position: 'relative',
             flex: '1 1 50%',
+            display: 'flex',
+            justifyContent: 'center',
             boxSizing: 'border-box',
             backgroundColor: '#000',
             borderRadius: 20,
-            '&:nth-child(odd) > div': {
-                marginLeft: 'auto',
-                '&  > div': {
-                    paddingLeft: 120,
-                },
-            },
-            '&:nth-child(even) > div > div': {
-                paddingLeft: 115,
-            },
-        },
-        groupWrapper: {
-            position: 'relative',
-            width: 647,
-            boxSizing: 'border-box',
             '&::after': {
                 content: '""',
                 zIndex: 0,
                 position: 'absolute',
-                bottom: 24,
+                bottom: 84,
                 right: 0,
-                width: '100%',
+                width: '90%',
                 height: 1,
                 backgroundColor: '#fff',
             },
+            '&:nth-child(2n)::after': {
+                right: 'initial',
+                left: 0,
+            },
+        },
+        groupWrapper: {
+            position: 'relative',
+            boxSizing: 'border-box',
         },
         mainTitle: {
+            width: '100%',
             marginTop: 77,
             marginBottom: 31,
             textAlign: 'center',
@@ -72,6 +70,10 @@ const useStyles = makeStyles(() => {
             },
         },
         groupItems: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '0 100px',
+            width: '100%',
             marginLeft: 'auto',
             columnCount: 2,
         },

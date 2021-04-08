@@ -16,18 +16,6 @@ const useStyles = makeStyles(() => {
             backgroundSize: 'cover',
             padding: '344px 136px 158px',
         },
-        headerRow: {
-            position: 'absolute',
-            zIndex: 1,
-            top: 0,
-            left: 0,
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            boxSizing: 'border-box',
-            padding: '45px 136px',
-        },
         article: {
             position: 'relative',
             width: '55%',

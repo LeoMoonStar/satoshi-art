@@ -1,10 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import bradImage from 'shared/images/dropOfTheDay/bradPit.png'
-import { LogoHeaderWhiteIcon } from 'shared/icons'
-import Button from 'shared/Button'
 
 import useStyles from './Introduction.style'
 
@@ -14,12 +11,6 @@ export default function TheSeries(): JSX.Element {
 
     return (
         <section className={classes.container}>
-            <div className={classes.headerRow}>
-                <Link to="/">
-                    <LogoHeaderWhiteIcon />
-                </Link>
-                <Button variantCustom="action">{t('viewAuction')}</Button>
-            </div>
             <article className={classes.article}>
                 <h2 className={classes.title}>Brad Pitt</h2>
                 <div className={classes.content}>

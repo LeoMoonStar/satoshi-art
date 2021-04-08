@@ -10,7 +10,14 @@ import Introduction from './Introduction'
 
 export default function DropOfTheDay(): JSX.Element {
     return (
-        <Layout isHeaderVisible={false} justifyTopRowFooter="center">
+        <Layout
+            hasHeaderDivider={false}
+            containerPaddingTop={0}
+            headerBackground="transparent"
+            inverseHeader
+            positionHeader="absolute"
+            // justifyTopRowFooter="center"
+        >
             <Introduction />
             <TopSeries />
             <LaunchTime />

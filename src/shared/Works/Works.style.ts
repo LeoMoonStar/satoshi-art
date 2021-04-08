@@ -13,6 +13,10 @@ const useStyles = makeStyles(() => ({
     },
     preview: {
         width: '100%',
+        //add height for alignment name of token, probably will need to change it later
+        height: 400,
+        objectFit: 'cover',
+        aspectRatio: '16:12',
     },
     authorInfo: {
         width: '100%',
@@ -33,7 +37,9 @@ const useStyles = makeStyles(() => ({
         alignItems: 'flex-end',
         fontSize: 13,
         fontWeight: 600,
-        marginTop: 29,
+        // marginTop: 29,
+        // temp
+        marginTop: 10,
     },
     info: {
         display: 'flex',
@@ -69,7 +75,9 @@ const useStyles = makeStyles(() => ({
         },
     },
     name: {
-        margin: 0,
+        // margin: 0,
+        // temp
+        margin: '10px 0 0 8px',
     },
     bidButton: {
         margin: '0 -6px -9px auto',
@@ -84,7 +92,7 @@ const useStyles = makeStyles(() => ({
         marginLeft: '1ch',
         color: '#7E7E7E',
     },
-    seeAllButton: {
+    showMoreButton: {
         margin: '0 auto',
         display: 'block',
         height: 53,

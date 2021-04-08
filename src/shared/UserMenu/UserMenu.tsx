@@ -1,35 +1,37 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Popover } from '@material-ui/core'
+import React, { useMemo, useRef, useState, useEffect } from 'react'
+import { IconButton, Popover } from '@material-ui/core'
 import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { shortAddress } from 'utils/helpers'
-import { Link } from 'react-router-dom'
+
+// import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import {
     CopyIcon,
     BalanceIcon,
-    ProfileIcon,
-    ItemsIcon,
-    DisconnectIcon,
+    // ProfileIcon,
+    // ItemsIcon,
+    // DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
 
 import useStyles from './UserMenu.styled'
 
 {
-    /*TODO: Add relevant links path */
+    /*TODO: Add relevant links path and Fix metamask-LOCK(disconnect) functionality   */
 }
 
-const userLinks = [
-    { title: 'My items', icon: <ItemsIcon /> },
-    { title: 'Edit Profile', icon: <ProfileIcon /> },
-    { title: 'Disconnect', icon: <DisconnectIcon /> },
-]
+// const userLinks = [
+//     { title: 'My items', icon: <ItemsIcon /> },
+//     { title: 'Edit Profile', icon: <ProfileIcon /> },
+//     { title: 'Disconnect', icon: <DisconnectIcon /> },
+// ]
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
+    const isAuthorized = localStorage.getItem('isAuthorized')
     const anchorElRef = useRef<HTMLDivElement>(null)
     const [isOpen, setOpen] = useState<boolean>(false)
     const [balance, setBalance] = useState('')
@@ -37,21 +39,22 @@ const UserMenu = (): JSX.Element | null => {
 
     useEffect(() => {
         async function getBalance() {
-            if (library && account) {
+            if (library && account && isAuthorized) {
                 const userEthBalance = await library.getBalance(account)
-                setBalance(ethers.utils.formatEther(userEthBalance))
+                setBalance(
+                    ethers.utils.formatEther(userEthBalance).substring(0, 5)
+                )
             }
         }
         getBalance()
-    }, [account, library])
+    }, [account, library, isAuthorized])
 
     const userAddress = useMemo(() => {
         if (!!account) {
             return shortAddress(account, 10)
         }
     }, [account])
-
-    if (!account) {
+    if (!isAuthorized || !account) {
         return null
     }
 
@@ -83,30 +86,36 @@ const UserMenu = (): JSX.Element | null => {
                 <div>
                     <div className={classes.nickName}>
                         {userAddress}
-                        <CopyIcon />
+                        <IconButton
+                            onClick={() =>
+                                navigator.clipboard.writeText(account)
+                            }
+                        >
+                            <CopyIcon />
+                        </IconButton>
                     </div>
-                    <Link to="/" className={classes.profileLink}>
-                        Set display name
-                    </Link>
+                    {/*<Link to="/" className={classes.profileLink}>*/}
+                    {/*    Set display name*/}
+                    {/*</Link>*/}
                     <ul className={classes.balances}>
                         <li>
                             <BalanceIcon />
                             <div className={classes.balance}>
                                 <span>Balance</span>
-                                <span>{balance} ETH $140.47 USD</span>
+                                <span>{balance} ETH</span>
                             </div>
                         </li>
                     </ul>
-                    <ul className={classes.links}>
-                        {userLinks.map((link, index) => (
-                            <li key={index}>
-                                <Link to="/">
-                                    {link.icon}
-                                    <span>{link.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {/*<ul className={classes.links}>*/}
+                    {/*    {userLinks.map((link, index) => (*/}
+                    {/*        <li key={index}>*/}
+                    {/*            <Link to="/">*/}
+                    {/*                {link.icon}*/}
+                    {/*                <span>{link.title}</span>*/}
+                    {/*            </Link>*/}
+                    {/*        </li>*/}
+                    {/*    ))}*/}
+                    {/*</ul>*/}
                 </div>
             </Popover>
         </div>

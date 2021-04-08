@@ -103,7 +103,7 @@ const useStyles = makeStyles((theme) => {
             color: theme.custom.common.blackColor,
         },
         unlock: {
-            background: 'linear-gradient(left, #6A2FE7, #FF0099)',
+            background: 'linear-gradient(to right, #6A2FE7 5%, #FF0099 20%)',
             '-webkit-background-clip': 'text',
             '-webkit-text-fill-color': 'transparent',
         },
@@ -152,7 +152,7 @@ const useStyles = makeStyles((theme) => {
                 borderBottom: '1px solid #7E7E7E4D',
             },
             '& span': {
-                display: 'block',
+                display: 'inline-block',
                 marginTop: 8,
                 lineHeight: '16px',
                 fontSize: 12,
@@ -200,6 +200,41 @@ const useStyles = makeStyles((theme) => {
                     color: theme.custom.common.blackColor,
                     border: `1px solid ${theme.custom.common.pinkColor}`,
                 },
+            },
+        },
+        switch: {
+            width: 47,
+            height: 24,
+            padding: 0,
+
+            '& .MuiSwitch-switchBase': {
+                color: '#ffffff',
+                padding: 4,
+                '&.Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: '#FF0099',
+                    opacity: 1,
+                },
+            },
+            '& .MuiSwitch-thumb': {
+                width: 16,
+                height: 16,
+                boxShadow: 'none',
+            },
+            '& .MuiSwitch-track': {
+                borderRadius: 16,
+                opacity: 1,
+                backgroundColor: '#FF009926',
+            },
+        },
+        uploadError: {
+            border: '1px solid #FF0000',
+        },
+        textError: {
+            color: '#FF0000',
+        },
+        inputError: {
+            '& .MuiInput-root': {
+                borderBottom: '1px solid #FF0000',
             },
         },
     }
