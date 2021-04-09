@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import {
     BrowserRouter,
     Switch,
@@ -46,57 +46,52 @@ const DevelopRoute = (props: RouteProps) => {
 
 function Routes(): JSX.Element {
     return (
-        <Suspense fallback={null}>
-            <BrowserRouter>
-                <Switch>
-                    <Route path="/connect">
-                        <ConnectWallet />
-                    </Route>
-                    <Route path="/support">
-                        <Support />
-                    </Route>
-                    <Route path="/privacy">
-                        <Privacy />
-                    </Route>
-                    <Route path="/about-satoshi-art">
-                        <SatoshiArt />
-                    </Route>
-                    <Route path="/cookie-privacy">
-                        <CookiePrivacy />
-                    </Route>
-                    <Route path="/terms-and-conditions">
-                        <TermsAndConditions />
-                    </Route>
-                    <DevelopRoute path="/artists/:id">
-                        <Artist />
-                    </DevelopRoute>
-                    <DevelopRoute path="/search">
-                        <Search />
-                    </DevelopRoute>
-                    <DevelopRoute path="/drop-of-the-day">
-                        <DropOfTheDay />
-                    </DevelopRoute>
-                    <DevelopRoute path="/productpage">
-                        <Product />
-                    </DevelopRoute>
-                    <DevelopRoute path="/dashboard/order-list">
-                        <OrderList />
-                    </DevelopRoute>
-                    <PrivateRoute exact path="/create-collectible">
-                        <CreateCollectibleType />
-                    </PrivateRoute>
-                    <PrivateRoute
-                        exact
-                        path="/create-collectible/:type(multiple)/"
-                    >
-                        <CreateCollectible />
-                    </PrivateRoute>
-                    <Route>
-                        <Home />
-                    </Route>
-                </Switch>
-            </BrowserRouter>
-        </Suspense>
+        <BrowserRouter>
+            <Switch>
+                <Route path="/connect">
+                    <ConnectWallet />
+                </Route>
+                <Route path="/support">
+                    <Support />
+                </Route>
+                <Route path="/privacy">
+                    <Privacy />
+                </Route>
+                <Route path="/about-satoshi-art">
+                    <SatoshiArt />
+                </Route>
+                <Route path="/cookie-privacy">
+                    <CookiePrivacy />
+                </Route>
+                <Route path="/terms-and-conditions">
+                    <TermsAndConditions />
+                </Route>
+                <DevelopRoute path="/artists/:id">
+                    <Artist />
+                </DevelopRoute>
+                <DevelopRoute path="/search">
+                    <Search />
+                </DevelopRoute>
+                <DevelopRoute path="/drop-of-the-day">
+                    <DropOfTheDay />
+                </DevelopRoute>
+                <DevelopRoute path="/productpage">
+                    <Product />
+                </DevelopRoute>
+                <DevelopRoute path="/dashboard/order-list">
+                    <OrderList />
+                </DevelopRoute>
+                <PrivateRoute exact path="/create-collectible">
+                    <CreateCollectibleType />
+                </PrivateRoute>
+                <PrivateRoute exact path="/create-collectible/:type(multiple)/">
+                    <CreateCollectible />
+                </PrivateRoute>
+                <Route>
+                    <Home />
+                </Route>
+            </Switch>
+        </BrowserRouter>
     )
 }
 

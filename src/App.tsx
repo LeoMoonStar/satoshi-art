@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 
 import theme from 'shared/theme'
@@ -27,10 +27,12 @@ function App(): JSX.Element {
     return (
         <React.StrictMode>
             <ThemeProvider theme={theme}>
-                <WrongNetworkModal />
-                <WarningMobileResolutions />
-                <MintingInProgressModal />
-                <Routes />
+                <Suspense fallback={null}>
+                    <WrongNetworkModal />
+                    <WarningMobileResolutions />
+                    <MintingInProgressModal />
+                    <Routes />
+                </Suspense>
             </ThemeProvider>
         </React.StrictMode>
     )
