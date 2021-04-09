@@ -124,6 +124,10 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         textAlign: 'center',
     },
+    centerAvatar: {
+        marginLeft: 118,
+        justifyContent: 'center',
+    },
     nftBackgroundImage: {
         position: 'absolute',
         top: 23,

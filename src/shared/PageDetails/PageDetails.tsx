@@ -35,7 +35,6 @@ export default function PageDetails({
     const handleToggleActions = () => {
         setIsOpenActions(!isOpenActions)
     }
-    console.log(center)
     return (
         <>
             <div className={classes.intro}>
@@ -74,7 +73,11 @@ export default function PageDetails({
                     })}
                 >
                     <div>
-                        <div className={classes.artistInfoWrapper}>
+                        <div
+                            className={clsx(classes.artistInfoWrapper, {
+                                [classes.centerAvatar]: center,
+                            })}
+                        >
                             <Avatar
                                 size={140}
                                 image={artistAvatar}
