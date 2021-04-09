@@ -25,11 +25,7 @@ const useStyles = makeStyles(() => {
             color: '#7E7E7E',
             fontWeight: 400,
             '& a': {
-                lineHeight: '10px',
-                display: 'inline-block',
-                maxWidth: 200,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
+                wordBreak: 'break-all',
                 color: '#ff0099',
                 textDecoration: 'none',
             },

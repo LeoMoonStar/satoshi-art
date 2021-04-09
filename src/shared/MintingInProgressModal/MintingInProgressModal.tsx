@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
 import { useTransactions } from 'state/transactions/hooks'
@@ -16,7 +17,12 @@ const CreateForm = (): JSX.Element => {
     ] = useState<TransactionsListItem | null>(null)
     const prevTransactionsRef = useRef<TransactionsListItem[]>([])
     const transactions: TransactionsListItem[] = useTransactions()
+    const { explorer, id } = useCurrentNetwork()
     const { t } = useTranslation()
+
+    useEffect(() => {
+        prevTransactionsRef.current = []
+    }, [id])
 
     useEffect(() => {
         if (
@@ -35,7 +41,7 @@ const CreateForm = (): JSX.Element => {
         setNewTransaction(null)
     }
 
-    const link = `https://ropsten.etherscan.io/tx/${newTransaction?.hash}`
+    const link = `${explorer}/tx/${newTransaction?.hash}`
 
     return (
         <Modal onClose={handleClose} open={isOpen}>
