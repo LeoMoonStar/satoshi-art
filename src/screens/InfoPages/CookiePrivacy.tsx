@@ -127,7 +127,7 @@ export default function CookiePrivacy(): JSX.Element {
                             </span>
                         </p>
 
-                        <strong>Functionality</strong>
+                        <strong>Functionality Cookies</strong>
                         <p>
                             <span>Type: Persistent Cookies</span>
                             <span>Administered by: Us</span>
