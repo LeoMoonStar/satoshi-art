@@ -151,6 +151,21 @@ const schema = yup.object().shape({
     */
 }
 
+/*
+    TODO: Super huge component: We should move types, rules and some functions from component to CreateForm.helpers.ts.
+ */
+
+type TempTokenData = {
+    id: string
+    payload: {
+        copiesCount: number
+        royalties: number
+        description: string
+        file: string
+        name: string
+    }
+}
+
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const dispatch = useDispatch()
     const classes = useStyles()
@@ -161,6 +176,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
+    const [createTokenError, setCreateTokenError] = useState<string>('')
+    const [tempToken, setTempToken] = useState<TempTokenData | null>(null)
     const {
         register,
         handleSubmit,
@@ -291,6 +308,27 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         type: '',
     })
 
+    const tryCreateItem = async (data: TempTokenData) => {
+        if (!chainId) {
+            return
+        }
+        try {
+            const { response, tokenType } = await createItem(data.payload)
+            await updateMetaData(data.id, response.hash)
+
+            dispatch(
+                addTransaction({
+                    type: tokenType,
+                    hash: response.hash,
+                    chainId,
+                })
+            )
+            history.push('/')
+        } catch (e) {
+            setCreateTokenError(e.message)
+        }
+    }
+
     const onSubmit = async (data: ICollectibleForm) => {
         if (!chainId) {
             return
@@ -315,17 +353,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             cover: coverResponse ? coverResponse.url : undefined,
         }
 
-        const metaResponse = await uploadMetaData(metadata, account, type)
-        const { response, tokenType } = await createItem(metaResponse.payload)
-        await updateMetaData(metaResponse.id, response.hash)
-        dispatch(
-            addTransaction({
-                type: tokenType,
-                hash: response.hash,
-                chainId,
-            })
+        const metaResponse: TempTokenData = await uploadMetaData(
+            metadata,
+            account,
+            type
         )
-        history.push('/')
+
+        setTempToken(metaResponse)
+        await tryCreateItem(metaResponse)
     }
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -369,6 +404,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         'unlockContent',
         'price',
     ])
+
+    const handleTryAgain = () => {
+        if (tempToken) {
+            setCreateTokenError('')
+            tryCreateItem(tempToken)
+        }
+    }
+
+    useEffect(() => {
+        if (!isSubmitModal) {
+            setCreateTokenError('')
+            setTempToken(null)
+        }
+    }, [isSubmitModal])
+
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -800,6 +850,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 isSingle={isSingle}
             />
             <ProgressModal
+                createTokenError={createTokenError}
+                onTryAgain={handleTryAgain}
                 open={isSubmitModal}
                 onClose={() => setIsSubmitModal(!isSubmitModal)}
             />

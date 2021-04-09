@@ -7,6 +7,8 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
+
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
 
@@ -32,13 +34,18 @@ function MyStepCircle(props: StepIconProps) {
 type ProgressModalProps = {
     open: boolean
     onClose: () => void
+    onTryAgain: () => void
+    createTokenError: string
 }
 export default function ProgressModal({
     open,
+    onTryAgain,
+    createTokenError,
     onClose,
 }: ProgressModalProps): JSX.Element {
     const classes = useStyles()
     const [activeStep] = useState<number>(0)
+    const { t } = useTranslation()
 
     return (
         <Modal open={open} onClose={onClose}>
@@ -65,22 +72,43 @@ export default function ProgressModal({
                     ))}
                 </Stepper>
                 <div className={classes.stepsContent}>
-                    <div className={classes.step}>
-                        <div className={classes.stepDescription}>
-                            <CircularProgress
-                                classes={{
-                                    root: classes.loader,
-                                }}
-                                size={22}
-                                color="secondary"
-                            />
-                            <div className={classes.stepTitle}>
-                                <span>Upload files & Mint token</span>
-                                <span>Call contract method</span>
+                    {createTokenError ? (
+                        <div className={classes.step}>
+                            <div className={classes.stepDescription}>
+                                <div className={classes.stepTitle}>
+                                    <span className={classes.error}>
+                                        {createTokenError}
+                                    </span>
+                                </div>
                             </div>
+                            <Button
+                                variantCustom="action"
+                                className={classes.tryAgain}
+                                onClick={onTryAgain}
+                            >
+                                {t('tryAgain')}
+                            </Button>
                         </div>
-                        <Button>In progress...</Button>
-                    </div>
+                    ) : (
+                        <div className={classes.step}>
+                            <div className={classes.stepDescription}>
+                                <CircularProgress
+                                    classes={{
+                                        root: classes.loader,
+                                    }}
+                                    size={22}
+                                    color="secondary"
+                                />
+                                <div className={classes.stepTitle}>
+                                    <span>Upload files & Mint token</span>
+                                    <span>Call contract method</span>
+                                </div>
+                            </div>
+                            <Button className={classes.disableButton}>
+                                In progress...
+                            </Button>
+                        </div>
+                    )}
                     {/*<div className={classes.step}>*/}
                     {/*    <div className={classes.stepDescription}>*/}
                     {/*        <CheckIcon />*/}
