@@ -25,8 +25,6 @@ import {
     TermsAndConditions,
     CookiePrivacy,
 } from 'screens/InfoPages'
-import WrongNetworkModal from 'shared/WrongNetwork'
-import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 import { getWhiteListedStatus } from 'state/app/selectors'
 
 const PrivateRoute = (props: RouteProps) => {
@@ -49,8 +47,6 @@ const DevelopRoute = (props: RouteProps) => {
 function Routes(): JSX.Element {
     return (
         <Suspense fallback={null}>
-            <WrongNetworkModal />
-            <WarningMobileResolutions />
             <BrowserRouter>
                 <Switch>
                     <Route path="/connect">
