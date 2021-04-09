@@ -47,7 +47,7 @@ export default function Privacy(): JSX.Element {
                                     <b>
                                         Questions; Contacting Satoshi.ART;
                                         Reporting Violations.
-                                    </b>
+                                    </b>{' '}
                                     If you have any questions or concerns or
                                     complaints about our Privacy Policy or our
                                     data collection or processing practices, or
@@ -610,8 +610,8 @@ export default function Privacy(): JSX.Element {
                                         </p>
                                         <p>
                                             <i>7.3.</i>{' '}
-                                            <u>Corporate Restructuring.</u>
-                                            We may share some or all of your
+                                            <u>Corporate Restructuring.</u> We
+                                            may share some or all of your
                                             Personal Data in connection with or
                                             during negotiation of any merger,
                                             financing, acquisition or
@@ -633,7 +633,7 @@ export default function Privacy(): JSX.Element {
                                         </p>
                                         <p>
                                             <i>7.4.</i>
-                                            <u>As Legally Required.</u>
+                                            <u>As Legally Required.</u>{' '}
                                             Regardless of any choices you make
                                             regarding your Personal Data (as
                                             described below), Satoshi.ART may
