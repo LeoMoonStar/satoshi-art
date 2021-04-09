@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import Button from 'shared/Button'
 
 import useStyles from './FooterMenu.style'
 
@@ -30,6 +31,18 @@ function FooterMenu(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
 
+    useEffect(() => {
+        const { cookieconsent } = window as any
+
+        cookieconsent.run({
+            notice_banner_type: 'standalone',
+            consent_type: 'express',
+            palette: 'dark',
+            language: 'en',
+            change_preferences_selector: '#changePreferences',
+        })
+    }, [])
+
     return (
         <div>
             {footerMenu.map((menuItem, index) => {
@@ -43,8 +56,15 @@ function FooterMenu(): JSX.Element {
                     </a>
                 )
             })}
+            <Button
+                id="changePreferences"
+                className={classes.link}
+                disableRipple
+                disableFocusRipple
+            >
+                Change cookie preferences
+            </Button>
         </div>
     )
 }
-
 export default FooterMenu
