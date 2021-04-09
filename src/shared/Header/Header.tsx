@@ -3,10 +3,14 @@ import { Popper, PopperProps, TextField } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { useWeb3React } from '@web3-react/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 // import cx from 'clsx'
 
-import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
+import {
+    permittedToUseWalletAndWhiteListedSelector,
+    permittedToUseWalletSelector,
+} from 'state/app/selectors'
 import Button from 'shared/Button'
 import UserMenu from 'shared/UserMenu'
 import { FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'shared/icons'
@@ -36,8 +40,12 @@ export default function Header({
 }: HeaderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+    const { account } = useWeb3React()
     const isWhiteListedAndHasPermittedWallet = useSelector<any, boolean>(
         permittedToUseWalletAndWhiteListedSelector
+    )
+    const isWalletPermitted = useSelector<any, boolean>(
+        permittedToUseWalletSelector
     )
 
     return (
@@ -98,7 +106,7 @@ export default function Header({
                         {/*    <Button>{t('howItWorks')}</Button>*/}
                         {/*</Link>*/}
 
-                        {isWhiteListedAndHasPermittedWallet ? (
+                        {isWhiteListedAndHasPermittedWallet && (
                             <>
                                 <Link
                                     to={{
@@ -107,7 +115,6 @@ export default function Header({
                                     }}
                                     className={classes.createLink}
                                 >
-                                    {}
                                     <Button
                                         variantCustom="linkButton"
                                         label={t('create')}
@@ -122,7 +129,8 @@ export default function Header({
                                 {/*    </IconButton>*/}
                                 {/*</div>*/}
                             </>
-                        ) : (
+                        )}
+                        {(!account || !isWalletPermitted) && (
                             <div>
                                 <Link
                                     to={'/connect'}
@@ -135,7 +143,6 @@ export default function Header({
                                 </Link>
                             </div>
                         )}
-
                         <UserMenu />
                     </div>
                 </div>

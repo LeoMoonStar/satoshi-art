@@ -3,6 +3,10 @@ import { IconButton, Popover } from '@material-ui/core'
 import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
+import { useSelector } from 'react-redux'
+
+import { AppState } from 'state'
+import { permittedToUseWalletSelector } from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
 // import { Link } from 'react-router-dom'
@@ -35,10 +39,13 @@ const UserMenu = (): JSX.Element | null => {
     const [isOpen, setOpen] = useState<boolean>(false)
     const [balance, setBalance] = useState('')
     const { account, library } = useWeb3React<Web3Provider>()
+    const isWalletPermitted = useSelector<AppState, boolean>(
+        permittedToUseWalletSelector
+    )
 
     useEffect(() => {
         async function getBalance() {
-            if (library && account) {
+            if (library && account && isWalletPermitted) {
                 const userEthBalance = await library.getBalance(account)
                 setBalance(
                     ethers.utils.formatEther(userEthBalance).substring(0, 5)
@@ -46,14 +53,15 @@ const UserMenu = (): JSX.Element | null => {
             }
         }
         getBalance()
-    }, [account, library])
+    }, [account, library, isWalletPermitted])
 
     const userAddress = useMemo(() => {
         if (!!account) {
             return shortAddress(account, 10)
         }
     }, [account])
-    if (!account) {
+
+    if (!account || !isWalletPermitted) {
         return null
     }
 
