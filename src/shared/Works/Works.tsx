@@ -35,15 +35,17 @@ export default function WorksList({
                 {tokens.map(({ metadata: { payload, type }, id }) => {
                     return (
                         <div className={classes.work} key={id}>
-                            <img
-                                src={payload.cover ?? payload.file}
-                                style={{
-                                    borderRadius:
-                                        variant === 'rounded' ? 30 : 0,
-                                }}
-                                className={classes.preview}
-                                alt={payload.description}
-                            />
+                            <div className={classes.imagePresentation}>
+                                <img
+                                    src={payload.cover ?? payload.file}
+                                    style={{
+                                        borderRadius:
+                                            variant === 'rounded' ? 30 : 0,
+                                    }}
+                                    className={classes.preview}
+                                    alt={payload.description}
+                                />
+                            </div>
                             <div
                                 className={classes.info}
                                 style={{ borderWidth }}
