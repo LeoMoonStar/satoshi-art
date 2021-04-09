@@ -33,14 +33,15 @@ function FooterMenu(): JSX.Element {
 
     useEffect(() => {
         const { cookieconsent } = window as any
-
-        cookieconsent.run({
-            notice_banner_type: 'standalone',
-            consent_type: 'express',
-            palette: 'dark',
-            language: 'en',
-            change_preferences_selector: '#changePreferences',
-        })
+        if (cookieconsent) {
+            cookieconsent.run({
+                notice_banner_type: 'standalone',
+                consent_type: 'express',
+                palette: 'dark',
+                language: 'en',
+                change_preferences_selector: '#changePreferences',
+            })
+        }
     }, [])
 
     return (
