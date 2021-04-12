@@ -7,6 +7,9 @@ const useStyles = makeStyles((theme) => {
             textDecoration: 'none',
             marginRight: 15,
             fontSize: 13,
+            textTransform: 'none',
+            padding: 0,
+            fontWeight: 400,
         },
     }
 })
