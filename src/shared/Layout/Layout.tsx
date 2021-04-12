@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useUserWhiteListChecking } from 'state/app/updater'
 import Header from '../Header'
 import Footer from './Footer'
 import useStyles from './Layout.style'
@@ -30,6 +31,7 @@ function Layout({
 }: // justifyTopRowFooter,
 ILayoutProps): JSX.Element {
     const classes = useStyles()
+    useUserWhiteListChecking()
 
     return (
         <div className={classes.container}>

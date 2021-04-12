@@ -25,12 +25,14 @@ import {
     TermsAndConditions,
     CookiePrivacy,
 } from 'screens/InfoPages'
-import { getWhiteListedStatus } from 'state/app/selectors'
+import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
 
 const PrivateRoute = (props: RouteProps) => {
-    const isWhitelisted = useSelector<AppState, boolean>(getWhiteListedStatus)
+    const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
+        permittedToUseWalletAndWhiteListedSelector
+    )
 
-    if (!isWhitelisted) {
+    if (!isWhiteListedAndHasPermittedWallet) {
         return <Redirect to="/" />
     }
 
