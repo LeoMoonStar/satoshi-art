@@ -198,5 +198,7 @@
   "proceed": "Proceed",
   "yourTokenIsBeingMinted": "Your token is being minted",
   "miningProgressModalContent": " It won't appear on our site until the transaction is\nsuccessfully completed. This might take minutes or even\nhours. To monitor status of this transaction head to:",
+  "oopsSomethingWentWrong": "Oops, something went wrong",
+  "pleaseTryConnectYourWalletManually": "Please try to connect your wallet manually via MetaMask extension.",
   "tryAgain": "Try again"
 }

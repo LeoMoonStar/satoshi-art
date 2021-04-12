@@ -11,6 +11,30 @@ const useStyles = makeStyles((theme) => {
             backgroundImage: `url(${connectWalletBackground})`,
             backgroundSize: 'cover',
         },
+        errorModal: {
+            width: 350,
+            padding: 30,
+            borderRadius: 20,
+            backgroundColor: '#fff',
+        },
+        errorModalTitle: {
+            color: theme.custom.common.blackColor,
+            fontWeight: 800,
+            fontSize: 21,
+            paddingBottom: 21,
+            borderBottom: '1px solid #6A2FE74D',
+            lineHeight: '38px',
+        },
+        errorModalContent: {
+            margin: '32px 0 24px',
+            textAlign: 'center',
+            fontSize: 14,
+            color: '#7E7E7E',
+        },
+        errorModalBtn: {
+            display: 'block',
+            margin: '0 auto',
+        },
         walletsModal: {
             height: 490,
             width: 765,
