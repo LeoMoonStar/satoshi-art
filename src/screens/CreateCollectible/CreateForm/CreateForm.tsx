@@ -158,11 +158,12 @@ const schema = yup.object().shape({
 type TempTokenData = {
     id: string
     payload: {
-        copiesCount: number
+        copiesCount?: number
         royalties: number
         description: string
         file: string
         name: string
+        cover?: string
     }
 }
 
