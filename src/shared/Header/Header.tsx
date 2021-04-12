@@ -10,7 +10,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete'
 
 import { getWhiteListedStatus } from 'state/app/selectors'
 import Button from 'shared/Button'
-import UserMenu from 'shared/UserMenu'
+import UserMenu from './UserMenu'
 import { FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'shared/icons'
 
 import useStyles from './Header.style'

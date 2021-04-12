@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { IconButton, Popover } from '@material-ui/core'
 import { ethers } from 'ethers'
+import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { shortAddress } from 'utils/helpers'
@@ -12,7 +13,7 @@ import {
     CopyIcon,
     BalanceIcon,
     // ProfileIcon,
-    // ItemsIcon,
+    ItemsIcon,
     // DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
@@ -23,11 +24,11 @@ import useStyles from './UserMenu.styled'
     /*TODO: Add relevant links path and Fix metamask-LOCK(disconnect) functionality   */
 }
 
-// const userLinks = [
-//     { title: 'My items', icon: <ItemsIcon /> },
-//     { title: 'Edit Profile', icon: <ProfileIcon /> },
-//     { title: 'Disconnect', icon: <DisconnectIcon /> },
-// ]
+const userLinks = [
+    { title: 'My items', icon: <ItemsIcon /> },
+    // { title: 'Edit Profile', icon: <ProfileIcon /> },
+    // { title: 'Disconnect', icon: <DisconnectIcon /> },
+]
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
@@ -106,16 +107,16 @@ const UserMenu = (): JSX.Element | null => {
                             </div>
                         </li>
                     </ul>
-                    {/*<ul className={classes.links}>*/}
-                    {/*    {userLinks.map((link, index) => (*/}
-                    {/*        <li key={index}>*/}
-                    {/*            <Link to="/">*/}
-                    {/*                {link.icon}*/}
-                    {/*                <span>{link.title}</span>*/}
-                    {/*            </Link>*/}
-                    {/*        </li>*/}
-                    {/*    ))}*/}
-                    {/*</ul>*/}
+                    <ul className={classes.links}>
+                        {userLinks.map((link, index) => (
+                            <li key={index}>
+                                <Link to="/">
+                                    {link.icon}
+                                    <span>{link.title}</span>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </Popover>
         </div>

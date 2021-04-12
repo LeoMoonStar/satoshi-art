@@ -18,8 +18,10 @@ export default function DashboardLayout({
         <>
             <Header />
             <div className={classes.container}>
-                <Sidebar />
-                {children}
+                <div className={classes.sideBar}>
+                    <Sidebar />
+                </div>
+                <div className={classes.content}>{children}</div>
             </div>
         </>
     )

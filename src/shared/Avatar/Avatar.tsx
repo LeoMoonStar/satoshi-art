@@ -10,12 +10,14 @@ type AvatarProps = {
     alt?: string
     status?: string | null
     onClick?: () => void
+    className?: string
 }
 
 export default function Avatar({
     size = 60,
     // image,
     // alt = '',
+    className = '',
     onClick,
     status = null,
 }: AvatarProps): JSX.Element {
@@ -25,7 +27,7 @@ export default function Avatar({
         <>
             <div
                 role={onClick ? 'button' : 'presentation'}
-                className={clsx(classes.container, {
+                className={clsx(classes.container, className, {
                     [classes.pointer]: onClick,
                 })}
                 style={{ fontSize: size }}

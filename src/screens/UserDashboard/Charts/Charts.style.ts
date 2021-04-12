@@ -4,16 +4,17 @@ const useStyles = makeStyles(() => {
     return {
         container: {
             width: '100%',
-            maxWidth: '100%',
             display: 'flex',
+            alignItems: 'center',
+            margin: '32px 0',
         },
-        sideBar: {
-            minWidth: 259,
-        },
-        content: {
-            display: 'flex',
-            width: 'calc(100% - 259px)',
+        col: {
+            flex: 1,
+            '&:not(:first-child)': {
+                marginLeft: 30,
+            },
         },
     }
 })
+
 export default useStyles

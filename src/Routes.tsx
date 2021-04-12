@@ -28,6 +28,7 @@ import {
 import WrongNetworkModal from 'shared/WrongNetwork'
 import WarningMobileResolutions from 'shared/WarningMobileResoultions'
 import { getWhiteListedStatus } from 'state/app/selectors'
+import UserDashboard from './screens/UserDashboard'
 
 const PrivateRoute = (props: RouteProps) => {
     const isWhitelisted = useSelector<AppState, boolean>(getWhiteListedStatus)
@@ -73,6 +74,9 @@ function Routes(): JSX.Element {
                     </Route>
                     <DevelopRoute path="/artists/:id">
                         <Artist />
+                    </DevelopRoute>
+                    <DevelopRoute path="/dashboard/user">
+                        <UserDashboard />
                     </DevelopRoute>
                     <DevelopRoute path="/search">
                         <Search />
