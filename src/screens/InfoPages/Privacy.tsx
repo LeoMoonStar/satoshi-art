@@ -44,13 +44,15 @@ export default function Privacy(): JSX.Element {
                             <div className={classes.listPrivacy}>
                                 <p>
                                     <i>1. </i>{' '}
-                                    <b>Questions; Contacting Satoshi.ART;</b>
-                                    Reporting Violations. If you have any
-                                    questions or concerns or complaints about
-                                    our Privacy Policy or our data collection or
-                                    processing practices, or if you want to
-                                    report any security violations to us, please
-                                    contact us at{' '}
+                                    <b>
+                                        Questions; Contacting Satoshi.ART;
+                                        Reporting Violations.
+                                    </b>{' '}
+                                    If you have any questions or concerns or
+                                    complaints about our Privacy Policy or our
+                                    data collection or processing practices, or
+                                    if you want to report any security
+                                    violations to us, please contact us at{' '}
                                     <a href="mailto:info@satoshi.art">
                                         info@satoshi.art
                                     </a>
@@ -581,31 +583,35 @@ export default function Privacy(): JSX.Element {
                                     Privacy Policy.
                                     <span>
                                         <p>
-                                            <i>7.1.</i> Third Party Service
-                                            Providers. We may share your
-                                            Personal Data with third party
-                                            service providers to: provide you
-                                            with the Services that we offer you
-                                            through our Service; to conduct
-                                            quality assurance testing; to
-                                            facilitate creation of accounts; to
-                                            provide technical support; and/or to
-                                            provide other services to the
+                                            <i>7.1.</i>
+                                            <u>
+                                                Third Party Service Providers.{' '}
+                                            </u>
+                                            We may share your Personal Data with
+                                            third party service providers to:
+                                            provide you with the Services that
+                                            we offer you through our Service; to
+                                            conduct quality assurance testing;
+                                            to facilitate creation of accounts;
+                                            to provide technical support; and/or
+                                            to provide other services to the
                                             Satoshi.ART.
                                         </p>
                                         <p>
-                                            <i>7.2.</i> Affiliates. We may share
-                                            some or all of your Personal Data
-                                            with our parent company,
-                                            subsidiaries, joint ventures, or
-                                            other companies under a common
-                                            control (“Affiliates”), in which
-                                            case we will require our Affiliates
-                                            to honor this Privacy Policy.
+                                            <i>7.2.</i> <u>Affiliates.</u> We
+                                            may share some or all of your
+                                            Personal Data with our parent
+                                            company, subsidiaries, joint
+                                            ventures, or other companies under a
+                                            common control (“Affiliates”), in
+                                            which case we will require our
+                                            Affiliates to honor this Privacy
+                                            Policy.
                                         </p>
                                         <p>
-                                            <i>7.3.</i> Corporate Restructuring.
-                                            We may share some or all of your
+                                            <i>7.3.</i>{' '}
+                                            <u>Corporate Restructuring.</u> We
+                                            may share some or all of your
                                             Personal Data in connection with or
                                             during negotiation of any merger,
                                             financing, acquisition or
@@ -626,7 +632,8 @@ export default function Privacy(): JSX.Element {
                                             this Privacy Policy.
                                         </p>
                                         <p>
-                                            <i>7.4.</i> As Legally Required.
+                                            <i>7.4.</i>
+                                            <u>As Legally Required.</u>{' '}
                                             Regardless of any choices you make
                                             regarding your Personal Data (as
                                             described below), Satoshi.ART may
@@ -646,13 +653,14 @@ export default function Privacy(): JSX.Element {
                                             Privacy Policy, or our Terms of Use.
                                         </p>
                                         <p>
-                                            <i>7.5.</i> Other Disclosures. We
-                                            may also disclose your Personal
-                                            Data, to fulfill the purpose for
-                                            which you provide it; for any other
-                                            purpose disclosed by us when you
-                                            provide it; or with your consent. We
-                                            do not sell your Personal Data.
+                                            <i>7.5.</i>{' '}
+                                            <u>Other Disclosures.</u> We may
+                                            also disclose your Personal Data, to
+                                            fulfill the purpose for which you
+                                            provide it; for any other purpose
+                                            disclosed by us when you provide it;
+                                            or with your consent. We do not sell
+                                            your Personal Data.
                                         </p>
                                     </span>
                                 </p>
@@ -662,12 +670,9 @@ export default function Privacy(): JSX.Element {
                             <div className={classes.listPrivacy}>
                                 <p>
                                     <i>8. </i>
-                                    <b>
-                                        Third Party Websites. Our Service may
-                                        contain
-                                    </b>
-                                    links to third party websites. When you
-                                    click on a link to any other website or
+                                    <b>Third Party Websites.</b> Our Service may
+                                    contain links to third party websites. When
+                                    you click on a link to any other website or
                                     location, you will leave our Service and go
                                     to another site, and another entity may
                                     collect Personal Data or Anonymous Data from
