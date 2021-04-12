@@ -338,20 +338,30 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             return
         }
         setIsSubmitModal(true)
-        const formData = new FormData()
-        formData.append('files', data.file[0])
+
+        const fileFormData = new FormData()
+        const coverFormData = new FormData()
+
+        fileFormData.append('files', data.file[0])
+        const filesPromises = [uploadFile(fileFormData)]
+
         if (data.cover) {
-            formData.append('files', data.cover[0])
+            coverFormData.append('files', data.cover[0])
+            filesPromises.push(uploadFile(coverFormData))
         }
-        const [fileResponse, coverResponse] = await uploadFile(formData)
+
+        const [fileResponse, coverResponse]: Array<any> = await Promise.all(
+            filesPromises
+        )
+
         const type = isSingle ? TokenType.SINGLE : TokenType.MULTIPLE
         const metadata = {
             name: data.name,
             description: data.description,
             copiesCount: data.copiesCount,
             royalties: data.royalties,
-            file: fileResponse.url,
-            cover: coverResponse ? coverResponse.url : undefined,
+            file: fileResponse[0].url,
+            cover: coverResponse ? coverResponse[0].url : undefined,
         }
 
         const metaResponse: TempTokenData = await uploadMetaData(
