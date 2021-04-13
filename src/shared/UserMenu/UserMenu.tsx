@@ -9,15 +9,15 @@ import { AppState } from 'state'
 import { permittedToUseWalletSelector } from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import {
     CopyIcon,
     BalanceIcon,
     // ProfileIcon,
-    // ItemsIcon,
-    // DisconnectIcon,
+    ItemsIcon,
+    DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
 
@@ -27,11 +27,11 @@ import useStyles from './UserMenu.styled'
     /*TODO: Add relevant links path and Fix metamask-LOCK(disconnect) functionality   */
 }
 
-// const userLinks = [
-//     { title: 'My items', icon: <ItemsIcon /> },
-//     { title: 'Edit Profile', icon: <ProfileIcon /> },
-//     { title: 'Disconnect', icon: <DisconnectIcon /> },
-// ]
+const userLinks = [
+    { title: 'My items', icon: <ItemsIcon /> },
+    // { title: 'Edit Profile', icon: <ProfileIcon /> },
+    { title: 'Disconnect', icon: <DisconnectIcon /> },
+]
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
@@ -113,16 +113,16 @@ const UserMenu = (): JSX.Element | null => {
                             </div>
                         </li>
                     </ul>
-                    {/*<ul className={classes.links}>*/}
-                    {/*    {userLinks.map((link, index) => (*/}
-                    {/*        <li key={index}>*/}
-                    {/*            <Link to="/">*/}
-                    {/*                {link.icon}*/}
-                    {/*                <span>{link.title}</span>*/}
-                    {/*            </Link>*/}
-                    {/*        </li>*/}
-                    {/*    ))}*/}
-                    {/*</ul>*/}
+                    <ul className={classes.links}>
+                        {userLinks.map((link, index) => (
+                            <li key={index}>
+                                <Link to="/">
+                                    {link.icon}
+                                    <span>{link.title}</span>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </Popover>
         </div>

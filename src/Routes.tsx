@@ -77,16 +77,19 @@ function Routes(): JSX.Element {
                 <DevelopRoute path="/drop-of-the-day">
                     <DropOfTheDay />
                 </DevelopRoute>
-                <DevelopRoute path="/productpage">
+                <Route path="/productpage">
                     <Product />
-                </DevelopRoute>
-                <DevelopRoute path="/dashboard/order-list">
+                </Route>
+                <Route path="/dashboard/order-list">
                     <OrderList />
-                </DevelopRoute>
+                </Route>
                 <PrivateRoute exact path="/create-collectible">
                     <CreateCollectibleType />
                 </PrivateRoute>
-                <PrivateRoute exact path="/create-collectible/:type(multiple)/">
+                <PrivateRoute
+                    exact
+                    path="/create-collectible/:type(single|multiple)/"
+                >
                     <CreateCollectible />
                 </PrivateRoute>
                 <Route>
