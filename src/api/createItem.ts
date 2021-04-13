@@ -15,13 +15,15 @@ export const uploadFile = (formData: FormData): Promise<Array<any>> =>
 export const uploadMetaData = (
     metadata: MetaDataType,
     walletHash: string,
-    type: string
+    type: string,
+    thumbnail?: string
 ): Promise<any> =>
     axios.post('/metadata', {
         payload: metadata,
         walletHash,
         type,
         status: 'pending',
+        thumbnail,
     })
 
 export const updateMetaData = (id: string, tx_hash: string): Promise<void> =>

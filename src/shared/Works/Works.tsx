@@ -32,69 +32,75 @@ export default function WorksList({
     return (
         <div>
             <div className={classes.grid}>
-                {tokens.map(({ metadata: { payload, type }, id }) => {
-                    return (
-                        <div className={classes.work} key={id}>
-                            <div className={classes.imagePresentation}>
-                                <img
-                                    src={payload.cover ?? payload.file}
-                                    style={{
-                                        borderRadius:
-                                            variant === 'rounded' ? 30 : 0,
-                                    }}
-                                    className={classes.preview}
-                                    alt={payload.description}
-                                />
-                            </div>
-                            <div
-                                className={classes.info}
-                                style={{ borderWidth }}
-                            >
-                                {/*<div className={classes.authorAvatar}>*/}
-                                {/*    <Avatar*/}
-                                {/*        size={60}*/}
-                                {/*        image={artistAvatar}*/}
-                                {/*        alt="User name"*/}
-                                {/*        status="premium"*/}
-                                {/*    />*/}
-                                {/*</div>*/}
-                                <div className={classes.infoHead}>
-                                    <h2 className={classes.name}>
-                                        {payload.name}
-                                    </h2>
-                                    {/*<div className={classes.actionButtons}>*/}
-                                    {/*    <IconButton*/}
-                                    {/*        className={classes.actionButton}*/}
-                                    {/*    >*/}
-                                    {/*        <SaveIcon />*/}
-                                    {/*    </IconButton>*/}
-                                    {/*    <IconButton*/}
-                                    {/*        className={classes.actionButton}*/}
-                                    {/*    >*/}
-                                    {/*        <ViewsIcon />*/}
-                                    {/*    </IconButton>*/}
+                {tokens.map(
+                    ({ metadata: { payload, type, thumbnail }, id }) => {
+                        return (
+                            <div className={classes.work} key={id}>
+                                <div className={classes.imagePresentation}>
+                                    <img
+                                        src={
+                                            thumbnail ??
+                                            payload.cover ??
+                                            payload.file
+                                        }
+                                        style={{
+                                            borderRadius:
+                                                variant === 'rounded' ? 30 : 0,
+                                        }}
+                                        className={classes.preview}
+                                        alt={payload.description}
+                                    />
+                                </div>
+                                <div
+                                    className={classes.info}
+                                    style={{ borderWidth }}
+                                >
+                                    {/*<div className={classes.authorAvatar}>*/}
+                                    {/*    <Avatar*/}
+                                    {/*        size={60}*/}
+                                    {/*        image={artistAvatar}*/}
+                                    {/*        alt="User name"*/}
+                                    {/*        status="premium"*/}
+                                    {/*    />*/}
                                     {/*</div>*/}
-                                </div>
-                                {/*<div className={classes.authorInfo}>*/}
-                                {/*    <a href="">@Fimbim</a> 124.56x3 ETH*/}
-                                {/*</div>*/}
-                                <div className={classes.workInfo}>
-                                    {/*0.25 ETH*/}
-                                    <span className={classes.count}>
-                                        {type === 'multiple'
-                                            ? `${payload.copiesCount} of ${payload.copiesCount}`
-                                            : '1 of 1'}
-                                    </span>
-                                    {/*<Button className={classes.bidButton}>*/}
-                                    {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
-                                    {/*        {t('placeABid')}*/}
-                                    {/*    </TextGradient>*/}
-                                    {/*</Button>*/}
+                                    <div className={classes.infoHead}>
+                                        <h2 className={classes.name}>
+                                            {payload.name}
+                                        </h2>
+                                        {/*<div className={classes.actionButtons}>*/}
+                                        {/*    <IconButton*/}
+                                        {/*        className={classes.actionButton}*/}
+                                        {/*    >*/}
+                                        {/*        <SaveIcon />*/}
+                                        {/*    </IconButton>*/}
+                                        {/*    <IconButton*/}
+                                        {/*        className={classes.actionButton}*/}
+                                        {/*    >*/}
+                                        {/*        <ViewsIcon />*/}
+                                        {/*    </IconButton>*/}
+                                        {/*</div>*/}
+                                    </div>
+                                    {/*<div className={classes.authorInfo}>*/}
+                                    {/*    <a href="">@Fimbim</a> 124.56x3 ETH*/}
+                                    {/*</div>*/}
+                                    <div className={classes.workInfo}>
+                                        {/*0.25 ETH*/}
+                                        <span className={classes.count}>
+                                            {type === 'multiple'
+                                                ? `${payload.copiesCount} of ${payload.copiesCount}`
+                                                : '1 of 1'}
+                                        </span>
+                                        {/*<Button className={classes.bidButton}>*/}
+                                        {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
+                                        {/*        {t('placeABid')}*/}
+                                        {/*    </TextGradient>*/}
+                                        {/*</Button>*/}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )
-                })}
+                        )
+                    }
+                )}
             </div>
 
             {isLoading ? (

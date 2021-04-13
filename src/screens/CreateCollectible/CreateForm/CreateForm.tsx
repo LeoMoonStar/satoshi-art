@@ -355,6 +355,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         )
 
         const type = isSingle ? TokenType.SINGLE : TokenType.MULTIPLE
+
+        const thumbnail =
+            coverResponse?.[0]?.formats?.medium?.url ??
+            fileResponse?.[0]?.formats?.medium?.url
+
         const metadata = {
             name: data.name,
             description: data.description,
@@ -367,7 +372,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         const metaResponse: TempTokenData = await uploadMetaData(
             metadata,
             account,
-            type
+            type,
+            thumbnail
         )
 
         setTempToken(metaResponse)
