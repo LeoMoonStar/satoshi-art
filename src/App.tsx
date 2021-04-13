@@ -19,6 +19,7 @@ export function Updaters(): null {
 }
 
 function App(): JSX.Element {
+    //phase 2
     return (
         <React.StrictMode>
             <ThemeProvider theme={theme}>
