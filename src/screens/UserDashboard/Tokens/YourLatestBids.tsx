@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
+import { useTranslation } from 'react-i18next'
 
 import { ViewsIcon, EditIcon, TrashIcon } from 'shared/icons'
 import preview from 'shared/images/artist/work.jpg'
@@ -21,6 +22,7 @@ const mockTokens = Array.from({ length: 24 }, (index) => ({
 
 const RenderCardContent = () => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <>
@@ -39,7 +41,7 @@ const RenderCardContent = () => {
                     <div>
                         <ViewsIcon />
                     </div>
-                    <span>View bid</span>
+                    <span>{t('viewBid')}</span>
                 </button>
                 <button
                     type="button"
@@ -48,7 +50,7 @@ const RenderCardContent = () => {
                     <div>
                         <EditIcon />
                     </div>
-                    <span>Edit bid</span>
+                    <span>{t('editBid')}</span>
                 </button>
                 <button
                     type="button"
@@ -57,7 +59,7 @@ const RenderCardContent = () => {
                     <div>
                         <TrashIcon />
                     </div>
-                    <span>Cancel bid</span>
+                    <span>{t('cancelBid')}</span>
                 </button>
             </div>
         </>
@@ -65,8 +67,10 @@ const RenderCardContent = () => {
 }
 
 export default function YourLatestBids(): JSX.Element {
+    const { t } = useTranslation()
+
     return (
-        <TokensSlider title="Your Latest Bids">
+        <TokensSlider title={t('yourLatestBids')}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}

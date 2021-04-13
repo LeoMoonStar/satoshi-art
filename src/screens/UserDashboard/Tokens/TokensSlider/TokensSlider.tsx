@@ -1,6 +1,7 @@
 import React from 'react'
 import { SpecialSliderArrowIcon } from 'shared/icons'
 import Slider from 'react-slick'
+import { useTranslation } from 'react-i18next'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
@@ -79,6 +80,7 @@ export default function TokensSlider({
     children,
 }: TokensSliderProps): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.container}>
@@ -88,7 +90,7 @@ export default function TokensSlider({
                     className={classes.viewAllButton}
                     variantCustom="action"
                 >
-                    View All
+                    {t('viewAll')}
                 </Button>
             </div>
             <div className={classes.sliderRow}>

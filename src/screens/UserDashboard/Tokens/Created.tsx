@@ -1,4 +1,7 @@
 import React, { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { IconButton } from '@material-ui/core'
+import { Popover } from '@material-ui/core'
 
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
@@ -6,8 +9,6 @@ import preview from 'shared/images/artist/work.jpg'
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
-import { IconButton } from '@material-ui/core'
-import { Popover } from '@material-ui/core'
 
 const mockTokens = Array.from({ length: 24 }, (index) => ({
     id: index,
@@ -24,6 +25,7 @@ const RenderCardContent = () => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
     const anchorElRef = useRef()
+    const { t } = useTranslation()
 
     return (
         <>
@@ -57,19 +59,19 @@ const RenderCardContent = () => {
                                 <div>
                                     <PriceIcon />
                                 </div>
-                                Set a price
+                                {t('setAPrice')}
                             </button>
                             <button type="button">
                                 <div>
                                     <TransferIcon />
                                 </div>
-                                Transfer token
+                                {t('transferToken')}
                             </button>
                             <button type="button">
                                 <div>
                                     <BurnIcon />
                                 </div>
-                                Burn token
+                                {t('burnToken')}
                             </button>
                         </div>
                     </Popover>
@@ -84,8 +86,10 @@ const RenderCardContent = () => {
 }
 
 export default function Created(): JSX.Element {
+    const { t } = useTranslation()
+
     return (
-        <TokensSlider title="Created">
+        <TokensSlider title={t('created')}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}

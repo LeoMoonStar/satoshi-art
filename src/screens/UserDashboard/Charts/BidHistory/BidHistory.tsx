@@ -1,12 +1,6 @@
 import React from 'react'
-import {
-    AreaChart,
-    Area,
-    XAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-} from 'recharts'
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { useTranslation } from 'react-i18next'
 
 import useStyles from './BidHistory.style'
 
@@ -62,10 +56,10 @@ const data = [
     },
 ]
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active }: any) => {
     const classes = useStyles()
 
-    if (!active || !payload?.length) {
+    if (!active) {
         return null
     }
 
@@ -81,12 +75,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export default function BidHistory(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.container}>
             <div className={classes.head}>
                 <div className={classes.intro}>
-                    <h3 className={classes.mainTitle}>Bid History</h3>
+                    <h3 className={classes.mainTitle}>{t('bidHistory')}</h3>
                     <div className={classes.helpText}>
                         Lorem ipsum dolor sit amet, consectetur adipisicing
                         elit. Aliquid, blanditiis!

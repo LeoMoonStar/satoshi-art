@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { PieChart, Pie, ResponsiveContainer } from 'recharts'
+import { useTranslation } from 'react-i18next'
+
 import Checkbox from 'shared/Checkbox'
 
 import useStyles from './PieChart.style'
@@ -9,9 +11,9 @@ import IconButton from '@material-ui/core/IconButton'
 import { Popover } from '@material-ui/core'
 
 const items = [
-    { value: 81, color: '#FF0099', subTitle: 'Total\nOrder' },
-    { value: 22, color: '#00C2FF', subTitle: 'Customer\nGrowth' },
-    { value: 62, color: '#FFE600', subTitle: 'Total Revenue' },
+    { value: 81, color: '#FF0099', subTitle: 'totalOrder' },
+    { value: 22, color: '#00C2FF', subTitle: 'customerGrowth' },
+    { value: 62, color: '#FFE600', subTitle: 'totalRevenue' },
 ]
 
 type PieCardProps = {
@@ -21,10 +23,13 @@ type PieCardProps = {
 }
 
 const PieCard = ({ color, value, subTitle }: PieCardProps) => {
+    const { t } = useTranslation()
+
     const data = [
         { value: 100 - value, fill: `${color}15` },
         { value: value, fill: color },
     ]
+
     return (
         <>
             <ResponsiveContainer width="100%" aspect={1}>
@@ -43,7 +48,7 @@ const PieCard = ({ color, value, subTitle }: PieCardProps) => {
                     />
                 </PieChart>
             </ResponsiveContainer>
-            <b>{subTitle}</b>
+            <b>{t(subTitle)}</b>
         </>
     )
 }
@@ -52,21 +57,22 @@ export default function PieCharts(): JSX.Element {
     const classes = useStyles()
     const anchorElRef = useRef()
     const [isOpen, setOpen] = useState<boolean>(false)
+    const { t } = useTranslation()
 
     return (
         <div className={classes.container}>
             <div className={classes.head}>
                 <div className={classes.intro}>
-                    <h3 className={classes.mainTitle}>Pie Chart</h3>
+                    <h3 className={classes.mainTitle}>{t('pieChart')}</h3>
                 </div>
                 <div className={classes.checkboxGroup}>
                     <label htmlFor="chart">
                         <Checkbox id="chart" />
-                        Chart
+                        {t('chart')}
                     </label>
                     <label htmlFor="showValue">
                         <Checkbox id="showValue" />
-                        Show Value
+                        {t('showValue')}
                     </label>
                     <IconButton
                         className={classes.showMoreButton}

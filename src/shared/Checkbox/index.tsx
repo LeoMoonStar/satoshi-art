@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import MUICheckbox, { CheckboxProps } from '@material-ui/core/Checkbox'
+
 const useStyles = makeStyles(() => {
     const commonStyles: Record<string, string | number> = {
         position: 'relative',

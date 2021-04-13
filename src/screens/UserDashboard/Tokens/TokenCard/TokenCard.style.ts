@@ -10,12 +10,6 @@ const useStyles = makeStyles(() => {
             padding: '0 17px 24px',
             borderRadius: 10,
             margin: '0 8px',
-            pointerEvents: 'none',
-            touchEvents: 'none',
-            '& > div': {
-                pointerEvents: 'initial',
-                touchEvents: 'initial',
-            },
         },
         tokenName: {
             margin: '16px 0 12px',

@@ -36,6 +36,7 @@ const useStyles = makeStyles(() => {
                 left: 'initial',
                 width: 36,
                 height: 36,
+                zIndex: 2,
                 border: '1px solid #E5E5E5',
                 borderRadius: '50%',
                 '&:before': {
@@ -57,6 +58,8 @@ const useStyles = makeStyles(() => {
             },
         },
         viewAllButton: {
+            position: 'relative',
+            zIndex: 2,
             marginRight: 96,
             minWidth: 97,
         },

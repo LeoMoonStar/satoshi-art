@@ -25,7 +25,7 @@ import useStyles from './UserMenu.styled'
 }
 
 const userLinks = [
-    { title: 'My items', icon: <ItemsIcon /> },
+    { title: 'My items', href: '/dashboard/user', icon: <ItemsIcon /> },
     // { title: 'Edit Profile', icon: <ProfileIcon /> },
     // { title: 'Disconnect', icon: <DisconnectIcon /> },
 ]
@@ -110,7 +110,7 @@ const UserMenu = (): JSX.Element | null => {
                     <ul className={classes.links}>
                         {userLinks.map((link, index) => (
                             <li key={index}>
-                                <Link to="/">
+                                <Link to={link.href}>
                                     {link.icon}
                                     <span>{link.title}</span>
                                 </Link>

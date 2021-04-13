@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import Avatar from 'shared/Avatar'
 import Button from 'shared/Button'
@@ -14,6 +15,7 @@ const items: number[] = Array.from(
 
 const Item = () => {
     const classes = useStyles()
+    const { t } = useTranslation()
 
     return (
         <div className={classes.item}>
@@ -25,7 +27,7 @@ const Item = () => {
                         variantCustom="outlinedLink"
                         className={classes.followingButton}
                     >
-                        Following
+                        {t('followingBtn')}
                     </Button>
                 </div>
                 <div className={classes.location}>Berlin, Germany</div>
@@ -53,27 +55,29 @@ const Item = () => {
 
 export default function Collections(): JSX.Element {
     const classes = useStyles()
+    const { t } = useTranslation()
+
     return (
         <div className={classes.container}>
             <div className={classes.col}>
-                <h2 className={classes.title}>Following</h2>
+                <h2 className={classes.title}>{t('following')}</h2>
                 <div className={classes.items}>
                     {items.map((item) => (
                         <Item key={item} />
                     ))}
                     <Button variantCustom="action" className={classes.viewAll}>
-                        View All
+                        {t('viewAll')}
                     </Button>
                 </div>
             </div>
             <div className={classes.col}>
-                <h2 className={classes.title}>Followers</h2>
+                <h2 className={classes.title}>{t('followers')}</h2>
                 <div className={classes.items}>
                     {items.map((item) => (
                         <Item key={item} />
                     ))}
                     <Button variantCustom="action" className={classes.viewAll}>
-                        View All
+                        {t('viewAll')}
                     </Button>
                 </div>
             </div>

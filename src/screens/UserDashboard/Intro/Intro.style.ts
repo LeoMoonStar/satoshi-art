@@ -69,6 +69,9 @@ const useStyles = makeStyles(() => {
                 backgroundColor: '#FF0099',
                 borderRadius: '50%',
             },
+            '&  .react-datepicker__day--in-selecting-range:not(.react-datepicker__day--selected)': {
+                opacity: '0.7',
+            },
             '& .react-datepicker__day--outside-month': {
                 color: '#BDBDBD',
             },

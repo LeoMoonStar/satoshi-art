@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import DatePicker from 'react-datepicker'
 import { IconButton } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import { CalendarIcon } from 'shared/icons/dashboard'
 import { AngleDownIcon, RoundedAngleLeftIcon } from 'shared/icons'
@@ -36,6 +37,7 @@ export default function CardsStatistics(): JSX.Element {
     const [endDate, setEndDate] = useState<Date>(new Date())
     const [isOpenFilter, setOpenFilter] = useState<boolean>(false)
     const anchorElRef: React.RefObject<HTMLDivElement> = useRef(null)
+    const { t } = useTranslation()
 
     const onChange = (dates: [Date, Date]): void => {
         const [start, end] = dates
@@ -56,9 +58,9 @@ export default function CardsStatistics(): JSX.Element {
     return (
         <div className={classes.container}>
             <div>
-                <div className={classes.mainTitle}>Dashboard</div>
+                <div className={classes.mainTitle}>{t('dashboard')}</div>
                 <div className={classes.subTitle}>
-                    Hi, Jown. Welcome back to your dashboard.
+                    {t('hiWelcomeBackToDashboard', { name: 'Jown' })}
                 </div>
             </div>
             <div
@@ -71,7 +73,7 @@ export default function CardsStatistics(): JSX.Element {
                 </div>
                 <div>
                     <div className={classes.datepickerTitle}>
-                        Filter Period
+                        {t('filterPeriod')}
                         <AngleDownIcon />
                     </div>
                     <div className={classes.timeRange}>
@@ -142,14 +144,14 @@ export default function CardsStatistics(): JSX.Element {
                             className={classes.cancelBtn}
                             onClick={handleCancel}
                         >
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button
                             onClick={handleDone}
                             className={classes.doneBtn}
                             variantCustom="action"
                         >
-                            Done
+                            {t('done')}
                         </Button>
                     </div>
                 </div>

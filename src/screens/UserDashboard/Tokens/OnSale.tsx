@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { IconButton } from '@material-ui/core'
 import { Popover } from '@material-ui/core'
+import { useTranslation } from 'react-i18next'
 
 import { ShowMoreIcon } from 'shared/icons'
 import {
@@ -29,6 +30,7 @@ const RenderCardContent = () => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
     const anchorElRef = useRef()
+    const { t } = useTranslation()
 
     return (
         <>
@@ -62,25 +64,25 @@ const RenderCardContent = () => {
                                 <div>
                                     <EditIcon />
                                 </div>
-                                Change price
+                                {t('changePrice')}
                             </button>
                             <button type="button">
                                 <div>
                                     <RemoveIcon />
                                 </div>
-                                Remove from sale
+                                {t('removeFromSale')}
                             </button>
                             <button type="button">
                                 <div>
                                     <TransferIcon />
                                 </div>
-                                Transfer token
+                                {t('transferToken')}
                             </button>
                             <button type="button">
                                 <div>
                                     <BurnIcon />
                                 </div>
-                                Burn token
+                                {t('burnToken')}
                             </button>
                         </div>
                     </Popover>
@@ -97,8 +99,10 @@ const RenderCardContent = () => {
 }
 
 export default function OnSale(): JSX.Element {
+    const { t } = useTranslation()
+
     return (
-        <TokensSlider title="On Sale">
+        <TokensSlider title={t('onSale')}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
@@ -24,6 +25,7 @@ const RenderCardContent = () => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
     const anchorElRef = useRef()
+    const { t } = useTranslation()
 
     return (
         <>
@@ -57,19 +59,19 @@ const RenderCardContent = () => {
                                 <div>
                                     <PriceIcon />
                                 </div>
-                                Set a price
+                                {t('setAPrice')}
                             </button>
                             <button type="button">
                                 <div>
                                     <TransferIcon />
                                 </div>
-                                Transfer token
+                                {t('transferToken')}
                             </button>
                             <button type="button">
                                 <div>
                                     <BurnIcon />
                                 </div>
-                                Burn token
+                                {t('burnToken')}
                             </button>
                         </div>
                     </Popover>
@@ -84,8 +86,10 @@ const RenderCardContent = () => {
 }
 
 export default function Collections(): JSX.Element {
+    const { t } = useTranslation()
+
     return (
-        <TokensSlider title="Collections">
+        <TokensSlider title={t('collections')}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}
