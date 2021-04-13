@@ -10,6 +10,16 @@ const useStyles = makeStyles((theme) => {
             borderRadius: 20,
             padding: '27px 41px 0 39px',
         },
+        error: {
+            textAlign: 'center',
+            color: 'red !important',
+            fontWeight: 400,
+            fontSize: 14,
+        },
+        tryAgain: {
+            display: 'block',
+            margin: '0 auto',
+        },
         title: {
             color: theme.custom.common.blackColor,
             fontSize: 30,
@@ -54,17 +64,17 @@ const useStyles = makeStyles((theme) => {
             '&:first-child': {
                 marginTop: 0,
             },
-            '& .MuiButton-root': {
-                width: '100%',
-                height: 40,
-                padding: 0,
-                borderRadius: 60,
-                background: '#C4C4C4',
-                textTransform: 'none',
-                fontWeight: 600,
-                fontSize: 13,
-                color: '#ffffff',
-            },
+        },
+        disableButton: {
+            width: '100%',
+            height: 40,
+            padding: 0,
+            borderRadius: 60,
+            background: '#C4C4C4',
+            textTransform: 'none',
+            fontWeight: 600,
+            fontSize: 13,
+            color: '#ffffff',
         },
         stepDescription: {
             display: 'flex',

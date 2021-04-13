@@ -5,6 +5,7 @@ export type Token = {
     id: string
     metadata: {
         type: TokenType
+        thumbnail?: string
         payload: {
             name: string
             copiesCount: string // todo: Probably should has totalCount and currentCount

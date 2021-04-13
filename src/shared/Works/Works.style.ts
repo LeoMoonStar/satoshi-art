@@ -12,11 +12,18 @@ const useStyles = makeStyles(() => ({
         marginBottom: 46,
     },
     preview: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
         width: '100%',
-        //add height for alignment name of token, probably will need to change it later
-        height: 400,
+        height: '100%',
         objectFit: 'cover',
-        aspectRatio: '16:12',
+    },
+    imagePresentation: {
+        position: 'relative',
+        width: '100%',
+        height: 1,
+        paddingBottom: '78%',
     },
     authorInfo: {
         width: '100%',

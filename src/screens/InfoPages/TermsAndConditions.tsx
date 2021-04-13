@@ -27,6 +27,8 @@ export default function Privacy(): JSX.Element {
                         {t('terms:lastUpdate')}
                     </div>
                     <b>{t('terms:warning')}</b>
+                    <br />
+                    <br />
                     <ul>
                         <li>
                             <h2>{t('terms:title1')}</h2>
@@ -196,6 +198,7 @@ export default function Privacy(): JSX.Element {
                                         i: <i />,
                                         span: <span />,
                                         br: <br />,
+                                        u: <u />,
                                     }}
                                 />
                             </div>

@@ -5,3 +5,6 @@ export const updateBlockNumber = createAction<number>('app/updateBlockNumber')
 export const changeWhitelistedStatus = createAction<boolean>(
     'app/changeWhitelistedStatus'
 )
+export const changePermittedToUseWallet = createAction<boolean>(
+    'app/changePermittedToUseWallet'
+)

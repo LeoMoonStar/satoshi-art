@@ -4,6 +4,10 @@ import { ethers } from 'ethers'
 import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
+import { useSelector } from 'react-redux'
+
+import { AppState } from 'state'
+import { permittedToUseWalletSelector } from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
 // import { Link } from 'react-router-dom'
@@ -32,15 +36,17 @@ const userLinks = [
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
-    const isAuthorized = localStorage.getItem('isAuthorized')
     const anchorElRef = useRef<HTMLDivElement>(null)
     const [isOpen, setOpen] = useState<boolean>(false)
     const [balance, setBalance] = useState('')
     const { account, library } = useWeb3React<Web3Provider>()
+    const isWalletPermitted = useSelector<AppState, boolean>(
+        permittedToUseWalletSelector
+    )
 
     useEffect(() => {
         async function getBalance() {
-            if (library && account && isAuthorized) {
+            if (library && account && isWalletPermitted) {
                 const userEthBalance = await library.getBalance(account)
                 setBalance(
                     ethers.utils.formatEther(userEthBalance).substring(0, 5)
@@ -48,14 +54,15 @@ const UserMenu = (): JSX.Element | null => {
             }
         }
         getBalance()
-    }, [account, library, isAuthorized])
+    }, [account, library, isWalletPermitted])
 
     const userAddress = useMemo(() => {
         if (!!account) {
             return shortAddress(account, 10)
         }
     }, [account])
-    if (!isAuthorized || !account) {
+
+    if (!account || !isWalletPermitted) {
         return null
     }
 

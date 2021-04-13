@@ -1,7 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import { LogoIcon } from 'shared/icons'
-// import artistStatus from 'shared/images/artist/artistStatus.png'
+import artistStatus from 'shared/images/artist/artistStatus.png'
 import useStyles from './Avatar.style'
 
 type AvatarProps = {
@@ -34,12 +34,11 @@ export default function Avatar({
                 onClick={onClick}
             >
                 {status && (
-                    <LogoIcon className={classes.image} />
-                    // <img
-                    //     className={classes.status}
-                    //     src={artistStatus}
-                    //     alt={status}
-                    // />
+                    <img
+                        className={classes.status}
+                        src={artistStatus}
+                        alt={status}
+                    />
                 )}
                 <LogoIcon className={classes.image} />
                 {/*<img className={classes.image} src={image} alt={alt} />*/}
