@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => {
             fontWeight: 600,
         },
         subTitle: {
-            color: '##C4C4C4',
+            color: '#C4C4C4',
         },
         datepickerFieldGroup: {
             position: 'relative',
@@ -42,19 +42,13 @@ const useStyles = makeStyles(() => {
             backgroundColor: '#FF009915',
         },
         modal: {
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-            marginTop: 5,
             width: 278,
             minHeight: 298,
+            marginTop: 5,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             flexWrap: 'wrap',
-            border: '1px solid #E5E5E5',
-            borderRadius: 9,
-            backgroundColor: '#fff',
             '& .react-datepicker': {
                 border: 0,
             },
@@ -127,6 +121,11 @@ const useStyles = makeStyles(() => {
             '& svg': {
                 transform: 'rotateZ(180deg)',
             },
+        },
+        controlsPaper: {
+            border: '1px solid #E5E5E5',
+            borderRadius: 9,
+            backgroundColor: '#fff',
         },
     }
 })

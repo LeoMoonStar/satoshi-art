@@ -3,9 +3,9 @@ import React, { useState, useRef } from 'react'
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
 import preview from 'shared/images/artist/work.jpg'
-import useStyles from './Created.style'
-import TokensSlider from '../TokensSlider'
-import TokenCard from '../TokenCard'
+import useStyles from './Tokens.style'
+import TokensSlider from './TokensSlider'
+import TokenCard from './TokenCard'
 import { IconButton } from '@material-ui/core'
 import { Popover } from '@material-ui/core'
 
@@ -83,7 +83,7 @@ const RenderCardContent = () => {
     )
 }
 
-export default function Collections(): JSX.Element {
+export default function Created(): JSX.Element {
     return (
         <TokensSlider title="Created">
             {mockTokens.map((token: any) => (

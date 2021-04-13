@@ -1,18 +1,13 @@
 import React, { useState, useRef } from 'react'
-import { IconButton } from '@material-ui/core'
-import { Popover } from '@material-ui/core'
 
 import { ShowMoreIcon } from 'shared/icons'
-import {
-    EditIcon,
-    RemoveIcon,
-    TransferIcon,
-    BurnIcon,
-} from 'shared/icons/dashboard'
+import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
 import preview from 'shared/images/artist/work.jpg'
-import useStyles from './OnSale.style'
-import TokensSlider from '../TokensSlider'
-import TokenCard from '../TokenCard'
+import useStyles from './Tokens.style'
+import TokensSlider from './TokensSlider'
+import TokenCard from './TokenCard'
+import { IconButton } from '@material-ui/core'
+import { Popover } from '@material-ui/core'
 
 const mockTokens = Array.from({ length: 24 }, (index) => ({
     id: index,
@@ -60,15 +55,9 @@ const RenderCardContent = () => {
                         <div className={classes.controlsButtons}>
                             <button type="button">
                                 <div>
-                                    <EditIcon />
+                                    <PriceIcon />
                                 </div>
-                                Change price
-                            </button>
-                            <button type="button">
-                                <div>
-                                    <RemoveIcon />
-                                </div>
-                                Remove from sale
+                                Set a price
                             </button>
                             <button type="button">
                                 <div>
@@ -86,9 +75,7 @@ const RenderCardContent = () => {
                     </Popover>
                 </IconButton>
             </div>
-            <div className={classes.count}>
-                <span>0,44 ETH</span> 1 of 30
-            </div>
+            <div className={classes.count}>1 of 30</div>
             <div className={classes.highestBid}>
                 Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>
             </div>
@@ -96,9 +83,9 @@ const RenderCardContent = () => {
     )
 }
 
-export default function OnSale(): JSX.Element {
+export default function Collections(): JSX.Element {
     return (
-        <TokensSlider title="On Sale">
+        <TokensSlider title="Collections">
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}

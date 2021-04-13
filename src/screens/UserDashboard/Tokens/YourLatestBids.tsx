@@ -1,12 +1,12 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
 import { ViewsIcon, EditIcon, TrashIcon } from 'shared/icons'
 import preview from 'shared/images/artist/work.jpg'
-import useStyles from './YourLatestBids.style'
-import TokensSlider from '../TokensSlider'
-import TokenCard from '../TokenCard'
+import useStyles from './Tokens.style'
+import TokensSlider from './TokensSlider'
+import TokenCard from './TokenCard'
 
 const mockTokens = Array.from({ length: 24 }, (index) => ({
     id: index,
@@ -24,7 +24,9 @@ const RenderCardContent = () => {
 
     return (
         <>
-            <h3 className={classes.tokenName}>Fresh MEar #F</h3>
+            <div className={classes.head}>
+                <h3 className={classes.tokenName}>Fresh MEar #F</h3>
+            </div>
             <div className={classes.userInfo}>
                 <Link to="/">@Fimbim</Link>
                 <span>124.56x3 ETH</span>

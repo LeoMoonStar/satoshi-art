@@ -4,15 +4,14 @@ const useStyles = makeStyles(() => {
     return {
         container: {
             width: '100%',
-            display: 'flex',
-            alignItems: 'center',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 30,
             margin: '32px 0',
         },
         col: {
-            flex: 1,
-            '&:not(:first-child)': {
-                marginLeft: 30,
-            },
+            // flex: 1,
+            display: 'flex',
         },
     }
 })

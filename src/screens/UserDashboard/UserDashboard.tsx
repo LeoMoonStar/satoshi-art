@@ -6,13 +6,10 @@ import useStyles from './UserDashboard.style'
 
 import CardsStatistics from './CardsStatistics'
 import Intro from './Intro'
-import YourLatestBids from './Tokens/YourLatestBids'
-import OnSale from './Tokens/OnSale'
-import Collections from './Tokens/Collections'
-import FollowingAndFollowers from './Tokens/FollowingAndFollowers'
+import { Collections, Created, OnSale, YourLatestBids } from './Tokens'
+import FollowingAndFollowers from './FollowingAndFollowers'
 import Charts from './Charts'
 
-// todo: Remove useless files in Tokens dir
 export default function UserDashboard(): JSX.Element {
     const classes = useStyles()
 
@@ -25,6 +22,7 @@ export default function UserDashboard(): JSX.Element {
                 <YourLatestBids />
                 <OnSale />
                 <Collections />
+                <Created />
                 <FollowingAndFollowers />
             </div>
         </DashboardLayout>

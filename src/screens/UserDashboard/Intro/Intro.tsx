@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import DatePicker from 'react-datepicker'
 import { IconButton } from '@material-ui/core'
 
@@ -7,6 +7,7 @@ import { AngleDownIcon, RoundedAngleLeftIcon } from 'shared/icons'
 import Button from 'shared/Button'
 
 import useStyles from './Intro.style'
+import { Popover } from '@material-ui/core'
 
 const months = [
     'January',
@@ -29,13 +30,12 @@ const convertDateToSting = (date: Date): string => {
     return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
 }
 
-// todo: maybe use popover for the period filter popup
-
 export default function CardsStatistics(): JSX.Element {
     const classes = useStyles()
-    const [isOpen, setOpen] = useState<boolean>(false)
     const [startDate, setStartDate] = useState<Date>(new Date())
     const [endDate, setEndDate] = useState<Date>(new Date())
+    const [isOpenFilter, setOpenFilter] = useState<boolean>(false)
+    const anchorElRef: React.RefObject<HTMLDivElement> = useRef(null)
 
     const onChange = (dates: [Date, Date]): void => {
         const [start, end] = dates
@@ -45,12 +45,12 @@ export default function CardsStatistics(): JSX.Element {
 
     const handleDone = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.stopPropagation()
-        setOpen(false)
+        setOpenFilter(false)
     }
 
     const handleCancel = (e: React.MouseEvent<HTMLButtonElement>): void => {
         e.stopPropagation()
-        setOpen(false)
+        setOpenFilter(false)
     }
 
     return (
@@ -63,7 +63,8 @@ export default function CardsStatistics(): JSX.Element {
             </div>
             <div
                 className={classes.datepickerFieldGroup}
-                onClick={() => setOpen(true)}
+                onClick={() => setOpenFilter(true)}
+                ref={anchorElRef}
             >
                 <div className={classes.dateIcon}>
                     <CalendarIcon />
@@ -78,68 +79,81 @@ export default function CardsStatistics(): JSX.Element {
                         {convertDateToSting(endDate)}
                     </div>
                 </div>
-                {isOpen && (
-                    <div className={classes.modal}>
-                        <DatePicker
-                            renderCustomHeader={({
-                                date,
-                                decreaseMonth,
-                                increaseMonth,
-                                prevMonthButtonDisabled,
-                                nextMonthButtonDisabled,
-                            }: any): JSX.Element => {
-                                return (
-                                    <div
-                                        className={
-                                            classes.customDatePickerHeader
-                                        }
-                                    >
-                                        <IconButton
-                                            onClick={decreaseMonth}
-                                            disabled={prevMonthButtonDisabled}
-                                        >
-                                            <RoundedAngleLeftIcon />
-                                        </IconButton>
-
-                                        <div className={classes.month}>
-                                            {months[date.getMonth()]}
-                                        </div>
-
-                                        <IconButton
-                                            className={classes.nextArrow}
-                                            onClick={increaseMonth}
-                                            disabled={nextMonthButtonDisabled}
-                                        >
-                                            <RoundedAngleLeftIcon />
-                                        </IconButton>
-                                    </div>
-                                )
-                            }}
-                            selected={startDate}
-                            onChange={onChange}
-                            startDate={startDate}
-                            endDate={endDate}
-                            selectsRange
-                            inline
-                        />
-                        <div className={classes.buttonsRow}>
-                            <Button
-                                className={classes.cancelBtn}
-                                onClick={handleCancel}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                onClick={handleDone}
-                                className={classes.doneBtn}
-                                variantCustom="action"
-                            >
-                                Done
-                            </Button>
-                        </div>
-                    </div>
-                )}
             </div>
+
+            <Popover
+                anchorEl={anchorElRef?.current}
+                classes={{
+                    paper: classes.controlsPaper,
+                }}
+                open={isOpenFilter}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                onClose={() => setOpenFilter(false)}
+                disableRestoreFocus
+            >
+                <div className={classes.modal}>
+                    <DatePicker
+                        renderCustomHeader={({
+                            date,
+                            decreaseMonth,
+                            increaseMonth,
+                            prevMonthButtonDisabled,
+                            nextMonthButtonDisabled,
+                        }: any): JSX.Element => {
+                            return (
+                                <div className={classes.customDatePickerHeader}>
+                                    <IconButton
+                                        onClick={decreaseMonth}
+                                        disabled={prevMonthButtonDisabled}
+                                    >
+                                        <RoundedAngleLeftIcon />
+                                    </IconButton>
+
+                                    <div className={classes.month}>
+                                        {months[date.getMonth()]}
+                                    </div>
+
+                                    <IconButton
+                                        className={classes.nextArrow}
+                                        onClick={increaseMonth}
+                                        disabled={nextMonthButtonDisabled}
+                                    >
+                                        <RoundedAngleLeftIcon />
+                                    </IconButton>
+                                </div>
+                            )
+                        }}
+                        selected={startDate}
+                        onChange={onChange}
+                        startDate={startDate}
+                        endDate={endDate}
+                        selectsRange
+                        inline
+                    />
+                    <div className={classes.buttonsRow}>
+                        <Button
+                            className={classes.cancelBtn}
+                            onClick={handleCancel}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleDone}
+                            className={classes.doneBtn}
+                            variantCustom="action"
+                        >
+                            Done
+                        </Button>
+                    </div>
+                </div>
+            </Popover>
         </div>
     )
 }

@@ -62,6 +62,23 @@ const data = [
     },
 ]
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+    const classes = useStyles()
+
+    if (!active || !payload?.length) {
+        return null
+    }
+
+    return (
+        <div className={classes.customToolTip}>
+            <b className={classes.customToolTipTitle}>456 Order</b>
+            <div className={classes.customToolTipDescription}>
+                Oct 18th, 2020
+            </div>
+        </div>
+    )
+}
+
 export default function BidHistory(): JSX.Element {
     const classes = useStyles()
 
@@ -106,9 +123,8 @@ export default function BidHistory(): JSX.Element {
                             />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <Tooltip />
+                    <XAxis strokeWidth={0} dataKey="name" />
+                    <Tooltip content={<CustomTooltip />} />
                     <Area
                         type="monotone"
                         dataKey="uv"
