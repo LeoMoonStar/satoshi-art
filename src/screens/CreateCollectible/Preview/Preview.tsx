@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-// import Avatar from 'shared/Avatar'
-// import avatar from 'shared/images/artist/avatar.jpg'
+import Avatar from 'shared/Avatar'
+import avatar from 'shared/images/artist/avatar.jpg'
 import useStyles from './Preview.style'
 
 type PreviewProps = {
@@ -15,11 +15,7 @@ type PreviewProps = {
     isSingle: boolean
 }
 
-const Preview = ({
-    // isSingle,
-    fileSrc,
-    fields,
-}: PreviewProps): JSX.Element => {
+const Preview = ({ isSingle, fileSrc, fields }: PreviewProps): JSX.Element => {
     const classes = useStyles()
     const { t } = useTranslation()
     const isFieldsNotEmpty = Object.values(fields).some((field) => field)
@@ -30,11 +26,11 @@ const Preview = ({
                 <div className={classes.previewArea}>
                     {fileSrc || isFieldsNotEmpty ? (
                         <div className={classes.content}>
-                            {/*<div className={classes.references}>*/}
-                            {/*    <Avatar size={26} image={avatar} alt="John" />*/}
-                            {/*    <Avatar size={26} image={avatar} alt="John" />*/}
-                            {/*    <Avatar size={26} image={avatar} alt="John" />*/}
-                            {/*</div>*/}
+                            <div className={classes.references}>
+                                <Avatar size={26} image={avatar} alt="John" />
+                                <Avatar size={26} image={avatar} alt="John" />
+                                <Avatar size={26} image={avatar} alt="John" />
+                            </div>
                             <div className={classes.previewImgWrapper}>
                                 {fileSrc && (
                                     <img src={fileSrc} alt="preview-image" />
@@ -42,21 +38,21 @@ const Preview = ({
                             </div>
                             <div className={classes.previewDscr}>
                                 <div>{fields.name}</div>
-                                {/*<div>*/}
-                                {/*    {fields.price*/}
-                                {/*        ? fields.price*/}
-                                {/*        : 'Not for sale'}{' '}*/}
-                                {/*    {isSingle ? (*/}
-                                {/*        <span>1 of 1</span>*/}
-                                {/*    ) : (*/}
-                                {/*        <span>*/}
-                                {/*            {fields.copiesCount*/}
-                                {/*                ? `${fields.copiesCount} of ${fields.copiesCount}`*/}
-                                {/*                : '0 in stock'}*/}
-                                {/*        </span>*/}
-                                {/*    )}*/}
-                                {/*</div>*/}
-                                {/*<div> {t('noBidsYet')}</div>*/}
+                                <div>
+                                    {fields.price
+                                        ? fields.price
+                                        : 'Not for sale'}{' '}
+                                    {isSingle ? (
+                                        <span>1 of 1</span>
+                                    ) : (
+                                        <span>
+                                            {fields.copiesCount
+                                                ? `${fields.copiesCount} of ${fields.copiesCount}`
+                                                : '0 in stock'}
+                                        </span>
+                                    )}
+                                </div>
+                                <div> {t('noBidsYet')}</div>
                             </div>
                         </div>
                     ) : (
