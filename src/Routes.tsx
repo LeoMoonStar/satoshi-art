@@ -81,7 +81,7 @@ function Routes(): JSX.Element {
                 <DevelopRoute path="/drop-of-the-day">
                     <DropOfTheDay />
                 </DevelopRoute>
-                <DevelopRoute path="/productpage">
+                <DevelopRoute path="/product/:id">
                     <Product />
                 </DevelopRoute>
                 <DevelopRoute path="/dashboard/order-list">

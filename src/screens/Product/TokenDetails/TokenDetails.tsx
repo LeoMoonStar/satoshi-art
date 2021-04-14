@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     styled,
     Grid,
@@ -8,9 +8,12 @@ import {
     Tabs,
     Theme,
 } from '@material-ui/core'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SaveIcon, ExpandIcon } from 'shared/icons'
 import Button from 'shared/Button'
+import Loader from 'shared/Loader'
+import { getToken, Token } from 'api/tokens'
 import { TokenInfo } from './TokenInfo'
 import BidModal from './BidModal'
 import BuyModal from './BuyModal'
@@ -74,12 +77,29 @@ const TokenDetails = (): JSX.Element => {
     const [isBidModal, setBidModal] = useState<boolean>(false)
     const [isBuyModal, setBuyModal] = useState<boolean>(false)
     const [isFSModal, setFSModal] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const [token, setToken] = useState<Token | null>(null)
     const [isProgressModal, setIsProgressModal] = useState<boolean>(false)
+    const { id } = useParams<{ id: string }>()
+    console.log(id)
     const classes = useStyles()
     const { t } = useTranslation()
+    useEffect(() => {
+        async function tryGetToken() {
+            const data = await getToken(id)
+            setLoading(false)
+            setToken(data)
+        }
+
+        tryGetToken()
+    }, [id])
 
     const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => {
         selectTab(newValue)
+    }
+
+    if (isLoading) {
+        return <Loader />
     }
     return (
         <div className={classes.container}>
@@ -87,15 +107,15 @@ const TokenDetails = (): JSX.Element => {
                 <div className={classes.imageWrapper}>
                     <img
                         className={classes.tokenImage}
-                        src={productImgSrc}
+                        src={token?.metadata.payload.file}
                         alt={'Token image'}
                     />
                     <div className={classes.iconsContainer}>
-                        <IconWrapper item alignItems="center" justify="center">
-                            <IconButton>
-                                <SaveIcon />
-                            </IconButton>
-                        </IconWrapper>
+                        {/*<IconWrapper item alignItems="center" justify="center">*/}
+                        {/*    <IconButton>*/}
+                        {/*        <SaveIcon />*/}
+                        {/*    </IconButton>*/}
+                        {/*</IconWrapper>*/}
                         <IconWrapper
                             onClick={() => setFSModal(true)}
                             item
@@ -162,7 +182,9 @@ const TokenDetails = (): JSX.Element => {
                     <Typography variant="h6" className={classes.artLabel}>
                         ART
                     </Typography>
-                    <Typography variant="h1">Dream Candy</Typography>
+                    <Typography variant="h1">
+                        {token?.metadata.payload.name}
+                    </Typography>
                     <div className={classes.tokenPriceContainer}>
                         <Typography variant="h2">1.00 ETH</Typography>
                         <Typography
@@ -174,7 +196,8 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                     <div className={classes.descriptionContainer}>
                         <Typography variant="h4">
-                            {t('thereIsNoDscr')}
+                            {token?.metadata.payload.description ||
+                                t('thereIsNoDscr')}
                         </Typography>
                     </div>
                 </div>
@@ -279,9 +302,9 @@ const TokenDetails = (): JSX.Element => {
                     onClose={() => setBuyModal(false)}
                 />
             )}
-            {isFSModal && (
+            {isFSModal && token && (
                 <FSModal
-                    src={productImgSrc}
+                    src={token.metadata.payload.file}
                     onClose={() => setFSModal(false)}
                 />
             )}
