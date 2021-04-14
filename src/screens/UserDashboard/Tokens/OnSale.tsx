@@ -102,7 +102,7 @@ export default function OnSale(): JSX.Element {
     const { t } = useTranslation()
 
     return (
-        <TokensSlider title={t('onSale')}>
+        <TokensSlider title={t('onSale')} count={mockTokens.length}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}

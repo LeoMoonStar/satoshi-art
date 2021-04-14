@@ -89,7 +89,7 @@ export default function Created(): JSX.Element {
     const { t } = useTranslation()
 
     return (
-        <TokensSlider title={t('created')}>
+        <TokensSlider title={t('created')} count={mockTokens.length}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}
