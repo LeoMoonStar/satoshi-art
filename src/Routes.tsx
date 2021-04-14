@@ -25,6 +25,8 @@ import {
     TermsAndConditions,
     CookiePrivacy,
 } from 'screens/InfoPages'
+import Collection from 'screens/Collection'
+
 import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
 
 const PrivateRoute = (props: RouteProps) => {
@@ -92,6 +94,9 @@ function Routes(): JSX.Element {
                 <Route>
                     <Home />
                 </Route>
+                <DevelopRoute path="/collections/:id">
+                    <Collection />
+                </DevelopRoute>
             </Switch>
         </BrowserRouter>
     )
