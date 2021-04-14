@@ -32,7 +32,10 @@ export const useUserWhiteListChecking = (): void => {
     const { account } = useWeb3React()
 
     useEffect(() => {
-        if (!account) return
+        if (!account) {
+            dispatch(changeWhitelistedStatus(false))
+            return
+        }
 
         checkUserWhitelisted(account).then((res) => {
             dispatch(changeWhitelistedStatus(res.isWhitelisted))

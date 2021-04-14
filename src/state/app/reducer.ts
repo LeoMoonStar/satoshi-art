@@ -3,18 +3,21 @@ import {
     changeLoggedWith,
     updateBlockNumber,
     changeWhitelistedStatus,
+    changePermittedToUseWallet,
 } from './actions'
 
 export interface AppState {
     loggedInWith: string
     blockNumber?: number
     isWhitelisted: boolean
+    isPermittedToUseWallet: boolean
 }
 
 const initialState: AppState = {
     loggedInWith: '',
     blockNumber: undefined,
     isWhitelisted: false,
+    isPermittedToUseWallet: false,
 }
 
 export default createReducer(initialState, (app) => {
@@ -26,5 +29,8 @@ export default createReducer(initialState, (app) => {
         })
         .addCase(changeWhitelistedStatus, (state, action) => {
             state.isWhitelisted = action.payload
+        })
+        .addCase(changePermittedToUseWallet, (state, action) => {
+            state.isPermittedToUseWallet = action.payload
         })
 })
