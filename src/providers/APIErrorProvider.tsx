@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 
 type ErrorType = {
     title: string
@@ -7,13 +7,13 @@ type ErrorType = {
 
 export type APIErrorContextProps = {
     error: ErrorType | null
-    addError: (title: string, message: string) => void
+    setError: (title: string, message: string) => void
     removeError: () => void
 }
 
 export const APIErrorContext = React.createContext<APIErrorContextProps>({
     error: null,
-    addError: () => undefined,
+    setError: () => undefined,
     removeError: () => undefined,
 })
 
@@ -22,18 +22,22 @@ export default function APIErrorProvider({
 }: {
     children: React.ReactNode
 }): JSX.Element {
-    const [error, setError] = useState<ErrorType | null>(null)
+    const [error, updateError] = useState<ErrorType | null>(null)
 
-    const removeError = () => setError(null)
+    const setError = useCallback(
+        (title: string, message: string) => updateError({ title, message }),
+        []
+    )
 
-    const addError = (title: string, message: string) =>
-        setError({ title, message })
+    const removeError = useCallback(() => updateError(null), [])
 
-    const contextValue = {
-        error,
-        addError: useCallback((title, message) => addError(title, message), []),
-        removeError: useCallback(() => removeError(), []),
-    }
+    const contextValue = useMemo(() => {
+        return {
+            error,
+            setError,
+            removeError,
+        }
+    }, [error, setError, removeError])
 
     return (
         <APIErrorContext.Provider value={contextValue}>

@@ -5,6 +5,6 @@ import {
 } from 'providers/APIErrorProvider'
 
 export function useAPIError(): APIErrorContextProps {
-    const { error, addError, removeError } = useContext(APIErrorContext)
-    return { error, addError, removeError }
+    const { error, setError, removeError } = useContext(APIErrorContext)
+    return { error, setError, removeError }
 }

@@ -163,7 +163,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const history = useHistory()
     const { t } = useTranslation()
     const { account, library, chainId } = useWeb3React<Web3Provider>()
-    const { addError } = useAPIError()
+    const { setError } = useAPIError()
     const erc721NetworkData = useSmartContractNetworkData(chainId)
     const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
@@ -325,7 +325,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         try {
             return await Promise.all(files)
         } catch (e) {
-            addError('Upload files', e.data?.data?.errors?.[0].message)
+            setError('Upload files', e.data?.data?.errors?.[0].message)
             setIsSubmitModal(false)
         }
     }
