@@ -16,7 +16,7 @@ import {
     BalanceIcon,
     // ProfileIcon,
     ItemsIcon,
-    // DisconnectIcon,
+    DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
 
@@ -29,7 +29,7 @@ import useStyles from './UserMenu.styled'
 const userLinks = [
     { title: 'My items', href: '/dashboard/user', icon: <ItemsIcon /> },
     // { title: 'Edit Profile', icon: <ProfileIcon /> },
-    // { title: 'Disconnect', icon: <DisconnectIcon /> },
+    { title: 'Disconnect', href: '#', icon: <DisconnectIcon /> },
 ]
 
 const UserMenu = (): JSX.Element | null => {
