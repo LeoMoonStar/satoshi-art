@@ -3,8 +3,8 @@ import React from 'react'
 import Layout from 'shared/Layout'
 
 // import DropOfTheDay from './DropOfTheDay'
-// import TopSellersAndBuyers from './TopSellersAndBuyers'
-// import Tops from './Tops'
+import TopSellersAndBuyers from './TopSellersAndBuyers'
+import Tops from './Tops'
 // import Iterators from './Iterators'
 
 import PopularWorks from './PopularWorks'
@@ -19,8 +19,8 @@ function Home(): JSX.Element {
             <Intro />
             {/*<DropOfTheDay />*/}
             {/*<Iterators />*/}
-            {/*<TopSellersAndBuyers />*/}
-            {/*<Tops />*/}
+            <TopSellersAndBuyers />
+            <Tops />
             <PopularWorks />
         </Layout>
     )
