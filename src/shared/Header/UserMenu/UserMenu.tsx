@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react'
 import { IconButton, Popover } from '@material-ui/core'
 import { ethers } from 'ethers'
+import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useSelector } from 'react-redux'
@@ -9,15 +10,13 @@ import { AppState } from 'state'
 import { permittedToUseWalletSelector } from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
-import { Link } from 'react-router-dom'
-
 import Avatar from 'shared/Avatar'
 import {
     CopyIcon,
     BalanceIcon,
     // ProfileIcon,
     ItemsIcon,
-    DisconnectIcon,
+    // DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
 
@@ -28,9 +27,9 @@ import useStyles from './UserMenu.styled'
 }
 
 const userLinks = [
-    { title: 'My items', icon: <ItemsIcon /> },
+    { title: 'My items', href: '/dashboard/user', icon: <ItemsIcon /> },
     // { title: 'Edit Profile', icon: <ProfileIcon /> },
-    { title: 'Disconnect', icon: <DisconnectIcon /> },
+    // { title: 'Disconnect', icon: <DisconnectIcon /> },
 ]
 
 const UserMenu = (): JSX.Element | null => {
@@ -116,7 +115,7 @@ const UserMenu = (): JSX.Element | null => {
                     <ul className={classes.links}>
                         {userLinks.map((link, index) => (
                             <li key={index}>
-                                <Link to="/">
+                                <Link to={link.href}>
                                     {link.icon}
                                     <span>{link.title}</span>
                                 </Link>

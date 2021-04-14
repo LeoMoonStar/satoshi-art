@@ -26,6 +26,7 @@ import {
     CookiePrivacy,
 } from 'screens/InfoPages'
 import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
+import UserDashboard from './screens/UserDashboard'
 
 const PrivateRoute = (props: RouteProps) => {
     const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
@@ -68,6 +69,9 @@ function Routes(): JSX.Element {
                 <Route path="/terms-and-conditions">
                     <TermsAndConditions />
                 </Route>
+                <DevelopRoute path="/dashboard/user">
+                    <UserDashboard />
+                </DevelopRoute>
                 <DevelopRoute path="/artists/:id">
                     <Artist />
                 </DevelopRoute>

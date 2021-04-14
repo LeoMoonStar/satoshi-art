@@ -6,13 +6,9 @@ const useStyles = makeStyles(() => {
             width: '100%',
             maxWidth: '100%',
             display: 'flex',
-        },
-        sideBar: {
-            minWidth: 259,
-        },
-        content: {
-            display: 'flex',
-            width: 'calc(100% - 259px)',
+            flexWrap: 'wrap',
+            boxSizing: 'border-box',
+            paddingRight: 36,
         },
     }
 })

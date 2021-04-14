@@ -4,16 +4,16 @@ const useStyles = makeStyles(() => {
     return {
         container: {
             width: '100%',
-            maxWidth: '100%',
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 30,
+            margin: '32px 0',
         },
-        sideBar: {
-            minWidth: 259,
-        },
-        content: {
+        col: {
+            // flex: 1,
             display: 'flex',
-            width: 'calc(100% - 259px)',
         },
     }
 })
+
 export default useStyles
