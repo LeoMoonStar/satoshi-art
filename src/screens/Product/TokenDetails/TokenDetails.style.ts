@@ -10,12 +10,15 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'row',
             marginBottom: 57,
         },
-        imageWrapper: {
+        fileWrapper: {
             position: 'relative',
-        },
-        tokenImage: {
             width: 885,
-            height: 710,
+            height: 709,
+            '& > *': {
+                width: '100%',
+                height: 'auto',
+                maxHeight: 709,
+            },
         },
         iconsContainer: {
             display: 'flex',

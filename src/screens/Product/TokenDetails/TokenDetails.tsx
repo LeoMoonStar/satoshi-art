@@ -10,9 +10,13 @@ import {
 } from '@material-ui/core'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { SaveIcon, ExpandIcon } from 'shared/icons'
+import { ExpandIcon } from 'shared/icons'
 import Button from 'shared/Button'
 import Loader from 'shared/Loader'
+import {
+    VALID_VIDEO_TYPES,
+    VALID_AUDIO_TYPES,
+} from 'constants/supportedFileTypes'
 import { getToken, Token } from 'api/tokens'
 import { TokenInfo } from './TokenInfo'
 import BidModal from './BidModal'
@@ -69,9 +73,6 @@ const tabs = [
     },
 ]
 
-const productImgSrc =
-    'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg'
-
 const TokenDetails = (): JSX.Element => {
     const [tab, selectTab] = useState(TabVariants.INFO)
     const [isBidModal, setBidModal] = useState<boolean>(false)
@@ -81,10 +82,12 @@ const TokenDetails = (): JSX.Element => {
     const [token, setToken] = useState<Token | null>(null)
     const [isProgressModal, setIsProgressModal] = useState<boolean>(false)
     const { id } = useParams<{ id: string }>()
-    console.log(id)
     const classes = useStyles()
     const { t } = useTranslation()
+
     useEffect(() => {
+        window.scrollTo(0, 0)
+
         async function tryGetToken() {
             const data = await getToken(id)
             setLoading(false)
@@ -98,48 +101,67 @@ const TokenDetails = (): JSX.Element => {
         selectTab(newValue)
     }
 
+    const renderIcons = () => (
+        <div className={classes.iconsContainer}>
+            {/*<IconWrapper item alignItems="center" justify="center">*/}
+            {/*    <IconButton>*/}
+            {/*        <SaveIcon />*/}
+            {/*    </IconButton>*/}
+            {/*</IconWrapper>*/}
+            <IconWrapper
+                onClick={() => setFSModal(true)}
+                item
+                alignItems="center"
+                justify="center"
+            >
+                <IconButton>
+                    <ExpandIcon />
+                </IconButton>
+            </IconWrapper>
+            {/* TODO: Hidden for MVP */}
+            {/*
+            <IconWrapper
+                item
+                alignItems="center"
+                justify="center"
+                dots={true}
+            >
+                <IconButton>
+                    <DotsIcon />
+                </IconButton>
+            </IconWrapper>
+            */}
+        </div>
+    )
+
+    const renderSwitch = (url: string) => {
+        const extension = url.split('.').pop()
+        if (extension) {
+            switch (true) {
+                case VALID_VIDEO_TYPES.includes(extension):
+                    return <video src={url} controls />
+                case VALID_AUDIO_TYPES.includes(extension):
+                    return <audio src={url} controls />
+                default:
+                    return (
+                        <>
+                            <img src={url} />
+                            {renderIcons()}
+                        </>
+                    )
+            }
+        }
+    }
+
     if (isLoading) {
         return <Loader />
     }
+
     return (
         <div className={classes.container}>
             <div>
-                <div className={classes.imageWrapper}>
-                    <img
-                        className={classes.tokenImage}
-                        src={token?.metadata.payload.file}
-                        alt={'Token image'}
-                    />
-                    <div className={classes.iconsContainer}>
-                        {/*<IconWrapper item alignItems="center" justify="center">*/}
-                        {/*    <IconButton>*/}
-                        {/*        <SaveIcon />*/}
-                        {/*    </IconButton>*/}
-                        {/*</IconWrapper>*/}
-                        <IconWrapper
-                            onClick={() => setFSModal(true)}
-                            item
-                            alignItems="center"
-                            justify="center"
-                        >
-                            <IconButton>
-                                <ExpandIcon />
-                            </IconButton>
-                        </IconWrapper>
-                        {/* TODO: Hidden for MVP */}
-                        {/*
-                        <IconWrapper
-                            item
-                            alignItems="center"
-                            justify="center"
-                            dots={true}
-                        >
-                            <IconButton>
-                                <DotsIcon />
-                            </IconButton>
-                        </IconWrapper>
-                        */}
-                    </div>
+                <div className={classes.fileWrapper}>
+                    {token && renderSwitch(token.metadata.payload.file)}
                 </div>
                 {/* TODO: Hidden for MVP */}
                 {/*<div className={classes.socialActivityContainer}>
