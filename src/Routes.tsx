@@ -44,7 +44,6 @@ const DevelopRoute = (props: RouteProps) => {
     if (process.env.REACT_APP_SPECIAL_MODE === 'production') {
         return <Redirect to="/" />
     }
-
     return <Route {...props} />
 }
 
@@ -73,6 +72,9 @@ function Routes(): JSX.Element {
                 <DevelopRoute path="/artists/:id">
                     <Artist />
                 </DevelopRoute>
+                <DevelopRoute path="/collections/:id">
+                    <Collection />
+                </DevelopRoute>
                 <DevelopRoute path="/search">
                     <Search />
                 </DevelopRoute>
@@ -94,9 +96,6 @@ function Routes(): JSX.Element {
                 <Route>
                     <Home />
                 </Route>
-                <DevelopRoute path="/collections/:id">
-                    <Collection />
-                </DevelopRoute>
             </Switch>
         </BrowserRouter>
     )
