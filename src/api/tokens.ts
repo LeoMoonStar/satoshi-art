@@ -16,6 +16,13 @@ export type Token = {
     }
 }
 
-export const getTokens = (): Promise<Token[]> => {
-    return axios.get('/products')
+type getTokensProps = {
+    sort: string
+}
+export const getTokens = ({ sort }: getTokensProps): Promise<Token[]> => {
+    return axios.get('/products', {
+        params: {
+            _sort: sort,
+        },
+    })
 }
