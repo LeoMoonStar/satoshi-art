@@ -10,7 +10,7 @@ import { AppState } from 'state'
 import { permittedToUseWalletSelector } from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import {

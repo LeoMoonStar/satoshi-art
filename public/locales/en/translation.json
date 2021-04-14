@@ -201,6 +201,7 @@
   "oopsSomethingWentWrong": "Oops, something went wrong",
   "pleaseTryConnectYourWalletManually": "Please try to connect your wallet manually via MetaMask extension.",
   "tryAgain": "Try again",
+  "youHaveClosedMetamask": "You’ve closed MetaMask",
   "hiWelcomeBackToDashboard": "Hi, {{name}}. Welcome back to your dashboard.",
   "filterPeriod": "Filter Period",
   "done": "Done",
