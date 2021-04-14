@@ -69,9 +69,9 @@ function Routes(): JSX.Element {
                 <Route path="/terms-and-conditions">
                     <TermsAndConditions />
                 </Route>
-                <DevelopRoute path="/dashboard/user">
+                <PrivateRoute path="/dashboard/user">
                     <UserDashboard />
-                </DevelopRoute>
+                </PrivateRoute>
                 <DevelopRoute path="/artists/:id">
                     <Artist />
                 </DevelopRoute>

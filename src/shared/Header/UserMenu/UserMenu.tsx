@@ -7,7 +7,10 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useSelector } from 'react-redux'
 
 import { AppState } from 'state'
-import { permittedToUseWalletSelector } from 'state/app/selectors'
+import {
+    permittedToUseWalletAndWhiteListedSelector,
+    permittedToUseWalletSelector,
+} from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
 // import { Link } from 'react-router-dom'
@@ -42,6 +45,9 @@ const UserMenu = (): JSX.Element | null => {
     const { account, library } = useWeb3React<Web3Provider>()
     const isWalletPermitted = useSelector<AppState, boolean>(
         permittedToUseWalletSelector
+    )
+    const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
+        permittedToUseWalletAndWhiteListedSelector
     )
 
     useEffect(() => {
@@ -114,16 +120,18 @@ const UserMenu = (): JSX.Element | null => {
                             </div>
                         </li>
                     </ul>
-                    <ul className={classes.links}>
-                        {userLinks.map((link, index) => (
-                            <li key={index}>
-                                <Link to={link.href}>
-                                    {link.icon}
-                                    <span>{link.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {isWhiteListedAndHasPermittedWallet && (
+                        <ul className={classes.links}>
+                            {userLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link to={link.href}>
+                                        {link.icon}
+                                        <span>{link.title}</span>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </Popover>
         </div>
