@@ -1,3 +1,4 @@
+import numeral from 'numeral'
 import { Web3Provider, ExternalProvider } from '@ethersproject/providers'
 
 export function getLibrary(provider: ExternalProvider): Web3Provider {
@@ -24,3 +25,13 @@ export const getKeyValue = <
     obj: T
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 ) => (key: U) => obj[key]
+
+export function convertEthToUsd(
+    value: number,
+    currency: number,
+    fee = 0.025,
+    format = '0,0.00'
+): string {
+    const amountInDollars = value * currency
+    return numeral(amountInDollars - amountInDollars * fee).format(format)
+}

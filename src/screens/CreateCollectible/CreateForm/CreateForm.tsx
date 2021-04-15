@@ -24,7 +24,7 @@ import * as yup from 'yup'
 import { useAPIError } from 'hooks/useAPIError'
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import { addTransaction, TokenType } from 'state/transactions/actions'
-import { percentageToBasicPoints } from 'utils/helpers'
+import { percentageToBasicPoints, convertEthToUsd } from 'utils/helpers'
 import {
     Engine1155ABI,
     Satoshi1155ABI,
@@ -185,6 +185,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const [createTokenError, setCreateTokenError] = useState<string>('')
+    const [currency, setCurrency] = useState<number>(1)
     const [tempToken, setTempToken] = useState<TempTokenData | null>(null)
     const {
         register,
@@ -208,6 +209,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const engineAddress = engine1155NetworkData?.address
 
     useEffect(() => {
+        async function getAndSetCurrency() {
+            const currency = await getCurrency()
+            if (currency) {
+                setCurrency(+currency)
+            }
+        }
+        getAndSetCurrency()
+    }, [])
+
+    useEffect(() => {
         if (isSingle) {
             if (library && erc721NetworkData) {
                 const address = erc721NetworkData.address
@@ -220,9 +231,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             }
         }
     }, [erc721NetworkData, isSingle, library])
-    useEffect(() => {
-        getCurrency()
-    }, [])
+
     useEffect(() => {
         if (!isSingle) {
             if (library && erc1155NetworkData && engine1155NetworkData) {
@@ -455,6 +464,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [isSubmitModal])
 
+    const { price } = previewFields
+
+    const ethAmount = price ? price - price * 0.025 : 0
+    const usdAmount = price ? convertEthToUsd(price, currency) : '0.00'
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -642,19 +655,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                             name="price"
                                             disableUnderline
                                         />
-                                        <span>
-                                            {' '}
-                                            {t('serviceFeeProgress', {
-                                                fee: '2.5',
-                                            })}
-                                        </span>
-                                        <span>
-                                            {t('youWillReceiveCnt', {
-                                                count: 0,
-                                                currency: 'ETH',
-                                                amount: '0,00',
-                                            })}
-                                        </span>
+                                        <div className={classes.priceInfo}>
+                                            <span>
+                                                {' '}
+                                                {t('serviceFeeProgress', {
+                                                    fee: '2.5',
+                                                })}
+                                            </span>
+                                            <span>
+                                                {t('youWillReceiveCnt', {
+                                                    count: ethAmount,
+                                                    currency: 'ETH',
+                                                    amount: usdAmount,
+                                                })}
+                                            </span>
+                                        </div>
                                         {errors.price && (
                                             <p className={classes.textError}>
                                                 {errors.price.message}
