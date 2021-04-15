@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css'
 
 import useStyles from './TokensSlider.style'
 import Button from 'shared/Button'
+import Loader from 'shared/Loader'
 
 const SliderLeft = ({ currentSlide, slideCount, ...props }: any) => {
     return (
@@ -73,31 +74,36 @@ const sliderConfig = {
 type TokensSliderProps = {
     title: string
     children: React.ReactNode
+    isLoading?: boolean
 }
 
 export default function TokensSlider({
     title,
     children,
+    isLoading = false,
 }: TokensSliderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
 
     return (
-        <div className={classes.container}>
-            <div className={classes.head}>
-                <h2 className={classes.mainTitle}>{title}</h2>
-                <Button
-                    className={classes.viewAllButton}
-                    variantCustom="action"
-                >
-                    {t('viewAll')}
-                </Button>
+        <>
+            <div className={classes.container}>
+                <div className={classes.head}>
+                    <h2 className={classes.mainTitle}>{title}</h2>
+                    <Button
+                        className={classes.viewAllButton}
+                        variantCustom="action"
+                    >
+                        {t('viewAll')}
+                    </Button>
+                </div>
+                <div className={classes.sliderRow}>
+                    <Slider className={classes.slider} {...sliderConfig}>
+                        {children}
+                    </Slider>
+                </div>
             </div>
-            <div className={classes.sliderRow}>
-                <Slider className={classes.slider} {...sliderConfig}>
-                    {children}
-                </Slider>
-            </div>
-        </div>
+            {isLoading && <Loader />}
+        </>
     )
 }

@@ -1,8 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWeb3React } from '@web3-react/core'
-
-import Loader from 'shared/Loader'
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
 import useStyles from './Tokens.style'
@@ -10,7 +7,8 @@ import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
 import { IconButton } from '@material-ui/core'
 import { Popover } from '@material-ui/core'
-import { getTokens, Token } from 'api/tokens'
+import { Token } from 'api/tokens'
+import preview from 'shared/images/artist/work.jpg'
 
 const RenderCardContent = ({ token }: { token: Token }) => {
     const classes = useStyles()
@@ -87,34 +85,29 @@ const RenderCardContent = ({ token }: { token: Token }) => {
     )
 }
 
+const mockTokens = Array.from({ length: 24 }, (index) => ({
+    id: index,
+    preview,
+    name: 'Fresh Meat #F',
+    author: {
+        image: '',
+        name: 'Fimbim',
+        price: '124.56x3 ETH',
+    },
+}))
+
 export default function Collections(): JSX.Element {
     const { t } = useTranslation()
-    const [tokens, setTokens] = useState<Token[]>([])
-    const [isLoading, setLoading] = useState<boolean>(true)
-    const { account } = useWeb3React()
 
-    useEffect(() => {
-        if (!account) {
-            return
-        }
-
-        getTokens(account).then((tokens) => {
-            setTokens(tokens)
-            setLoading(false)
-        })
-    }, [account])
     return (
-        <>
-            <TokensSlider title={t('collections')}>
-                {tokens.map((token: any) => (
-                    <TokenCard
-                        key={token._id}
-                        token={token}
-                        renderContent={RenderCardContent}
-                    />
-                ))}
-            </TokensSlider>
-            {isLoading && <Loader />}
-        </>
+        <TokensSlider title={t('collections')}>
+            {mockTokens.map((token: any) => (
+                <TokenCard
+                    key={token._id}
+                    token={token}
+                    renderContent={RenderCardContent}
+                />
+            ))}
+        </TokensSlider>
     )
 }

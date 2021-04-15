@@ -1,25 +1,15 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@material-ui/core'
 import { Popover } from '@material-ui/core'
 
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
-import preview from 'shared/images/artist/work.jpg'
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
-
-const mockTokens = Array.from({ length: 24 }, (index) => ({
-    id: index,
-    preview,
-    name: 'Fresh Meat #F',
-    author: {
-        image: '',
-        name: 'Fimbim',
-        price: '124.56x3 ETH',
-    },
-}))
+import { getTokens, Token } from 'api/tokens'
+import { useWeb3React } from '@web3-react/core'
 
 const RenderCardContent = () => {
     const classes = useStyles()
@@ -78,8 +68,8 @@ const RenderCardContent = () => {
                 </IconButton>
             </div>
             <div className={classes.count}>1 of 30</div>
-            <div className={classes.highestBid}>
-                Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>
+            <div className={classes.createdInfo}>
+                <a href="">@Coll3ctor</a> 1,995 ETH
             </div>
         </>
     )
@@ -87,16 +77,32 @@ const RenderCardContent = () => {
 
 export default function Created(): JSX.Element {
     const { t } = useTranslation()
+    const [tokens, setTokens] = useState<Token[]>([])
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const { account } = useWeb3React()
+
+    useEffect(() => {
+        if (!account) {
+            return
+        }
+
+        getTokens(account).then((tokens) => {
+            setTokens(tokens)
+            setLoading(false)
+        })
+    }, [account])
 
     return (
-        <TokensSlider title={t('created')}>
-            {mockTokens.map((token: any) => (
-                <TokenCard
-                    key={token.id}
-                    token={token}
-                    renderContent={RenderCardContent}
-                />
-            ))}
-        </TokensSlider>
+        <>
+            <TokensSlider isLoading={isLoading} title={t('created')}>
+                {tokens.map((token: any) => (
+                    <TokenCard
+                        key={token.id}
+                        token={token}
+                        renderContent={RenderCardContent}
+                    />
+                ))}
+            </TokensSlider>
+        </>
     )
 }

@@ -1,5 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles'
 
+const linkStyles = {
+    textDecoration: 'none',
+    color: '#8900FF ',
+    fontWeight: 600,
+    '&:hover': {
+        textDecoration: 'underline',
+    },
+}
+
 const useStyles = makeStyles(() => {
     return {
         head: {
@@ -13,14 +22,7 @@ const useStyles = makeStyles(() => {
             marginBottom: 20,
             fontSize: 9,
             color: '#7E7E7E',
-            '& a': {
-                fontWeight: 600,
-                color: '#8900FF',
-                textDecoration: 'none',
-                '&:hover': {
-                    textDecoration: 'none',
-                },
-            },
+            '& a': linkStyles,
         },
         controls: {
             width: '100%',
@@ -141,9 +143,13 @@ const useStyles = makeStyles(() => {
             marginBottom: 8,
             fontSize: 9,
             fontWeight: 600,
-            '& a': {
-                color: '#4D0ED2 ',
-            },
+            '& a': linkStyles,
+        },
+        createdInfo: {
+            fontSize: 9,
+            fontWeight: 400,
+            color: '#7E7E7E',
+            '& a': linkStyles,
         },
     }
 })
