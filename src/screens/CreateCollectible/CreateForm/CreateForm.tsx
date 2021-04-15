@@ -20,8 +20,7 @@ import { Controller, useForm } from 'react-hook-form'
 // import { LogoIcon, PlusCircle } from 'shared/icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import Preview from '../Preview'
-import ProgressModal from '../ProgressModal'
+
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import { addTransaction } from 'state/transactions/actions'
 import { percentageToBasicPoints } from 'utils/helpers'
@@ -38,6 +37,9 @@ import {
     updateMetaData,
     MetaDataType,
 } from 'api/createItem'
+import { getCurrency } from 'api/tokens'
+import Preview from '../Preview'
+import ProgressModal from '../ProgressModal'
 import useStyles from './CreateForm.style'
 
 type PropertyType = {
@@ -217,7 +219,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             }
         }
     }, [erc721NetworkData, isSingle, library])
-
+    useEffect(() => {
+        getCurrency()
+    }, [])
     useEffect(() => {
         if (!isSingle) {
             if (library && erc1155NetworkData && engine1155NetworkData) {
