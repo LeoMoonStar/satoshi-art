@@ -21,7 +21,7 @@ export default function PopularWorks(): JSX.Element {
 
     useEffect(() => {
         // todo: We should implement error handling
-        getTokens().then((res) => {
+        getTokens({ sort: 'published_at:desc' }).then((res) => {
             setTokens(res)
             setLoading(false)
         })
