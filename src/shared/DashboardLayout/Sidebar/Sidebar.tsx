@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { HouseIcon, OrderDetailsIcon, LogOutIcon } from 'shared/icons'
 import useStyles from './Sidebar.style'
+import useDisconnect from 'hooks/useDisconnect'
 
 const navItems = [
     {
@@ -23,6 +24,7 @@ const navItems = [
 function Header(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+    const handleDisconnect = useDisconnect()
 
     return (
         <div className={classes.container}>
@@ -38,7 +40,11 @@ function Header(): JSX.Element {
                         {t(label)}
                     </NavLink>
                 ))}
-                <button type="button" className={classes.navItem}>
+                <button
+                    type="button"
+                    onClick={handleDisconnect}
+                    className={classes.navItem}
+                >
                     {/* todo: change icon logOut to disconnect */}
                     <LogOutIcon />
                     {t('disconnect')}

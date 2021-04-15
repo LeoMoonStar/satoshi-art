@@ -4,6 +4,7 @@ import {
     updateBlockNumber,
     changeWhitelistedStatus,
     changePermittedToUseWallet,
+    disconnectAccount,
 } from './actions'
 
 export interface AppState {
@@ -33,4 +34,5 @@ export default createReducer(initialState, (app) => {
         .addCase(changePermittedToUseWallet, (state, action) => {
             state.isPermittedToUseWallet = action.payload
         })
+        .addCase(disconnectAccount, () => initialState)
 })

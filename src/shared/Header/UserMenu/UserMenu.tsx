@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 import { AppState } from 'state'
 import { permittedToUseWalletSelector } from 'state/app/selectors'
@@ -19,17 +20,13 @@ import {
     DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
+import useDisconnect from 'hooks/useDisconnect'
 
 import useStyles from './UserMenu.styled'
 
-{
-    /*TODO: Add relevant links path and Fix metamask-LOCK(disconnect) functionality   */
-}
-
 const userLinks = [
-    { title: 'My items', href: '/dashboard/user', icon: <ItemsIcon /> },
-    // { title: 'Edit Profile', icon: <ProfileIcon /> },
-    { title: 'Disconnect', href: '#', icon: <DisconnectIcon /> },
+    { title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> },
+    // { title: 'editProfile', icon: <ProfileIcon /> },
 ]
 
 const UserMenu = (): JSX.Element | null => {
@@ -41,6 +38,8 @@ const UserMenu = (): JSX.Element | null => {
     const isWalletPermitted = useSelector<AppState, boolean>(
         permittedToUseWalletSelector
     )
+    const { t } = useTranslation()
+    const handleDisconnect = useDisconnect()
 
     useEffect(() => {
         async function getBalance() {
@@ -117,10 +116,18 @@ const UserMenu = (): JSX.Element | null => {
                             <li key={index}>
                                 <Link to={link.href}>
                                     {link.icon}
-                                    <span>{link.title}</span>
+                                    <span>{t(link.title)}</span>
                                 </Link>
                             </li>
                         ))}
+                        <button
+                            type="button"
+                            className={classes.btnDisconnect}
+                            onClick={handleDisconnect}
+                        >
+                            <DisconnectIcon />
+                            {t('disconnect')}
+                        </button>
                     </ul>
                 </div>
             </Popover>

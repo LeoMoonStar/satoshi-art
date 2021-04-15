@@ -231,5 +231,7 @@
   "burnToken": "Burn token",
   "created": "Created",
   "setAPrice": "Set a price",
-  "collections": "Collections"
+  "collections": "Collections",
+  "myItems": "My Items",
+  "editProfile": "Edit Profile"
 }
