@@ -9,7 +9,7 @@ import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
 
-const mockTokens = Array.from({ length: 24 }, (index) => ({
+const mockTokens = Array.from({ length: 3 }, (index) => ({
     id: index,
     preview,
     name: 'Fresh Meat #F',
@@ -70,7 +70,7 @@ export default function YourLatestBids(): JSX.Element {
     const { t } = useTranslation()
 
     return (
-        <TokensSlider title={t('yourLatestBids')}>
+        <TokensSlider title={t('yourLatestBids')} count={mockTokens.length}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token.id}

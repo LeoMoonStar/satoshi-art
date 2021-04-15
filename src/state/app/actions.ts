@@ -8,3 +8,4 @@ export const changeWhitelistedStatus = createAction<boolean>(
 export const changePermittedToUseWallet = createAction<boolean>(
     'app/changePermittedToUseWallet'
 )
+export const disconnectAccount = createAction('app/disconnectAccount')

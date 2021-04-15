@@ -16,8 +16,18 @@ export type Token = {
     }
 }
 
-export const getTokens = (walletHash?: string): Promise<Token[]> => {
-    return axios.get(`/products`, {
-        params: { 'metadata.walletHash': walletHash },
+type getTokensProps = {
+    sort?: string
+    walletHash?: string
+}
+export const getTokens = ({
+    sort,
+    walletHash,
+}: getTokensProps): Promise<Token[]> => {
+    return axios.get('/products', {
+        params: {
+            _sort: sort,
+            'metadata.walletHash': walletHash,
+        },
     })
 }

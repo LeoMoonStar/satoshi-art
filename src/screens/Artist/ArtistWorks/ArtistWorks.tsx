@@ -6,6 +6,8 @@ import Followers, { TabVariants } from 'shared/Followers'
 import { FilterIcon } from 'shared/icons'
 
 import useStyles from './ArtistWorks.style'
+import { TokenType } from 'state/transactions/actions'
+import preview from 'shared/images/artist/work.jpg'
 
 type CategoryType = {
     id: number
@@ -20,6 +22,20 @@ const categories: CategoryType[] = [
     { id: 4, title: 'Liked', isEmpty: true },
     { id: 5, title: 'Activity', isEmpty: true },
 ]
+
+const tokens = Array.from({ length: 24 }, (index) => ({
+    id: `id${index}`,
+    metadata: {
+        type: TokenType.MULTIPLE,
+        thumbnail: preview,
+        payload: {
+            name: 'Fresh Meat #F',
+            copiesCount: '20',
+            description: '',
+            file: preview,
+        },
+    },
+}))
 
 export default function ArtistWorks(): JSX.Element {
     const [open, setOpen] = useState(false)
@@ -66,7 +82,7 @@ export default function ArtistWorks(): JSX.Element {
                     <FilterIcon />
                 </IconButton>
             </div>
-            <Works />
+            <Works tokens={tokens} isLoading={false} />
             <Modal open={open} onClose={closeModal}>
                 <Followers active={active} />
             </Modal>

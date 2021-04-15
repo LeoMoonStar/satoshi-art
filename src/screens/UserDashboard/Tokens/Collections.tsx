@@ -100,7 +100,7 @@ export default function Collections(): JSX.Element {
     const { t } = useTranslation()
 
     return (
-        <TokensSlider title={t('collections')}>
+        <TokensSlider title={t('collections')} count={mockTokens.length}>
             {mockTokens.map((token: any) => (
                 <TokenCard
                     key={token._id}

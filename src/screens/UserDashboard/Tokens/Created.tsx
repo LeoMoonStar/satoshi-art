@@ -94,7 +94,7 @@ export default function Created(): JSX.Element {
 
     return (
         <>
-            <TokensSlider isLoading={isLoading} title={t('created')}>
+            <TokensSlider isLoading={isLoading} count={tokens.length} title={t('created')}>
                 {tokens.map((token: any) => (
                     <TokenCard
                         key={token.id}

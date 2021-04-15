@@ -6,6 +6,7 @@ import React from 'react'
 // import { SaveIcon, ViewsIcon } from 'shared/icons'
 // import Avatar from 'shared/Avatar'
 import Loader from 'shared/Loader'
+import { Link } from 'react-router-dom'
 // import TextGradient from 'shared/TexGradient'
 // import preview from 'shared/images/artist/work.jpg'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
@@ -37,19 +38,23 @@ export default function WorksList({
                         return (
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
-                                    <img
-                                        src={
-                                            thumbnail ??
-                                            payload.cover ??
-                                            payload.file
-                                        }
-                                        style={{
-                                            borderRadius:
-                                                variant === 'rounded' ? 30 : 0,
-                                        }}
-                                        className={classes.preview}
-                                        alt={payload.description}
-                                    />
+                                    <Link to="/productpage">
+                                        <img
+                                            src={
+                                                thumbnail ??
+                                                payload.cover ??
+                                                payload.file
+                                            }
+                                            style={{
+                                                borderRadius:
+                                                    variant === 'rounded'
+                                                        ? 30
+                                                        : 0,
+                                            }}
+                                            className={classes.preview}
+                                            alt={payload.description}
+                                        />
+                                    </Link>
                                 </div>
                                 <div
                                     className={classes.info}

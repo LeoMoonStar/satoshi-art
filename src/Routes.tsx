@@ -25,6 +25,8 @@ import {
     TermsAndConditions,
     CookiePrivacy,
 } from 'screens/InfoPages'
+import Collection from 'screens/Collection'
+
 import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
 import UserDashboard from './screens/UserDashboard'
 
@@ -43,7 +45,6 @@ const DevelopRoute = (props: RouteProps) => {
     if (process.env.REACT_APP_SPECIAL_MODE === 'production') {
         return <Redirect to="/" />
     }
-
     return <Route {...props} />
 }
 
@@ -75,22 +76,28 @@ function Routes(): JSX.Element {
                 <DevelopRoute path="/artists/:id">
                     <Artist />
                 </DevelopRoute>
+                <DevelopRoute path="/collections/:id">
+                    <Collection />
+                </DevelopRoute>
                 <DevelopRoute path="/search">
                     <Search />
                 </DevelopRoute>
                 <DevelopRoute path="/drop-of-the-day">
                     <DropOfTheDay />
                 </DevelopRoute>
-                <DevelopRoute path="/productpage">
+                <Route path="/productpage">
                     <Product />
-                </DevelopRoute>
-                <DevelopRoute path="/dashboard/order-list">
+                </Route>
+                <Route path="/dashboard/order-list">
                     <OrderList />
-                </DevelopRoute>
+                </Route>
                 <PrivateRoute exact path="/create-collectible">
                     <CreateCollectibleType />
                 </PrivateRoute>
-                <PrivateRoute exact path="/create-collectible/:type(multiple)/">
+                <PrivateRoute
+                    exact
+                    path="/create-collectible/:type(single|multiple)/"
+                >
                     <CreateCollectible />
                 </PrivateRoute>
                 <Route>

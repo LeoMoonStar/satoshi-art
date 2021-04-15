@@ -40,10 +40,29 @@ const SliderRight = ({ currentSlide, slideCount, ...props }: any) => {
 const sliderConfig = {
     speed: 500,
     slidesToShow: 7,
+    infinite: false,
     slidesToScroll: 1,
     prevArrow: <SliderLeft />,
     nextArrow: <SliderRight />,
-    responsive: [
+}
+
+type TokensSliderProps = {
+    title: string
+    count?: number
+    children: React.ReactNode
+    isLoading?: boolean
+}
+
+export default function TokensSlider({
+    title,
+    count = 0,
+    children,
+    isLoading = false,
+}: TokensSliderProps): JSX.Element {
+    const classes = useStyles()
+    const { t } = useTranslation()
+
+    const responsive = [
         {
             breakpoint: 1920,
             settings: {
@@ -68,37 +87,43 @@ const sliderConfig = {
                 slidesToShow: 4,
             },
         },
-    ],
-}
+    ]
 
-type TokensSliderProps = {
-    title: string
-    children: React.ReactNode
-    isLoading?: boolean
-}
+    const currentSlideToShow = responsive.reduce(
+        (
+            currentSlideToShow,
+            { breakpoint, settings: { slidesToShow } }: any
+        ) => {
+            if (breakpoint > window.innerWidth) {
+                return slidesToShow
+            }
 
-export default function TokensSlider({
-    title,
-    children,
-    isLoading = false,
-}: TokensSliderProps): JSX.Element {
-    const classes = useStyles()
-    const { t } = useTranslation()
+            return currentSlideToShow
+        },
+        7
+    )
 
     return (
         <>
+            {' '}
             <div className={classes.container}>
                 <div className={classes.head}>
                     <h2 className={classes.mainTitle}>{title}</h2>
-                    <Button
-                        className={classes.viewAllButton}
-                        variantCustom="action"
-                    >
-                        {t('viewAll')}
-                    </Button>
+                    {count > currentSlideToShow && (
+                        <Button
+                            className={classes.viewAllButton}
+                            variantCustom="action"
+                        >
+                            {t('viewAll')}
+                        </Button>
+                    )}
                 </div>
                 <div className={classes.sliderRow}>
-                    <Slider className={classes.slider} {...sliderConfig}>
+                    <Slider
+                        className={classes.slider}
+                        responsive={responsive}
+                        {...sliderConfig}
+                    >
                         {children}
                     </Slider>
                 </div>
