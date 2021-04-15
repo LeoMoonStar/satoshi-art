@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import {
-    Button,
-    // FormControl,
-    // FormControlLabel,
-    // Switch,
-    IconButton,
-    Input,
-} from '@material-ui/core'
+import { Button, IconButton, Input } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { Contract } from '@ethersproject/contracts'
 import { useWeb3React } from '@web3-react/core'
@@ -15,18 +8,16 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useDispatch } from 'react-redux'
 
 import { Close } from '@material-ui/icons'
-import { useTranslation, Trans } from 'react-i18next'
-import {
-    // Controller,
-    useForm,
-} from 'react-hook-form'
+import { Trans, useTranslation } from 'react-i18next'
+import { useForm } from 'react-hook-form'
 // import { LogoIcon, PlusCircle } from 'shared/icons'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useAPIError } from 'hooks/useAPIError'
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
-import { addTransaction } from 'state/transactions/actions'
+import { addTransaction, TokenType } from 'state/transactions/actions'
 import { percentageToBasicPoints } from 'utils/helpers'
 import {
     Engine1155ABI,
@@ -34,12 +25,11 @@ import {
     use1155EngineSmartContractNetworkData,
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
-import { TokenType } from 'state/transactions/actions'
 import {
+    MetaDataType,
+    updateMetaData,
     uploadFile,
     uploadMetaData,
-    updateMetaData,
-    MetaDataType,
 } from 'api/createItem'
 import useStyles from './CreateForm.style'
 
@@ -173,6 +163,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const history = useHistory()
     const { t } = useTranslation()
     const { account, library, chainId } = useWeb3React<Web3Provider>()
+    const { setError } = useAPIError()
     const erc721NetworkData = useSmartContractNetworkData(chainId)
     const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
@@ -330,6 +321,15 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }
 
+    const tryUploadFiles = async (files: Array<Promise<any>>) => {
+        try {
+            return await Promise.all(files)
+        } catch (e) {
+            setError('Upload files', e.data?.data?.errors?.[0].message)
+            setIsSubmitModal(false)
+        }
+    }
+
     const onSubmit = async (data: ICollectibleForm) => {
         if (!chainId) {
             return
@@ -343,41 +343,42 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         const coverFormData = new FormData()
 
         fileFormData.append('files', data.file[0])
-        const filesPromises = [uploadFile(fileFormData)]
+        const files = [uploadFile(fileFormData)]
 
         if (data.cover) {
             coverFormData.append('files', data.cover[0])
-            filesPromises.push(uploadFile(coverFormData))
+            files.push(uploadFile(coverFormData))
         }
 
-        const [fileResponse, coverResponse]: Array<any> = await Promise.all(
-            filesPromises
-        )
+        const uploadedFiles = await tryUploadFiles(files)
 
-        const type = isSingle ? TokenType.SINGLE : TokenType.MULTIPLE
+        if (uploadedFiles) {
+            const type = isSingle ? TokenType.SINGLE : TokenType.MULTIPLE
 
-        const thumbnail =
-            coverResponse?.[0]?.formats?.medium?.url ??
-            fileResponse?.[0]?.formats?.medium?.url
+            const [fileResponse, coverResponse] = uploadedFiles
+            const thumbnail =
+                coverResponse?.[0]?.formats?.medium?.url ??
+                fileResponse?.[0]?.formats?.medium?.url
 
-        const metadata = {
-            name: data.name,
-            description: data.description,
-            copiesCount: data.copiesCount,
-            royalties: data.royalties,
-            file: fileResponse[0].url,
-            cover: coverResponse ? coverResponse[0].url : undefined,
+            const metadata = {
+                name: data.name,
+                description: data.description,
+                copiesCount: data.copiesCount,
+                royalties: data.royalties,
+                file: fileResponse[0].url,
+                cover: coverResponse ? coverResponse[0].url : undefined,
+            }
+
+            const metaResponse: TempTokenData = await uploadMetaData(
+                metadata,
+                account,
+                type,
+                thumbnail
+            )
+
+            setTempToken(metaResponse)
+            await tryCreateItem(metaResponse)
         }
-
-        const metaResponse: TempTokenData = await uploadMetaData(
-            metadata,
-            account,
-            type,
-            thumbnail
-        )
-
-        setTempToken(metaResponse)
-        await tryCreateItem(metaResponse)
     }
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
