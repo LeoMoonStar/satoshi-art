@@ -31,3 +31,7 @@ export const getTokens = ({
         },
     })
 }
+
+export const getToken = (id: string): Promise<Token> => {
+    return axios.get(`/products/${id}`)
+}
