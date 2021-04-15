@@ -10,10 +10,17 @@ import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
 import { getTokens, Token } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
+import PutOnSaleModal from './TokenActions/PutOnSaleModal'
+import PutOnSaleProgressModal from './TokenActions/PutOnSaleProgressModal'
 
 const RenderCardContent = () => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
+    const [
+        isPutOnSaleProgressModal,
+        setIsPutOnSaleProgressModal,
+    ] = useState<boolean>(false)
+    const [isPutOnSale, setPutOnSale] = useState<boolean>(false)
     const anchorElRef = useRef()
     const { t } = useTranslation()
 
@@ -45,7 +52,10 @@ const RenderCardContent = () => {
                         disableRestoreFocus
                     >
                         <div className={classes.controlsButtons}>
-                            <button type="button">
+                            <button
+                                type="button"
+                                onClick={() => setPutOnSale(true)}
+                            >
                                 <div>
                                     <PriceIcon />
                                 </div>
@@ -68,9 +78,24 @@ const RenderCardContent = () => {
                 </IconButton>
             </div>
             <div className={classes.count}>1 of 30</div>
+            {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
             <div className={classes.createdInfo}>
                 <a href="">@Coll3ctor</a> 1,995 ETH
             </div>
+            {isPutOnSale && (
+                <PutOnSaleModal
+                    onClose={() => setPutOnSale(false)}
+                    onSubmit={() => {
+                        setIsPutOnSaleProgressModal(true)
+                        setPutOnSale(false)
+                    }}
+                />
+            )}
+            {isPutOnSaleProgressModal && (
+                <PutOnSaleProgressModal
+                    onClose={() => setIsPutOnSaleProgressModal(false)}
+                />
+            )}
         </>
     )
 }
