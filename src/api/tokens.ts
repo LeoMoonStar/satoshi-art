@@ -8,7 +8,7 @@ export type Token = {
         thumbnail?: string
         payload: {
             name: string
-            copiesCount: string // todo: Probably should has totalCount and currentCount
+            copiesCount?: number // todo: Probably should has totalCount and currentCount
             description: string
             cover?: string
             file: string

@@ -30,7 +30,7 @@ const tokens = Array.from({ length: 24 }, (index) => ({
         thumbnail: preview,
         payload: {
             name: 'Fresh Meat #F',
-            copiesCount: '20',
+            copiesCount: 20,
             description: '',
             file: preview,
         },
