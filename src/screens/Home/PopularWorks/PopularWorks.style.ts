@@ -9,6 +9,20 @@ const useStyles = makeStyles(() => {
             lineHeight: '53px',
             color: '#7E7E7E',
         },
+        controls: {
+            display: 'flex',
+            flexDirection: 'column',
+            '& button': {
+                padding: '4px 16px',
+                '& span': {
+                    justifyContent: 'left',
+                    textTransform: 'initial',
+                },
+            },
+        },
+        paper: {
+            borderRadius: 10,
+        },
         subTitle: {
             margin: '0 0 53px',
             fontWeight: 800,
@@ -37,6 +51,7 @@ const useStyles = makeStyles(() => {
         },
         filters: {
             display: 'flex',
+            justifyContent: 'flex-end',
             marginLeft: 'auto',
             marginBottom: 32,
         },

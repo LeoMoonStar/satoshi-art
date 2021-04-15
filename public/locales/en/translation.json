@@ -237,5 +237,7 @@
   "putOnSaleBtn": "Put on Sale",
   "putOnAuctionBtn": "Put on Auction",
   "changePriceBtn": "Change Price",
-  "removeFromSaleBtn": "Remove from Sale"
+  "removeFromSaleBtn": "Remove from Sale",
+  "recentlyAdded": "Recently added",
+  "tokensLoadingFailed": "Loading tokens was failed"
 }

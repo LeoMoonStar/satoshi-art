@@ -30,6 +30,10 @@ export default function WorksList({
     const classes = useStyles()
     // const { t } = useTranslation()
 
+    if (isLoading) {
+        return <Loader />
+    }
+
     return (
         <div>
             <div className={classes.grid}>
@@ -107,20 +111,13 @@ export default function WorksList({
                     }
                 )}
             </div>
-
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <>
-                    {/*<Button*/}
-                    {/*    variantCustom="action"*/}
-                    {/*    onClick={onShowMore}*/}
-                    {/*    className={classes.showMoreButton}*/}
-                    {/*>*/}
-                    {/*    Show more*/}
-                    {/*</Button>*/}
-                </>
-            )}
+            {/*<Button*/}
+            {/*    variantCustom="action"*/}
+            {/*    onClick={onShowMore}*/}
+            {/*    className={classes.showMoreButton}*/}
+            {/*>*/}
+            {/*    Show more*/}
+            {/*</Button>*/}
         </div>
     )
 }
