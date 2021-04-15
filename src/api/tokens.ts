@@ -19,3 +19,7 @@ export type Token = {
 export const getTokens = (): Promise<Token[]> => {
     return axios.get('/products')
 }
+
+export const getToken = (id: string): Promise<Token> => {
+    return axios.get(`/products/${id}`)
+}
