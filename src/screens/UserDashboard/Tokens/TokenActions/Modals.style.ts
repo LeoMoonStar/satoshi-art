@@ -126,6 +126,9 @@ const useStyles = makeStyles(() => {
         loader: {
             flexShrink: 0,
         },
+        textError: {
+            color: '#FF0000',
+        },
     }
 })
 
