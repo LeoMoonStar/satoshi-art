@@ -86,7 +86,7 @@ export default function Created(): JSX.Element {
             return
         }
 
-        getTokens(account).then((tokens) => {
+        getTokens({ walletHash: account }).then((tokens) => {
             setTokens(tokens)
             setLoading(false)
         })
@@ -94,7 +94,11 @@ export default function Created(): JSX.Element {
 
     return (
         <>
-            <TokensSlider isLoading={isLoading} count={tokens.length} title={t('created')}>
+            <TokensSlider
+                isLoading={isLoading}
+                count={tokens.length}
+                title={t('created')}
+            >
                 {tokens.map((token: any) => (
                     <TokenCard
                         key={token.id}
