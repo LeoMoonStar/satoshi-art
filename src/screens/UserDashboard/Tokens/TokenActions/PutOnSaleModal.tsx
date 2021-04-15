@@ -1,19 +1,24 @@
 import React from 'react'
-import { useTranslation, Trans } from 'react-i18next'
-import { FormControl, Input } from '@material-ui/core'
+import { Trans, useTranslation } from 'react-i18next'
+import { FormControl, Input, InputLabel } from '@material-ui/core'
 
 import Button from 'shared/Button'
 import Modal from 'shared/Modal'
 import useStyles from './Modals.style'
+import { TokenType } from 'state/transactions/actions'
 
 type PutOnSaleModalProps = {
     onClose: () => void
     onSubmit: () => void
+    type: TokenType
+    copiesCount?: number
 }
 
 export default function PutOnSaleModal({
     onClose,
     onSubmit,
+    type,
+    copiesCount,
 }: PutOnSaleModalProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -22,7 +27,10 @@ export default function PutOnSaleModal({
         <Modal open className={classes.modal} onClose={onClose}>
             <form className={classes.container}>
                 <h2 className={classes.title}>{t('putOnSale')}</h2>
-                <FormControl className={classes.priceRow}>
+                <FormControl className={classes.fieldGroup}>
+                    <InputLabel shrink htmlFor="price">
+                        {t('instantSalePrice')}
+                    </InputLabel>
                     <Input
                         id="price"
                         placeholder="1"
@@ -31,6 +39,17 @@ export default function PutOnSaleModal({
                         }
                     />
                 </FormControl>
+                {type === TokenType.MULTIPLE && copiesCount && (
+                    <FormControl className={classes.fieldGroup}>
+                        <InputLabel shrink htmlFor="quantity">
+                            {t('enterQuantity')}{' '}
+                            <small>
+                                ({t('countAvailable', { count: copiesCount })})
+                            </small>
+                        </InputLabel>
+                        <Input id="quantity" placeholder="1" />
+                    </FormControl>
+                )}
                 <ul className={classes.additionalInfo}>
                     <li>
                         <Trans

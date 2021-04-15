@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => {
             fontWeight: 600,
             color: '#7E7E7E',
         },
-        priceRow: {
+        fieldGroup: {
             width: '100%',
             marginBottom: 14,
             borderBottom: 1,
@@ -42,8 +42,23 @@ const useStyles = makeStyles(() => {
                     color: '#7E7E7E',
                 },
             },
+            '& label.Mui-focused': {
+                color: '#000',
+                '& small': {
+                    color: '#7E7E7E',
+                },
+            },
             '& .Mui-focused.MuiInput-underline::after, .MuiInput-underline:hover:not(.Mui-disabled):before': {
                 borderBottom: '1px solid #ff0099',
+            },
+            '& label': {
+                fontWeight: 700,
+                fontSize: 18,
+                color: '#000',
+                '& small': {
+                    fontWeight: 400,
+                    color: '#7E7E7E',
+                },
             },
         },
         additionalInfo: {
