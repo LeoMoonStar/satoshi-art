@@ -19,6 +19,11 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useForm, Controller } from 'react-hook-form'
 // import { LogoIcon, PlusCircle } from 'shared/icons'
 import { yupResolver } from '@hookform/resolvers/yup'
+import {
+    VAlID_IMAGES_TYPES,
+    VALID_FILE_TYPES,
+    ALL_SUPPORTED_TYPES,
+} from 'constants/supportedFileTypes'
 import * as yup from 'yup'
 
 import { useAPIError } from 'hooks/useAPIError'
@@ -68,10 +73,6 @@ interface ICollectibleForm {
     royalties: number
     properties: Array<PropertyType>
 }
-
-const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
-const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg'
-const ALL_SUPPORTED_TYPES = `${VAlID_COVER_TYPES},${VALID_FILE_TYPES}`
 
 const FILE_SIZE = 31457280
 
@@ -129,7 +130,7 @@ const schema = yup.object().shape({
                 (value) =>
                     value &&
                     value.hasOwnProperty(0) &&
-                    VAlID_COVER_TYPES.includes(value[0].type)
+                    VAlID_IMAGES_TYPES.includes(value[0].type)
             ),
     }),
     royalties: yup
@@ -544,7 +545,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 })}
                             >
                                 <input
-                                    accept={VAlID_COVER_TYPES}
+                                    accept={VAlID_IMAGES_TYPES}
                                     className={classes.input}
                                     onChange={handleFileChange}
                                     ref={register}

@@ -2,6 +2,7 @@ import { TokenType } from 'state/transactions/actions'
 import axios from 'axios'
 import api from './axios'
 
+
 export type Token = {
     id: string
     metadata: {
@@ -25,12 +26,16 @@ export const getTokens = ({
     sort,
     walletHash,
 }: getTokensProps): Promise<Token[]> => {
-    return axios.get('/products', {
+    return api.get('/products', {
         params: {
             _sort: sort,
             'metadata.walletHash': walletHash,
         },
     })
+}
+
+export const getToken = (id: string): Promise<Token> => {
+    return api.get(`/products/${id}`)
 }
 
 export const getCurrency = async (): Promise<string> => {
