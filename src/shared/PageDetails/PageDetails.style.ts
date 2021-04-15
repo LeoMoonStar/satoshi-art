@@ -88,6 +88,9 @@ const useStyles = makeStyles(() => ({
     },
     helpText: {
         marginBottom: 6,
+        fontSize: 13,
+        letterSpacing: '-0.04em',
+        maxWidth: 690,
         color: '#7E7E7E',
     },
     linkToWebPage: {
@@ -115,6 +118,15 @@ const useStyles = makeStyles(() => ({
                 stroke: 'transparent !important',
             },
         },
+    },
+    center: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+    },
+    centerAvatar: {
+        marginLeft: 118,
+        justifyContent: 'center',
     },
     nftBackgroundImage: {
         position: 'absolute',
