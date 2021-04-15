@@ -8,7 +8,10 @@ import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { AppState } from 'state'
-import { permittedToUseWalletSelector } from 'state/app/selectors'
+import {
+    permittedToUseWalletAndWhiteListedSelector,
+    permittedToUseWalletSelector,
+} from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
 import Avatar from 'shared/Avatar'
@@ -40,6 +43,9 @@ const UserMenu = (): JSX.Element | null => {
     )
     const { t } = useTranslation()
     const handleDisconnect = useDisconnect()
+    const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
+        permittedToUseWalletAndWhiteListedSelector
+    )
 
     useEffect(() => {
         async function getBalance() {
@@ -111,24 +117,26 @@ const UserMenu = (): JSX.Element | null => {
                             </div>
                         </li>
                     </ul>
-                    <ul className={classes.links}>
-                        {userLinks.map((link, index) => (
-                            <li key={index}>
-                                <Link to={link.href}>
-                                    {link.icon}
-                                    <span>{t(link.title)}</span>
-                                </Link>
-                            </li>
-                        ))}
-                        <button
-                            type="button"
-                            className={classes.btnDisconnect}
-                            onClick={handleDisconnect}
-                        >
-                            <DisconnectIcon />
-                            {t('disconnect')}
-                        </button>
-                    </ul>
+                    {isWhiteListedAndHasPermittedWallet && (
+                        <ul className={classes.links}>
+                            {userLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link to={link.href}>
+                                        {link.icon}
+                                        <span>{t(link.title)}</span>
+                                    </Link>
+                                </li>
+                            ))}
+                            <button
+                                type="button"
+                                className={classes.btnDisconnect}
+                                onClick={handleDisconnect}
+                            >
+                                <DisconnectIcon />
+                                {t('disconnect')}
+                            </button>
+                        </ul>
+                    )}
                 </div>
             </Popover>
         </div>

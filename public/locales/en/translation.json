@@ -233,5 +233,9 @@
   "setAPrice": "Set a price",
   "collections": "Collections",
   "myItems": "My Items",
-  "editProfile": "Edit Profile"
+  "editProfile": "Edit Profile",
+  "putOnSaleBtn": "Put on Sale",
+  "putOnAuctionBtn": "Put on Auction",
+  "changePriceBtn": "Change Price",
+  "removeFromSaleBtn": "Remove from Sale"
 }
