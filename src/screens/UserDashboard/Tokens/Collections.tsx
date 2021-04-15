@@ -76,7 +76,9 @@ const RenderCardContent = ({ token }: { token: Token }) => {
                 </IconButton>
             </div>
             {type === 'multiple' && (
-                <div className={classes.count}>1 of {payload?.copiesCount}</div>
+                <div className={classes.count}>
+                    {payload?.copiesCount} of {payload?.copiesCount}
+                </div>
             )}
             <div className={classes.highestBid}>
                 Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>
