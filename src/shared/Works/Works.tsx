@@ -38,7 +38,7 @@ export default function WorksList({
                         return (
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
-                                    <Link to="/productpage">
+                                    <Link to={`product/${id}`}>
                                         <img
                                             src={
                                                 thumbnail ??

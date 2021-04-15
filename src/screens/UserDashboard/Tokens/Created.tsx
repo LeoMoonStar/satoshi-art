@@ -12,8 +12,9 @@ import { getTokens, Token } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
 import PutOnSaleProgressModal from './TokenActions/PutOnSaleProgressModal'
+import { TokenType } from 'state/transactions/actions'
 
-const RenderCardContent = () => {
+const RenderCardContent = ({ token }: { token: Token }) => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
     const [
@@ -23,11 +24,12 @@ const RenderCardContent = () => {
     const [isPutOnSale, setPutOnSale] = useState<boolean>(false)
     const anchorElRef = useRef()
     const { t } = useTranslation()
+    const { payload, type } = token?.metadata
 
     return (
         <>
             <div className={classes.head}>
-                <h3 className={classes.tokenName}>Fresh MEar #F</h3>
+                <h3 className={classes.tokenName}>{payload?.name}</h3>
                 <IconButton
                     className={classes.showMoreButton}
                     buttonRef={anchorElRef}
@@ -77,7 +79,11 @@ const RenderCardContent = () => {
                     </Popover>
                 </IconButton>
             </div>
-            <div className={classes.count}>1 of 30</div>
+            {type === TokenType.MULTIPLE && (
+                <div className={classes.count}>
+                    {payload?.copiesCount} of {payload?.copiesCount}
+                </div>
+            )}
             {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
             <div className={classes.createdInfo}>
                 <a href="">@Coll3ctor</a> 1,995 ETH
