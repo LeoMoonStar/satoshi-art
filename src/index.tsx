@@ -28,10 +28,12 @@ function SatoshiArt() {
  * tracesSampleRate - allow us check performance of the app.
  * Receive float value from 0 to 1.0 that means how often we should receive performance details.
  */
-if (process.env.NODE_ENV !== 'development') {
+if (
+    process.env.NODE_ENV !== 'development' &&
+    process.env.REACT_APP_SENTRY_DSN
+) {
     Sentry.init({
-        dsn:
-            'https://37a0d33fa3a04fad8ddf1bd04bb6df68@o571513.ingest.sentry.io/5719850',
+        dsn: process.env.REACT_APP_SENTRY_DSN,
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 0.2,
     })
