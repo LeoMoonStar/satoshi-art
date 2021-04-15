@@ -11,9 +11,10 @@ type TokensSliderProps = {
 
 export default function TokenCard({
     token,
-    renderContent,
+    renderContent: RenderContent,
 }: TokensSliderProps): JSX.Element {
     const classes = useStyles()
+    const { payload } = token?.metadata
 
     return (
         <div className={classes.card} key={token.id}>
@@ -21,13 +22,13 @@ export default function TokenCard({
                 <div className={classes.tokenPreviewWrapper}>
                     <img
                         className={classes.tokenPreview}
-                        src={preview}
-                        alt=""
+                        src={token.thumbnail ?? payload?.cover ?? payload?.file}
+                        alt={payload?.description}
                     />
                 </div>
             </div>
             <Avatar className={classes.avatar} image={preview} size={60} />
-            {renderContent(token)}
+            <RenderContent token={token} />
         </div>
     )
 }

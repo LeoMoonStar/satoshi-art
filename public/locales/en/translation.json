@@ -231,5 +231,11 @@
   "burnToken": "Burn token",
   "created": "Created",
   "setAPrice": "Set a price",
-  "collections": "Collections"
+  "collections": "Collections",
+  "myItems": "My Items",
+  "editProfile": "Edit Profile",
+  "putOnSaleBtn": "Put on Sale",
+  "putOnAuctionBtn": "Put on Auction",
+  "changePriceBtn": "Change Price",
+  "removeFromSaleBtn": "Remove from Sale"
 }

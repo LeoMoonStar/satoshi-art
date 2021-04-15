@@ -80,6 +80,22 @@ const useStyles = makeStyles((theme) => {
                 },
             },
         },
+        btnDisconnect: {
+            padding: 0,
+            color: theme.custom.common.darkerGrayColor,
+            backgroundColor: 'transparent',
+            border: 0,
+            cursor: 'pointer',
+
+            '&:hover': {
+                color: theme.custom.common.blackColor,
+            },
+
+            '& svg': {
+                width: 15,
+                marginRight: 11,
+            },
+        },
     }
 })
 export default useStyles

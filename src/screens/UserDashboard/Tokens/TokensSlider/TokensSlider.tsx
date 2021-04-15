@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick-theme.css'
 
 import useStyles from './TokensSlider.style'
 import Button from 'shared/Button'
+import Loader from 'shared/Loader'
 
 const SliderLeft = ({ currentSlide, slideCount, ...props }: any) => {
     return (
@@ -49,12 +50,14 @@ type TokensSliderProps = {
     title: string
     count?: number
     children: React.ReactNode
+    isLoading?: boolean
 }
 
 export default function TokensSlider({
     title,
     count = 0,
     children,
+    isLoading = false,
 }: TokensSliderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -101,27 +104,31 @@ export default function TokensSlider({
     )
 
     return (
-        <div className={classes.container}>
-            <div className={classes.head}>
-                <h2 className={classes.mainTitle}>{title}</h2>
-                {count > currentSlideToShow && (
-                    <Button
-                        className={classes.viewAllButton}
-                        variantCustom="action"
+        <>
+            {' '}
+            <div className={classes.container}>
+                <div className={classes.head}>
+                    <h2 className={classes.mainTitle}>{title}</h2>
+                    {count > currentSlideToShow && (
+                        <Button
+                            className={classes.viewAllButton}
+                            variantCustom="action"
+                        >
+                            {t('viewAll')}
+                        </Button>
+                    )}
+                </div>
+                <div className={classes.sliderRow}>
+                    <Slider
+                        className={classes.slider}
+                        responsive={responsive}
+                        {...sliderConfig}
                     >
-                        {t('viewAll')}
-                    </Button>
-                )}
+                        {children}
+                    </Slider>
+                </div>
             </div>
-            <div className={classes.sliderRow}>
-                <Slider
-                    className={classes.slider}
-                    responsive={responsive}
-                    {...sliderConfig}
-                >
-                    {children}
-                </Slider>
-            </div>
-        </div>
+            {isLoading && <Loader />}
+        </>
     )
 }

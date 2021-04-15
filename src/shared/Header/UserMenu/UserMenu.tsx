@@ -5,9 +5,13 @@ import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 
 import { AppState } from 'state'
-import { permittedToUseWalletSelector } from 'state/app/selectors'
+import {
+    permittedToUseWalletAndWhiteListedSelector,
+    permittedToUseWalletSelector,
+} from 'state/app/selectors'
 import { shortAddress } from 'utils/helpers'
 
 import Avatar from 'shared/Avatar'
@@ -19,17 +23,13 @@ import {
     DisconnectIcon,
 } from 'shared/icons'
 import avatar from 'shared/images/artist/avatar.jpg'
+import useDisconnect from 'hooks/useDisconnect'
 
 import useStyles from './UserMenu.styled'
 
-{
-    /*TODO: Add relevant links path and Fix metamask-LOCK(disconnect) functionality   */
-}
-
 const userLinks = [
-    { title: 'My items', href: '/dashboard/user', icon: <ItemsIcon /> },
-    // { title: 'Edit Profile', icon: <ProfileIcon /> },
-    { title: 'Disconnect', href: '#', icon: <DisconnectIcon /> },
+    { title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> },
+    // { title: 'editProfile', icon: <ProfileIcon /> },
 ]
 
 const UserMenu = (): JSX.Element | null => {
@@ -40,6 +40,11 @@ const UserMenu = (): JSX.Element | null => {
     const { account, library } = useWeb3React<Web3Provider>()
     const isWalletPermitted = useSelector<AppState, boolean>(
         permittedToUseWalletSelector
+    )
+    const { t } = useTranslation()
+    const handleDisconnect = useDisconnect()
+    const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
+        permittedToUseWalletAndWhiteListedSelector
     )
 
     useEffect(() => {
@@ -112,16 +117,26 @@ const UserMenu = (): JSX.Element | null => {
                             </div>
                         </li>
                     </ul>
-                    <ul className={classes.links}>
-                        {userLinks.map((link, index) => (
-                            <li key={index}>
-                                <Link to={link.href}>
-                                    {link.icon}
-                                    <span>{link.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {isWhiteListedAndHasPermittedWallet && (
+                        <ul className={classes.links}>
+                            {userLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link to={link.href}>
+                                        {link.icon}
+                                        <span>{t(link.title)}</span>
+                                    </Link>
+                                </li>
+                            ))}
+                            <button
+                                type="button"
+                                className={classes.btnDisconnect}
+                                onClick={handleDisconnect}
+                            >
+                                <DisconnectIcon />
+                                {t('disconnect')}
+                            </button>
+                        </ul>
+                    )}
                 </div>
             </Popover>
         </div>
