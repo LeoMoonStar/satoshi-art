@@ -42,7 +42,7 @@ import {
     updateMetaData,
     MetaDataType,
 } from 'api/createItem'
-import { getCurrency } from 'api/tokens'
+import { getCurrency } from 'api/currency'
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
 import useStyles from './CreateForm.style'
@@ -210,14 +210,17 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const engineAddress = engine1155NetworkData?.address
 
     useEffect(() => {
-        async function getAndSetCurrency() {
-            const currency = await getCurrency()
-            if (currency) {
-                setCurrency(+currency)
+        ;(async () => {
+            try {
+                const currency = await getCurrency()
+                if (currency) {
+                    setCurrency(+currency)
+                }
+            } catch (e) {
+                setError('Get exchange rate error')
             }
-        }
-        getAndSetCurrency()
-    }, [])
+        })()
+    }, [setError])
 
     useEffect(() => {
         if (isSingle) {
