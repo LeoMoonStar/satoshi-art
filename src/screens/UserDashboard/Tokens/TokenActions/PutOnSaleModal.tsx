@@ -21,10 +21,10 @@ import {
 } from 'utils/erc1155'
 import { etherToWei } from 'utils/helpers'
 import { putTokenOnSaleAPI, Token } from 'api/tokens'
+import PutOnSaleProgressModal from './PutOnSaleProgressModal'
 
 type PutOnSaleModalProps = {
     onClose: () => void
-    onSubmit: () => void
     token: Token
 }
 
@@ -43,7 +43,6 @@ const schema = yup.object().shape({
 
 export default function PutOnSaleModal({
     onClose,
-    onSubmit,
     token,
 }: PutOnSaleModalProps): JSX.Element {
     const classes = useStyles()
@@ -65,6 +64,7 @@ export default function PutOnSaleModal({
     const [engine1155contract, setEngine1155contract] = useState<any>()
     const [putOnSaleError, setPutOnSaleError] = useState<string>('')
     const [formData, setFormData] = useState<PutOnSaleForm | null>(null)
+    const [isInProgress, setInProgress] = useState<boolean>(false)
     const isSingle = token.metadata.type === TokenType.SINGLE
 
     //@TODO: probably we need to move out these contracts instance creation to a separate hook or smth else, any ideas?
@@ -147,7 +147,7 @@ export default function PutOnSaleModal({
     }
 
     const onFormSubmit = async (data: PutOnSaleForm) => {
-        onSubmit()
+        setInProgress(true)
         setFormData(data)
         await tryPutOnSale(data)
     }
@@ -164,7 +164,7 @@ export default function PutOnSaleModal({
     }
 
     const handleNumberInput = (e: any) => {
-        setValue(e.target.name, e.target.value.split(/\D/).join(''))
+        setValue(e.target.name, e.target.value.replace(/\D/g, ''))
     }
 
     const handleTryAgain = () => {
@@ -172,6 +172,16 @@ export default function PutOnSaleModal({
             setPutOnSaleError('')
             tryPutOnSale(formData)
         }
+    }
+
+    if (isInProgress) {
+        return (
+            <PutOnSaleProgressModal
+                onClose={onClose}
+                putOnSaleError={putOnSaleError}
+                onTryAgain={handleTryAgain}
+            />
+        )
     }
 
     return (

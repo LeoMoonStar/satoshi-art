@@ -93,21 +93,13 @@ const RenderCardContent = ({
     )
 }
 
-export enum PutOnSaleModalsSteps {
-    initialModal,
-    progressModal,
-}
-
 export default function Created(): JSX.Element {
     const [tokens, setTokens] = useState<Token[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const { account } = useWeb3React()
     const [selectedToken, setSelectedToken] = useState<Token | null>(null)
-    const [openedModal, setOpenedModal] = useState<PutOnSaleModalsSteps | null>(
-        PutOnSaleModalsSteps.initialModal
-    )
+    const [isPutOnSale, setPutOnSale] = useState<boolean>(false)
     const { t } = useTranslation()
-    const [putOnSaleError, setPutOnSaleError] = useState<string>('')
 
     useEffect(() => {
         if (!account) {
@@ -122,7 +114,7 @@ export default function Created(): JSX.Element {
 
     const renderContent = useMemo(() => {
         const handlePutOnSale = (token: any) => {
-            setOpenedModal(PutOnSaleModalsSteps.initialModal)
+            setPutOnSale(true)
             setSelectedToken(token)
         }
         return function RenderCardContentWithHandlers(props: any) {
@@ -131,10 +123,6 @@ export default function Created(): JSX.Element {
             )
         }
     }, [setSelectedToken])
-
-    const handleTryAgain = () => {
-        console.log('any')
-    }
 
     return (
         <>
@@ -151,31 +139,11 @@ export default function Created(): JSX.Element {
                     />
                 ))}
             </TokensSlider>
-            {selectedToken !== null && openedModal && (
-                <>
-                    {
-                        {
-                            [PutOnSaleModalsSteps.initialModal]: (
-                                <PutOnSaleModal
-                                    token={selectedToken}
-                                    onClose={() => setOpenedModal(null)}
-                                    onSubmit={() => {
-                                        setOpenedModal(
-                                            PutOnSaleModalsSteps.progressModal
-                                        )
-                                    }}
-                                />
-                            ),
-                            [PutOnSaleModalsSteps.progressModal]: (
-                                <PutOnSaleProgressModal
-                                    onClose={() => setOpenedModal(null)}
-                                    putOnSaleError={putOnSaleError}
-                                    onTryAgain={handleTryAgain}
-                                />
-                            ),
-                        }[openedModal]
-                    }
-                </>
+            {selectedToken !== null && isPutOnSale && (
+                <PutOnSaleModal
+                    token={selectedToken}
+                    onClose={() => setPutOnSale(false)}
+                />
             )}
         </>
     )
