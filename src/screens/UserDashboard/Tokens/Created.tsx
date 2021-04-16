@@ -90,8 +90,7 @@ const RenderCardContent = ({ token }: { token: Token }) => {
             </div>
             {isPutOnSale && (
                 <PutOnSaleModal
-                    copiesCount={payload.copiesCount}
-                    type={type}
+                    token={token}
                     onClose={() => setPutOnSale(false)}
                     onSubmit={() => {
                         setIsPutOnSaleProgressModal(true)

@@ -1,20 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { FormControl, Input, InputLabel } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import { Contract } from '@ethersproject/contracts'
 
 import Button from 'shared/Button'
 import Modal from 'shared/Modal'
 import useStyles from './Modals.style'
 import { TokenType } from 'state/transactions/actions'
+import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
+import {
+    Engine1155ABI,
+    Satoshi1155ABI,
+    use1155EngineSmartContractNetworkData,
+    use1155SmartContractNetworkData,
+} from 'utils/erc1155'
+import { etherToWei } from 'utils/helpers'
+import { putTokenOnSaleAPI, Token } from 'api/tokens'
 
 type PutOnSaleModalProps = {
     onClose: () => void
     onSubmit: () => void
-    type: TokenType
-    copiesCount?: number
+    token: Token
 }
 
 interface PutOnSaleForm {
@@ -33,11 +44,14 @@ const schema = yup.object().shape({
 export default function PutOnSaleModal({
     onClose,
     onSubmit,
-    type,
-    copiesCount,
+    token,
 }: PutOnSaleModalProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+    const { account, library, chainId } = useWeb3React<Web3Provider>()
+    const erc721NetworkData = useSmartContractNetworkData(chainId)
+    const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
+    const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const {
         register,
         handleSubmit,
@@ -46,14 +60,100 @@ export default function PutOnSaleModal({
     } = useForm<PutOnSaleForm>({
         resolver: yupResolver(schema),
     })
+    const [singleContract, setSingleContract] = useState<any>()
+    const [erc1155contract, setErc1155contract] = useState<any>()
+    const [engine1155contract, setEngine1155contract] = useState<any>()
+    const [putOnSaleError, setPutOnSaleError] = useState<string>('')
+    const [formData, setFormData] = useState<PutOnSaleForm | null>(null)
+    const isSingle = token.metadata.type === TokenType.SINGLE
 
-    const onFormSubmit = (data: PutOnSaleForm) => {
-        console.log(data)
+    //@TODO: probably we need to move out these contracts instance creation to a separate hook or smth else, any ideas?
+    useEffect(() => {
+        if (isSingle) {
+            console.log('here')
+            if (library && erc721NetworkData) {
+                const address = erc721NetworkData.address
+                const singleContract = new Contract(
+                    address,
+                    Satoshi721ABI,
+                    library.getSigner()
+                )
+                setSingleContract(singleContract)
+            }
+        }
+    }, [erc721NetworkData, isSingle, library])
+
+    useEffect(() => {
+        if (!isSingle) {
+            if (library && erc1155NetworkData && engine1155NetworkData) {
+                const erc1155Address = erc1155NetworkData.address
+                const engine1155Contract = new Contract(
+                    erc1155Address,
+                    Engine1155ABI,
+                    library.getSigner()
+                )
+                setEngine1155contract(engine1155Contract)
+                const erc1155Contract = new Contract(
+                    engine1155Contract.address,
+                    Satoshi1155ABI,
+                    library.getSigner()
+                )
+                setErc1155contract(erc1155Contract)
+            }
+        }
+    }, [library, chainId, erc1155NetworkData, engine1155NetworkData, isSingle])
+
+    const putTokenOnSaleBlockchain = async (data: PutOnSaleForm) => {
+        const priceInWei = etherToWei(data.price)
+        if (isSingle) {
+            const putSingleTokenOnSaleResponse = await singleContract.putOnSale(
+                token.TokenID,
+                priceInWei,
+                { from: account }
+            )
+            return {
+                price: priceInWei,
+                response: putSingleTokenOnSaleResponse,
+            }
+        }
+        const putMultipleOnSaleResponse = await engine1155contract.putToSale(
+            erc1155contract.address,
+            token.TokenID,
+            data.copiesCount,
+            priceInWei,
+            { from: account }
+        )
+        return {
+            price: priceInWei,
+            response: putMultipleOnSaleResponse,
+        }
+    }
+
+    const tryPutOnSale = async (data: PutOnSaleForm) => {
+        if (!chainId) {
+            return
+        }
+        try {
+            const { response, price } = await putTokenOnSaleBlockchain(data)
+            await putTokenOnSaleAPI({
+                id: token.id,
+                tx_hash: response.hash,
+                price,
+                copiesOnSale: data.copiesCount,
+            })
+        } catch (e) {
+            setPutOnSaleError(e.message)
+        }
+    }
+
+    const onFormSubmit = async (data: PutOnSaleForm) => {
+        onSubmit()
+        setFormData(data)
+        await tryPutOnSale(data)
     }
 
     //got typescript error if pass e: React.ChangeEvent<HTMLInputElement>: Argument of type 'string' is not assignable to parameter of type '"price" | "copiesCount"'
     const handlePriceInput = (e: any) => {
-        // setValue(e.target.name, e.target.value.split(/\D/).join(''))
         let index = 0
         setValue(
             e.target.name,
@@ -66,6 +166,13 @@ export default function PutOnSaleModal({
 
     const handleNumberInput = (e: any) => {
         setValue(e.target.name, e.target.value.split(/\D/).join(''))
+    }
+
+    const handleTryAgain = () => {
+        if (formData) {
+            setPutOnSaleError('')
+            tryPutOnSale(formData)
+        }
     }
 
     return (
@@ -95,29 +202,35 @@ export default function PutOnSaleModal({
                         </p>
                     )}
                 </FormControl>
-                {type === TokenType.MULTIPLE && copiesCount && (
-                    <FormControl className={classes.fieldGroup}>
-                        <InputLabel shrink htmlFor="quantity">
-                            {t('enterQuantity')}{' '}
-                            <small>
-                                ({t('countAvailable', { count: copiesCount })})
-                            </small>
-                        </InputLabel>
-                        {/*@TODO: add validation that not allow user to put more tokens than he has*/}
-                        <Input
-                            inputRef={register}
-                            name="copiesCount"
-                            onChange={handleNumberInput}
-                            id="quantity"
-                            placeholder="1"
-                        />
-                        {errors.copiesCount && (
-                            <p className={classes.textError}>
-                                {errors.copiesCount.message}
-                            </p>
-                        )}
-                    </FormControl>
-                )}
+                {token.metadata.type === TokenType.MULTIPLE &&
+                    token.metadata.payload.copiesCount && (
+                        <FormControl className={classes.fieldGroup}>
+                            <InputLabel shrink htmlFor="quantity">
+                                {t('enterQuantity')}{' '}
+                                <small>
+                                    (
+                                    {t('countAvailable', {
+                                        count:
+                                            token.metadata.payload.copiesCount,
+                                    })}
+                                    )
+                                </small>
+                            </InputLabel>
+                            {/*@TODO: add validation that not allow user to put more tokens than he has*/}
+                            <Input
+                                inputRef={register}
+                                name="copiesCount"
+                                onChange={handleNumberInput}
+                                id="quantity"
+                                placeholder="1"
+                            />
+                            {errors.copiesCount && (
+                                <p className={classes.textError}>
+                                    {errors.copiesCount.message}
+                                </p>
+                            )}
+                        </FormControl>
+                    )}
                 <ul className={classes.additionalInfo}>
                     <li>
                         <Trans
