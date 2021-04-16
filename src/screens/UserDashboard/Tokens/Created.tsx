@@ -11,7 +11,6 @@ import TokenCard from './TokenCard'
 import { getTokens, Token } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
-import PutOnSaleProgressModal from './TokenActions/PutOnSaleProgressModal'
 import { TokenType } from 'state/transactions/actions'
 
 const RenderCardContent = ({

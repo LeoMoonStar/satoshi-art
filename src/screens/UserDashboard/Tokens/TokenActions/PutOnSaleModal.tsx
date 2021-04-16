@@ -141,6 +141,7 @@ export default function PutOnSaleModal({
                 price,
                 copiesOnSale: data.copiesCount,
             })
+            onClose()
         } catch (e) {
             setPutOnSaleError(e.message)
         }
