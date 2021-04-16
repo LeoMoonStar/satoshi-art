@@ -20,7 +20,7 @@ export type Token = {
 type PutOnSaleParams = {
     id: string
     tx_hash: string
-    price: number
+    price: string
     copiesOnSale?: number
 }
 
