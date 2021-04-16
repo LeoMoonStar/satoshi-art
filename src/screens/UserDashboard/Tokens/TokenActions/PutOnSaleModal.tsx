@@ -163,8 +163,11 @@ export default function PutOnSaleModal({
         )
     }
 
-    const handleNumberInput = (e: any) => {
-        setValue(e.target.name, e.target.value.replace(/\D/g, ''))
+    const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(
+            e.target.name as keyof PutOnSaleForm,
+            e.target.value.replace(/\D/g, '')
+        )
     }
 
     const handleTryAgain = () => {
