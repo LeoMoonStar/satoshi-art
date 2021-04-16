@@ -2,7 +2,7 @@ import { TokenType } from 'state/transactions/actions'
 import axios from './axios'
 
 export type Token = {
-    TokenID: number
+    TokenID: string
     id: string
     metadata: {
         type: TokenType

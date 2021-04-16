@@ -24,7 +24,7 @@ const categories: CategoryType[] = [
 ]
 
 const tokens = Array.from({ length: 24 }, (index) => ({
-    TokenID: index as number,
+    TokenID: index as string,
     id: `id${index}`,
     metadata: {
         type: TokenType.MULTIPLE,

@@ -19,7 +19,7 @@ import {
     use1155EngineSmartContractNetworkData,
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
-import { etherToWei } from 'utils/helpers'
+import { convertStringToNumber, etherToWei } from 'utils/helpers'
 import { putTokenOnSaleAPI, Token } from 'api/tokens'
 
 type PutOnSaleModalProps = {
@@ -70,7 +70,6 @@ export default function PutOnSaleModal({
     //@TODO: probably we need to move out these contracts instance creation to a separate hook or smth else, any ideas?
     useEffect(() => {
         if (isSingle) {
-            console.log('here')
             if (library && erc721NetworkData) {
                 const address = erc721NetworkData.address
                 const singleContract = new Contract(
@@ -105,9 +104,10 @@ export default function PutOnSaleModal({
 
     const putTokenOnSaleBlockchain = async (data: PutOnSaleForm) => {
         const priceInWei = etherToWei(data.price)
+        const tokenId = convertStringToNumber(token.TokenID)
         if (isSingle) {
             const putSingleTokenOnSaleResponse = await singleContract.putOnSale(
-                token.TokenID,
+                tokenId,
                 priceInWei,
                 { from: account }
             )
@@ -118,7 +118,7 @@ export default function PutOnSaleModal({
         }
         const putMultipleOnSaleResponse = await engine1155contract.putToSale(
             erc1155contract.address,
-            token.TokenID,
+            tokenId,
             data.copiesCount,
             priceInWei,
             { from: account }

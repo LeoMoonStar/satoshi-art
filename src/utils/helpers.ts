@@ -22,6 +22,10 @@ export function etherToWei(priceInEth: number): string {
     return priceInWei.toString()
 }
 
+export function convertStringToNumber(value: string): number {
+    return Number(value)
+}
+
 export const getKeyValue = <
     T extends Record<string, unknown>,
     U extends keyof T
