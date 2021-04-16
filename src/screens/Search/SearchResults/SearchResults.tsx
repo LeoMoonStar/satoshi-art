@@ -7,6 +7,7 @@ import preview from 'shared/images/artist/work.jpg'
 import { TokenType } from 'state/transactions/actions'
 
 const tokens = Array.from({ length: 24 }, (index) => ({
+    TokenID: index as number,
     id: `id${index}`,
     metadata: {
         type: TokenType.MULTIPLE,
