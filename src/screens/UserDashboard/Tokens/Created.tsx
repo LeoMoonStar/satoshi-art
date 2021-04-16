@@ -25,6 +25,7 @@ const RenderCardContent = ({ token }: { token: Token }) => {
     const anchorElRef = useRef()
     const { t } = useTranslation()
     const { payload, type } = token?.metadata
+    const [putOnSaleError, setPutOnSaleError] = useState<string>('')
 
     return (
         <>
@@ -98,11 +99,13 @@ const RenderCardContent = ({ token }: { token: Token }) => {
                     }}
                 />
             )}
-            {isPutOnSaleProgressModal && (
-                <PutOnSaleProgressModal
-                    onClose={() => setIsPutOnSaleProgressModal(false)}
-                />
-            )}
+            {/*{isPutOnSaleProgressModal && (*/}
+            {/*    <PutOnSaleProgressModal*/}
+            {/*        onClose={() => setIsPutOnSaleProgressModal(false)}*/}
+            {/*        putOnSaleError={putOnSaleError}*/}
+            {/*        onTryAgain={}*/}
+            {/*    />*/}
+            {/*)}*/}
         </>
     )
 }

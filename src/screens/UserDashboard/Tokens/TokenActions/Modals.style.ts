@@ -127,7 +127,7 @@ const useStyles = makeStyles(() => {
             flexShrink: 0,
         },
         textError: {
-            color: '#FF0000',
+            color: '#FF0000 !important',
         },
     }
 })
