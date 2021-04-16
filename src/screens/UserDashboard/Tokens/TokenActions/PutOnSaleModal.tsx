@@ -21,10 +21,10 @@ import {
 } from 'utils/erc1155'
 import { convertStringToNumber, etherToWei } from 'utils/helpers'
 import { putTokenOnSaleAPI, Token } from 'api/tokens'
+import PutOnSaleProgressModal from './PutOnSaleProgressModal'
 
 type PutOnSaleModalProps = {
     onClose: () => void
-    onSubmit: () => void
     token: Token
 }
 
@@ -43,7 +43,6 @@ const schema = yup.object().shape({
 
 export default function PutOnSaleModal({
     onClose,
-    onSubmit,
     token,
 }: PutOnSaleModalProps): JSX.Element {
     const classes = useStyles()
@@ -65,6 +64,7 @@ export default function PutOnSaleModal({
     const [engine1155contract, setEngine1155contract] = useState<any>()
     const [putOnSaleError, setPutOnSaleError] = useState<string>('')
     const [formData, setFormData] = useState<PutOnSaleForm | null>(null)
+    const [isInProgress, setInProgress] = useState<boolean>(false)
     const isSingle = token.metadata.type === TokenType.SINGLE
 
     //@TODO: probably we need to move out these contracts instance creation to a separate hook or smth else, any ideas?
@@ -147,16 +147,15 @@ export default function PutOnSaleModal({
     }
 
     const onFormSubmit = async (data: PutOnSaleForm) => {
-        onSubmit()
+        setInProgress(true)
         setFormData(data)
         await tryPutOnSale(data)
     }
 
-    //got typescript error if pass e: React.ChangeEvent<HTMLInputElement>: Argument of type 'string' is not assignable to parameter of type '"price" | "copiesCount"'
-    const handlePriceInput = (e: any) => {
+    const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         let index = 0
         setValue(
-            e.target.name,
+            e.target.name as keyof PutOnSaleForm,
             e.target.value
                 .replace(/[^\d.,]/g, '') //replace everything but valid symbols
                 .replace(/,/g, '.') // replace comma to dot
@@ -164,8 +163,11 @@ export default function PutOnSaleModal({
         )
     }
 
-    const handleNumberInput = (e: any) => {
-        setValue(e.target.name, e.target.value.split(/\D/).join(''))
+    const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(
+            e.target.name as keyof PutOnSaleForm,
+            e.target.value.replace(/\D/g, '')
+        )
     }
 
     const handleTryAgain = () => {
@@ -173,6 +175,16 @@ export default function PutOnSaleModal({
             setPutOnSaleError('')
             tryPutOnSale(formData)
         }
+    }
+
+    if (isInProgress) {
+        return (
+            <PutOnSaleProgressModal
+                onClose={onClose}
+                putOnSaleError={putOnSaleError}
+                onTryAgain={handleTryAgain}
+            />
+        )
     }
 
     return (
@@ -208,12 +220,10 @@ export default function PutOnSaleModal({
                             <InputLabel shrink htmlFor="quantity">
                                 {t('enterQuantity')}{' '}
                                 <small>
-                                    (
                                     {t('countAvailable', {
                                         count:
                                             token.metadata.payload.copiesCount,
                                     })}
-                                    )
                                 </small>
                             </InputLabel>
                             {/*@TODO: add validation that not allow user to put more tokens than he has*/}
