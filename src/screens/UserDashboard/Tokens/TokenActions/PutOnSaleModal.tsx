@@ -152,11 +152,10 @@ export default function PutOnSaleModal({
         await tryPutOnSale(data)
     }
 
-    //got typescript error if pass e: React.ChangeEvent<HTMLInputElement>: Argument of type 'string' is not assignable to parameter of type '"price" | "copiesCount"'
-    const handlePriceInput = (e: any) => {
+    const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         let index = 0
         setValue(
-            e.target.name,
+            e.target.name as keyof PutOnSaleForm,
             e.target.value
                 .replace(/[^\d.,]/g, '') //replace everything but valid symbols
                 .replace(/,/g, '.') // replace comma to dot
@@ -208,12 +207,10 @@ export default function PutOnSaleModal({
                             <InputLabel shrink htmlFor="quantity">
                                 {t('enterQuantity')}{' '}
                                 <small>
-                                    (
                                     {t('countAvailable', {
                                         count:
                                             token.metadata.payload.copiesCount,
                                     })}
-                                    )
                                 </small>
                             </InputLabel>
                             {/*@TODO: add validation that not allow user to put more tokens than he has*/}
