@@ -146,6 +146,7 @@ const useStyles = makeStyles(() => {
             height: 245,
             padding: '23px 25px 17px 25px',
             boxSizing: 'border-box',
+            marginLeft: 5,
             background: '#fff',
             borderRadius: 20,
             display: 'flex',

@@ -9,9 +9,9 @@ import {
     SortedArrowsDownIcon,
     SortedArrowsUpIcon,
 } from 'shared/icons'
+import Pagination from 'shared/Pagination'
 
 import useStyles from './OrderListData.style'
-import OrderListPagination from '../OrderListPagination'
 
 enum OrderEvents {
     Bid,
@@ -265,7 +265,7 @@ export default function OrderListData(): JSX.Element {
                 <div className={classes.countsOfRow}>
                     {t('showingCountOfData', { count: 12, total: 22 })}
                 </div>
-                <OrderListPagination />
+                <Pagination />
             </div>
         </>
     )

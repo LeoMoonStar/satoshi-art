@@ -3,19 +3,19 @@ import { Select as MUISelect } from '@material-ui/core'
 import useStyles from './Select.style'
 
 interface SelectProps {
-    renderValue: (value: any) => JSX.Element
+    renderValue?: (value: any) => JSX.Element
     label?: string
     defaultValue?: string | number
-    className: string
+    className?: string
     children: React.ReactNode
 }
 
 export default function Select({
-    renderValue,
+    renderValue = (value): JSX.Element => value,
     label,
     children,
     defaultValue,
-    className,
+    className = '',
 }: SelectProps): JSX.Element {
     const classes = useStyles()
     return (
