@@ -64,7 +64,7 @@ export default function TopList({
                         )
                     })}
                 </div>
-                <Button className={classes.seeAll}>{t('seeAll')}</Button>
+                {/*<Button className={classes.seeAll}>{t('seeAll')}</Button>*/}
             </div>
         </div>
     )
