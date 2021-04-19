@@ -18,7 +18,7 @@ const RenderCardContent = ({
     onPutOnSale,
 }: {
     token: Token
-    onPutOnSale: (toke: Token) => Token
+    onPutOnSale: (token: Token) => Token
 }) => {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -112,7 +112,7 @@ export default function Created(): JSX.Element {
     }, [account])
 
     const renderContent = useMemo(() => {
-        const handlePutOnSale = (token: any) => {
+        const handlePutOnSale = (token: Token) => {
             setPutOnSale(true)
             setSelectedToken(token)
         }
