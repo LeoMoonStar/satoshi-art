@@ -238,6 +238,8 @@
   "putOnAuctionBtn": "Put on Auction",
   "changePriceBtn": "Change Price",
   "removeFromSaleBtn": "Remove from Sale",
+  "recentlyAdded": "Recently added",
+  "tokensLoadingFailed": "Loading tokens was failed",
   "putOnSaleServiceFee": "Service fee: <b>{{fee}}%</b>",
   "putOnSaleReceiveAmount": "You will receive <b>{{ count }} {{ currency }}</b> $ {{ amount }}",
   "nextStep": "Next step"
