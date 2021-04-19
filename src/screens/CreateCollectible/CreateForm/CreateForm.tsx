@@ -430,7 +430,17 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.name, e.target.value.split(/\D/).join(''))
     }
-
+    /* TODO: Create PriceComponent */
+    const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let index = 0
+        setValue(
+            e.target.name,
+            e.target.value
+                .replace(/[^\d.,]/g, '') //replace everything but valid symbols
+                .replace(/,/g, '.') // replace comma to dot
+                .replace(/\./g, (item: string) => (!index++ ? item : '')) // replace all but the first occurence of dot
+        )
+    }
     const clearFile = () => {
         setValue('file', null)
         setPreview({
@@ -654,7 +664,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     <div className={classes.input}>
                                         <Input
                                             placeholder="Enter price for one piece"
-                                            onChange={handleNumberInput}
+                                            onChange={handlePriceInput}
                                             inputRef={register}
                                             name="price"
                                             disableUnderline
