@@ -51,7 +51,7 @@ export const putTokenOnSaleAPI = ({
     copiesOnSale,
 }: PutOnSaleParams): Promise<void> => {
     return axios.put(`/products/${id}`, {
-        status: 'inMining',
+        status: 'waitForSale',
         tx_hash,
         price,
         copiesOnSale,
