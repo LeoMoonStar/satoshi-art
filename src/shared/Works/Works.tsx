@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 
 import { Token } from 'api/tokens'
 import useStyles from './Works.style'
+import { shortAddress } from 'utils/helpers'
 
 type WorksListProps = {
     borderWidth?: number
@@ -38,7 +39,10 @@ export default function WorksList({
         <div>
             <div className={classes.grid}>
                 {tokens.map(
-                    ({ metadata: { payload, type, thumbnail }, id }) => {
+                    ({
+                        metadata: { payload, type, thumbnail, walletHash },
+                        id,
+                    }) => {
                         return (
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
@@ -89,9 +93,14 @@ export default function WorksList({
                                         {/*    </IconButton>*/}
                                         {/*</div>*/}
                                     </div>
-                                    {/*<div className={classes.authorInfo}>*/}
-                                    {/*    <a href="">@Fimbim</a> 124.56x3 ETH*/}
-                                    {/*</div>*/}
+                                    <div className={classes.authorInfo}>
+                                        <a
+                                            href={`https://ropsten.etherscan.io/address/${walletHash}`}
+                                        >
+                                            {shortAddress(walletHash)}
+                                        </a>
+                                        {/*124.56x3 ETH*/}
+                                    </div>
                                     <div className={classes.workInfo}>
                                         {/*0.25 ETH*/}
                                         <span className={classes.count}>

@@ -12,6 +12,7 @@ const tokens = Array.from({ length: 24 }, (index) => ({
     metadata: {
         type: TokenType.MULTIPLE,
         thumbnail: preview,
+        walletHash: '00030fgr039023tjkujrghjith',
         payload: {
             name: 'Fresh Meat #F',
             copiesCount: 20,

@@ -7,6 +7,7 @@ export type Token = {
     metadata: {
         type: TokenType
         thumbnail?: string
+        walletHash: string
         payload: {
             name: string
             copiesCount?: number // todo: Probably should has totalCount and currentCount
