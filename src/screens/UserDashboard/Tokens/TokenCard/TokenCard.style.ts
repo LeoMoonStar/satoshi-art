@@ -3,13 +3,14 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(() => {
     return {
         card: {
+            display: 'block',
             marginTop: 86,
             width: '207px !important',
+            textDecoration: 'none',
             border: '1px solid #E5E5E5',
             boxSizing: 'border-box',
             padding: '0 17px 24px',
             borderRadius: 10,
-            margin: '0 8px',
         },
         tokenName: {
             margin: '16px 0 12px',
@@ -49,6 +50,7 @@ const useStyles = makeStyles(() => {
             left: 0,
             width: '100%',
             height: '100%',
+            objectFit: 'cover',
             borderRadius: 20,
         },
 

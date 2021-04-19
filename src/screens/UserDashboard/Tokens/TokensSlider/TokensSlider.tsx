@@ -1,12 +1,11 @@
 import React from 'react'
 import { SpecialSliderArrowIcon } from 'shared/icons'
 import Slider from 'react-slick'
-import { useTranslation } from 'react-i18next'
+import cx from 'classnames'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 
 import useStyles from './TokensSlider.style'
-import Button from 'shared/Button'
 import Loader from 'shared/Loader'
 
 const SliderLeft = ({ currentSlide, slideCount, ...props }: any) => {
@@ -40,7 +39,6 @@ const SliderRight = ({ currentSlide, slideCount, ...props }: any) => {
 const sliderConfig = {
     speed: 500,
     slidesToShow: 7,
-    infinite: false,
     slidesToScroll: 1,
     prevArrow: <SliderLeft />,
     nextArrow: <SliderRight />,
@@ -60,7 +58,6 @@ export default function TokensSlider({
     isLoading = false,
 }: TokensSliderProps): JSX.Element {
     const classes = useStyles()
-    const { t } = useTranslation()
 
     const responsive = [
         {
@@ -102,6 +99,7 @@ export default function TokensSlider({
         },
         7
     )
+    const isHasMore = count > currentSlideToShow
 
     if (isLoading) {
         return <Loader />
@@ -113,19 +111,22 @@ export default function TokensSlider({
             <div className={classes.container}>
                 <div className={classes.head}>
                     <h2 className={classes.mainTitle}>{title}</h2>
-                    {count > currentSlideToShow && (
-                        <Button
-                            className={classes.viewAllButton}
-                            variantCustom="action"
-                        >
-                            {t('viewAll')}
-                        </Button>
-                    )}
+                    {/*{isHasMore && (*/}
+                    {/*    <Button*/}
+                    {/*        className={classes.viewAllButton}*/}
+                    {/*        variantCustom="action"*/}
+                    {/*    >*/}
+                    {/*        {t('viewAll')}*/}
+                    {/*    </Button>*/}
+                    {/*)}*/}
                 </div>
                 <div className={classes.sliderRow}>
                     <Slider
-                        className={classes.slider}
+                        className={cx(classes.slider, {
+                            [classes.sliderHasNotMore]: !isHasMore,
+                        })}
                         responsive={responsive}
+                        infinite={isHasMore}
                         {...sliderConfig}
                     >
                         {children}

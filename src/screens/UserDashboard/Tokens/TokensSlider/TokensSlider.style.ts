@@ -51,10 +51,15 @@ const useStyles = makeStyles(() => {
                 },
             },
             '& .slick-prev': {
-                transform: 'rotateZ(180deg) translate(0, 50%)',
+                right: 44,
             },
             '& .slick-next': {
-                right: 44,
+                transform: 'rotateZ(180deg) translate(0, 50%)',
+            },
+        },
+        sliderHasNotMore: {
+            '& .slick-list> div': {
+                marginLeft: 0,
             },
         },
         viewAllButton: {
