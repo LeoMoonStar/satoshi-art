@@ -7,13 +7,14 @@ import preview from 'shared/images/artist/work.jpg'
 import { TokenType } from 'state/transactions/actions'
 
 const tokens = Array.from({ length: 24 }, (index) => ({
+    TokenID: index as string,
     id: `id${index}`,
     metadata: {
         type: TokenType.MULTIPLE,
         thumbnail: preview,
         payload: {
             name: 'Fresh Meat #F',
-            copiesCount: '20',
+            copiesCount: 20,
             description: '',
             file: preview,
         },

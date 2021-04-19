@@ -2,12 +2,12 @@ import React, { useState, useCallback, useMemo } from 'react'
 
 type ErrorType = {
     title: string
-    message: string
+    message?: string
 }
 
 export type APIErrorContextProps = {
     error: ErrorType | null
-    setError: (title: string, message: string) => void
+    setError: (title: string, message?: string) => void
     removeError: () => void
 }
 
@@ -25,7 +25,7 @@ export default function APIErrorProvider({
     const [error, updateError] = useState<ErrorType | null>(null)
 
     const setError = useCallback(
-        (title: string, message: string) => updateError({ title, message }),
+        (title: string, message?: string) => updateError({ title, message }),
         []
     )
 

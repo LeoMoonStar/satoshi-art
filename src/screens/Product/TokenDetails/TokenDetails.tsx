@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     styled,
     Grid,
@@ -8,9 +8,16 @@ import {
     Tabs,
     Theme,
 } from '@material-ui/core'
+import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { SaveIcon, ExpandIcon } from 'shared/icons'
+import { ExpandIcon } from 'shared/icons'
 import Button from 'shared/Button'
+import Loader from 'shared/Loader'
+import {
+    VALID_VIDEO_TYPES,
+    VALID_AUDIO_TYPES,
+} from 'constants/supportedFileTypes'
+import { getToken, Token } from 'api/tokens'
 import { TokenInfo } from './TokenInfo'
 import BidModal from './BidModal'
 import BuyModal from './BuyModal'
@@ -66,60 +73,95 @@ const tabs = [
     },
 ]
 
-const productImgSrc =
-    'https://ipfs.rarible.com/ipfs/QmbDxMus9wLt1SSesBGo4qbfmVRtmzdoAtt8X9oSFc6pJt/image.jpeg'
-
 const TokenDetails = (): JSX.Element => {
     const [tab, selectTab] = useState(TabVariants.INFO)
     const [isBidModal, setBidModal] = useState<boolean>(false)
     const [isBuyModal, setBuyModal] = useState<boolean>(false)
     const [isFSModal, setFSModal] = useState<boolean>(false)
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const [token, setToken] = useState<Token | null>(null)
     const [isProgressModal, setIsProgressModal] = useState<boolean>(false)
+    const { id } = useParams<{ id: string }>()
     const classes = useStyles()
     const { t } = useTranslation()
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+
+        async function tryGetToken() {
+            const data = await getToken(id)
+            setLoading(false)
+            setToken(data)
+        }
+
+        tryGetToken()
+    }, [id])
 
     const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => {
         selectTab(newValue)
     }
+
+    const renderIcons = () => (
+        <div className={classes.iconsContainer}>
+            {/*<IconWrapper item alignItems="center" justify="center">*/}
+            {/*    <IconButton>*/}
+            {/*        <SaveIcon />*/}
+            {/*    </IconButton>*/}
+            {/*</IconWrapper>*/}
+            <IconWrapper
+                onClick={() => setFSModal(true)}
+                item
+                alignItems="center"
+                justify="center"
+            >
+                <IconButton>
+                    <ExpandIcon />
+                </IconButton>
+            </IconWrapper>
+            {/* TODO: Hidden for MVP */}
+            {/*
+            <IconWrapper
+                item
+                alignItems="center"
+                justify="center"
+                dots={true}
+            >
+                <IconButton>
+                    <DotsIcon />
+                </IconButton>
+            </IconWrapper>
+            */}
+        </div>
+    )
+
+    const renderSwitch = (url: string) => {
+        const extension = url.split('.').pop()
+        if (extension) {
+            switch (true) {
+                case VALID_VIDEO_TYPES.includes(extension):
+                    return <video src={url} controls />
+                case VALID_AUDIO_TYPES.includes(extension):
+                    return <audio src={url} controls />
+                default:
+                    return (
+                        <>
+                            <img src={url} />
+                            {renderIcons()}
+                        </>
+                    )
+            }
+        }
+    }
+
+    if (isLoading) {
+        return <Loader />
+    }
+
     return (
         <div className={classes.container}>
             <div>
-                <div className={classes.imageWrapper}>
-                    <img
-                        className={classes.tokenImage}
-                        src={productImgSrc}
-                        alt={'Token image'}
-                    />
-                    <div className={classes.iconsContainer}>
-                        <IconWrapper item alignItems="center" justify="center">
-                            <IconButton>
-                                <SaveIcon />
-                            </IconButton>
-                        </IconWrapper>
-                        <IconWrapper
-                            onClick={() => setFSModal(true)}
-                            item
-                            alignItems="center"
-                            justify="center"
-                        >
-                            <IconButton>
-                                <ExpandIcon />
-                            </IconButton>
-                        </IconWrapper>
-                        {/* TODO: Hidden for MVP */}
-                        {/*
-                        <IconWrapper
-                            item
-                            alignItems="center"
-                            justify="center"
-                            dots={true}
-                        >
-                            <IconButton>
-                                <DotsIcon />
-                            </IconButton>
-                        </IconWrapper>
-                        */}
-                    </div>
+                <div className={classes.fileWrapper}>
+                    {token && renderSwitch(token.metadata.payload.file)}
                 </div>
                 {/* TODO: Hidden for MVP */}
                 {/*<div className={classes.socialActivityContainer}>
@@ -162,7 +204,9 @@ const TokenDetails = (): JSX.Element => {
                     <Typography variant="h6" className={classes.artLabel}>
                         ART
                     </Typography>
-                    <Typography variant="h1">Dream Candy</Typography>
+                    <Typography variant="h1">
+                        {token?.metadata.payload.name}
+                    </Typography>
                     <div className={classes.tokenPriceContainer}>
                         <Typography variant="h2">1.00 ETH</Typography>
                         <Typography
@@ -174,7 +218,8 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                     <div className={classes.descriptionContainer}>
                         <Typography variant="h4">
-                            {t('thereIsNoDscr')}
+                            {token?.metadata.payload.description ||
+                                t('thereIsNoDscr')}
                         </Typography>
                     </div>
                 </div>
@@ -279,9 +324,9 @@ const TokenDetails = (): JSX.Element => {
                     onClose={() => setBuyModal(false)}
                 />
             )}
-            {isFSModal && (
+            {isFSModal && token && (
                 <FSModal
-                    src={productImgSrc}
+                    src={token.metadata.payload.file}
                     onClose={() => setFSModal(false)}
                 />
             )}

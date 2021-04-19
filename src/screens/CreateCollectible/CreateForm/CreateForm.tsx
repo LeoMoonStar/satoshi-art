@@ -19,13 +19,17 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useForm, Controller } from 'react-hook-form'
 // import { LogoIcon, PlusCircle } from 'shared/icons'
 import { yupResolver } from '@hookform/resolvers/yup'
+import {
+    VAlID_IMAGES_TYPES,
+    VALID_FILE_TYPES,
+    ALL_SUPPORTED_TYPES,
+} from 'constants/supportedFileTypes'
 import * as yup from 'yup'
+
 import { useAPIError } from 'hooks/useAPIError'
-import Preview from '../Preview'
-import ProgressModal from '../ProgressModal'
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import { addTransaction, TokenType } from 'state/transactions/actions'
-import { percentageToBasicPoints } from 'utils/helpers'
+import { percentageToBasicPoints, convertEthToUsd } from 'utils/helpers'
 import {
     Engine1155ABI,
     Satoshi1155ABI,
@@ -38,6 +42,9 @@ import {
     updateMetaData,
     MetaDataType,
 } from 'api/createItem'
+import { getCurrency } from 'api/currency'
+import Preview from '../Preview'
+import ProgressModal from '../ProgressModal'
 import useStyles from './CreateForm.style'
 
 type PropertyType = {
@@ -66,10 +73,6 @@ interface ICollectibleForm {
     royalties: number
     properties: Array<PropertyType>
 }
-
-const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
-const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg'
-const ALL_SUPPORTED_TYPES = `${VAlID_COVER_TYPES},${VALID_FILE_TYPES}`
 
 const FILE_SIZE = 31457280
 
@@ -127,7 +130,7 @@ const schema = yup.object().shape({
                 (value) =>
                     value &&
                     value.hasOwnProperty(0) &&
-                    VAlID_COVER_TYPES.includes(value[0].type)
+                    VAlID_IMAGES_TYPES.includes(value[0].type)
             ),
     }),
     royalties: yup
@@ -183,6 +186,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const [createTokenError, setCreateTokenError] = useState<string>('')
+    const [currency, setCurrency] = useState<number>(1)
     const [tempToken, setTempToken] = useState<TempTokenData | null>(null)
     const {
         register,
@@ -204,6 +208,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const [engine1155contract, setEngine1155contract] = useState<any>()
 
     const engineAddress = engine1155NetworkData?.address
+
+    useEffect(() => {
+        ;(async () => {
+            try {
+                const currency = await getCurrency()
+                if (currency) {
+                    setCurrency(+currency)
+                }
+            } catch (e) {
+                setError('Get exchange rate error')
+            }
+        })()
+    }, [setError])
 
     useEffect(() => {
         if (isSingle) {
@@ -239,7 +256,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [
         library,
-        erc721NetworkData,
         chainId,
         isSingle,
         erc1155NetworkData,
@@ -413,7 +429,17 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.name, e.target.value.split(/\D/).join(''))
     }
-
+    /* TODO: Create PriceComponent */
+    const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let index = 0
+        setValue(
+            e.target.name,
+            e.target.value
+                .replace(/[^\d.,]/g, '') //replace everything but valid symbols
+                .replace(/,/g, '.') // replace comma to dot
+                .replace(/\./g, (item: string) => (!index++ ? item : '')) // replace all but the first occurence of dot
+        )
+    }
     const clearFile = () => {
         setValue('file', null)
         setPreview({
@@ -451,6 +477,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [isSubmitModal])
 
+    const { price } = previewFields
+
+    const ethAmount = price ? price - price * 0.025 : 0
+    const usdAmount = price ? convertEthToUsd(price, currency) : '0.00'
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -527,7 +557,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 })}
                             >
                                 <input
-                                    accept={VAlID_COVER_TYPES}
+                                    accept={VAlID_IMAGES_TYPES}
                                     className={classes.input}
                                     onChange={handleFileChange}
                                     ref={register}
@@ -633,24 +663,26 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                     <div className={classes.input}>
                                         <Input
                                             placeholder="Enter price for one piece"
-                                            onChange={handleNumberInput}
+                                            onChange={handlePriceInput}
                                             inputRef={register}
                                             name="price"
                                             disableUnderline
                                         />
-                                        <span>
-                                            {' '}
-                                            {t('serviceFeeProgress', {
-                                                fee: '2.5',
-                                            })}
-                                        </span>
-                                        <span>
-                                            {t('youWillReceiveCnt', {
-                                                count: 0,
-                                                currency: 'ETH',
-                                                amount: '0,00',
-                                            })}
-                                        </span>
+                                        <div className={classes.priceInfo}>
+                                            <span>
+                                                {' '}
+                                                {t('serviceFeeProgress', {
+                                                    fee: '2.5',
+                                                })}
+                                            </span>
+                                            <span>
+                                                {t('youWillReceiveCnt', {
+                                                    count: ethAmount,
+                                                    currency: 'ETH',
+                                                    amount: usdAmount,
+                                                })}
+                                            </span>
+                                        </div>
                                         {errors.price && (
                                             <p className={classes.textError}>
                                                 {errors.price.message}

@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => {
         },
         autocomplete: {
             position: 'relative',
-            zIndex: 9999,
+            zIndex: 999,
             width: 672,
 
             '&[aria-expanded="true"] .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {

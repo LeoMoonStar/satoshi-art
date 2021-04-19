@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@material-ui/core'
 import { Popover } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
@@ -10,21 +11,33 @@ import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
 import { getTokens, Token } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
+import PutOnSaleModal from './TokenActions/PutOnSaleModal'
+import { TokenType } from 'state/transactions/actions'
 
-const RenderCardContent = () => {
+const RenderCardContent = ({
+    token,
+    onPutOnSale,
+}: {
+    token: Token
+    onPutOnSale: (token: Token) => Token
+}) => {
     const classes = useStyles()
-    const [isOpen, setOpen] = useState<boolean>(false)
-    const anchorElRef = useRef()
     const { t } = useTranslation()
+    const { payload, type } = token?.metadata
+    const anchorElRef = useRef()
+    const [isOpen, setOpen] = useState<boolean>(false)
 
     return (
         <>
             <div className={classes.head}>
-                <h3 className={classes.tokenName}>Fresh MEar #F</h3>
+                <h3 className={classes.tokenName}>{payload?.name}</h3>
                 <IconButton
                     className={classes.showMoreButton}
                     buttonRef={anchorElRef}
-                    onClick={() => setOpen(!isOpen)}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setOpen(!isOpen)
+                    }}
                 >
                     <ShowMoreIcon />
                     <Popover
@@ -45,7 +58,10 @@ const RenderCardContent = () => {
                         disableRestoreFocus
                     >
                         <div className={classes.controlsButtons}>
-                            <button type="button">
+                            <button
+                                type="button"
+                                onClick={() => onPutOnSale(token)}
+                            >
                                 <div>
                                     <PriceIcon />
                                 </div>
@@ -67,19 +83,26 @@ const RenderCardContent = () => {
                     </Popover>
                 </IconButton>
             </div>
-            <div className={classes.count}>1 of 30</div>
+            {type === TokenType.MULTIPLE && (
+                <div className={classes.count}>
+                    {payload?.copiesCount} of {payload?.copiesCount}
+                </div>
+            )}
+            {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
             <div className={classes.createdInfo}>
-                <a href="">@Coll3ctor</a> 1,995 ETH
+                <Link to="/artists/1">@Coll3ctor</Link> 1,995 ETH
             </div>
         </>
     )
 }
 
 export default function Created(): JSX.Element {
-    const { t } = useTranslation()
     const [tokens, setTokens] = useState<Token[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const { account } = useWeb3React()
+    const [selectedToken, setSelectedToken] = useState<Token | null>(null)
+    const [isPutOnSale, setPutOnSale] = useState<boolean>(false)
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (!account) {
@@ -92,6 +115,18 @@ export default function Created(): JSX.Element {
         })
     }, [account])
 
+    const renderContent = useMemo(() => {
+        const handlePutOnSale = (token: Token) => {
+            setPutOnSale(true)
+            setSelectedToken(token)
+        }
+        return function RenderCardContentWithHandlers(props: any) {
+            return (
+                <RenderCardContent {...props} onPutOnSale={handlePutOnSale} />
+            )
+        }
+    }, [setSelectedToken])
+
     return (
         <>
             <TokensSlider
@@ -103,10 +138,16 @@ export default function Created(): JSX.Element {
                     <TokenCard
                         key={token.id}
                         token={token}
-                        renderContent={RenderCardContent}
+                        renderContent={renderContent}
                     />
                 ))}
             </TokensSlider>
+            {selectedToken !== null && isPutOnSale && (
+                <PutOnSaleModal
+                    token={selectedToken}
+                    onClose={() => setPutOnSale(false)}
+                />
+            )}
         </>
     )
 }
