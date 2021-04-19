@@ -49,9 +49,9 @@ export default function Tops(): JSX.Element {
                             </div>
                         </Link>
                     </div>
-                    <Link to="" className={classes.seeAllLink}>
-                        <Button>{t('seeAll')}</Button>
-                    </Link>
+                    {/*<Link to="" className={classes.seeAllLink}>*/}
+                    {/*    <Button>{t('seeAll')}</Button>*/}
+                    {/*</Link>*/}
                 </div>
                 <div className={classes.col}>
                     <small className={classes.subTitle}>
@@ -82,9 +82,9 @@ export default function Tops(): JSX.Element {
                             </div>
                         </Link>
                     </div>
-                    <Link to="" className={classes.seeAllLink}>
-                        <Button>{t('seeAll')}</Button>
-                    </Link>
+                    {/*<Link to="" className={classes.seeAllLink}>*/}
+                    {/*    <Button>{t('seeAll')}</Button>*/}
+                    {/*</Link>*/}
                 </div>
                 <div className={classes.col}>
                     <small className={classes.subTitle}>
@@ -115,9 +115,9 @@ export default function Tops(): JSX.Element {
                             </div>
                         </Link>
                     </div>
-                    <Link to="" className={classes.seeAllLink}>
-                        <Button>{t('seeAll')}</Button>
-                    </Link>
+                    {/*<Link to="" className={classes.seeAllLink}>*/}
+                    {/*    <Button>{t('seeAll')}</Button>*/}
+                    {/*</Link>*/}
                 </div>
             </div>
         </section>
