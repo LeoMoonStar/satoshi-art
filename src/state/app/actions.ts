@@ -8,3 +8,6 @@ export const changeWhitelistedStatus = createAction<boolean>(
 export const changePermittedToUseWallet = createAction<boolean>(
     'app/changePermittedToUseWallet'
 )
+export const updateTransactionInMintingProcess = createAction<string | null>(
+    'app/updateTransactionInMintingProcess'
+)

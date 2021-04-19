@@ -32,6 +32,7 @@ import {
     uploadMetaData,
 } from 'api/createItem'
 import useStyles from './CreateForm.style'
+import { updateTransactionInMintingProcess } from 'state/app/actions'
 
 type PropertyType = {
     name: string
@@ -315,6 +316,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     chainId,
                 })
             )
+            dispatch(updateTransactionInMintingProcess(response.hash))
             history.push('/')
         } catch (e) {
             setCreateTokenError(e.message)
