@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Button from 'shared/Button'
+// import Button from 'shared/Button'
 import { useTranslation } from 'react-i18next'
 
 import Avatar from 'shared/Avatar'
