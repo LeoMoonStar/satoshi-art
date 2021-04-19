@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@material-ui/core'
 import { Popover } from '@material-ui/core'
+import { Link } from 'react-router-dom'
 
 import { ShowMoreIcon } from 'shared/icons'
 import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
@@ -26,7 +27,10 @@ const RenderCardContent = ({ token }: { token: Token }) => {
                 <IconButton
                     className={classes.showMoreButton}
                     buttonRef={anchorElRef}
-                    onClick={() => setOpen(!isOpen)}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setOpen(!isOpen)
+                    }}
                 >
                     <ShowMoreIcon />
                     <Popover
@@ -75,7 +79,7 @@ const RenderCardContent = ({ token }: { token: Token }) => {
                 </div>
             )}
             <div className={classes.createdInfo}>
-                <a href="">@Coll3ctor</a> 1,995 ETH
+                <Link to="/artists/1">@Coll3ctor</Link> 1,995 ETH
             </div>
         </>
     )

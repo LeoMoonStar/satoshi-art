@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import preview from 'shared/images/artist/work.jpg'
@@ -17,7 +18,7 @@ export default function TokenCard({
     const { payload } = token?.metadata
 
     return (
-        <div className={classes.card} key={token.id}>
+        <Link to={`/product/${token.id}`} className={classes.card} key={token.id}>
             <div className={classes.topWrapper}>
                 <div className={classes.tokenPreviewWrapper}>
                     <img
@@ -29,6 +30,6 @@ export default function TokenCard({
             </div>
             <Avatar className={classes.avatar} image={preview} size={60} />
             <RenderContent token={token} />
-        </div>
+        </Link>
     )
 }
