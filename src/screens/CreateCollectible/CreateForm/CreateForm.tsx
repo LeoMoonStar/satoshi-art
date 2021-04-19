@@ -256,7 +256,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [
         library,
-        erc721NetworkData,
         chainId,
         isSingle,
         erc1155NetworkData,

@@ -103,6 +103,10 @@ export default function TokensSlider({
         7
     )
 
+    if (isLoading) {
+        return <Loader />
+    }
+
     return (
         <>
             {' '}
@@ -128,7 +132,6 @@ export default function TokensSlider({
                     </Slider>
                 </div>
             </div>
-            {isLoading && <Loader />}
         </>
     )
 }

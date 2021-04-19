@@ -237,5 +237,8 @@
   "putOnSaleBtn": "Put on Sale",
   "putOnAuctionBtn": "Put on Auction",
   "changePriceBtn": "Change Price",
-  "removeFromSaleBtn": "Remove from Sale"
+  "removeFromSaleBtn": "Remove from Sale",
+  "putOnSaleServiceFee": "Service fee: <b>{{fee}}%</b>",
+  "putOnSaleReceiveAmount": "You will receive <b>{{ count }} {{ currency }}</b> $ {{ amount }}",
+  "nextStep": "Next step"
 }

@@ -18,6 +18,15 @@ export function percentageToBasicPoints(royaltiesPercentage: number): number {
     return royaltiesPercentage * 100
 }
 
+export function etherToWei(priceInEth: number): string {
+    const priceInWei = priceInEth * Math.pow(10, 18)
+    return priceInWei.toString()
+}
+
+export function convertStringToNumber(value: string): number {
+    return Number(value)
+}
+
 export const getKeyValue = <
     T extends Record<string, unknown>,
     U extends keyof T

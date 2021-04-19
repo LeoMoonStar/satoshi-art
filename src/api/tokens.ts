@@ -2,18 +2,26 @@ import { TokenType } from 'state/transactions/actions'
 import axios from './axios'
 
 export type Token = {
+    TokenID: string
     id: string
     metadata: {
         type: TokenType
         thumbnail?: string
         payload: {
             name: string
-            copiesCount: string // todo: Probably should has totalCount and currentCount
+            copiesCount?: number // todo: Probably should has totalCount and currentCount
             description: string
             cover?: string
             file: string
         }
     }
+}
+
+type PutOnSaleParams = {
+    id: string
+    tx_hash: string
+    price: string
+    copiesOnSale?: number
 }
 
 type getTokensProps = {
@@ -34,4 +42,18 @@ export const getTokens = ({
 
 export const getToken = (id: string): Promise<Token> => {
     return axios.get(`/products/${id}`)
+}
+
+export const putTokenOnSaleAPI = ({
+    id,
+    tx_hash,
+    price,
+    copiesOnSale,
+}: PutOnSaleParams): Promise<void> => {
+    return axios.put(`/products/${id}`, {
+        status: 'waitForSale',
+        tx_hash,
+        price,
+        copiesOnSale,
+    })
 }
