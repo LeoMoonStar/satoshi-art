@@ -93,6 +93,8 @@ const useStyles = makeStyles(() => {
             letterSpacing: '-0.04em',
         },
         showMoreButton: {
+            width: 20,
+            height: 20,
             padding: 2,
             '& svg': {
                 width: 13,
