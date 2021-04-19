@@ -18,7 +18,11 @@ export default function TokenCard({
     const { payload } = token?.metadata
 
     return (
-        <Link to={`/product/${token.id}`} className={classes.card} key={token.id}>
+        <Link
+            to={`/product/${token.id}`}
+            className={classes.card}
+            key={token.id}
+        >
             <div className={classes.topWrapper}>
                 <div className={classes.tokenPreviewWrapper}>
                     <img
