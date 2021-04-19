@@ -26,6 +26,9 @@ const useStyles = makeStyles(() => {
             minWidth: 166,
             height: 40,
             marginLeft: 16,
+            '& .MuiSvgIcon-root': {
+                marginLeft: 5,
+            },
             '& > div': {
                 fontSize: 13,
                 height: 27,

@@ -51,7 +51,7 @@ const useStyles = makeStyles(() => {
             position: 'relative',
             zIndex: 3,
             marginLeft: 'auto',
-            marginRight: 70,
+            marginRight: 50,
             padding: '0 50px',
             boxSizing: 'border-box',
             width: 'calc(100% - 510px)',

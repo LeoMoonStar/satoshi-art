@@ -1,17 +1,17 @@
 import React from 'react'
 import cx from 'classnames'
 
-import useStyles from './HistoryItem.style'
+import useStyles from './DropOfTheDayArtist.style'
 import DropOfTheDaySlider from 'shared/DropOfTheDaySlider'
 
 type HistoryItemProps = {
     color: string
     name: string
     artistImage: string
-    imagePreview: string
+    imagePreview?: string
 }
 
-export default function HistoryItem({
+export default function DropOfTheDayArtist({
     color,
     name,
     artistImage,

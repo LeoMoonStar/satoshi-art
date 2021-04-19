@@ -8,7 +8,7 @@ import rihanna from 'shared/images/dropOfTheDay/rihanna.png'
 import ryanRyanHold from 'shared/images/dropOfTheDay/ryanReynhold.png'
 import brunoMars from 'shared/images/dropOfTheDay/brunoMars.png'
 import useStyles from './History.style'
-import HistoryItem from './HistoryItem'
+import DropOfTheDayArtist from 'shared/DropOfTheDayArtist'
 
 const items = [
     {
@@ -40,7 +40,7 @@ export default function History(): JSX.Element {
     return (
         <section className={classes.container}>
             {items.map((item) => (
-                <HistoryItem
+                <DropOfTheDayArtist
                     key={item.id}
                     color={item.color}
                     name={item.name}
