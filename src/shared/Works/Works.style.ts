@@ -49,6 +49,7 @@ const useStyles = makeStyles(() => ({
         marginTop: 10,
     },
     info: {
+        flex: 1,
         display: 'flex',
         flexWrap: 'wrap',
         border: '1px solid #E5E5E5',

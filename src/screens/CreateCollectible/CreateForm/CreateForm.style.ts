@@ -237,6 +237,12 @@ const useStyles = makeStyles((theme) => {
                 borderBottom: '1px solid #FF0000',
             },
         },
+        priceInfo: {
+            '& span': {
+                color: theme.custom.common.blackColor,
+                display: 'block',
+            },
+        },
     }
 })
 export default useStyles

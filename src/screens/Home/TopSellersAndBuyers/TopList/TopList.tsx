@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 
-import Button from 'shared/Button'
+// import Button from 'shared/Button'
 import Avatar from 'shared/Avatar'
 import bradPit from 'shared/images/home/bradPitPaint.png'
 
@@ -32,7 +32,7 @@ export default function TopList({
     title,
 }: TopListProps): JSX.Element {
     const classes = useStyles()
-    const { t } = useTranslation()
+    // const { t } = useTranslation()
 
     return (
         <div className={classes.group}>
@@ -64,7 +64,7 @@ export default function TopList({
                         )
                     })}
                 </div>
-                <Button className={classes.seeAll}>{t('seeAll')}</Button>
+                {/*<Button className={classes.seeAll}>{t('seeAll')}</Button>*/}
             </div>
         </div>
     )

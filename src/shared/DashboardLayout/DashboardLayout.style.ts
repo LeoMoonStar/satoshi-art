@@ -4,9 +4,15 @@ const useStyles = makeStyles(() => {
     return {
         container: {
             width: '100%',
-            display: 'grid',
-            gridTemplateColumns: '259px 1fr',
-            gap: 43,
+            maxWidth: '100%',
+            display: 'flex',
+        },
+        sideBar: {
+            minWidth: 259,
+        },
+        content: {
+            display: 'flex',
+            width: 'calc(100% - 259px)',
         },
     }
 })

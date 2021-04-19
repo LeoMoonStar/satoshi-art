@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { Button, IconButton, Input } from '@material-ui/core'
+import {
+    Button,
+    IconButton,
+    Input,
+    FormControlLabel,
+    FormControl,
+    Switch,
+} from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { Contract } from '@ethersproject/contracts'
 import { useWeb3React } from '@web3-react/core'
@@ -9,16 +16,20 @@ import { useDispatch } from 'react-redux'
 
 import { Close } from '@material-ui/icons'
 import { Trans, useTranslation } from 'react-i18next'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 // import { LogoIcon, PlusCircle } from 'shared/icons'
 import { yupResolver } from '@hookform/resolvers/yup'
+import {
+    VAlID_IMAGES_TYPES,
+    VALID_FILE_TYPES,
+    ALL_SUPPORTED_TYPES,
+} from 'constants/supportedFileTypes'
 import * as yup from 'yup'
+
 import { useAPIError } from 'hooks/useAPIError'
-import Preview from '../Preview'
-import ProgressModal from '../ProgressModal'
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import { addTransaction, TokenType } from 'state/transactions/actions'
-import { percentageToBasicPoints } from 'utils/helpers'
+import { percentageToBasicPoints, convertEthToUsd } from 'utils/helpers'
 import {
     Engine1155ABI,
     Satoshi1155ABI,
@@ -26,11 +37,14 @@ import {
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
 import {
-    MetaDataType,
-    updateMetaData,
     uploadFile,
     uploadMetaData,
+    updateMetaData,
+    MetaDataType,
 } from 'api/createItem'
+import { getCurrency } from 'api/currency'
+import Preview from '../Preview'
+import ProgressModal from '../ProgressModal'
 import useStyles from './CreateForm.style'
 
 type PropertyType = {
@@ -59,10 +73,6 @@ interface ICollectibleForm {
     royalties: number
     properties: Array<PropertyType>
 }
-
-const VAlID_COVER_TYPES = 'image/png,image/jpeg,image/gif,image/webp'
-const VALID_FILE_TYPES = 'video/mp4,video/webm,audio/mp3,audio/webm,audio/mpeg'
-const ALL_SUPPORTED_TYPES = `${VAlID_COVER_TYPES},${VALID_FILE_TYPES}`
 
 const FILE_SIZE = 31457280
 
@@ -120,7 +130,7 @@ const schema = yup.object().shape({
                 (value) =>
                     value &&
                     value.hasOwnProperty(0) &&
-                    VAlID_COVER_TYPES.includes(value[0].type)
+                    VAlID_IMAGES_TYPES.includes(value[0].type)
             ),
     }),
     royalties: yup
@@ -130,6 +140,13 @@ const schema = yup.object().shape({
         .typeError('You need to enter number')
         .required('Royalties must be less than or equal to 10'),
     copiesCount: yup.number().typeError('You need to enter number'),
+    price: yup.mixed().when('instantPrice', {
+        is: true,
+        then: yup
+            .number()
+            .typeError('"Price" must be a number')
+            .required('"Price" must be a number'),
+    }),
 })
 
 {
@@ -169,12 +186,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const [createTokenError, setCreateTokenError] = useState<string>('')
+    const [currency, setCurrency] = useState<number>(1)
     const [tempToken, setTempToken] = useState<TempTokenData | null>(null)
     const {
         register,
         handleSubmit,
         setValue,
-        // control,
+        control,
         watch,
         formState: { errors },
     } = useForm<ICollectibleForm>({
@@ -190,6 +208,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const [engine1155contract, setEngine1155contract] = useState<any>()
 
     const engineAddress = engine1155NetworkData?.address
+
+    useEffect(() => {
+        ;(async () => {
+            try {
+                const currency = await getCurrency()
+                if (currency) {
+                    setCurrency(+currency)
+                }
+            } catch (e) {
+                setError('Get exchange rate error')
+            }
+        })()
+    }, [setError])
 
     useEffect(() => {
         if (isSingle) {
@@ -225,7 +256,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [
         library,
-        erc721NetworkData,
         chainId,
         isSingle,
         erc1155NetworkData,
@@ -399,7 +429,17 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.name, e.target.value.split(/\D/).join(''))
     }
-
+    /* TODO: Create PriceComponent */
+    const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let index = 0
+        setValue(
+            e.target.name,
+            e.target.value
+                .replace(/[^\d.,]/g, '') //replace everything but valid symbols
+                .replace(/,/g, '.') // replace comma to dot
+                .replace(/\./g, (item: string) => (!index++ ? item : '')) // replace all but the first occurence of dot
+        )
+    }
     const clearFile = () => {
         setValue('file', null)
         setPreview({
@@ -437,6 +477,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
     }, [isSubmitModal])
 
+    const { price } = previewFields
+
+    const ethAmount = price ? price - price * 0.025 : 0
+    const usdAmount = price ? convertEthToUsd(price, currency) : '0.00'
     return (
         <div className={classes.form}>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -513,7 +557,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 })}
                             >
                                 <input
-                                    accept={VAlID_COVER_TYPES}
+                                    accept={VAlID_IMAGES_TYPES}
                                     className={classes.input}
                                     onChange={handleFileChange}
                                     ref={register}
@@ -557,125 +601,133 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             {errors.cover.message}
                         </p>
                     )}
-                    {/*<FormControl className={classes.controls}>*/}
-                    {/*    <Controller*/}
-                    {/*        name="onSale"*/}
-                    {/*        control={control}*/}
-                    {/*        render={(props) => (*/}
-                    {/*            <FormControlLabel*/}
-                    {/*                control={*/}
-                    {/*                    <Switch*/}
-                    {/*                        inputRef={register}*/}
-                    {/*                        onChange={(e) =>*/}
-                    {/*                            props.onChange(e.target.checked)*/}
-                    {/*                        }*/}
-                    {/*                        checked={props.value}*/}
-                    {/*                    />*/}
-                    {/*                }*/}
-                    {/*                classes={{*/}
-                    {/*                    root: classes.switchLabel,*/}
-                    {/*                }}*/}
-                    {/*                labelPlacement="start"*/}
-                    {/*                label={*/}
-                    {/*                    <span>*/}
-                    {/*                        <span className={classes.onSale}>*/}
-                    {/*                            {t('putOnSale')}*/}
-                    {/*                        </span>*/}
-                    {/*                        <span>*/}
-                    {/*                            {t('youWillReceiveBids')}*/}
-                    {/*                        </span>*/}
-                    {/*                    </span>*/}
-                    {/*                }*/}
-                    {/*            />*/}
-                    {/*        )}*/}
-                    {/*    />*/}
-                    {/*    {watch('onSale') && (*/}
-                    {/*        <div>*/}
-                    {/*            <FormControlLabel*/}
-                    {/*                control={*/}
-                    {/*                    <Switch*/}
-                    {/*                        inputRef={register}*/}
-                    {/*                        name="instantPrice"*/}
-                    {/*                    />*/}
-                    {/*                }*/}
-                    {/*                classes={{*/}
-                    {/*                    root: classes.switchLabel,*/}
-                    {/*                }}*/}
-                    {/*                labelPlacement="start"*/}
-                    {/*                label={*/}
-                    {/*                    <span>*/}
-                    {/*                        <span className={classes.price}>*/}
-                    {/*                            {t('instantSalePrice')}*/}
-                    {/*                        </span>*/}
-                    {/*                        <span>*/}
-                    {/*                            {t(*/}
-                    {/*                                'enterThePriceForInstantlySold'*/}
-                    {/*                            )}*/}
-                    {/*                        </span>*/}
-                    {/*                    </span>*/}
-                    {/*                }*/}
-                    {/*            />*/}
-                    {/*            {watch('instantPrice') && (*/}
-                    {/*                <div className={classes.input}>*/}
-                    {/*                    <Input*/}
-                    {/*                        placeholder="Enter price for one piece"*/}
-                    {/*                        inputRef={register}*/}
-                    {/*                        name="price"*/}
-                    {/*                        disableUnderline*/}
-                    {/*                    />*/}
-                    {/*                    <span>*/}
-                    {/*                        {' '}*/}
-                    {/*                        {t('serviceFeeProgress', {*/}
-                    {/*                            fee: '2.5',*/}
-                    {/*                        })}*/}
-                    {/*                    </span>*/}
-                    {/*                    <span>*/}
-                    {/*                        {t('youWillReceiveCnt', {*/}
-                    {/*                            count: 0,*/}
-                    {/*                            currency: 'ETH',*/}
-                    {/*                            amount: '0,00',*/}
-                    {/*                        })}*/}
-                    {/*                    </span>*/}
-                    {/*                </div>*/}
-                    {/*            )}*/}
-                    {/*        </div>*/}
-                    {/*    )}*/}
-                    {/*    <div>*/}
-                    {/*        <FormControlLabel*/}
-                    {/*            control={*/}
-                    {/*                <Switch inputRef={register} name="unlock" />*/}
-                    {/*            }*/}
-                    {/*            classes={{*/}
-                    {/*                root: classes.switchLabel,*/}
-                    {/*            }}*/}
-                    {/*            labelPlacement="start"*/}
-                    {/*            label={*/}
-                    {/*                <span>*/}
-                    {/*                    <span className={classes.unlock}>*/}
-                    {/*                        {t('unlockOncePurchased')}*/}
-                    {/*                    </span>*/}
-                    {/*                    <span>*/}
-                    {/*                        {t('unlockOncePurchasedContent')}*/}
-                    {/*                    </span>*/}
-                    {/*                </span>*/}
-                    {/*            }*/}
-                    {/*        />*/}
-                    {/*        {watch('unlock') && (*/}
-                    {/*            <div className={classes.input}>*/}
-                    {/*                <Input*/}
-                    {/*                    placeholder="Digital key, code to redeem or link to a file..."*/}
-                    {/*                    inputRef={register}*/}
-                    {/*                    name="unlockContent"*/}
-                    {/*                    disableUnderline*/}
-                    {/*                />*/}
-                    {/*                <span>*/}
-                    {/*                    markDownIsSupported*/}
-                    {/*                    {t('markdownIsSupported')}*/}
-                    {/*                </span>*/}
-                    {/*            </div>*/}
-                    {/*        )}*/}
-                    {/*    </div>*/}
-                    {/*</FormControl>*/}
+                    <FormControl className={classes.controls}>
+                        <Controller
+                            name="onSale"
+                            control={control}
+                            render={(props) => (
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            inputRef={register}
+                                            onChange={(e) =>
+                                                props.onChange(e.target.checked)
+                                            }
+                                            checked={props.value}
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.switchLabel,
+                                    }}
+                                    labelPlacement="start"
+                                    label={
+                                        <span>
+                                            <span className={classes.onSale}>
+                                                {t('putOnSale')}
+                                            </span>
+                                            <span>
+                                                {t('youWillReceiveBids')}
+                                            </span>
+                                        </span>
+                                    }
+                                />
+                            )}
+                        />
+                        {watch('onSale') && (
+                            <div>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            inputRef={register}
+                                            name="instantPrice"
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.switchLabel,
+                                    }}
+                                    labelPlacement="start"
+                                    label={
+                                        <span>
+                                            <span className={classes.price}>
+                                                {t('instantSalePrice')}
+                                            </span>
+                                            <span>
+                                                {t(
+                                                    'enterThePriceForInstantlySold'
+                                                )}
+                                            </span>
+                                        </span>
+                                    }
+                                />
+                                {watch('instantPrice') && (
+                                    <div className={classes.input}>
+                                        <Input
+                                            placeholder="Enter price for one piece"
+                                            onChange={handlePriceInput}
+                                            inputRef={register}
+                                            name="price"
+                                            disableUnderline
+                                        />
+                                        <div className={classes.priceInfo}>
+                                            <span>
+                                                {' '}
+                                                {t('serviceFeeProgress', {
+                                                    fee: '2.5',
+                                                })}
+                                            </span>
+                                            <span>
+                                                {t('youWillReceiveCnt', {
+                                                    count: ethAmount,
+                                                    currency: 'ETH',
+                                                    amount: usdAmount,
+                                                })}
+                                            </span>
+                                        </div>
+                                        {errors.price && (
+                                            <p className={classes.textError}>
+                                                {errors.price.message}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {/*<div>*/}
+                        {/*    <FormControlLabel*/}
+                        {/*        control={*/}
+                        {/*            <Switch inputRef={register} name="unlock" />*/}
+                        {/*        }*/}
+                        {/*        classes={{*/}
+                        {/*            root: classes.switchLabel,*/}
+                        {/*        }}*/}
+                        {/*        labelPlacement="start"*/}
+                        {/*        label={*/}
+                        {/*            <span>*/}
+                        {/*                <span className={classes.unlock}>*/}
+                        {/*                    {t('unlockOncePurchased')}*/}
+                        {/*                </span>*/}
+                        {/*                <span>*/}
+                        {/*                    {t('unlockOncePurchasedContent')}*/}
+                        {/*                </span>*/}
+                        {/*            </span>*/}
+                        {/*        }*/}
+                        {/*    />*/}
+                        {/*    {watch('unlock') && (*/}
+                        {/*        <div className={classes.input}>*/}
+                        {/*            <Input*/}
+                        {/*                placeholder="Digital key, code to redeem or link to a file..."*/}
+                        {/*                inputRef={register}*/}
+                        {/*                name="unlockContent"*/}
+                        {/*                disableUnderline*/}
+                        {/*            />*/}
+                        {/*            <span>*/}
+                        {/*                markDownIsSupported*/}
+                        {/*                {t('markdownIsSupported')}*/}
+                        {/*            </span>*/}
+                        {/*        </div>*/}
+                        {/*    )}*/}
+                        {/*</div>*/}
+                    </FormControl>
                     {/*<div className={classes.collectionType}>*/}
                     {/*    <div className={classes.subtitle}>*/}
                     {/*        {t('chooseCollection')}*/}
@@ -849,7 +901,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                         <Button disabled={isErrors()} type="submit">
                             {t('createItem')}
                         </Button>
-                        {/*<div>{t('unsavedChanges')}</div>*/}
+                        <div>{t('unsavedChanges')}</div>
                     </div>
                     {isErrors() && (
                         <p className={classes.textError}>
