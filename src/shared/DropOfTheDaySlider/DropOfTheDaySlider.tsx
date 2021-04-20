@@ -103,6 +103,7 @@ export default function DropOfTheDaySlider({
                                     <span className={classes.count}>
                                         1 of 1
                                     </span>
+                                    {/* should be muted if Wallet's hash = owner */}
                                     <Button className={classes.bidButton}>
                                         {t('placeABid')}
                                     </Button>
