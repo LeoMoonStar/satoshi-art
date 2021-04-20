@@ -140,6 +140,7 @@ export default function PutOnSaleModal({
                 tx_hash: response.hash,
                 price,
                 copiesOnSale: data.copiesCount,
+                offerIndex: response.value?.toString(),
             })
             onClose()
         } catch (e) {
