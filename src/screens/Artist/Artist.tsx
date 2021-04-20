@@ -13,11 +13,11 @@ const profile = {
 }
 
 export default function Artist(): JSX.Element {
-    // const params = useParams<any>()
+    // const { id } = useParams<{ id: string }>()
     // const profileTest = {
     //     title: 'Artist',
     //     name: 'Igor',
-    //     hash: params.id,
+    //     hash: id,
     //     dscr: 'Good collections. Stay tuned for new NFTs',
     //     url: '#',
     // }
