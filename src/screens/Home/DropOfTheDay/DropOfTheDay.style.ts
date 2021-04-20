@@ -21,49 +21,6 @@ const useStyles = makeStyles(() => {
             position: 'relative',
             width: '100%',
         },
-        card: {
-            position: 'relative',
-            zIndex: 1,
-            width: '100%',
-            display: 'flex',
-            alignItems: 'flex-end',
-            height: 341,
-            backgroundColor: '#7E7E7E',
-            borderRadius: 20,
-        },
-        leftCol: {
-            marginLeft: 110,
-            display: 'flex',
-            '& h3': {
-                position: 'absolute',
-                left: 50,
-                zIndex: 0,
-                width: 185,
-                fontSize: 80,
-                fontWeight: 800,
-                color: '#fff',
-            },
-            '& img': {
-                position: 'relative',
-                zIndex: 1,
-            },
-        },
-        rightCol: {
-            position: 'relative',
-            zIndex: 1,
-            marginLeft: -70,
-            padding: '0 50px',
-            boxSizing: 'border-box',
-            width: 'calc(100% - 510px)',
-            '& .slick-arrow:hover': {
-                '& circle': {
-                    fill: '#fff',
-                },
-                '& path': {
-                    fill: '#7E7E7E',
-                },
-            },
-        },
         colorsDissolving: {
             position: 'absolute',
             top: '-30%',
