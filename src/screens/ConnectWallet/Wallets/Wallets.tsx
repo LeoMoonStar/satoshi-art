@@ -105,7 +105,7 @@ function Wallets(): JSX.Element {
             <Modal open={isErrorModal} onClose={() => setShowErrorModal(false)}>
                 <div className={classes.errorModal}>
                     <div className={classes.errorModalTitle}>
-                        {t('oopsSomethingWentWrong')}
+                        {t('youHaveClosedMetamask')}
                     </div>
                     <div className={classes.errorModalContent}>
                         {t('pleaseTryConnectYourWalletManually')}

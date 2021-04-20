@@ -2,9 +2,9 @@ import React from 'react'
 
 import Layout from 'shared/Layout'
 
-// import DropOfTheDay from './DropOfTheDay'
-// import TopSellersAndBuyers from './TopSellersAndBuyers'
-// import Tops from './Tops'
+import DropOfTheDay from './DropOfTheDay'
+import TopSellersAndBuyers from './TopSellersAndBuyers'
+import Tops from './Tops'
 // import Iterators from './Iterators'
 
 import PopularWorks from './PopularWorks'
@@ -17,10 +17,10 @@ function Home(): JSX.Element {
             // justifyTopRowFooter="center"
         >
             <Intro />
-            {/*<DropOfTheDay />*/}
+            <DropOfTheDay />
             {/*<Iterators />*/}
-            {/*<TopSellersAndBuyers />*/}
-            {/*<Tops />*/}
+            <TopSellersAndBuyers />
+            <Tops />
             <PopularWorks />
         </Layout>
     )

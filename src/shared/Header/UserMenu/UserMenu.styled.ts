@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => {
         balances: {
             margin: '20px 0 0 0',
             padding: '0 0 18px 0',
-            // borderBottom: '1px solid #C4C4C4',
+            borderBottom: '1px solid #C4C4C4',
             listStyle: 'none',
 
             '& li': {
@@ -78,6 +78,22 @@ const useStyles = makeStyles((theme) => {
                     width: 15,
                     marginRight: 11,
                 },
+            },
+        },
+        btnDisconnect: {
+            padding: 0,
+            color: theme.custom.common.darkerGrayColor,
+            backgroundColor: 'transparent',
+            border: 0,
+            cursor: 'pointer',
+
+            '&:hover': {
+                color: theme.custom.common.blackColor,
+            },
+
+            '& svg': {
+                width: 15,
+                marginRight: 11,
             },
         },
     }

@@ -28,6 +28,7 @@ import {
 import Collection from 'screens/Collection'
 
 import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
+import UserDashboard from './screens/UserDashboard'
 
 const PrivateRoute = (props: RouteProps) => {
     const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(
@@ -69,6 +70,9 @@ function Routes(): JSX.Element {
                 <Route path="/terms-and-conditions">
                     <TermsAndConditions />
                 </Route>
+                <PrivateRoute path="/dashboard/user">
+                    <UserDashboard />
+                </PrivateRoute>
                 <DevelopRoute path="/artists/:id">
                     <Artist />
                 </DevelopRoute>
@@ -81,16 +85,19 @@ function Routes(): JSX.Element {
                 <DevelopRoute path="/drop-of-the-day">
                     <DropOfTheDay />
                 </DevelopRoute>
-                <DevelopRoute path="/productpage">
+                <DevelopRoute path="/product/:id">
                     <Product />
                 </DevelopRoute>
-                <DevelopRoute path="/dashboard/order-list">
+                <Route path="/dashboard/order-list">
                     <OrderList />
-                </DevelopRoute>
+                </Route>
                 <PrivateRoute exact path="/create-collectible">
                     <CreateCollectibleType />
                 </PrivateRoute>
-                <PrivateRoute exact path="/create-collectible/:type(multiple)/">
+                <PrivateRoute
+                    exact
+                    path="/create-collectible/:type(single|multiple)/"
+                >
                     <CreateCollectible />
                 </PrivateRoute>
                 <Route>

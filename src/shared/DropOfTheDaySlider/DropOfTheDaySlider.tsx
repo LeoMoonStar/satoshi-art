@@ -105,12 +105,12 @@ export default function DropOfTheDaySlider({
                                         {t('placeABid')}
                                     </Button>
                                 </div>
-                                <Button
-                                    className={classes.seeAll}
-                                    variantCustom="action"
-                                >
-                                    {t('seeAll')}
-                                </Button>
+                                {/*<Button*/}
+                                {/*    className={classes.seeAll}*/}
+                                {/*    variantCustom="action"*/}
+                                {/*>*/}
+                                {/*    {t('seeAll')}*/}
+                                {/*</Button>*/}
                             </div>
                         </div>
                     </div>

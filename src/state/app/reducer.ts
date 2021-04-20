@@ -5,6 +5,7 @@ import {
     changeWhitelistedStatus,
     changePermittedToUseWallet,
     updateTransactionInMintingProcess,
+    disconnectAccount,
 } from './actions'
 
 export interface AppState {
@@ -39,4 +40,5 @@ export default createReducer(initialState, (app) => {
         .addCase(updateTransactionInMintingProcess, (state, action) => {
             state.transactionInMintingProcess = action.payload
         })
+        .addCase(disconnectAccount, () => initialState)
 })

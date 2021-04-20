@@ -74,6 +74,7 @@ const useStyles = makeStyles((theme) => {
                 color: '#7E7E7E',
                 fontSize: 12,
                 fontWeight: 600,
+                letterSpacing: '-0.04em',
                 display: 'block',
                 '&:first-child': {
                     color: '#000000',
