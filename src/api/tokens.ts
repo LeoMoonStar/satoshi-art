@@ -28,15 +28,18 @@ type PutOnSaleParams = {
 type getTokensProps = {
     sort?: string
     walletHash?: string
+    status?: string
 }
 export const getTokens = ({
     sort,
     walletHash,
+    status,
 }: getTokensProps): Promise<Token[]> => {
     return axios.get('/products', {
         params: {
             _sort: sort,
             'metadata.walletHash': walletHash,
+            'metadata.status': status,
         },
     })
 }
@@ -51,10 +54,18 @@ export const putTokenOnSaleAPI = ({
     price,
     copiesOnSale,
 }: PutOnSaleParams): Promise<void> => {
-    return axios.put(`/products/${id}`, {
-        status: 'waitForSale',
-        tx_hash,
-        price,
-        copiesOnSale,
-    })
+    return axios.put(
+        `/products/${id}`,
+        {
+            status: 'waitForSale',
+            tx_hash,
+            price,
+            copiesOnSale,
+        },
+        {
+            headers: {
+                'auth token': localStorage.getItem('token'),
+            },
+        }
+    )
 }

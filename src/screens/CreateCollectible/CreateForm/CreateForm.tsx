@@ -164,6 +164,7 @@ const schema = yup.object().shape({
 
 type TempTokenData = {
     id: string
+    authToken: string
     payload: {
         copiesCount?: number
         royalties: number
@@ -348,7 +349,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             history.push('/')
         } catch (e) {
             setCreateTokenError(
-                e.data?.message || e.message || 'Something went wrong'
+                e?.data?.message || e?.message || 'Something went wrong'
             )
         }
     }
@@ -407,6 +408,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 type,
                 thumbnail
             )
+
+            localStorage.setItem('token', metaResponse.authToken)
 
             setTempToken(metaResponse)
             await tryCreateItem(metaResponse)

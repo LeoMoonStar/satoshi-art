@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { DashboardLayout } from 'shared/DashboardLayout'
 import useStyles from './UserDashboard.style'
 
-import { Created } from './Tokens'
+import { Created, OnSale } from './Tokens'
 
 export default function UserDashboard(): JSX.Element {
     const classes = useStyles()
@@ -16,7 +16,7 @@ export default function UserDashboard(): JSX.Element {
                 {/*<CardsStatistics />*/}
                 {/*<Charts />*/}
                 {/*<YourLatestBids />*/}
-                {/*<OnSale />*/}
+                <OnSale />
                 {/*<Collections />*/}
                 <Created />
                 {/*<FollowingAndFollowers />*/}
