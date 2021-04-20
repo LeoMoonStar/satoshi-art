@@ -120,9 +120,19 @@ const useStyles = makeStyles(() => {
             fontWeight: 600,
         },
         fsModal: {
+            position: 'relative',
             backgroundColor: 'rgb(18, 18, 18)',
             display: 'flex',
+            '& > div:first-child': {
+                display: 'none',
+            },
+        },
+        fsModalContainer: {
+            display: 'flex',
             flexDirection: 'column',
+            width: '100vw',
+            height: '100vh',
+            overflow: 'auto',
         },
         collectibleWrapper: {
             display: 'flex',
@@ -130,22 +140,37 @@ const useStyles = makeStyles(() => {
             flexDirection: 'column',
             alignItems: 'stretch',
             maxWidth: '100%',
+            boxSizing: 'border-box',
             padding: 20,
         },
         collectibleItem: {
-            maxWidth: 600,
             margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
 
             '& img': {
-                width: '100%',
+                flex: 1,
+                minWidth: 600,
             },
         },
         fsModalHeader: {
+            position: 'absolute',
+            width: '100%',
+            top: 0,
+            right: 0,
             display: 'flex',
             justifyContent: 'flex-end',
             padding: '20px 16px',
+            '& button': {
+                width: 40,
+                height: 40,
+                border: '1px solid #ffffff30',
+                margin: '10px 20px 0 0',
+                backgroundColor: '#00000030',
+                '& svg': {
+                    minWidth: 26,
+                },
+            },
         },
         fsModalFooter: {
             padding: '20px 16px',

@@ -11,19 +11,8 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         marginBottom: 46,
     },
-    preview: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-    },
     imagePresentation: {
-        position: 'relative',
         width: '100%',
-        height: 1,
-        paddingBottom: '78%',
     },
     authorInfo: {
         width: '100%',

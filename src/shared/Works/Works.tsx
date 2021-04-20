@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 // import preview from 'shared/images/artist/work.jpg'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
 
+import TokenPreview from 'shared/TokenPreview'
 import { Token } from 'api/tokens'
 import useStyles from './Works.style'
 
@@ -43,7 +44,7 @@ export default function WorksList({
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
                                     <Link to={`product/${id}`}>
-                                        <img
+                                        <TokenPreview
                                             src={
                                                 thumbnail ??
                                                 payload.cover ??
@@ -55,7 +56,6 @@ export default function WorksList({
                                                         ? 30
                                                         : 0,
                                             }}
-                                            className={classes.preview}
                                             alt={payload.description}
                                         />
                                     </Link>
