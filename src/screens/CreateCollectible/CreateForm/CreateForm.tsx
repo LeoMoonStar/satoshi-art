@@ -347,7 +347,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             )
             history.push('/')
         } catch (e) {
-            setCreateTokenError(e.message)
+            setCreateTokenError(
+                e.data?.message || e.message || 'Something went wrong'
+            )
         }
     }
 

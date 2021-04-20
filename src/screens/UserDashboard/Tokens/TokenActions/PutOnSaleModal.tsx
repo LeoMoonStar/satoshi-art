@@ -143,7 +143,9 @@ export default function PutOnSaleModal({
             })
             onClose()
         } catch (e) {
-            setPutOnSaleError(e.message)
+            setPutOnSaleError(
+                e.data?.message || e.message || 'Something went wrong'
+            )
         }
     }
 
