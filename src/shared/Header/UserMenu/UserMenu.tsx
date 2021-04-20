@@ -18,7 +18,7 @@ import Avatar from 'shared/Avatar'
 import {
     CopyIcon,
     BalanceIcon,
-    // ProfileIcon,
+    ProfileIcon,
     ItemsIcon,
     DisconnectIcon,
 } from 'shared/icons'
@@ -29,7 +29,7 @@ import useStyles from './UserMenu.styled'
 
 const userLinks = [
     { title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> },
-    // { title: 'editProfile', icon: <ProfileIcon /> },
+    { title: 'editProfile', href: '/edit-profile', icon: <ProfileIcon /> },
 ]
 
 const UserMenu = (): JSX.Element | null => {
