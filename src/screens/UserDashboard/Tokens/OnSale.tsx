@@ -13,7 +13,7 @@ import {
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
-import { getTokens, Token } from 'api/tokens'
+import { getTokens, Token, TokenStatus } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import { useEffect } from 'react'
 import { TokenType } from 'state/transactions/actions'
@@ -86,28 +86,36 @@ const RenderCardContent = ({ token }: { token: Token }) => {
                     {payload?.copiesCount} of {payload?.copiesCount}
                 </div>
             )}
-            <div className={classes.highestBid}>
-                Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>
-            </div>
+            {/*<div className={classes.highestBid}>*/}
+            {/*    Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>*/}
+            {/*</div>*/}
         </>
     )
 }
 
-export default function OnSale(): JSX.Element | null {
+export default function OnSale({
+    isOutOfDate,
+}: {
+    isOutOfDate: boolean
+}): JSX.Element | null {
     const { t } = useTranslation()
     const [tokens, setTokens] = useState<Token[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const { account } = useWeb3React()
+
     useEffect(() => {
-        if (!account) {
+        if (!account || !isOutOfDate) {
             return
         }
 
-        getTokens({ walletHash: account, status: 'onSale' }).then((tokens) => {
+        getTokens({
+            walletHash: account,
+            status: TokenStatus.waitForSale,
+        }).then((tokens) => {
             setTokens(tokens)
             setLoading(false)
         })
-    }, [account])
+    }, [account, isOutOfDate])
 
     if (tokens.length === 0) {
         return null

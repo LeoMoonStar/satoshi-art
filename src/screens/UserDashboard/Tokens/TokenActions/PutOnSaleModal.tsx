@@ -26,6 +26,7 @@ import PutOnSaleProgressModal from './PutOnSaleProgressModal'
 type PutOnSaleModalProps = {
     onClose: () => void
     token: Token
+    onSuccess: () => void
 }
 
 interface PutOnSaleForm {
@@ -44,6 +45,7 @@ const schema = yup.object().shape({
 export default function PutOnSaleModal({
     onClose,
     token,
+    onSuccess,
 }: PutOnSaleModalProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -141,6 +143,7 @@ export default function PutOnSaleModal({
                 price,
                 copiesOnSale: data.copiesCount,
             })
+            onSuccess()
             onClose()
         } catch (e) {
             setPutOnSaleError(

@@ -1,9 +1,15 @@
 import { TokenType } from 'state/transactions/actions'
 import axios from './axios'
 
+export enum TokenStatus {
+    waitForSale = 'waitForSale',
+    waitForBid = 'waitForBid',
+}
 export type Token = {
     TokenID: string
     id: string
+    price?: string
+    status: TokenStatus
     metadata: {
         type: TokenType
         thumbnail?: string
@@ -39,7 +45,7 @@ export const getTokens = ({
         params: {
             _sort: sort,
             'metadata.walletHash': walletHash,
-            'metadata.status': status,
+            status,
         },
     })
 }
@@ -54,18 +60,10 @@ export const putTokenOnSaleAPI = ({
     price,
     copiesOnSale,
 }: PutOnSaleParams): Promise<void> => {
-    return axios.put(
-        `/products/${id}`,
-        {
-            status: 'waitForSale',
-            tx_hash,
-            price,
-            copiesOnSale,
-        },
-        {
-            headers: {
-                'auth token': localStorage.getItem('token'),
-            },
-        }
-    )
+    return axios.put(`/products/${id}`, {
+        status: TokenStatus.waitForSale,
+        tx_hash,
+        price,
+        copiesOnSale,
+    })
 }

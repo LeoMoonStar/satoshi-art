@@ -17,7 +17,7 @@ import {
     VALID_VIDEO_TYPES,
     VALID_AUDIO_TYPES,
 } from 'constants/supportedFileTypes'
-import { getToken, Token } from 'api/tokens'
+import { getToken, Token, TokenStatus } from 'api/tokens'
 import { TokenInfo } from './TokenInfo'
 import BidModal from './BidModal'
 import BuyModal from './BuyModal'
@@ -25,6 +25,11 @@ import FSModal from './FSModal'
 
 import useStyles from './TokenDetails.style'
 import ProgressModal from './ProgressModal'
+import { weiToEth } from 'utils/helpers'
+import Price from 'shared/Price'
+import { TokenType } from 'state/transactions/actions'
+
+const SERVICE_FEE = 0.025
 
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
@@ -157,6 +162,10 @@ const TokenDetails = (): JSX.Element => {
         return <Loader />
     }
 
+    if (!token) {
+        return <h1>Oops something went wrong</h1>
+    }
+
     return (
         <div className={classes.container}>
             <div>
@@ -208,12 +217,24 @@ const TokenDetails = (): JSX.Element => {
                         {token?.metadata.payload.name}
                     </Typography>
                     <div className={classes.tokenPriceContainer}>
-                        <Typography variant="h2">1.00 ETH</Typography>
+                        {token.price && (
+                            <Typography variant="h2">
+                                {weiToEth(Number(token.price))} ETH
+                            </Typography>
+                        )}
                         <Typography
                             variant="h6"
                             className={classes.tokenDollarPrice}
                         >
-                            $1846 1 of 1
+                            {token.price && (
+                                <Price.WeiToUsd value={token.price} />
+                            )}
+                            {token.metadata?.type === TokenType.MULTIPLE && (
+                                <>
+                                    {token?.metadata?.payload?.copiesCount} of{' '}
+                                    {token?.metadata?.payload?.copiesCount}
+                                </>
+                            )}
                         </Typography>
                     </div>
                     <div className={classes.descriptionContainer}>
@@ -247,63 +268,82 @@ const TokenDetails = (): JSX.Element => {
                         />
                     ))}
                 </Tabs>
-                {tab === TabVariants.INFO && <TokenInfo />}
+                {tab === TabVariants.INFO && <TokenInfo token={token} />}
                 {tab === TabVariants.OWNERS && <div />}
                 {tab === TabVariants.HISTORY && <div />}
                 {tab === TabVariants.BIDS && <div />}
                 <Grid>
-                    <div className={classes.highestBidInfoContainer}>
-                        <div className={classes.highestBidContainer}>
+                    {/* todo: display it if this info will available */}
+                    {/*<div className={classes.highestBidInfoContainer}>*/}
+                    {/*    <div className={classes.highestBidContainer}>*/}
+                    {/*        <Typography variant="h6">*/}
+                    {/*            {t('highestBidBy')}*/}
+                    {/*        </Typography>*/}
+                    {/*        <Typography*/}
+                    {/*            variant="h6"*/}
+                    {/*            className={classes.walletAddress}*/}
+                    {/*        >*/}
+                    {/*            0xcabb22cb1...ba05*/}
+                    {/*        </Typography>*/}
+                    {/*    </div>*/}
+                    {/*    <div className={classes.highestBidContainer}>*/}
+                    {/*        <Typography variant="h2">2,000 DAI</Typography>*/}
+                    {/*        <Typography*/}
+                    {/*            variant="h3"*/}
+                    {/*            className={classes.bidDollarAmount}*/}
+                    {/*        >*/}
+                    {/*            $2,000*/}
+                    {/*        </Typography>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                    <div className={classes.buttonsContainer}>
+                        {
+                            {
+                                [TokenStatus.waitForBid]: (
+                                    <Button
+                                        onClick={() => setBidModal(true)}
+                                        label={t('placeABid')}
+                                        className={classes.placeBidButton}
+                                    />
+                                ),
+                                [TokenStatus.waitForSale]: (
+                                    <Button
+                                        onClick={() => setBuyModal(true)}
+                                        label={t('buyNow')}
+                                        className={classes.buyButton}
+                                    />
+                                ),
+                            }[token.status]
+                        }
+                    </div>
+
+                    {token.price && (
+                        <div className={classes.serviceFeeInfoContainer}>
                             <Typography variant="h6">
-                                {t('highestBidBy')}
+                                {t('serviceFeeProgress', { fee: SERVICE_FEE })}
                             </Typography>
                             <Typography
                                 variant="h6"
-                                className={classes.walletAddress}
+                                className={classes.serviceCryptoFee}
                             >
-                                0xcabb22cb1...ba05
+                                <Price.WeiToEth
+                                    value={
+                                        Number(token.price) * (1 + SERVICE_FEE)
+                                    }
+                                />
                             </Typography>
-                        </div>
-                        <div className={classes.highestBidContainer}>
-                            <Typography variant="h2">2,000 DAI</Typography>
                             <Typography
-                                variant="h3"
-                                className={classes.bidDollarAmount}
+                                variant="h6"
+                                className={classes.serviceDollarFee}
                             >
-                                $2,000
+                                <Price.WeiToUsd
+                                    value={
+                                        Number(token.price) * (1 + SERVICE_FEE)
+                                    }
+                                />
                             </Typography>
                         </div>
-                    </div>
-                    <div className={classes.buttonsContainer}>
-                        <Button
-                            onClick={() => setBuyModal(true)}
-                            label={t('buyNow')}
-                            className={classes.buyButton}
-                        />
-                        <Button
-                            onClick={() => setBidModal(true)}
-                            label={t('placeABid')}
-                            className={classes.placeBidButton}
-                        />
-                    </div>
-
-                    <div className={classes.serviceFeeInfoContainer}>
-                        <Typography variant="h6">
-                            {t('serviceFeeProgress', { fee: '2.5' })}
-                        </Typography>
-                        <Typography
-                            variant="h6"
-                            className={classes.serviceCryptoFee}
-                        >
-                            10.486 ETH
-                        </Typography>
-                        <Typography
-                            variant="h6"
-                            className={classes.serviceDollarFee}
-                        >
-                            $19,333.52
-                        </Typography>
-                    </div>
+                    )}
                 </Grid>
             </div>
             {isBidModal && (

@@ -1,19 +1,19 @@
 import React from 'react'
 // import { IconButton } from '@material-ui/core'
-// import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
-// import Button from 'shared/Button'
+import Button from 'shared/Button'
 // import { SaveIcon, ViewsIcon } from 'shared/icons'
 // import Avatar from 'shared/Avatar'
 import Loader from 'shared/Loader'
 import { Link } from 'react-router-dom'
-// import TextGradient from 'shared/TexGradient'
+import TextGradient from 'shared/TexGradient'
 // import preview from 'shared/images/artist/work.jpg'
 // import artistAvatar from 'shared/images/artist/avatar.jpg'
 
-import { Token } from 'api/tokens'
+import { Token, TokenStatus } from 'api/tokens'
 import useStyles from './Works.style'
-import { shortAddress } from 'utils/helpers'
+import { shortAddress, weiToEth } from 'utils/helpers'
 
 type WorksListProps = {
     borderWidth?: number
@@ -29,7 +29,7 @@ export default function WorksList({
     tokens = [],
 }: WorksListProps): JSX.Element {
     const classes = useStyles()
-    // const { t } = useTranslation()
+    const { t } = useTranslation()
 
     if (isLoading) {
         return <Loader />
@@ -40,6 +40,8 @@ export default function WorksList({
             <div className={classes.grid}>
                 {tokens.map(
                     ({
+                        price,
+                        status,
                         metadata: { payload, type, thumbnail, walletHash },
                         id,
                     }) => {
@@ -95,11 +97,14 @@ export default function WorksList({
                                     </div>
                                     <div className={classes.authorInfo}>
                                         <a
+                                            target="_blank"
+                                            rel="noreferrer"
                                             href={`https://ropsten.etherscan.io/address/${walletHash}`}
                                         >
                                             {shortAddress(walletHash)}
                                         </a>
-                                        {/*124.56x3 ETH*/}
+                                        {price &&
+                                            ` ${weiToEth(Number(price))}ETH`}
                                     </div>
                                     <div className={classes.workInfo}>
                                         {/*0.25 ETH*/}
@@ -108,11 +113,32 @@ export default function WorksList({
                                                 ? `${payload.copiesCount} of ${payload.copiesCount}`
                                                 : '1 of 1'}
                                         </span>
-                                        {/*<Button className={classes.bidButton}>*/}
-                                        {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
-                                        {/*        {t('placeABid')}*/}
-                                        {/*    </TextGradient>*/}
-                                        {/*</Button>*/}
+                                        {
+                                            {
+                                                [TokenStatus.waitForBid]: (
+                                                    <Button
+                                                        className={
+                                                            classes.bidButton
+                                                        }
+                                                    >
+                                                        <TextGradient colors="#FF0099, #6A2FE7">
+                                                            {t('placeABid')}
+                                                        </TextGradient>
+                                                    </Button>
+                                                ),
+                                                [TokenStatus.waitForSale]: (
+                                                    <Button
+                                                        className={
+                                                            classes.bidButton
+                                                        }
+                                                    >
+                                                        <TextGradient colors="#FF0099, #6A2FE7">
+                                                            {t('buyNow')}
+                                                        </TextGradient>
+                                                    </Button>
+                                                ),
+                                            }[status]
+                                        }
                                     </div>
                                 </div>
                             </div>
