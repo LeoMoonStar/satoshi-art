@@ -22,7 +22,7 @@ type PutOnSaleParams = {
     tx_hash: string
     price: string
     copiesOnSale?: number
-    offerIndex?: string
+    offerIndex?: number
 }
 
 type getTokensProps = {
