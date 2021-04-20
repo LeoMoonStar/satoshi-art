@@ -24,7 +24,7 @@ const categories: CategoryType[] = [
     { id: 5, title: 'Activity', isEmpty: true },
 ]
 
-const tokens = Array.from({ length: 24 }, (index) => ({
+const tokens = Array.from({ length: 23 }, (index) => ({
     TokenID: index as string,
     id: `id${index}`,
     status: TokenStatus.waitForBid,
@@ -40,6 +40,21 @@ const tokens = Array.from({ length: 24 }, (index) => ({
         },
     },
 }))
+const testingTokens = [...tokens]
+testingTokens.push({
+    TokenID: '24',
+    id: '607d95edc95ad00014e01767',
+    metadata: {
+        type: TokenType.MULTIPLE,
+        thumbnail: preview,
+        payload: {
+            name: 'Fresh Meat #F',
+            copiesCount: 20,
+            description: '',
+            file: preview,
+        },
+    },
+})
 
 export default function ArtistWorks(): JSX.Element {
     const [open, setOpen] = useState(false)
@@ -86,7 +101,7 @@ export default function ArtistWorks(): JSX.Element {
                     <FilterIcon />
                 </IconButton>
             </div>
-            <Works tokens={tokens} isLoading={false} />
+            <Works tokens={testingTokens} isLoading={false} />
             <Modal open={open} onClose={closeModal}>
                 <Followers active={active} />
             </Modal>

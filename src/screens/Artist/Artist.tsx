@@ -2,8 +2,9 @@ import React from 'react'
 import Layout from 'shared/Layout'
 import PageDetails from 'shared/PageDetails'
 import ArtistWorks from './ArtistWorks'
+// import { useParams } from 'react-router-dom'
 
-const profle = {
+const profile = {
     title: 'Artist',
     name: 'Fimbim',
     hash: '0x83fa662610b20...7495',
@@ -12,9 +13,17 @@ const profle = {
 }
 
 export default function Artist(): JSX.Element {
+    // const params = useParams<any>()
+    // const profileTest = {
+    //     title: 'Artist',
+    //     name: 'Igor',
+    //     hash: params.id,
+    //     dscr: 'Good collections. Stay tuned for new NFTs',
+    //     url: '#',
+    // }
     return (
         <Layout>
-            <PageDetails profile={profle} />
+            <PageDetails profile={profile} />
             <ArtistWorks />
         </Layout>
     )
