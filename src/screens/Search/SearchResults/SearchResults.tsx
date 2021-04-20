@@ -7,7 +7,7 @@ import preview from 'shared/images/artist/work.jpg'
 import { TokenType } from 'state/transactions/actions'
 import { TokenStatus } from 'api/tokens'
 
-const tokens = Array.from({ length: 24 }, (index) => ({
+const tokens = Array.from({ length: 23 }, (index) => ({
     TokenID: index as string,
     id: `id${index}`,
     status: TokenStatus.waitForBid,
@@ -24,13 +24,29 @@ const tokens = Array.from({ length: 24 }, (index) => ({
     },
 }))
 
+const testingTokens = [...tokens]
+testingTokens.push({
+    TokenID: '24',
+    id: '607d95edc95ad00014e01767',
+    metadata: {
+        type: TokenType.MULTIPLE,
+        thumbnail: preview,
+        payload: {
+            name: 'Fresh Meat #F',
+            copiesCount: 20,
+            description: '',
+            file: preview,
+        },
+    },
+})
+
 export default function SearchResults(): JSX.Element {
     const classes = useStyles()
     return (
         <div>
             <SearchHeader />
             <div className={classes.container}>
-                <Works isLoading={false} tokens={tokens} />
+                <Works isLoading={false} tokens={testingTokens} />
             </div>
         </div>
     )

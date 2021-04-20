@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { getTokens } from 'api/tokens'
 import { Token } from 'api/tokens'
 
-const useWalletTokens = () => {
+const useWalletTokens = (): any => {
     const [tokens, setTokens] = useState<Token[]>([])
     const { account } = useWeb3React()
     const walletHash = JSON.stringify(account)
@@ -25,7 +25,7 @@ const useWalletTokens = () => {
     console.log('walletHash', walletHash)
 
     // Arts = tokens, sorted by wallet
-    return { tokens }
+    return tokens
 }
 
 export default useWalletTokens

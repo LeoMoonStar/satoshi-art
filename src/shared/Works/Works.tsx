@@ -17,6 +17,7 @@ import { Token, TokenStatus } from 'api/tokens'
 import useStyles from './Works.style'
 import { shortAddress } from 'utils/helpers'
 import Price from '../Price'
+import useWalletTokens from './../../screens/Home/useWalletTokens'
 
 type WorksListProps = {
     borderWidth?: number
@@ -35,6 +36,13 @@ export default function WorksList({
 
     const classes = useStyles()
     const { t } = useTranslation()
+    const filteredTokens = useWalletTokens()
+    const testingFiltredTokens = [...filteredTokens]
+    testingFiltredTokens.push('607d95edc95ad00014e01767')
+
+    const findOut = (id: string) => {
+        return testingFiltredTokens.some((el) => id === el)
+    }
 
     if (isLoading) {
         return <Loader />
@@ -144,6 +152,24 @@ export default function WorksList({
                                                 ),
                                             }[status]
                                         }
+                                        {findOut(id) ? (
+                                            <span>Owner</span>
+                                        ) : (
+                                            <Button
+                                                className={classes.bidButton}
+                                            >
+                                                {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
+                                                {/*        {t('placeABid')}*/}
+                                                {/*    </TextGradient>*/}
+                                                Place a bid
+                                            </Button>
+                                        )}
+                                        {/* <Button className={classes.bidButton}> */}
+                                        {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
+                                        {/*        {t('placeABid')}*/}
+                                        {/*    </TextGradient>*/}
+                                        {/* Place a bid */}
+                                        {/* </Button> */}
                                     </div>
                                 </div>
                             </div>
