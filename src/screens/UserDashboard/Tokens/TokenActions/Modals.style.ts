@@ -94,13 +94,15 @@ const useStyles = makeStyles(() => {
         },
         step: {
             marginTop: 28,
+            '&:first-child': {
+                marginTop: 0,
+            },
             '& .MuiButton-root': {
                 marginTop: 30,
                 width: '100%',
                 height: 40,
                 padding: 0,
                 borderRadius: 60,
-                background: '#C4C4C4',
                 textTransform: 'none',
                 fontWeight: 600,
                 fontSize: 13,
@@ -121,6 +123,26 @@ const useStyles = makeStyles(() => {
                 '&:first-child': {
                     color: '#000000',
                 },
+            },
+        },
+        stepper: {
+            '& .MuiStepConnector-alternativeLabel': {
+                top: 7,
+                left: 'calc(-50% + 7px)',
+                right: 'calc(50% + 7px)',
+
+                '&.MuiStepConnector-active ': {
+                    '& .MuiStepConnector-line': {
+                        borderColor: '#FF0099',
+                    },
+                },
+            },
+        },
+        labelContainer: {
+            '& span.MuiTypography-root': {
+                fontSize: 9,
+                fontWeight: 600,
+                marginTop: 3,
             },
         },
         loader: {
