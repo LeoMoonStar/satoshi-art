@@ -117,6 +117,7 @@ export default function Created({
 
         getTokens({ walletHash: account }).then((tokens) => {
             setTokens(tokens)
+            console.log('your tokens from CREATED ----', tokens)
             setLoading(false)
         })
     }, [account])

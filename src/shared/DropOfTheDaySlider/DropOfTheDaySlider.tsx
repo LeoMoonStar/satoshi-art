@@ -11,6 +11,7 @@ import Avatar from 'shared/Avatar'
 import Button from 'shared/Button'
 import { SliderArrow, SaveIcon, ViewsIcon } from 'shared/icons'
 import useStyles from './DropOfTheDaySlider.style'
+import useWalletTokens from './../../hooks/useWalletTokens'
 
 const SliderLeft = ({ currentSlide, slideCount, ...props }: any) => {
     return (
@@ -61,6 +62,7 @@ export default function DropOfTheDaySlider({
 }: DropOfTheDaySliderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
+    const walletTokens = useWalletTokens()
 
     return (
         <Slider className={cx(classes.slider, className)} {...sliderConfig}>
