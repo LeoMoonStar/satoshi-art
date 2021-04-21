@@ -14,7 +14,7 @@ import { FilterIcon } from 'shared/icons'
 
 import useStyles from './PopularWorks.style'
 import { APIErrorContext } from 'providers/APIErrorProvider'
-import { testingArray } from './../testingArray'
+import { testingArray } from '../../../utils/testingArray'
 
 const sortCases = [
     { sort: 'published_at:desc', title: 'Recently added' },

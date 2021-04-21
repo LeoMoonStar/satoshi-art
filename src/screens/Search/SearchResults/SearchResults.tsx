@@ -6,7 +6,7 @@ import useStyles from './SearchResults.style'
 import preview from 'shared/images/artist/work.jpg'
 import { TokenType } from 'state/transactions/actions'
 import { TokenStatus } from 'api/tokens'
-import { testingArray } from './../../Home/testingArray'
+import { testingArray } from 'utils/testingArray'
 
 const tokens = Array.from({ length: 23 }, (index) => ({
     TokenID: index as string,

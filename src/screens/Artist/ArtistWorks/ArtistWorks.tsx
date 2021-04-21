@@ -9,7 +9,7 @@ import useStyles from './ArtistWorks.style'
 import { TokenType } from 'state/transactions/actions'
 import preview from 'shared/images/artist/work.jpg'
 import { TokenStatus } from 'api/tokens'
-import { testingArray } from './../../Home/testingArray'
+import { testingArray } from 'utils/testingArray'
 
 type CategoryType = {
     id: number
