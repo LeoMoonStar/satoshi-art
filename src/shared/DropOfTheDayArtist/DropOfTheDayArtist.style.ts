@@ -20,8 +20,8 @@ const useStyles = makeStyles(() => {
             borderRadius: 20,
         },
         whiteSliderDots: {
-            '& .slick-dots button': {
-                backgroundColor: '#fff',
+            '& .slick-dots li:not(.slick-active) button': {
+                backgroundColor: '#fff !important',
             },
         },
         leftCol: {

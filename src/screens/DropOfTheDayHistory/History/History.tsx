@@ -1,5 +1,6 @@
 import React from 'react'
 import Pagination from 'shared/Pagination'
+import { useHistory } from 'react-router-dom'
 
 import history1 from 'shared/images/dropOfTheDay/history1.jpg'
 import history2 from 'shared/images/dropOfTheDay/history2.jpg'
@@ -36,11 +37,17 @@ const items = [
 
 export default function History(): JSX.Element {
     const classes = useStyles()
+    const history = useHistory()
+
+    const handleSeeAll = () => {
+        history.push('/drop-of-the-day')
+    }
 
     return (
         <section className={classes.container}>
             {items.map((item) => (
                 <DropOfTheDayArtist
+                    onSeeAll={handleSeeAll}
                     key={item.id}
                     color={item.color}
                     name={item.name}

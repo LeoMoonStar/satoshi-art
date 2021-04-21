@@ -40,6 +40,9 @@ const useStyles = makeStyles(() => {
                     backgroundColor: '#FFB800',
                 },
             },
+            '& .slick-slide div:focus': {
+                outline: 0,
+            },
 
             '& .slick-prev': {
                 marginLeft: -44,
