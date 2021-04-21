@@ -9,12 +9,14 @@ type HistoryItemProps = {
     name: string
     artistImage: string
     imagePreview?: string
+    onSeeAll?: () => void
 }
 
 export default function DropOfTheDayArtist({
     color,
     name,
     artistImage,
+    onSeeAll,
 }: HistoryItemProps): JSX.Element {
     const classes = useStyles()
 
@@ -30,7 +32,7 @@ export default function DropOfTheDayArtist({
                         [classes.whiteSliderDots]: color === '#C4C4C4',
                     })}
                 >
-                    <DropOfTheDaySlider />
+                    <DropOfTheDaySlider onSeeAll={onSeeAll} />
                 </div>
             </div>
         </div>
