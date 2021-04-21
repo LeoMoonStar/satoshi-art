@@ -27,8 +27,7 @@ import useStyles from './TokenDetails.style'
 import ProgressModal from './ProgressModal'
 import Price from 'shared/Price'
 import { TokenType } from 'state/transactions/actions'
-
-const SERVICE_FEE = 0.025
+import { SERVICE_FEE } from 'constants/common'
 
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
@@ -325,21 +324,13 @@ const TokenDetails = (): JSX.Element => {
                                 variant="h6"
                                 className={classes.serviceCryptoFee}
                             >
-                                <Price.WeiToEth
-                                    value={
-                                        Number(token.price) * (1 + SERVICE_FEE)
-                                    }
-                                />
+                                <Price.WeiToEth withFee value={token.price} />
                             </Typography>
                             <Typography
                                 variant="h6"
                                 className={classes.serviceDollarFee}
                             >
-                                <Price.WeiToUsd
-                                    value={
-                                        Number(token.price) * (1 + SERVICE_FEE)
-                                    }
-                                />
+                                <Price.WeiToUsd withFee value={token.price} />
                             </Typography>
                         </div>
                     )}
