@@ -17,7 +17,7 @@ const useWalletTokens = (): any => {
                 setTokens(res)
             })
             .catch((err) => {
-                console.log('Error in getting tokens - useWalletTokens', err)
+                console.error('Error in getting tokens - useWalletTokens', err)
             })
     }, [walletHash])
 

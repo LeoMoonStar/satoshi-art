@@ -17,7 +17,7 @@ import { Token, TokenStatus } from 'api/tokens'
 import useStyles from './Works.style'
 import { shortAddress } from 'utils/helpers'
 import Price from '../Price'
-import useWalletTokens from './../../screens/Home/useWalletTokens'
+import useWalletTokens from '../../hooks/useWalletTokens'
 
 type WorksListProps = {
     borderWidth?: number

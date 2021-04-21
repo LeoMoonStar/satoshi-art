@@ -9,11 +9,8 @@ import Tops from './Tops'
 
 import PopularWorks from './PopularWorks'
 import Intro from './Intro'
-import useWalletTokens from './useWalletTokens'
 
 function Home(): JSX.Element {
-    useWalletTokens()
-
     return (
         <Layout
             headerVariant="full"

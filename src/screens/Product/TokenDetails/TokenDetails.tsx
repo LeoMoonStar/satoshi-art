@@ -28,7 +28,7 @@ import ProgressModal from './ProgressModal'
 import Price from 'shared/Price'
 import { TokenType } from 'state/transactions/actions'
 import { SERVICE_FEE } from 'constants/common'
-import useWalletTokens from './../../Home/useWalletTokens'
+import useWalletTokens from 'hooks/useWalletTokens'
 
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
