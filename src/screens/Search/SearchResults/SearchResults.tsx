@@ -7,7 +7,6 @@ import preview from 'shared/images/artist/work.jpg'
 import { TokenType } from 'state/transactions/actions'
 import { TokenStatus } from 'api/tokens'
 import { testingArray } from './../../Home/testingArray'
-import TokensSlider from 'screens/UserDashboard/Tokens/TokensSlider'
 
 const tokens = Array.from({ length: 23 }, (index) => ({
     TokenID: index as string,
