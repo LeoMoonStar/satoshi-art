@@ -10,6 +10,7 @@ import { TokenType } from 'state/transactions/actions'
 import preview from 'shared/images/artist/work.jpg'
 import { TokenStatus } from 'api/tokens'
 import { testingArray } from 'utils/testingArray'
+import useWalletTokens from 'hooks/useWalletTokens'
 
 type CategoryType = {
     id: number
@@ -49,6 +50,7 @@ export default function ArtistWorks(): JSX.Element {
     const [selectedCategory, setSelectedCategory] = useState<CategoryType>(
         categories[0]
     )
+    const filteredTokens = useWalletTokens()
 
     const openModal = (activeType: number) => {
         setActive(activeType)

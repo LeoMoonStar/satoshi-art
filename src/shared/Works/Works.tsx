@@ -18,6 +18,7 @@ import useStyles from './Works.style'
 import { shortAddress } from 'utils/helpers'
 import Price from '../Price'
 import useWalletTokens from '../../hooks/useWalletTokens'
+import { testingArray } from './../../utils/testingArray'
 
 type WorksListProps = {
     borderWidth?: number
@@ -37,11 +38,10 @@ export default function WorksList({
     const classes = useStyles()
     const { t } = useTranslation()
     const filteredTokens = useWalletTokens()
-    const testingFiltredTokens = [...filteredTokens]
-    testingFiltredTokens.push('607d95edc95ad00014e01767')
+    const testingFiltredTokens = testingArray(filteredTokens)
 
     const findOut = (id: string) => {
-        return testingFiltredTokens.some((el) => id === el)
+        return testingFiltredTokens.some((el) => id === el.id)
     }
 
     if (isLoading) {
@@ -153,7 +153,9 @@ export default function WorksList({
                                             }[status]
                                         }
                                         {findOut(id) ? (
-                                            <span>Owner</span>
+                                            <span style={{ marginLeft: '5px' }}>
+                                                You are the Owner
+                                            </span>
                                         ) : (
                                             <Button
                                                 className={classes.bidButton}
