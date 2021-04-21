@@ -13,7 +13,7 @@ import { getTokens, Token } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
 import { TokenType } from 'state/transactions/actions'
-import { weiToEth } from 'utils/helpers'
+import Price from 'shared/Price'
 
 const RenderCardContent = ({
     token,
@@ -92,7 +92,7 @@ const RenderCardContent = ({
             {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
             <div className={classes.createdInfo}>
                 <Link to="/artists/1">@Coll3ctor</Link>{' '}
-                {token.price && `${weiToEth(Number(token.price))} ETH`}
+                {token.price && <Price.WeiToEth value={token.price} />}
             </div>
         </>
     )

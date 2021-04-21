@@ -13,7 +13,8 @@ import TextGradient from 'shared/TexGradient'
 
 import { Token, TokenStatus } from 'api/tokens'
 import useStyles from './Works.style'
-import { shortAddress, weiToEth } from 'utils/helpers'
+import { shortAddress } from 'utils/helpers'
+import Price from '../Price'
 
 type WorksListProps = {
     borderWidth?: number
@@ -103,8 +104,9 @@ export default function WorksList({
                                         >
                                             {shortAddress(walletHash)}
                                         </a>
-                                        {price &&
-                                            ` ${weiToEth(Number(price))}ETH`}
+                                        {price && (
+                                            <Price.WeiToEth value={price} />
+                                        )}
                                     </div>
                                     <div className={classes.workInfo}>
                                         {/*0.25 ETH*/}

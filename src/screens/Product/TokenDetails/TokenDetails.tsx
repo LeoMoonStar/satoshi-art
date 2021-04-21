@@ -25,7 +25,6 @@ import FSModal from './FSModal'
 
 import useStyles from './TokenDetails.style'
 import ProgressModal from './ProgressModal'
-import { weiToEth } from 'utils/helpers'
 import Price from 'shared/Price'
 import { TokenType } from 'state/transactions/actions'
 
@@ -219,7 +218,7 @@ const TokenDetails = (): JSX.Element => {
                     <div className={classes.tokenPriceContainer}>
                         {token.price && (
                             <Typography variant="h2">
-                                {weiToEth(Number(token.price))} ETH
+                                <Price.WeiToEth value={token.price} />
                             </Typography>
                         )}
                         <Typography
