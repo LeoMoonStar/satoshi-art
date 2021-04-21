@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             display: 'flex',
             alignItems: 'center ',
+            borderBottom: '1px solid #ffffff50',
         },
         divider: {
             position: 'absolute',
@@ -28,6 +29,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             width: '100%',
             height: 51,
+            borderBottom: '1px solid #C4C4C4',
         },
         innerBottomRow: {
             width: '100%',
