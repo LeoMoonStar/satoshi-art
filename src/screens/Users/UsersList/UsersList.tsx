@@ -37,11 +37,13 @@ export default function UsersList(): JSX.Element {
 
     return (
         <section className={classes.container}>
-            {Array.from({ length: 20 }).map((_, index) => (
-                <UserItem key={index} />
-            ))}
+            <div className={classes.cardsWrapper}>
+                {Array.from({ length: 20 }).map((_, index) => (
+                    <UserItem key={index} />
+                ))}
+            </div>
             <div className={classes.paginationWrapper}>
-                <Pagination />
+                <Pagination className={classes.pagination} />
             </div>
         </section>
     )

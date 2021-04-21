@@ -6,15 +6,21 @@ const useStyles = makeStyles(() => {
             width: '100%',
             maxWidth: 1440,
             boxSizing: 'border-box',
-            display: 'grid',
             margin: '33px auto 0',
+        },
+        cardsWrapper: {
+            display: 'grid',
             gap: '40px 12px',
             gridTemplateColumns: 'repeat(4, 1fr)',
         },
         paginationWrapper: {
             width: '100%',
+            margin: '40px 0 120px',
             display: 'flex',
             justifyContent: 'flex-end',
+        },
+        pagination: {
+            margin: 0,
         },
         item: {
             border: '1px solid #E5E5E5',
@@ -46,6 +52,7 @@ const useStyles = makeStyles(() => {
         itemAdditionalInfo: {
             margin: '4px 0 32px',
             color: '#C4C4C4',
+            fontSize: 9,
             '& a': {
                 marginTop: 5,
                 fontWeight: 600,

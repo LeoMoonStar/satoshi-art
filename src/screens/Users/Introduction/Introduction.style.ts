@@ -36,6 +36,32 @@ const useStyles = makeStyles(() => {
                 color: '#7E7E7E',
             },
         },
+        rightCol: {
+            display: 'flex',
+            flexDirection: 'column',
+        },
+        filterGroup: {
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: 25,
+        },
+        tabs: {
+            '& button': {
+                marginRight: 4,
+                fontSize: 13,
+                fontWeight: 600,
+                letterSpacing: '-0.04em',
+                backgroundColor: 'transparent',
+                border: 0,
+                color: '#7E7E7E',
+                cursor: 'pointer',
+                '&.selected': {
+                    color: '#000',
+                },
+            },
+        },
+        selectsGroup: {},
+        filterButton: {},
     }
 })
 export default useStyles
