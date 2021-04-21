@@ -347,10 +347,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 })
             )
             history.push('/')
-        } catch (e) {
-            setCreateTokenError(
-                e?.data?.message || e?.message || 'Something went wrong'
-            )
+        } catch (err) {
+            const serverError = err?.data?.message
+            const metamaskError = err?.message
+
+            if (serverError || metamaskError) {
+                setCreateTokenError(serverError || metamaskError)
+                return
+            }
+
+            throw err
         }
     }
 

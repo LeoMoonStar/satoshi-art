@@ -145,10 +145,16 @@ export default function PutOnSaleModal({
             })
             onSuccess()
             onClose()
-        } catch (e) {
-            setPutOnSaleError(
-                e.data?.message || e.message || 'Something went wrong'
-            )
+        } catch (err) {
+            const serverError = err?.data?.message
+            const metamaskError = err?.message
+
+            if (serverError || metamaskError) {
+                setPutOnSaleError(serverError || metamaskError)
+                return
+            }
+
+            throw err
         }
     }
 
