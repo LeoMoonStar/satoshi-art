@@ -337,7 +337,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
         try {
             const { response, tokenType } = await createItem(data.payload)
-            await updateMetaData(data.id, response.hash)
+            await updateMetaData(data.id, response.hash, data.authToken)
 
             dispatch(
                 addTransaction({
@@ -414,8 +414,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 type,
                 thumbnail
             )
-
-            localStorage.setItem('token', metaResponse.authToken)
 
             setTempToken(metaResponse)
             await tryCreateItem(metaResponse)

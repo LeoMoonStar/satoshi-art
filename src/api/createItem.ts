@@ -26,13 +26,8 @@ export const uploadMetaData = (
         thumbnail,
     })
 
-export const updateMetaData = (id: string, tx_hash: string): Promise<void> =>
-    axios.put(
-        `/metadata/${id}`,
-        { tx_hash },
-        {
-            headers: {
-                'auth-token': localStorage.getItem('token'),
-            },
-        }
-    )
+export const updateMetaData = (
+    id: string,
+    tx_hash: string,
+    authToken: string
+): Promise<void> => axios.put(`/metadata/${id}`, { tx_hash, authToken })
