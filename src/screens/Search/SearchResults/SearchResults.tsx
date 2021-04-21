@@ -6,6 +6,8 @@ import useStyles from './SearchResults.style'
 import preview from 'shared/images/artist/work.jpg'
 import { TokenType } from 'state/transactions/actions'
 import { TokenStatus } from 'api/tokens'
+import { testingArray } from './../../Home/testingArray'
+import TokensSlider from 'screens/UserDashboard/Tokens/TokensSlider'
 
 const tokens = Array.from({ length: 23 }, (index) => ({
     TokenID: index as string,
@@ -24,21 +26,7 @@ const tokens = Array.from({ length: 23 }, (index) => ({
     },
 }))
 
-const testingTokens = [...tokens]
-testingTokens.push({
-    TokenID: '24',
-    id: '607d95edc95ad00014e01767',
-    metadata: {
-        type: TokenType.MULTIPLE,
-        thumbnail: preview,
-        payload: {
-            name: 'Fresh Meat #F',
-            copiesCount: 20,
-            description: '',
-            file: preview,
-        },
-    },
-})
+const testingTokens = testingArray(tokens)
 
 export default function SearchResults(): JSX.Element {
     const classes = useStyles()

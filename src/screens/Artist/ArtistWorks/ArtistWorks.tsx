@@ -9,6 +9,7 @@ import useStyles from './ArtistWorks.style'
 import { TokenType } from 'state/transactions/actions'
 import preview from 'shared/images/artist/work.jpg'
 import { TokenStatus } from 'api/tokens'
+import { testingArray } from './../../Home/testingArray'
 
 type CategoryType = {
     id: number
@@ -40,21 +41,22 @@ const tokens = Array.from({ length: 23 }, (index) => ({
         },
     },
 }))
-const testingTokens = [...tokens]
-testingTokens.push({
-    TokenID: '24',
-    id: '607d95edc95ad00014e01767',
-    metadata: {
-        type: TokenType.MULTIPLE,
-        thumbnail: preview,
-        payload: {
-            name: 'Fresh Meat #F',
-            copiesCount: 20,
-            description: '',
-            file: preview,
-        },
-    },
-})
+const testingTokens = testingArray(tokens)
+// const testingTokens = [...tokens]
+// testingTokens.push({
+//     TokenID: '24',
+//     id: '607d95edc95ad00014e01767',
+//     metadata: {
+//         type: TokenType.MULTIPLE,
+//         thumbnail: preview,
+//         payload: {
+//             name: 'Fresh Meat #F',
+//             copiesCount: 20,
+//             description: '',
+//             file: preview,
+//         },
+//     },
+// })
 
 export default function ArtistWorks(): JSX.Element {
     const [open, setOpen] = useState(false)
