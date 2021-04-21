@@ -7,15 +7,29 @@ import Button from 'shared/Button'
 import { useTranslation } from 'react-i18next'
 
 type PutOnSaleProgressModalProps = {
+    isNeedToApprove: boolean
+    isPutOnSaleInProgress: boolean
+    isApprovalInProgress: boolean
+    activeStep: number
     onClose: () => void
     putOnSaleError: string
+    approvalError: string
     onTryAgain: () => void
+    onTryApproveAgain: () => void
+    putOnSale: () => Promise<void>
 }
 
 export default function PutOnSaleProgressModal({
+    isNeedToApprove,
+    isApprovalInProgress,
+    isPutOnSaleInProgress,
+    activeStep,
     onClose,
     putOnSaleError,
+    approvalError,
     onTryAgain,
+    onTryApproveAgain,
+    putOnSale,
 }: PutOnSaleProgressModalProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()

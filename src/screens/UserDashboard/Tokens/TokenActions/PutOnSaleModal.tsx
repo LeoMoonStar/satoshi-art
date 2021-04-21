@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { FormControl, Input, InputLabel } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
@@ -63,9 +63,21 @@ export default function PutOnSaleModal({
     const [erc1155contract, setErc1155contract] = useState<any>()
     const [engine1155contract, setEngine1155contract] = useState<any>()
     const [putOnSaleError, setPutOnSaleError] = useState<string>('')
+    const [approvalError, setApprovalError] = useState<string>('')
     const [formData, setFormData] = useState<PutOnSaleForm | null>(null)
     const [isInProgress, setInProgress] = useState<boolean>(false)
+    const [activeProgressStep, setActiveStep] = useState<number>(0)
+    const [isPutOnSaleInProgress, setPutOnSaleInProgress] = useState<boolean>(
+        false
+    )
+    const [isApprovalInProgress, setApprovalInProgress] = useState<boolean>(
+        false
+    )
+    const [isApproved, setIsApproved] = useState<boolean>(false)
+
     const isSingle = token.metadata.type === TokenType.SINGLE
+    const isNeedToApprove =
+        token.metadata.type === TokenType.MULTIPLE && !isApproved
 
     //@TODO: probably we need to move out these contracts instance creation to a separate hook or smth else, any ideas?
     useEffect(() => {
@@ -129,28 +141,68 @@ export default function PutOnSaleModal({
         }
     }
 
-    const tryPutOnSale = async (data: PutOnSaleForm) => {
+    const tryPutOnSale = async (data: PutOnSaleForm | null) => {
         if (!chainId) {
             return
         }
+        setPutOnSaleInProgress(true)
         try {
-            const { response, price } = await putTokenOnSaleBlockchain(data)
-            await putTokenOnSaleAPI({
-                id: token.id,
-                tx_hash: response.hash,
-                price,
-                copiesOnSale: data.copiesCount,
-                offerIndex: response.value?.toNumber(),
-            })
-            onClose()
+            if (data) {
+                const { response, price } = await putTokenOnSaleBlockchain(data)
+                await putTokenOnSaleAPI({
+                    id: token.id,
+                    tx_hash: response.hash,
+                    price,
+                    copiesOnSale: data.copiesCount,
+                    offerIndex: response.value?.toNumber(),
+                })
+                onClose()
+            }
         } catch (e) {
+            setPutOnSaleInProgress(false)
             setPutOnSaleError(e.message)
         }
     }
 
+    const setApprovalForAllBlockchain = async () => {
+        setApprovalInProgress(true)
+        try {
+            await erc1155contract.setApprovalForAll(
+                engine1155contract.address,
+                true,
+                {
+                    from: account,
+                }
+            )
+            setActiveStep(1)
+            setApprovalInProgress(false)
+        } catch (e) {
+            setApprovalInProgress(false)
+            setApprovalError(e.message)
+        }
+    }
+
+    const checkIsApprovedForAllBlockchain = useCallback(async () => {
+        if (engine1155contract) {
+            const isApproved = await erc1155contract.isApprovedForAll(
+                account,
+                engine1155contract.address
+            )
+            setIsApproved(isApproved)
+        }
+    }, [account, engine1155contract, erc1155contract])
+
+    useEffect(() => {
+        checkIsApprovedForAllBlockchain()
+    }, [checkIsApprovedForAllBlockchain])
+
     const onFormSubmit = async (data: PutOnSaleForm) => {
         setInProgress(true)
         setFormData(data)
+        if (isNeedToApprove) {
+            await setApprovalForAllBlockchain()
+            return
+        }
         await tryPutOnSale(data)
     }
 
@@ -172,6 +224,11 @@ export default function PutOnSaleModal({
         )
     }
 
+    const handleTryApproveForAllAgain = () => {
+        setApprovalError('')
+        setApprovalForAllBlockchain()
+    }
+
     const handleTryAgain = () => {
         if (formData) {
             setPutOnSaleError('')
@@ -184,7 +241,14 @@ export default function PutOnSaleModal({
             <PutOnSaleProgressModal
                 onClose={onClose}
                 putOnSaleError={putOnSaleError}
+                approvalError={approvalError}
+                putOnSale={() => tryPutOnSale(formData)}
                 onTryAgain={handleTryAgain}
+                isNeedToApprove={isNeedToApprove}
+                isApprovalInProgress={isApprovalInProgress}
+                isPutOnSaleInProgress={isPutOnSaleInProgress}
+                activeStep={activeProgressStep}
+                onTryApproveAgain={handleTryApproveForAllAgain}
             />
         )
     }
