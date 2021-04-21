@@ -158,10 +158,10 @@ export default function WorksList({
                                             <Button
                                                 className={classes.bidButton}
                                             >
-                                                {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
-                                                {/*        {t('placeABid')}*/}
-                                                {/*    </TextGradient>*/}
-                                                Place a bid
+                                                <TextGradient colors="#FF0099, #6A2FE7">
+                                                    {/* {t('placeABid')} */}
+                                                    Place a bid
+                                                </TextGradient>
                                             </Button>
                                         )}
                                         {/* <Button className={classes.bidButton}> */}

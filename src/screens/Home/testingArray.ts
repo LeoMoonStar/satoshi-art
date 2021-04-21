@@ -4,7 +4,7 @@ import { Token } from 'api/tokens'
 
 export const testingArray = (tokens: Token[]): Token[] => {
     const testingTokens = [...tokens]
-    testingTokens.push({
+    testingTokens.unshift({
         TokenID: '24',
         id: '607d95edc95ad00014e01767',
         metadata: {
