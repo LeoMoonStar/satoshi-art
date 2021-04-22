@@ -8,7 +8,7 @@ import useStyles from './Input.style'
 interface InputProps extends MuiInputProps {
     id: string
     placeholder: string
-    label: React.ReactNode | string
+    label: React.ReactNode
     register: any
 }
 export default function Input({

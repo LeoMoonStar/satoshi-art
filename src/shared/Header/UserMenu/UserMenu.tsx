@@ -29,8 +29,16 @@ import useStyles from './UserMenu.styled'
 
 const userLinks = [
     { title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> },
-    { title: 'editProfile', href: '/edit-profile', icon: <ProfileIcon /> },
 ]
+
+// TEMPORARY
+if (process.env.REACT_APP_SPECIAL_MODE === 'development') {
+    userLinks.push({
+        title: 'editProfile',
+        href: '/edit-profile',
+        icon: <ProfileIcon />,
+    })
+}
 
 const UserMenu = (): JSX.Element | null => {
     const classes = useStyles()
