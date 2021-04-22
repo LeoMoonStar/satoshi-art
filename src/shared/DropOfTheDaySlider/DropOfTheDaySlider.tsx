@@ -64,9 +64,27 @@ export default function DropOfTheDaySlider({
     const { t } = useTranslation()
     const walletTokens = useWalletTokens()
 
+    const dropsOfTheDay = [
+        { id: '6080107c6aeffc0014c8df3d' }, //hardcoded one of my Token.id
+        { id: '607e976877ca3c0014e4b8c2' },
+        { id: '607e976877ca3c0014e4b8c2' },
+        { id: '607e976877ca3c0014e4b8c2' },
+        { id: '607e976877ca3c0014e4b8c2' },
+        { id: '607e976877ca3c0014e4b8c2' },
+    ]
+
+    // const image = walletTokens.filter(
+    //     (el: any) => el.id === '6080107c6aeffc0014c8df3d'
+    // )
+
+    const foundIdInFilteredTokens = (id: string): boolean => {
+        return walletTokens.some((el: any) => el.id === id)
+    }
+
     return (
         <Slider className={cx(classes.slider, className)} {...sliderConfig}>
-            {[1, 2, 3, 4, 5, 6].map((_, index) => (
+            {/* {[1, 2, 3, 4, 5, 6].map((_, index) => ( */}
+            {dropsOfTheDay.map((el, index) => (
                 <div key={index}>
                     <div className={classes.slide}>
                         <img
@@ -106,9 +124,14 @@ export default function DropOfTheDaySlider({
                                         1 of 1
                                     </span>
                                     {/* should be muted if Wallet's hash = owner */}
-                                    <Button className={classes.bidButton}>
+                                    {foundIdInFilteredTokens(el.id) ? null : (
+                                        <Button className={classes.bidButton}>
+                                            {t('placeABid')}
+                                        </Button>
+                                    )}
+                                    {/* <Button className={classes.bidButton}>
                                         {t('placeABid')}
-                                    </Button>
+                                    </Button> */}
                                 </div>
                                 {onSeeAll && (
                                     <Button

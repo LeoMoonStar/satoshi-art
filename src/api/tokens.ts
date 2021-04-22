@@ -24,6 +24,23 @@ export type Token = {
     }
 }
 
+export type Token2 = {
+    TokenID: string
+    id: string
+    metadata: {
+        type: TokenType
+        thumbnail?: string
+        payload: {
+            name: string
+            copiesCount?: number // todo: Probably should has totalCount and currentCount
+            description: string
+            cover?: string
+            file: string
+        }
+    }
+    status: string
+}
+
 type PutOnSaleParams = {
     id: string
     tx_hash: string
@@ -52,6 +69,9 @@ export const getTokens = ({
 }
 
 export const getToken = (id: string): Promise<Token> => {
+    return axios.get(`/products/${id}`)
+}
+export const getToken2 = (id: string): Promise<Token2> => {
     return axios.get(`/products/${id}`)
 }
 

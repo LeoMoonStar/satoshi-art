@@ -9,7 +9,7 @@ import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
-import { getTokens, Token } from 'api/tokens'
+import { getTokens, Token, getToken2, Token2 } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
 import { TokenType } from 'state/transactions/actions'
@@ -19,7 +19,7 @@ const RenderCardContent = ({
     token,
     onPutOnSale,
 }: {
-    token: Token
+    token: Token2
     onPutOnSale: (token: Token) => Token
 }) => {
     const classes = useStyles()
@@ -27,6 +27,16 @@ const RenderCardContent = ({
     const { payload, type } = token?.metadata
     const anchorElRef = useRef()
     const [isOpen, setOpen] = useState<boolean>(false)
+    const [tokenStatus, setTokenStatus] = useState<string | null>(null)
+
+    useEffect(() => {
+        const tryGetToken = () => {
+            getToken2(token.id).then((res) => {
+                setTokenStatus(res.status)
+            })
+        }
+        tryGetToken()
+    }, [token.id])
 
     return (
         <>
@@ -59,15 +69,20 @@ const RenderCardContent = ({
                         disableRestoreFocus
                     >
                         <div className={classes.controlsButtons}>
-                            <button
-                                type="button"
-                                onClick={() => onPutOnSale(token)}
-                            >
-                                <div>
-                                    <PriceIcon />
-                                </div>
-                                {t('setAPrice')}
-                            </button>
+                            {tokenStatus !== null &&
+                            tokenStatus === 'onSale' ? (
+                                <span>Is already on Sale</span>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => onPutOnSale(token)}
+                                >
+                                    <div>
+                                        <PriceIcon />
+                                    </div>
+                                    {t('setAPrice')}
+                                </button>
+                            )}
                             <button type="button">
                                 <div>
                                     <TransferIcon />
@@ -90,6 +105,11 @@ const RenderCardContent = ({
                 </div>
             )}
             {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
+            {tokenStatus !== null && tokenStatus === 'onSale' ? (
+                <span>Is on Sale</span>
+            ) : (
+                <span>Could be saled</span>
+            )}
             <div className={classes.createdInfo}>
                 <Link to="/artists/1">@Coll3ctor</Link>{' '}
                 {token.price && <Price.WeiToEth value={token.price} />}
@@ -117,7 +137,6 @@ export default function Created({
 
         getTokens({ walletHash: account }).then((tokens) => {
             setTokens(tokens)
-            console.log('your tokens from CREATED ----', tokens)
             setLoading(false)
         })
     }, [account])

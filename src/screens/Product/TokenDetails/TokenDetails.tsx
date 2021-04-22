@@ -107,10 +107,7 @@ const TokenDetails = (): JSX.Element => {
     }
 
     const foundIdInFilteredTokens = (id: string): boolean => {
-        const copiedFilteredTokens = [...filteredTokens]
-        copiedFilteredTokens.push('607e8bd777ca3c0014e4b8bf')
-        const checked = copiedFilteredTokens.some((el: string) => el === id)
-        return checked
+        return filteredTokens.some((el: Token) => el.id === id)
     }
     const founded = foundIdInFilteredTokens(id)
 

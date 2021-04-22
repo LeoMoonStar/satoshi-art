@@ -14,20 +14,25 @@ import { FilterIcon } from 'shared/icons'
 
 import useStyles from './PopularWorks.style'
 import { APIErrorContext } from 'providers/APIErrorProvider'
-import { testingArray } from '../../../utils/testingArray'
+// import useWalletTokens from './../../../hooks/useWalletTokens'
 
 const sortCases = [
     { sort: 'published_at:desc', title: 'Recently added' },
     { sort: 'published_at:asc', title: 'Oldest' },
 ]
 
+type PopularWorksProps = {
+    testTokens?: Token[]
+}
+
 // const categories = ['creator', 'collectible', 'collection']
 
-export default function PopularWorks(): JSX.Element {
+export default function WorksList({
+    testTokens = [],
+}: PopularWorksProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
     const [tokens, setTokens] = useState<Token[]>([])
-    const [testTokens, setTestTokens] = useState<Token[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const [isExistNewTokens, setExistNewTokens] = useState<boolean>(false)
     const [isOpenSorting, setOpenSorting] = useState<boolean>(false)
@@ -42,7 +47,6 @@ export default function PopularWorks(): JSX.Element {
         getTokens({ sort: sortBy })
             .then((res) => {
                 setTokens(res)
-                setTestTokens(testingArray(res))
                 setLoading(false)
             })
             .catch((err) => {
@@ -126,8 +130,8 @@ export default function PopularWorks(): JSX.Element {
                 </div>
             </Modal>
             <Works
-                // tokens={tokens}
-                tokens={testTokens}
+                tokens={tokens}
+                testTokens={testTokens}
                 borderWidth={0}
                 isLoading={isLoading}
                 variant="rounded"

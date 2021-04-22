@@ -25,6 +25,8 @@ type WorksListProps = {
     variant?: 'none' | 'rounded'
     isLoading?: boolean
     tokens?: Token[]
+    testTokens?: Token[]
+    isArtistPage?: boolean
 }
 
 export default function WorksList({
@@ -32,6 +34,8 @@ export default function WorksList({
     variant = 'none',
     isLoading = true,
     tokens = [],
+    testTokens = [],
+    isArtistPage = false,
 }: WorksListProps): JSX.Element {
     const { explorer } = useCurrentNetwork()
 
@@ -41,7 +45,7 @@ export default function WorksList({
     const testingFiltredTokens = testingArray(filteredTokens)
 
     const findOut = (id: string) => {
-        return testingFiltredTokens.some((el) => id === el.id)
+        return testTokens.some((tokenEl) => id === tokenEl.id)
     }
 
     if (isLoading) {
@@ -61,7 +65,8 @@ export default function WorksList({
                         return (
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
-                                    <Link to={`product/${id}`}>
+                                    {/* fixed from product/${id} */}
+                                    <Link to={`/product/${id}`}>
                                         <TokenPreview
                                             src={
                                                 thumbnail ??
@@ -152,7 +157,7 @@ export default function WorksList({
                                                 ),
                                             }[status]
                                         }
-                                        {findOut(id) ? (
+                                        {findOut(id) || isArtistPage ? (
                                             <span style={{ marginLeft: '5px' }}>
                                                 You are the Owner
                                             </span>
