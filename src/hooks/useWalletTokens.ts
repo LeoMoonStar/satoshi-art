@@ -26,6 +26,8 @@ const useWalletTokens = (): any => {
     console.log('Tokens', tokens)
     // console.log('walletHash', account)
 
+    // if sotred (params) - return sortedTokens
+
     // Arts = tokens, sorted by wallet
     return tokens
 }
