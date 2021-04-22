@@ -5,7 +5,12 @@ import { Popover } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 import { ShowMoreIcon } from 'shared/icons'
-import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
+import {
+    TransferIcon,
+    BurnIcon,
+    PriceIcon,
+    RemoveIcon,
+} from 'shared/icons/dashboard'
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
@@ -33,6 +38,7 @@ const RenderCardContent = ({
         const tryGetToken = () => {
             getToken2(token.id).then((res) => {
                 setTokenStatus(res.status)
+                console.log(res)
             })
         }
         tryGetToken()
@@ -71,7 +77,15 @@ const RenderCardContent = ({
                         <div className={classes.controlsButtons}>
                             {tokenStatus !== null &&
                             tokenStatus === 'onSale' ? (
-                                <span>Is already on Sale</span>
+                                <button
+                                    type="button"
+                                    onClick={() => alert('Remove')}
+                                >
+                                    <div>
+                                        <RemoveIcon />
+                                    </div>
+                                    {t('Remove from sale')}
+                                </button>
                             ) : (
                                 <button
                                     type="button"
@@ -105,11 +119,6 @@ const RenderCardContent = ({
                 </div>
             )}
             {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
-            {tokenStatus !== null && tokenStatus === 'onSale' ? (
-                <span>Is on Sale</span>
-            ) : (
-                <span>Could be saled</span>
-            )}
             <div className={classes.createdInfo}>
                 <Link to="/artists/1">@Coll3ctor</Link>{' '}
                 {token.price && <Price.WeiToEth value={token.price} />}
