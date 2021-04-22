@@ -175,10 +175,11 @@ export default function PutOnSaleModal({
                 }
             )
             setActiveStep(1)
-            setApprovalInProgress(false)
         } catch (e) {
             setApprovalInProgress(false)
             setApprovalError(e.message)
+        } finally {
+            setApprovalInProgress(false)
         }
     }
 
