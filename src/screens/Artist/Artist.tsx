@@ -4,11 +4,10 @@ import PageDetails from 'shared/PageDetails'
 import ArtistWorks from './ArtistWorks'
 import { useParams } from 'react-router-dom'
 import useWalletTokens from './../../hooks/useWalletTokens'
-// import { profile } from 'console'
 
 const profileTest = {
     title: 'Artist',
-    name: 'Igor',
+    name: 'John Doe',
     hash: '',
     dscr: 'Good collections. Stay tuned for new NFTs',
     url: 'twitter.com/',
