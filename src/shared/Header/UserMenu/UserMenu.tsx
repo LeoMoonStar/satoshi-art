@@ -32,7 +32,7 @@ const userLinks = [
 ]
 
 // TEMPORARY
-if (process.env.REACT_APP_SPECIAL_MODE === 'development') {
+if (process.env.REACT_APP_SPECIAL_MODE !== 'production') {
     userLinks.push({
         title: 'editProfile',
         href: '/edit-profile',
