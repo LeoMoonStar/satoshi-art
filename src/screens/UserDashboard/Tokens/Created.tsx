@@ -14,7 +14,7 @@ import {
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
-import { getTokens, Token, getToken2, Token2 } from 'api/tokens'
+import { getTokens, Token, getToken } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
 import { TokenType } from 'state/transactions/actions'
@@ -24,7 +24,7 @@ const RenderCardContent = ({
     token,
     onPutOnSale,
 }: {
-    token: Token2
+    token: Token
     onPutOnSale: (token: Token) => Token
 }) => {
     const classes = useStyles()
@@ -36,9 +36,8 @@ const RenderCardContent = ({
 
     useEffect(() => {
         const tryGetToken = () => {
-            getToken2(token.id).then((res) => {
+            getToken(token.id).then((res) => {
                 setTokenStatus(res.status)
-                console.log(res)
             })
         }
         tryGetToken()

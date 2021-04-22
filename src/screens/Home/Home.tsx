@@ -9,11 +9,8 @@ import Tops from './Tops'
 
 import PopularWorks from './PopularWorks'
 import Intro from './Intro'
-import useWalletTokens from 'hooks/useWalletTokens'
 
 function Home(): JSX.Element {
-    const testTokens = useWalletTokens()
-
     return (
         <Layout
             headerVariant="full"
@@ -24,7 +21,7 @@ function Home(): JSX.Element {
             {/*<Iterators />*/}
             <TopSellersAndBuyers />
             <Tops />
-            <PopularWorks testTokens={testTokens} />
+            <PopularWorks />
         </Layout>
     )
 }

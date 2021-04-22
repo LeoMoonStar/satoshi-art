@@ -6,7 +6,7 @@ import { Token } from 'api/tokens'
 import { APIErrorContext } from 'providers/APIErrorProvider'
 import { useTranslation } from 'react-i18next'
 
-const useWalletTokens = (): any => {
+const useWalletTokens = (): Token[] => {
     const [tokens, setTokens] = useState<Token[]>([])
     const { account } = useWeb3React()
     const { setError } = useContext(APIErrorContext)
@@ -30,8 +30,6 @@ const useWalletTokens = (): any => {
                 )
             })
     }, [account, setError, t])
-
-    // TODO sotred (params) - return sortedTokens
 
     return tokens
 }

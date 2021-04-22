@@ -6,8 +6,6 @@ import Followers, { TabVariants } from 'shared/Followers'
 import { FilterIcon } from 'shared/icons'
 
 import useStyles from './ArtistWorks.style'
-// import { TokenType } from 'state/transactions/actions'
-// import preview from 'shared/images/artist/work.jpg'
 import { Token } from 'api/tokens'
 
 type CategoryType = {
@@ -23,21 +21,6 @@ const categories: CategoryType[] = [
     { id: 4, title: 'Liked', isEmpty: true },
     { id: 5, title: 'Activity', isEmpty: true },
 ]
-
-// const tokens = Array.from({ length: 23 }, (index) => ({
-//     TokenID: index as string,
-//     id: `id${index}`,
-//     metadata: {
-//         type: TokenType.MULTIPLE,
-//         thumbnail: preview,
-//         payload: {
-//             name: 'Fresh Meat #F',
-//             copiesCount: 20,
-//             description: '',
-//             file: preview,
-//         },
-//     },
-// }))
 
 type ArtistWorksProps = {
     tokens?: Token[]

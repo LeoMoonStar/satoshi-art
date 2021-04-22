@@ -20,15 +20,9 @@ const sortCases = [
     { sort: 'published_at:asc', title: 'Oldest' },
 ]
 
-type PopularWorksProps = {
-    testTokens?: Token[]
-}
-
 // const categories = ['creator', 'collectible', 'collection']
 
-export default function WorksList({
-    testTokens = [],
-}: PopularWorksProps): JSX.Element {
+export default function WorksList(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
     const [tokens, setTokens] = useState<Token[]>([])
@@ -130,7 +124,6 @@ export default function WorksList({
             </Modal>
             <Works
                 tokens={tokens}
-                testTokens={testTokens}
                 borderWidth={0}
                 isLoading={isLoading}
                 variant="rounded"

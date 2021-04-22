@@ -8,6 +8,7 @@ import card3 from 'shared/images/dropOfTheDay/card3.png'
 import card4 from 'shared/images/dropOfTheDay/card4.png'
 import useStyles from './DropOfTheDayWorkCards.style'
 import useWalletTokens from 'hooks/useWalletTokens'
+import { isTokenOwned } from 'utils/common'
 
 const items = [
     { id: 1, image: card1 },
@@ -19,10 +20,8 @@ const items = [
 export default function OrderListFilters(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
-    const walletTokens = useWalletTokens()
-    const foundIdInFilteredTokens = (id: string | number): boolean => {
-        return walletTokens.some((el: any) => el.id === id)
-    }
+    const userTokens = useWalletTokens()
+    const isOwner = (id: string | number) => isTokenOwned(id, userTokens)
 
     return (
         <section className={classes.container}>
@@ -45,7 +44,7 @@ export default function OrderListFilters(): JSX.Element {
                         <li>Aliquam posuere purus mi, vitae luctus justo</li>
                         <li>Nulla pulvinar sed nisl</li>
                     </ul>
-                    {foundIdInFilteredTokens(id) ? (
+                    {isOwner(id) ? (
                         <h1>You are the owner</h1>
                     ) : (
                         <Button

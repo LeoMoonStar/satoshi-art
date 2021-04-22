@@ -17,15 +17,14 @@ import { Token, TokenStatus } from 'api/tokens'
 import useStyles from './Works.style'
 import { shortAddress } from 'utils/helpers'
 import Price from '../Price'
-import useWalletTokens from '../../hooks/useWalletTokens'
-import { testingArray } from './../../utils/testingArray'
+import useWalletTokens from 'hooks/useWalletTokens'
+import { isTokenOwned } from 'utils/common'
 
 type WorksListProps = {
     borderWidth?: number
     variant?: 'none' | 'rounded'
     isLoading?: boolean
     tokens?: Token[]
-    testTokens?: Token[]
     isArtistPage?: boolean
 }
 
@@ -34,19 +33,13 @@ export default function WorksList({
     variant = 'none',
     isLoading = true,
     tokens = [],
-    testTokens = [],
     isArtistPage = false,
 }: WorksListProps): JSX.Element {
     const { explorer } = useCurrentNetwork()
 
     const classes = useStyles()
     const { t } = useTranslation()
-    const filteredTokens = useWalletTokens()
-    const testingFiltredTokens = testingArray(filteredTokens)
-
-    const findOut = (id: string) => {
-        return testTokens.some((tokenEl) => id === tokenEl.id)
-    }
+    const userTokens = useWalletTokens()
 
     if (isLoading) {
         return <Loader />
@@ -156,7 +149,8 @@ export default function WorksList({
                                                 ),
                                             }[status]
                                         }
-                                        {findOut(id) || isArtistPage ? (
+                                        {isTokenOwned(id, userTokens) ||
+                                        isArtistPage ? (
                                             <span style={{ marginLeft: '5px' }}>
                                                 You are the Owner
                                             </span>
@@ -165,8 +159,7 @@ export default function WorksList({
                                                 className={classes.bidButton}
                                             >
                                                 <TextGradient colors="#FF0099, #6A2FE7">
-                                                    {/* {t('placeABid')} */}
-                                                    Place a bid
+                                                    {t('placeABid')}
                                                 </TextGradient>
                                             </Button>
                                         )}

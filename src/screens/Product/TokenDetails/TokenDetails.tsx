@@ -29,6 +29,7 @@ import Price from 'shared/Price'
 import { TokenType } from 'state/transactions/actions'
 import { SERVICE_FEE } from 'constants/common'
 import useWalletTokens from 'hooks/useWalletTokens'
+import { useIsTokenOwned } from 'utils/common'
 
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
@@ -88,7 +89,7 @@ const TokenDetails = (): JSX.Element => {
     const { id } = useParams<{ id: string }>()
     const classes = useStyles()
     const { t } = useTranslation()
-    const filteredTokens = useWalletTokens()
+    const userTokens = useWalletTokens()
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -106,10 +107,7 @@ const TokenDetails = (): JSX.Element => {
         selectTab(newValue)
     }
 
-    const foundIdInFilteredTokens = (id: string): boolean => {
-        return filteredTokens.some((el: Token) => el.id === id)
-    }
-    const founded = foundIdInFilteredTokens(id)
+    const isTokenOwner = useIsTokenOwned(id, userTokens)
 
     const renderIcons = () => (
         <div className={classes.iconsContainer}>
@@ -341,7 +339,7 @@ const TokenDetails = (): JSX.Element => {
                             </Typography>
                         </div>
                     )}
-                    {founded ? (
+                    {isTokenOwner ? (
                         <div className={classes.buttonsContainer}>
                             <h1>You are the owner</h1>
                         </div>
@@ -359,20 +357,6 @@ const TokenDetails = (): JSX.Element => {
                             />
                         </div>
                     )}
-
-                    {/* <div className={classes.buttonsContainer}>
-                        <Button
-                            onClick={() => setBuyModal(true)}
-                            label={t('buyNow')}
-                            className={classes.buyButton}
-                        />
-                        <Button
-                            onClick={() => setBidModal(true)}
-                            label={t('placeABid')}
-                            className={classes.placeBidButton}
-                        />
-                    </div> */}
-
                     <div className={classes.serviceFeeInfoContainer}>
                         <Typography variant="h6">
                             {t('serviceFeeProgress', { fee: '2.5' })}

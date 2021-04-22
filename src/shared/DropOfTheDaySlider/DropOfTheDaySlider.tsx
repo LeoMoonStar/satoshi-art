@@ -12,6 +12,16 @@ import Button from 'shared/Button'
 import { SliderArrow, SaveIcon, ViewsIcon } from 'shared/icons'
 import useStyles from './DropOfTheDaySlider.style'
 import useWalletTokens from './../../hooks/useWalletTokens'
+import { isTokenOwned } from 'utils/common'
+
+const dropsOfTheDay = [
+    { id: '6080107c6aeffc0014c8df3d' }, //hardcoded one of my Token.id
+    { id: '607e976877ca3c0014e4b8c2' },
+    { id: '607e976877ca3c0014e4b8c2' },
+    { id: '607e976877ca3c0014e4b8c2' },
+    { id: '607e976877ca3c0014e4b8c2' },
+    { id: '607e976877ca3c0014e4b8c2' },
+]
 
 const SliderLeft = ({ currentSlide, slideCount, ...props }: any) => {
     return (
@@ -62,20 +72,7 @@ export default function DropOfTheDaySlider({
 }: DropOfTheDaySliderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
-    const walletTokens = useWalletTokens()
-
-    const dropsOfTheDay = [
-        { id: '6080107c6aeffc0014c8df3d' }, //hardcoded one of my Token.id
-        { id: '607e976877ca3c0014e4b8c2' },
-        { id: '607e976877ca3c0014e4b8c2' },
-        { id: '607e976877ca3c0014e4b8c2' },
-        { id: '607e976877ca3c0014e4b8c2' },
-        { id: '607e976877ca3c0014e4b8c2' },
-    ]
-
-    const foundIdInFilteredTokens = (id: string): boolean => {
-        return walletTokens.some((el: any) => el.id === id)
-    }
+    const userTokens = useWalletTokens()
 
     return (
         <Slider className={cx(classes.slider, className)} {...sliderConfig}>
@@ -118,7 +115,7 @@ export default function DropOfTheDaySlider({
                                     <span className={classes.count}>
                                         1 of 1
                                     </span>
-                                    {foundIdInFilteredTokens(el.id) ? null : (
+                                    {isTokenOwned(el.id, userTokens) ? null : (
                                         <Button className={classes.bidButton}>
                                             {t('placeABid')}
                                         </Button>
