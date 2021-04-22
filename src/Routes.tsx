@@ -26,6 +26,7 @@ import {
     CookiePrivacy,
 } from 'screens/InfoPages'
 import Collection from 'screens/Collection'
+import EditProfile from 'screens/EditProfile'
 
 import { permittedToUseWalletAndWhiteListedSelector } from 'state/app/selectors'
 import UserDashboard from 'screens/UserDashboard'
@@ -72,6 +73,9 @@ function Routes(): JSX.Element {
                 <Route path="/terms-and-conditions">
                     <TermsAndConditions />
                 </Route>
+                <DevelopRoute path="/edit-profile">
+                    <EditProfile />
+                </DevelopRoute>
                 <PrivateRoute path="/dashboard/user">
                     <UserDashboard />
                 </PrivateRoute>
