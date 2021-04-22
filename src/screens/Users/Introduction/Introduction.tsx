@@ -14,8 +14,10 @@ export default function Introduction(): JSX.Element {
 
     return (
         <section className={classes.container}>
-            <h1 className={classes.title}>Top Sellers</h1>
-            <div className={classes.resultsCount}>7.943 results</div>
+            <div className={classes.titleWrapper}>
+                <h1 className={classes.title}>Top Sellers</h1>
+                <div className={classes.resultsCount}>7.943 results</div>
+            </div>
             <div className={classes.rightCol}>
                 <div className={classes.selectsGroup}>
                     <Select
@@ -54,7 +56,7 @@ export default function Introduction(): JSX.Element {
                 <div className={classes.filterGroup}>
                     <div className={classes.tabs}>
                         <button type="button" className="selected">
-                            Top Seller
+                            Top Sellers
                         </button>
                         <button type="button">Top Buyers</button>
                         <button type="button">Top Collectors</button>
