@@ -65,7 +65,6 @@ export default function WorksList({
                         return (
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
-                                    {/* fixed from product/${id} */}
                                     <Link to={`/product/${id}`}>
                                         <TokenPreview
                                             src={
@@ -171,12 +170,6 @@ export default function WorksList({
                                                 </TextGradient>
                                             </Button>
                                         )}
-                                        {/* <Button className={classes.bidButton}> */}
-                                        {/*    <TextGradient colors="#FF0099, #6A2FE7">*/}
-                                        {/*        {t('placeABid')}*/}
-                                        {/*    </TextGradient>*/}
-                                        {/* Place a bid */}
-                                        {/* </Button> */}
                                     </div>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@ import card2 from 'shared/images/dropOfTheDay/card2.png'
 import card3 from 'shared/images/dropOfTheDay/card3.png'
 import card4 from 'shared/images/dropOfTheDay/card4.png'
 import useStyles from './DropOfTheDayWorkCards.style'
-import useWalletTokens from './../../../hooks/useWalletTokens'
+import useWalletTokens from 'hooks/useWalletTokens'
 
 const items = [
     { id: 1, image: card1 },

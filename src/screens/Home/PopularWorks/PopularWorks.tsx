@@ -14,7 +14,6 @@ import { FilterIcon } from 'shared/icons'
 
 import useStyles from './PopularWorks.style'
 import { APIErrorContext } from 'providers/APIErrorProvider'
-// import useWalletTokens from './../../../hooks/useWalletTokens'
 
 const sortCases = [
     { sort: 'published_at:desc', title: 'Recently added' },

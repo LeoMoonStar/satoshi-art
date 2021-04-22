@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import Layout from 'shared/Layout'
 
@@ -9,7 +9,7 @@ import Tops from './Tops'
 
 import PopularWorks from './PopularWorks'
 import Intro from './Intro'
-import useWalletTokens from './../../hooks/useWalletTokens'
+import useWalletTokens from 'hooks/useWalletTokens'
 
 function Home(): JSX.Element {
     const testTokens = useWalletTokens()
