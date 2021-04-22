@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => {
             marginBottom: 57,
         },
         fileWrapper: {
+            display: 'flex',
             position: 'relative',
             width: 885,
             height: 709,
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => {
                 maxHeight: 709,
             },
             '& > img': {
-                objectFit: 'cover',
+                objectFit: 'contain',
             },
         },
         iconsContainer: {
