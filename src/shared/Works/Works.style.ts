@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
     },
     authorInfo: {
         width: '100%',
+        marginLeft: 8,
         fontSize: 9,
         fontWeight: 400,
         color: '#C4C4C4',

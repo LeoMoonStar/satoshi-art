@@ -22,7 +22,7 @@ const CreateForm = (): JSX.Element => {
 
     useEffect(() => {
         dispatch(updateTransactionInMintingProcess(null))
-    }, [id])
+    }, [id, dispatch])
 
     useEffect(() => {
         if (transactionInMintingProcess) {
@@ -30,7 +30,7 @@ const CreateForm = (): JSX.Element => {
             setTransactionHash(transactionInMintingProcess)
             dispatch(updateTransactionInMintingProcess(null))
         }
-    }, [transactionInMintingProcess])
+    }, [transactionInMintingProcess, dispatch])
 
     const handleClose = () => {
         setOpen(false)

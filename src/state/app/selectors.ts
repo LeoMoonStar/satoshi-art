@@ -15,3 +15,7 @@ export const transactionInMintingProcessSelector = (
 ): string | null => {
     return state.app.transactionInMintingProcess
 }
+
+export const ethToUsdRateSelector = (state: AppState): number => {
+    return state.app.ethToUsd
+}

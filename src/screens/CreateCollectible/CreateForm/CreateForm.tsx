@@ -165,6 +165,7 @@ const schema = yup.object().shape({
 
 type TempTokenData = {
     id: string
+    authToken: string
     payload: {
         copiesCount?: number
         royalties: number
@@ -337,7 +338,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
         try {
             const { response, tokenType } = await createItem(data.payload)
-            await updateMetaData(data.id, response.hash)
+            await updateMetaData(data.id, response.hash, data.authToken)
 
             dispatch(
                 addTransaction({
@@ -348,8 +349,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             )
             dispatch(updateTransactionInMintingProcess(response.hash))
             history.push('/')
-        } catch (e) {
-            setCreateTokenError(e.message)
+        } catch (err) {
+            const serverError = err?.data?.message
+            const metamaskError = err?.message
+
+            if (serverError || metamaskError) {
+                setCreateTokenError(serverError || metamaskError)
+                return
+            }
+
+            throw err
         }
     }
 

@@ -56,9 +56,13 @@ const useStyles = makeStyles(() => {
             '& .slick-next': {
                 transform: 'rotateZ(180deg) translate(0, 50%)',
             },
+            '& .slick-track': {
+                display: 'flex',
+                alignContent: 'stretch',
+            },
         },
         sliderHasNotMore: {
-            '& .slick-list> div': {
+            '& .slick-list > div': {
                 marginLeft: 0,
             },
         },

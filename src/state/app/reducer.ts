@@ -6,6 +6,7 @@ import {
     changePermittedToUseWallet,
     updateTransactionInMintingProcess,
     disconnectAccount,
+    changeRateEthToUsd,
 } from './actions'
 
 export interface AppState {
@@ -13,6 +14,7 @@ export interface AppState {
     blockNumber?: number
     isWhitelisted: boolean
     isPermittedToUseWallet: boolean
+    ethToUsd: number
     transactionInMintingProcess: string | null
 }
 
@@ -22,6 +24,7 @@ const initialState: AppState = {
     isWhitelisted: false,
     isPermittedToUseWallet: false,
     transactionInMintingProcess: null,
+    ethToUsd: 0,
 }
 
 export default createReducer(initialState, (app) => {
@@ -41,4 +44,7 @@ export default createReducer(initialState, (app) => {
             state.transactionInMintingProcess = action.payload
         })
         .addCase(disconnectAccount, () => initialState)
+        .addCase(changeRateEthToUsd, (state, action) => {
+            state.ethToUsd = action.payload
+        })
 })
