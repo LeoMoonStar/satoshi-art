@@ -18,7 +18,7 @@ export default function FullScreenModal({
 
     return (
         <Modal open className={classes.fsModal} onClose={onClose}>
-            <>
+            <div className={classes.fsModalContainer}>
                 <div className={classes.fsModalHeader}>
                     <IconButton title={t('close')} onClick={onClose}>
                         <ExpandIcon />
@@ -37,7 +37,7 @@ export default function FullScreenModal({
                         <a href="#">Site</a>
                     </div>
                 </div>
-            </>
+            </div>
         </Modal>
     )
 }

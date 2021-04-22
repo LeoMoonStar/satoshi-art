@@ -46,6 +46,7 @@ import { getCurrency } from 'api/currency'
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
 import useStyles from './CreateForm.style'
+import { updateTransactionInMintingProcess } from 'state/app/actions'
 
 type PropertyType = {
     name: string
@@ -346,6 +347,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     chainId,
                 })
             )
+            dispatch(updateTransactionInMintingProcess(response.hash))
             history.push('/')
         } catch (err) {
             const serverError = err?.data?.message

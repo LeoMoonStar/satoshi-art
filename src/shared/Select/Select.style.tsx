@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => {
             alignItems: 'center',
             height: 40,
             borderRadius: 60,
+            paddingRight: '0 !important',
             border: `1px solid ${theme.custom.common.grayColor}`,
 
             '&:focus': {

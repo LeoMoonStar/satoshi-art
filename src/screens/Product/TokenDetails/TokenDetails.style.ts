@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme) => {
                 height: 'auto',
                 maxHeight: 709,
             },
+            '& > img': {
+                objectFit: 'cover',
+            },
         },
         iconsContainer: {
             display: 'flex',

@@ -10,3 +10,6 @@ export const changePermittedToUseWallet = createAction<boolean>(
 )
 export const disconnectAccount = createAction('app/disconnectAccount')
 export const changeRateEthToUsd = createAction<number>('app/changeRateEthToUsd')
+export const updateTransactionInMintingProcess = createAction<string | null>(
+    'app/updateTransactionInMintingProcess'
+)

@@ -1,16 +1,23 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import cx from 'classnames'
 
 import { DoubleArrowLeft } from 'shared/icons'
 
-import useStyles from './OrderListPagination.style'
+import useStyles from './Pagination.style'
 
-export default function OrderListPagination(): JSX.Element {
+type PaginationProps = {
+    className?: string
+}
+
+export default function Pagination({
+    className,
+}: PaginationProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
 
     return (
-        <ul className={classes.container}>
+        <ul className={cx(classes.container, className)}>
             <li className={classes.first}>
                 <button type="button" title={t('first')}>
                     <DoubleArrowLeft />

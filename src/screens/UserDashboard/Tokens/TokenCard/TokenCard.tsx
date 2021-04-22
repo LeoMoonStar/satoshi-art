@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import Avatar from 'shared/Avatar'
 import preview from 'shared/images/artist/work.jpg'
+import TokenPreview from 'shared/TokenPreview'
 import useStyles from './TokenCard.style'
 
 type TokensSliderProps = {
@@ -24,13 +25,11 @@ export default function TokenCard({
             key={token.id}
         >
             <div className={classes.topWrapper}>
-                <div className={classes.tokenPreviewWrapper}>
-                    <img
-                        className={classes.tokenPreview}
-                        src={token.thumbnail ?? payload?.cover ?? payload?.file}
-                        alt={payload?.description}
-                    />
-                </div>
+                <TokenPreview
+                    className={classes.tokenPreview}
+                    src={token.thumbnail ?? payload?.cover ?? payload?.file}
+                    alt={payload?.description}
+                />
             </div>
             <Avatar className={classes.avatar} image={preview} size={60} />
             <RenderContent token={token} />
