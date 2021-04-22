@@ -13,7 +13,7 @@ export default function DropOfTheDay(): JSX.Element {
         <Layout
             hasHeaderDivider={false}
             containerPaddingTop={0}
-            headerBackground="#00000050"
+            headerBackground="#00000080"
             inverseHeader
             positionHeader="fixed"
             // justifyTopRowFooter="center"
