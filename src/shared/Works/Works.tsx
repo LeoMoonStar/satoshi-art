@@ -2,6 +2,7 @@ import React from 'react'
 // import { IconButton } from '@material-ui/core'
 import { useTranslation } from 'react-i18next'
 
+import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
 import Button from 'shared/Button'
 // import { SaveIcon, ViewsIcon } from 'shared/icons'
 // import Avatar from 'shared/Avatar'
@@ -29,6 +30,8 @@ export default function WorksList({
     isLoading = true,
     tokens = [],
 }: WorksListProps): JSX.Element {
+    const { explorer } = useCurrentNetwork()
+
     const classes = useStyles()
     const { t } = useTranslation()
 
@@ -100,7 +103,7 @@ export default function WorksList({
                                         <a
                                             target="_blank"
                                             rel="noreferrer"
-                                            href={`https://ropsten.etherscan.io/address/${walletHash}`}
+                                            href={`${explorer}/address/${walletHash}`}
                                         >
                                             {shortAddress(walletHash)}
                                         </a>
