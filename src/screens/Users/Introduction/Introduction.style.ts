@@ -3,12 +3,17 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(() => {
     return {
         container: {
+            maxWidth: 1440,
+            margin: '0 auto',
             width: '100%',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-end',
             justifyContent: 'space-between',
-            boxSizing: 'border-box',
             padding: '0 70px',
+        },
+        titleWrapper: {
+            display: 'flex',
+            alignItems: 'baseline',
         },
         title: {
             fontWeight: 800,
