@@ -7,17 +7,20 @@ const useStyles = makeStyles((theme) => {
         },
         resultsCount: {
             fontSize: 20,
+            lineHeight: '20px',
             color: theme.custom.common.darkerGrayColor,
             marginRight: 13,
         },
         filters: {
             display: 'flex',
             justifyContent: 'space-between',
-            margin: '0 70px 40px 70px',
+            margin: '0 0 40px',
+            boxSizing: 'border-box',
+            padding: '0 70px',
         },
         selectedTagsList: {
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-end',
         },
         tags: {
             display: 'flex',
@@ -28,6 +31,7 @@ const useStyles = makeStyles((theme) => {
             display: 'flex',
             alignItems: 'center',
             fontWeight: 800,
+            lineHeight: '18px',
             textTransform: 'lowercase',
 
             '& hr': {
@@ -36,13 +40,18 @@ const useStyles = makeStyles((theme) => {
             },
         },
         crossBtn: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: 0,
             fontWeight: 300,
             margin: '0 12px 0 12px',
             border: 'none',
             backgroundColor: theme.palette.primary.main,
             fontSize: 20,
             cursor: 'pointer',
-
+            '& svg': {
+                width: 20,
+            },
             '&:focus': {
                 outline: 'none',
             },
@@ -54,35 +63,60 @@ const useStyles = makeStyles((theme) => {
             background: 'none',
             border: 'none',
             fontSize: 20,
+            lineHeight: '20px',
+            paddingTop: 0,
+            paddingBottom: 0,
 
             '&:focus': {
                 outline: 'none',
             },
         },
         suggestedTags: {
-            margin: '25px 0 25px 67px',
+            margin: '25px 0 25px',
+            boxSizing: 'border-box',
+            padding: '0 50px',
             fontWeight: 600,
         },
         tag: {
             backgroundColor: theme.custom.common.blackColor,
             borderRadius: 60,
             color: theme.palette.primary.main,
-            marginRight: 12,
+            display: 'flex !important',
+            alignContent: 'center',
             height: 40,
         },
         select: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minWidth: 142,
+            minWidth: 166,
             height: 40,
-            borderRadius: 60,
             marginLeft: 16,
-            border: `1px solid ${theme.custom.common.grayColor}`,
-
-            '&:focus': {
-                borderRadius: 60,
-                backgroundColor: theme.palette.primary.main,
+            fontWeight: 600,
+            color: theme.custom.common.darkerGrayColor,
+            fontSize: 13,
+            letterSpacing: '-0.04em',
+            '& .MuiSelect-select.MuiSelect-select': {
+                padding: '0 !important',
+            },
+        },
+        tagsSlider: {
+            width: '100%',
+            '&::after': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                backgroundImage: 'linear-gradient(left,#ffffff20 0%, #fff 60%)',
+                width: 60,
+                height: 60,
+            },
+            '& .slick-slide': {
+                marginRight: 12,
+            },
+            '& .slick-prev:before, & .slick-next:before': {
+                color: '#000',
+            },
+            '& .slick-track': {
+                display: 'flex',
+                alignItems: 'center',
             },
         },
         paper: {
