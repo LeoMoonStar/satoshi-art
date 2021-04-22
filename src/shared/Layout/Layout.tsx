@@ -15,7 +15,7 @@ type ILayoutProps = {
     // justifyTopRowFooter?: JustifyTopRowFooter
     containerPaddingTop?: number
     headerBackground?: string
-    positionHeader?: 'sticky' | 'absolute'
+    positionHeader?: 'sticky' | 'absolute' | 'fixed'
     inverseHeader?: boolean
     hasHeaderDivider?: boolean
 }

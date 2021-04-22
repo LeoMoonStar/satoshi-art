@@ -9,3 +9,13 @@ export const permittedToUseWalletAndWhiteListedSelector = (
 ): boolean => {
     return state.app.isPermittedToUseWallet && state.app.isWhitelisted
 }
+
+export const transactionInMintingProcessSelector = (
+    state: AppState
+): string | null => {
+    return state.app.transactionInMintingProcess
+}
+
+export const ethToUsdRateSelector = (state: AppState): number => {
+    return state.app.ethToUsd
+}

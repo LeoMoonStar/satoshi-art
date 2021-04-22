@@ -37,23 +37,10 @@ const useStyles = makeStyles(() => {
         topWrapper: {
             padding: '0 5px',
         },
-        tokenPreviewWrapper: {
-            marginTop: -56,
-            position: 'relative',
-            width: '100%',
-            height: 0,
-            paddingBottom: '100%',
-        },
         tokenPreview: {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
             borderRadius: 20,
+            marginTop: -56,
         },
-
         controls: {
             width: '100%',
             display: 'flex',

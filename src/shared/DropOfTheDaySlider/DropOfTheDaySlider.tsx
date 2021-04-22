@@ -52,10 +52,12 @@ const sliderConfig = {
 
 type DropOfTheDaySliderProps = {
     className?: string
+    onSeeAll?: () => void
 }
 
 export default function DropOfTheDaySlider({
     className,
+    onSeeAll,
 }: DropOfTheDaySliderProps): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
@@ -105,12 +107,15 @@ export default function DropOfTheDaySlider({
                                         {t('placeABid')}
                                     </Button>
                                 </div>
-                                {/*<Button*/}
-                                {/*    className={classes.seeAll}*/}
-                                {/*    variantCustom="action"*/}
-                                {/*>*/}
-                                {/*    {t('seeAll')}*/}
-                                {/*</Button>*/}
+                                {onSeeAll && (
+                                    <Button
+                                        onClick={onSeeAll}
+                                        className={classes.seeAll}
+                                        variantCustom="action"
+                                    >
+                                        {t('seeAll')}
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>

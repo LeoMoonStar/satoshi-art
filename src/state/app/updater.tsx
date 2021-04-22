@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useContext } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useDispatch } from 'react-redux'
@@ -6,9 +6,15 @@ import { AppDispatch } from 'state'
 
 import { useEagerConnect, useInactiveListener } from 'hooks'
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
-import { updateBlockNumber, changeWhitelistedStatus } from './actions'
+import {
+    updateBlockNumber,
+    changeWhitelistedStatus,
+    changeRateEthToUsd,
+} from './actions'
 import { checkUserWhitelisted } from 'api/user'
 import { usePendingTransactions } from 'state/transactions/hooks'
+import { getCurrency } from 'api/currency'
+import { APIErrorContext } from 'providers/APIErrorProvider'
 
 export function useConnectWallet(): null {
     const triedEager = useEagerConnect()
@@ -63,4 +69,17 @@ export function useUpdateBlockNumber(): void {
             }
         }
     }, [library, blockNumberUpdateEventHandler, pendingTransactions.length])
+}
+
+export function useCurrencyUpdater(): void {
+    const dispatch = useDispatch()
+    const { setError } = useContext(APIErrorContext)
+
+    useEffect(() => {
+        getCurrency()
+            .then((rate) => dispatch(changeRateEthToUsd(Number(rate))))
+            .catch((err) => {
+                setError('Fetch rate eth to usd', JSON.stringify(err))
+            })
+    }, [dispatch, setError])
 }

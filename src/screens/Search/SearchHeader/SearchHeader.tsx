@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
-import { Divider, Chip, Select, MenuItem } from '@material-ui/core'
+import { Divider, Chip, MenuItem } from '@material-ui/core'
+import { Close as CloseIcon, ExpandMore } from '@material-ui/icons'
 import { useTranslation } from 'react-i18next'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 
+import Select from 'shared/Select'
 import useStyles from './SearchHeader.style'
+import { SelectProps } from '@material-ui/core/Select'
 
 type TagType = {
     id: number
@@ -21,10 +27,24 @@ const tags: TagType[] = [
     { id: 9, title: 'Digital art' },
     { id: 10, title: 'Hip hop' },
     { id: 11, title: 'Black power' },
+    { id: 12, title: 'Lady Gaga' },
+    { id: 13, title: 'Pop' },
+    { id: 14, title: 'Magazine' },
+    { id: 15, title: 'R & B' },
+    { id: 16, title: 'Celebrity' },
 ]
 
 {
     /*@TODO: Move tags and select into a separate components */
+}
+
+const sliderConfig = {
+    dots: false,
+    infinite: true,
+    speed: 250,
+    slidesToShow: 12,
+    variableWidth: true,
+    arrows: true,
 }
 
 const SearchHeader = (): JSX.Element => {
@@ -59,10 +79,11 @@ const SearchHeader = (): JSX.Element => {
                                 )}
                                 <span>{tag.title}</span>
                                 <button
+                                    type="button"
                                     onClick={() => removeTag(tag)}
                                     className={classes.crossBtn}
                                 >
-                                    x
+                                    <CloseIcon />
                                 </button>
                             </div>
                         ))}
@@ -74,62 +95,37 @@ const SearchHeader = (): JSX.Element => {
                     )}
                 </div>
                 <div>
-                    {/*@TODO: use const menuProps*/}
                     <Select
-                        label="All items"
-                        defaultValue="default"
-                        classes={{
-                            root: classes.select,
-                        }}
-                        MenuProps={{
-                            classes: {
-                                paper: classes.paper,
-                                list: classes.list,
-                            },
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            },
-                            transformOrigin: {
-                                vertical: 'top',
-                                horizontal: 'left',
-                            },
-                            getContentAnchorEl: null,
-                        }}
-                        disableUnderline
+                        className={classes.select}
+                        label={t('All items ')}
+                        defaultValue={t('All items ') as string}
+                        renderValue={(value: SelectProps['value']) => (
+                            <>
+                                {value}
+                                <ExpandMore />
+                            </>
+                        )}
                     >
-                        <MenuItem value="default">{t('allItems')}</MenuItem>
+                        <MenuItem value="default">{t('All items ')}</MenuItem>
                         <MenuItem value="Option1">Option1</MenuItem>
                         <MenuItem value="Option2">Option2</MenuItem>
                         <MenuItem value="Option3">Option3</MenuItem>
                     </Select>
                     <Select
-                        label="Sort By"
-                        defaultValue="default"
-                        classes={{
-                            root: classes.select,
-                        }}
-                        MenuProps={{
-                            classes: {
-                                paper: classes.paper,
-                                list: classes.list,
-                            },
-                            anchorOrigin: {
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            },
-                            transformOrigin: {
-                                vertical: 'top',
-                                horizontal: 'left',
-                            },
-                            getContentAnchorEl: null,
-                        }}
-                        disableUnderline
+                        className={classes.select}
+                        label={t('sortBy')}
+                        defaultValue={t('sortBy') as string}
+                        renderValue={(value: SelectProps['value']) => (
+                            <>
+                                {value}
+                                <ExpandMore />
+                            </>
+                        )}
                     >
                         <MenuItem value="default">{t('sortBy')}</MenuItem>
-                        <MenuItem value="Option1">Option1</MenuItem>
-                        <MenuItem value="Option2">Option2</MenuItem>
-                        <MenuItem value="Option3">Option3</MenuItem>
+                        <MenuItem value="Option1">Newest</MenuItem>
+                        <MenuItem value="Option2">Oldest</MenuItem>
+                        <MenuItem value="Option3">Expensive</MenuItem>
                     </Select>
                 </div>
             </div>
@@ -139,17 +135,19 @@ const SearchHeader = (): JSX.Element => {
                 }}
             />
             <div className={classes.suggestedTags}>
-                {tags.map((tag) => (
-                    <Chip
-                        key={tag.id}
-                        onClick={() => addTag(tag)}
-                        classes={{
-                            root: classes.tag,
-                        }}
-                        size="medium"
-                        label={tag.title}
-                    />
-                ))}
+                <Slider className={classes.tagsSlider} {...sliderConfig}>
+                    {tags.map((tag) => (
+                        <Chip
+                            key={tag.id}
+                            onClick={() => addTag(tag)}
+                            classes={{
+                                root: classes.tag,
+                            }}
+                            size="medium"
+                            label={tag.title}
+                        />
+                    ))}
+                </Slider>
             </div>
         </div>
     )

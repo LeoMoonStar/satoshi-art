@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom'
 import { Contract } from '@ethersproject/contracts'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Close } from '@material-ui/icons'
 import { Trans, useTranslation } from 'react-i18next'
@@ -42,10 +42,12 @@ import {
     updateMetaData,
     MetaDataType,
 } from 'api/createItem'
-import { getCurrency } from 'api/currency'
 import Preview from '../Preview'
 import ProgressModal from '../ProgressModal'
 import useStyles from './CreateForm.style'
+import { AppState } from 'state'
+import { ethToUsdRateSelector } from 'state/app/selectors'
+import { updateTransactionInMintingProcess } from 'state/app/actions'
 
 type PropertyType = {
     name: string
@@ -164,6 +166,7 @@ const schema = yup.object().shape({
 
 type TempTokenData = {
     id: string
+    authToken: string
     payload: {
         copiesCount?: number
         royalties: number
@@ -186,7 +189,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
     const [isSubmitModal, setIsSubmitModal] = useState<boolean>(false)
     const [createTokenError, setCreateTokenError] = useState<string>('')
-    const [currency, setCurrency] = useState<number>(1)
+    const currency = useSelector<AppState, number>(ethToUsdRateSelector)
     const [tempToken, setTempToken] = useState<TempTokenData | null>(null)
     const {
         register,
@@ -208,19 +211,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const [engine1155contract, setEngine1155contract] = useState<any>()
 
     const engineAddress = engine1155NetworkData?.address
-
-    useEffect(() => {
-        ;(async () => {
-            try {
-                const currency = await getCurrency()
-                if (currency) {
-                    setCurrency(+currency)
-                }
-            } catch (e) {
-                setError('Get exchange rate error')
-            }
-        })()
-    }, [setError])
 
     useEffect(() => {
         if (isSingle) {
@@ -336,7 +326,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
         try {
             const { response, tokenType } = await createItem(data.payload)
-            await updateMetaData(data.id, response.hash)
+            await updateMetaData(data.id, response.hash, data.authToken)
 
             dispatch(
                 addTransaction({
@@ -345,9 +335,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     chainId,
                 })
             )
+            dispatch(updateTransactionInMintingProcess(response.hash))
             history.push('/')
-        } catch (e) {
-            setCreateTokenError(e.message)
+        } catch (err) {
+            const serverError = err?.data?.message
+            const metamaskError = err?.message
+
+            if (serverError || metamaskError) {
+                setCreateTokenError(serverError || metamaskError)
+                return
+            }
+
+            throw err
         }
     }
 

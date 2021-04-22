@@ -1,6 +1,8 @@
 import numeral from 'numeral'
 import { Web3Provider, ExternalProvider } from '@ethersproject/providers'
 
+// Todo: We should divide helpers on separate files, it allow us avoid mess in future
+
 export function getLibrary(provider: ExternalProvider): Web3Provider {
     return new Web3Provider(provider)
 }
@@ -20,6 +22,11 @@ export function percentageToBasicPoints(royaltiesPercentage: number): number {
 
 export function etherToWei(priceInEth: number): string {
     const priceInWei = priceInEth * Math.pow(10, 18)
+    return priceInWei.toString()
+}
+
+export function weiToEth(priceInEth: number): string {
+    const priceInWei = priceInEth / Math.pow(10, 18)
     return priceInWei.toString()
 }
 
@@ -44,3 +51,11 @@ export function convertEthToUsd(
     const amountInDollars = value * currency
     return numeral(amountInDollars - amountInDollars * fee).format(format)
 }
+
+export const fileToBase64 = (file: File): Promise<any> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => resolve(reader.result)
+        reader.onerror = (error) => reject(error)
+    })

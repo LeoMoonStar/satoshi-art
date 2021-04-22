@@ -13,6 +13,7 @@ import { getTokens, Token } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
 import { TokenType } from 'state/transactions/actions'
+import Price from 'shared/Price'
 
 const RenderCardContent = ({
     token,
@@ -90,13 +91,18 @@ const RenderCardContent = ({
             )}
             {/*@TODO: show price only when user set price for the token, need to do when backend will be ready*/}
             <div className={classes.createdInfo}>
-                <Link to="/artists/1">@Coll3ctor</Link> 1,995 ETH
+                <Link to="/artists/1">@Coll3ctor</Link>{' '}
+                {token.price && <Price.WeiToEth value={token.price} />}
             </div>
         </>
     )
 }
 
-export default function Created(): JSX.Element {
+export default function Created({
+    setOutOfDatesSliders,
+}: {
+    setOutOfDatesSliders: (value: Record<any, boolean>) => void
+}): JSX.Element {
     const [tokens, setTokens] = useState<Token[]>([])
     const [isLoading, setLoading] = useState<boolean>(true)
     const { account } = useWeb3React()
@@ -144,6 +150,7 @@ export default function Created(): JSX.Element {
             </TokensSlider>
             {selectedToken !== null && isPutOnSale && (
                 <PutOnSaleModal
+                    onSuccess={() => setOutOfDatesSliders({ onSale: true })}
                     token={selectedToken}
                     onClose={() => setPutOnSale(false)}
                 />

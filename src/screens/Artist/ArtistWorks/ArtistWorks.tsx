@@ -8,6 +8,7 @@ import { FilterIcon } from 'shared/icons'
 import useStyles from './ArtistWorks.style'
 import { TokenType } from 'state/transactions/actions'
 import preview from 'shared/images/artist/work.jpg'
+import { TokenStatus } from 'api/tokens'
 
 type CategoryType = {
     id: number
@@ -26,9 +27,11 @@ const categories: CategoryType[] = [
 const tokens = Array.from({ length: 24 }, (index) => ({
     TokenID: index as string,
     id: `id${index}`,
+    status: TokenStatus.waitForBid,
     metadata: {
         type: TokenType.MULTIPLE,
         thumbnail: preview,
+        walletHash: '00030fgr039023tjkujrghjith',
         payload: {
             name: 'Fresh Meat #F',
             copiesCount: 20,

@@ -10,32 +10,25 @@ import {
     TransferIcon,
     BurnIcon,
 } from 'shared/icons/dashboard'
-import preview from 'shared/images/artist/work.jpg'
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
+import { getTokens, Token, TokenStatus } from 'api/tokens'
+import { useWeb3React } from '@web3-react/core'
+import { useEffect } from 'react'
+import { TokenType } from 'state/transactions/actions'
 
-const mockTokens = Array.from({ length: 24 }, (index) => ({
-    id: index,
-    preview,
-    name: 'Fresh Meat #F',
-    author: {
-        image: '',
-        name: 'Fimbim',
-        price: '124.56x3 ETH',
-    },
-}))
-
-const RenderCardContent = () => {
+const RenderCardContent = ({ token }: { token: Token }) => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
     const anchorElRef = useRef()
     const { t } = useTranslation()
+    const { payload, type } = token?.metadata
 
     return (
         <>
             <div className={classes.head}>
-                <h3 className={classes.tokenName}>Fresh MEar #F</h3>
+                <h3 className={classes.tokenName}>{payload.name}</h3>
                 <IconButton
                     className={classes.showMoreButton}
                     buttonRef={anchorElRef}
@@ -88,22 +81,53 @@ const RenderCardContent = () => {
                     </Popover>
                 </IconButton>
             </div>
-            <div className={classes.count}>
-                <span>0,44 ETH</span> 1 of 30
-            </div>
-            <div className={classes.highestBid}>
-                Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>
-            </div>
+            {type === TokenType.MULTIPLE && (
+                <div className={classes.count}>
+                    {payload?.copiesCount} of {payload?.copiesCount}
+                </div>
+            )}
+            {/*<div className={classes.highestBid}>*/}
+            {/*    Highest bid 1,995 ETH <br /> by <a href="">@Coll3ctor</a>*/}
+            {/*</div>*/}
         </>
     )
 }
 
-export default function OnSale(): JSX.Element {
+export default function OnSale({
+    isOutOfDate,
+}: {
+    isOutOfDate: boolean
+}): JSX.Element | null {
     const { t } = useTranslation()
+    const [tokens, setTokens] = useState<Token[]>([])
+    const [isLoading, setLoading] = useState<boolean>(true)
+    const { account } = useWeb3React()
+
+    useEffect(() => {
+        if (!account || !isOutOfDate) {
+            return
+        }
+
+        getTokens({
+            walletHash: account,
+            status: TokenStatus.waitForSale,
+        }).then((tokens) => {
+            setTokens(tokens)
+            setLoading(false)
+        })
+    }, [account, isOutOfDate])
+
+    if (tokens.length === 0) {
+        return null
+    }
 
     return (
-        <TokensSlider title={t('onSale')} count={mockTokens.length}>
-            {mockTokens.map((token: any) => (
+        <TokensSlider
+            isLoading={isLoading}
+            count={tokens.length}
+            title={t('onSale')}
+        >
+            {tokens.map((token: Token) => (
                 <TokenCard
                     key={token.id}
                     token={token}

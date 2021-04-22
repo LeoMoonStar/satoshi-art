@@ -1,47 +1,43 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork'
 import Modal from 'shared/Modal'
 import Button from 'shared/Button'
-import { useTransactions } from 'state/transactions/hooks'
-import { TransactionsListItem } from 'state/transactions/actions'
 import useStyles from './MintingInProgressModal.style'
+import { transactionInMintingProcessSelector } from 'state/app/selectors'
+import { updateTransactionInMintingProcess } from 'state/app/actions'
 
 const CreateForm = (): JSX.Element => {
     const classes = useStyles()
     const [isOpen, setOpen] = useState<boolean>(false)
-    const [
-        newTransaction,
-        setNewTransaction,
-    ] = useState<TransactionsListItem | null>(null)
-    const prevTransactionsRef = useRef<TransactionsListItem[]>([])
-    const transactions: TransactionsListItem[] = useTransactions()
+    const dispatch = useDispatch()
+    const transactionInMintingProcess = useSelector(
+        transactionInMintingProcessSelector
+    )
+    const [transactionHash, setTransactionHash] = useState<string | null>(null)
     const { explorer, id } = useCurrentNetwork()
     const { t } = useTranslation()
 
     useEffect(() => {
-        prevTransactionsRef.current = []
-    }, [id])
+        dispatch(updateTransactionInMintingProcess(null))
+    }, [id, dispatch])
 
     useEffect(() => {
-        if (
-            prevTransactionsRef.current.length &&
-            transactions.length !== prevTransactionsRef.current.length
-        ) {
+        if (transactionInMintingProcess) {
             setOpen(true)
-            setNewTransaction(transactions[transactions.length - 1])
+            setTransactionHash(transactionInMintingProcess)
+            dispatch(updateTransactionInMintingProcess(null))
         }
-
-        prevTransactionsRef.current = transactions
-    }, [transactions])
+    }, [transactionInMintingProcess, dispatch])
 
     const handleClose = () => {
         setOpen(false)
-        setNewTransaction(null)
+        dispatch(updateTransactionInMintingProcess(null))
     }
 
-    const link = `${explorer}/tx/${newTransaction?.hash}`
+    const link = `${explorer}/tx/${transactionHash}`
 
     return (
         <Modal onClose={handleClose} open={isOpen}>
