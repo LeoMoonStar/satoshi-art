@@ -231,13 +231,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             if (library && erc1155NetworkData && engine1155NetworkData) {
                 const erc1155Address = erc1155NetworkData.address
                 const engine1155Contract = new Contract(
-                    erc1155Address,
+                    engine1155NetworkData.address,
                     Engine1155ABI,
                     library.getSigner()
                 )
                 setEngine1155contract(engine1155Contract)
                 const erc1155Contract = new Contract(
-                    engine1155Contract.address,
+                    erc1155Address,
                     Satoshi1155ABI,
                     library.getSigner()
                 )

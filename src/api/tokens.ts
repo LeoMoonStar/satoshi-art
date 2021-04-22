@@ -29,6 +29,7 @@ type PutOnSaleParams = {
     tx_hash: string
     price: string
     copiesOnSale?: number
+    offerIndex?: number
 }
 
 type getTokensProps = {
@@ -59,11 +60,13 @@ export const putTokenOnSaleAPI = ({
     tx_hash,
     price,
     copiesOnSale,
+    offerIndex,
 }: PutOnSaleParams): Promise<void> => {
     return axios.put(`/products/${id}`, {
         status: TokenStatus.waitForSale,
         tx_hash,
         price,
         copiesOnSale,
+        offerIndex,
     })
 }

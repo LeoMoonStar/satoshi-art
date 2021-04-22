@@ -15,7 +15,7 @@ import useStyles from './ProgressModal.style'
 
 const CONNECTION_STEPS = ['Approval', 'Signture', 'Complete']
 
-function MyStepCircle(props: StepIconProps) {
+export function MyStepCircle(props: StepIconProps): JSX.Element {
     const classes = useStyles()
 
     const { active, completed } = props
