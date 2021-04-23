@@ -17,12 +17,15 @@ import { Token, TokenStatus } from 'api/tokens'
 import useStyles from './Works.style'
 import { shortAddress } from 'utils/helpers'
 import Price from '../Price'
+import useWalletTokens from 'hooks/useWalletTokens'
+import { isTokenOwned } from 'utils/common'
 
 type WorksListProps = {
     borderWidth?: number
     variant?: 'none' | 'rounded'
     isLoading?: boolean
     tokens?: Token[]
+    isArtistPage?: boolean
 }
 
 export default function WorksList({
@@ -30,11 +33,13 @@ export default function WorksList({
     variant = 'none',
     isLoading = true,
     tokens = [],
+    isArtistPage = false,
 }: WorksListProps): JSX.Element {
     const { explorer } = useCurrentNetwork()
 
     const classes = useStyles()
     const { t } = useTranslation()
+    const userTokens = useWalletTokens()
 
     if (isLoading) {
         return <Loader />
@@ -53,7 +58,7 @@ export default function WorksList({
                         return (
                             <div className={classes.work} key={id}>
                                 <div className={classes.imagePresentation}>
-                                    <Link to={`product/${id}`}>
+                                    <Link to={`/product/${id}`}>
                                         <TokenPreview
                                             src={
                                                 thumbnail ??
@@ -144,6 +149,20 @@ export default function WorksList({
                                                 ),
                                             }[status]
                                         }
+                                        {isTokenOwned(id, userTokens) ||
+                                        isArtistPage ? (
+                                            <span style={{ marginLeft: '5px' }}>
+                                                You are the Owner
+                                            </span>
+                                        ) : (
+                                            <Button
+                                                className={classes.bidButton}
+                                            >
+                                                <TextGradient colors="#FF0099, #6A2FE7">
+                                                    {t('placeABid')}
+                                                </TextGradient>
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             </div>

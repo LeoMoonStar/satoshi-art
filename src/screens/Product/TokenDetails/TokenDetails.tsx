@@ -28,6 +28,8 @@ import ProgressModal from './ProgressModal'
 import Price from 'shared/Price'
 import { TokenType } from 'state/transactions/actions'
 import { SERVICE_FEE } from 'constants/common'
+import useWalletTokens from 'hooks/useWalletTokens'
+import { useIsTokenOwned } from 'utils/common'
 
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
@@ -87,6 +89,7 @@ const TokenDetails = (): JSX.Element => {
     const { id } = useParams<{ id: string }>()
     const classes = useStyles()
     const { t } = useTranslation()
+    const userTokens = useWalletTokens()
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -103,6 +106,8 @@ const TokenDetails = (): JSX.Element => {
     const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => {
         selectTab(newValue)
     }
+
+    const isTokenOwner = useIsTokenOwned(id, userTokens)
 
     const renderIcons = () => (
         <div className={classes.iconsContainer}>
@@ -334,6 +339,41 @@ const TokenDetails = (): JSX.Element => {
                             </Typography>
                         </div>
                     )}
+                    {isTokenOwner ? (
+                        <div className={classes.buttonsContainer}>
+                            <h1>You are the owner</h1>
+                        </div>
+                    ) : (
+                        <div className={classes.buttonsContainer}>
+                            <Button
+                                onClick={() => setBuyModal(true)}
+                                label={t('buyNow')}
+                                className={classes.buyButton}
+                            />
+                            <Button
+                                onClick={() => setBidModal(true)}
+                                label={t('placeABid')}
+                                className={classes.placeBidButton}
+                            />
+                        </div>
+                    )}
+                    <div className={classes.serviceFeeInfoContainer}>
+                        <Typography variant="h6">
+                            {t('serviceFeeProgress', { fee: '2.5' })}
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            className={classes.serviceCryptoFee}
+                        >
+                            10.486 ETH
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            className={classes.serviceDollarFee}
+                        >
+                            $19,333.52
+                        </Typography>
+                    </div>
                 </Grid>
             </div>
             {isBidModal && (

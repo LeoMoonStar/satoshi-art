@@ -5,11 +5,16 @@ import { Popover } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 import { ShowMoreIcon } from 'shared/icons'
-import { TransferIcon, BurnIcon, PriceIcon } from 'shared/icons/dashboard'
+import {
+    TransferIcon,
+    BurnIcon,
+    PriceIcon,
+    RemoveIcon,
+} from 'shared/icons/dashboard'
 import useStyles from './Tokens.style'
 import TokensSlider from './TokensSlider'
 import TokenCard from './TokenCard'
-import { getTokens, Token } from 'api/tokens'
+import { getTokens, Token, getToken } from 'api/tokens'
 import { useWeb3React } from '@web3-react/core'
 import PutOnSaleModal from './TokenActions/PutOnSaleModal'
 import { TokenType } from 'state/transactions/actions'
@@ -27,6 +32,16 @@ const RenderCardContent = ({
     const { payload, type } = token?.metadata
     const anchorElRef = useRef()
     const [isOpen, setOpen] = useState<boolean>(false)
+    const [tokenStatus, setTokenStatus] = useState<string | null>(null)
+
+    useEffect(() => {
+        const tryGetToken = () => {
+            getToken(token.id).then((res) => {
+                setTokenStatus(res.status)
+            })
+        }
+        tryGetToken()
+    }, [token.id])
 
     return (
         <>
@@ -59,15 +74,28 @@ const RenderCardContent = ({
                         disableRestoreFocus
                     >
                         <div className={classes.controlsButtons}>
-                            <button
-                                type="button"
-                                onClick={() => onPutOnSale(token)}
-                            >
-                                <div>
-                                    <PriceIcon />
-                                </div>
-                                {t('setAPrice')}
-                            </button>
+                            {tokenStatus !== null &&
+                            tokenStatus === 'onSale' ? (
+                                <button
+                                    type="button"
+                                    onClick={() => alert('Remove')}
+                                >
+                                    <div>
+                                        <RemoveIcon />
+                                    </div>
+                                    {t('Remove from sale')}
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => onPutOnSale(token)}
+                                >
+                                    <div>
+                                        <PriceIcon />
+                                    </div>
+                                    {t('setAPrice')}
+                                </button>
+                            )}
                             <button type="button">
                                 <div>
                                     <TransferIcon />

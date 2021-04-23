@@ -6,9 +6,7 @@ import Followers, { TabVariants } from 'shared/Followers'
 import { FilterIcon } from 'shared/icons'
 
 import useStyles from './ArtistWorks.style'
-import { TokenType } from 'state/transactions/actions'
-import preview from 'shared/images/artist/work.jpg'
-import { TokenStatus } from 'api/tokens'
+import { Token } from 'api/tokens'
 
 type CategoryType = {
     id: number
@@ -24,24 +22,13 @@ const categories: CategoryType[] = [
     { id: 5, title: 'Activity', isEmpty: true },
 ]
 
-const tokens = Array.from({ length: 24 }, (index) => ({
-    TokenID: index as string,
-    id: `id${index}`,
-    status: TokenStatus.waitForBid,
-    metadata: {
-        type: TokenType.MULTIPLE,
-        thumbnail: preview,
-        walletHash: '00030fgr039023tjkujrghjith',
-        payload: {
-            name: 'Fresh Meat #F',
-            copiesCount: 20,
-            description: '',
-            file: preview,
-        },
-    },
-}))
+type ArtistWorksProps = {
+    tokens?: Token[]
+}
 
-export default function ArtistWorks(): JSX.Element {
+export default function ArtistWorks({
+    tokens = [],
+}: ArtistWorksProps): JSX.Element {
     const [open, setOpen] = useState(false)
     const [active, setActive] = useState(TabVariants.Following)
     const [selectedCategory, setSelectedCategory] = useState<CategoryType>(
@@ -86,7 +73,7 @@ export default function ArtistWorks(): JSX.Element {
                     <FilterIcon />
                 </IconButton>
             </div>
-            <Works tokens={tokens} isLoading={false} />
+            <Works tokens={tokens} isLoading={false} isArtistPage={true} />
             <Modal open={open} onClose={closeModal}>
                 <Followers active={active} />
             </Modal>

@@ -3,28 +3,15 @@ import SearchHeader from '../SearchHeader'
 import Works from 'shared/Works'
 
 import useStyles from './SearchResults.style'
-import preview from 'shared/images/artist/work.jpg'
-import { TokenType } from 'state/transactions/actions'
-import { TokenStatus } from 'api/tokens'
+import { Token } from 'api/tokens'
 
-const tokens = Array.from({ length: 24 }, (index) => ({
-    TokenID: index as string,
-    id: `id${index}`,
-    status: TokenStatus.waitForBid,
-    metadata: {
-        type: TokenType.MULTIPLE,
-        thumbnail: preview,
-        walletHash: '00030fgr039023tjkujrghjith',
-        payload: {
-            name: 'Fresh Meat #F',
-            copiesCount: 20,
-            description: '',
-            file: preview,
-        },
-    },
-}))
+type SearchResultsProps = {
+    tokens?: Token[]
+}
 
-export default function SearchResults(): JSX.Element {
+export default function SearchResults({
+    tokens = [],
+}: SearchResultsProps): JSX.Element {
     const classes = useStyles()
     return (
         <div>

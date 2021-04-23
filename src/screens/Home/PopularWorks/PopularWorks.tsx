@@ -22,7 +22,7 @@ const sortCases = [
 
 // const categories = ['creator', 'collectible', 'collection']
 
-export default function PopularWorks(): JSX.Element {
+export default function WorksList(): JSX.Element {
     const classes = useStyles()
     const { t } = useTranslation()
     const [tokens, setTokens] = useState<Token[]>([])
