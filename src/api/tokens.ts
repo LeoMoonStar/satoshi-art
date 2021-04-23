@@ -22,7 +22,6 @@ export type Token = {
             file: string
         }
     }
-    status: string | null
 }
 
 type PutOnSaleParams = {
