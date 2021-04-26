@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
+import { useSelector } from 'react-redux'
+import { AppState } from 'state'
 import { Trans, useTranslation } from 'react-i18next'
 import { FormControl, Input, InputLabel } from '@material-ui/core'
 import { useForm } from 'react-hook-form'
@@ -10,8 +12,8 @@ import { Contract } from '@ethersproject/contracts'
 
 import Button from 'shared/Button'
 import Modal from 'shared/Modal'
-import useStyles from './Modals.style'
 import { TokenType } from 'state/transactions/actions'
+import { ethToUsdRateSelector } from 'state/app/selectors'
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721'
 import {
     Engine1155ABI,
@@ -19,9 +21,15 @@ import {
     use1155EngineSmartContractNetworkData,
     use1155SmartContractNetworkData,
 } from 'utils/erc1155'
-import { convertStringToNumber, etherToWei } from 'utils/helpers'
+import {
+    convertEthToUsd,
+    convertStringToNumber,
+    etherToWei,
+} from 'utils/helpers'
 import { putTokenOnSaleAPI, Token } from 'api/tokens'
+
 import PutOnSaleProgressModal from './PutOnSaleProgressModal'
+import useStyles from './Modals.style'
 
 type PutOnSaleModalProps = {
     onClose: () => void
@@ -53,10 +61,12 @@ export default function PutOnSaleModal({
     const erc721NetworkData = useSmartContractNetworkData(chainId)
     const erc1155NetworkData = use1155SmartContractNetworkData(chainId)
     const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId)
+    const currency = useSelector<AppState, number>(ethToUsdRateSelector)
     const {
         register,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors },
     } = useForm<PutOnSaleForm>({
         resolver: yupResolver(schema),
@@ -263,7 +273,9 @@ export default function PutOnSaleModal({
             />
         )
     }
-
+    const price = watch('price')
+    const ethAmount = price ? price - price * 0.025 : 0
+    const usdAmount = price ? convertEthToUsd(price, currency) : '0.00'
     return (
         <Modal open className={classes.modal} onClose={onClose}>
             <form
@@ -331,9 +343,9 @@ export default function PutOnSaleModal({
                         <Trans
                             i18nKey="putOnSaleReceiveAmount"
                             values={{
-                                count: 0,
+                                count: ethAmount.toString().substring(0, 5),
                                 currency: 'ETH',
-                                amount: '0,00',
+                                amount: usdAmount,
                             }}
                             components={{ b: <b /> }}
                         />
