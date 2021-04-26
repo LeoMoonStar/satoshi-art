@@ -63,10 +63,13 @@ const useStyles = makeStyles(() => {
         },
         additionalInfo: {
             margin: '10px 0',
-            fontWeight: 500,
+            fontWeight: 600,
             listStyle: 'none',
             color: '#7E7E7E',
             padding: 0,
+            '& b': {
+                color: '#000000',
+            },
         },
         buttons: {
             width: '100%',
