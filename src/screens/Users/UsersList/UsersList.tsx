@@ -24,7 +24,7 @@ const UserItem = (): JSX.Element => {
                 />
                 <h3 className={classes.itemTitle}>Fresh Meat #F</h3>
                 <div className={classes.itemAdditionalInfo}>
-                    <Link to="artists/1">@Fimbim</Link>
+                    <Link to="artists/1">@Fimbim </Link>
                     124.56x3 ETH
                 </div>
             </div>
