@@ -1,42 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
-import { Web3ReactProvider } from '@web3-react/core'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
-import './index.css'
-import App, { Updaters } from './App'
-import { getLibrary } from './utils/helpers'
-import store from './state'
-import './i18n'
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 
-function SatoshiArt() {
-    return (
-        <Web3ReactProvider getLibrary={getLibrary}>
-            <Provider store={store}>
-                <Updaters />
-                <App />
-            </Provider>
-        </Web3ReactProvider>
-    )
-}
-
-/**
- * We should avoid error catching via sentry in development mode.
- *
- * tracesSampleRate - allow us check performance of the app.
- * Receive float value from 0 to 1.0 that means how often we should receive performance details.
- */
-if (
-    process.env.NODE_ENV !== 'development' &&
-    process.env.REACT_APP_SENTRY_DSN
-) {
-    Sentry.init({
-        dsn: process.env.REACT_APP_SENTRY_DSN,
-        integrations: [new Integrations.BrowserTracing()],
-        tracesSampleRate: 0.2,
-    })
-}
-
-ReactDOM.render(<SatoshiArt />, document.getElementById('root'))
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

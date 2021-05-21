@@ -1,47 +1,26 @@
-import React, { Suspense } from 'react'
-import { ThemeProvider } from '@material-ui/core/styles'
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-import theme from 'shared/theme'
-import {
-    useConnectWallet,
-    useUpdateBlockNumber,
-    useCurrencyUpdater,
-} from 'state/app/updater'
-import { useTransactionsUpdater } from 'state/transactions/hooks'
-import Routes from './Routes'
-import './App.css'
-import APIErrorProvider from 'providers/APIErrorProvider'
-import WrongNetworkModal from 'shared/WrongNetwork'
-import WarningMobileResolutions from 'shared/WarningMobileResoultions'
-import MintingInProgressModal from 'shared/MintingInProgressModal'
-import APIErrorModal from 'shared/APIErrorModal'
-
-export function Updaters(): null {
-    useUpdateBlockNumber()
-    useTransactionsUpdater()
-    useConnectWallet()
-    useCurrencyUpdater()
-
-    return null
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
 
-function App(): JSX.Element {
-    //phase 2
-    return (
-        <React.StrictMode>
-            <ThemeProvider theme={theme}>
-                <APIErrorProvider>
-                    <Suspense fallback={null}>
-                        <WrongNetworkModal />
-                        <WarningMobileResolutions />
-                        <MintingInProgressModal />
-                        <APIErrorModal />
-                        <Routes />
-                    </Suspense>
-                </APIErrorProvider>
-            </ThemeProvider>
-        </React.StrictMode>
-    )
-}
-
-export default App
+export default App;
