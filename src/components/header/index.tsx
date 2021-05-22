@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Popper, PopperProps, TextField } from '@material-ui/core';
-import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies } from 'apis/cookie';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 // import cx from 'clsx';
 import { getUserProfile } from 'apis/users';
-import axios from 'axios';
-import Web3 from 'web3';
 import { permittedToUseWalletSelector } from 'state/app/selectors';
 import Button from 'components/button';
 // import UserMenu from './UserMenu';

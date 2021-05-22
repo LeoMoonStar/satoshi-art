@@ -17,9 +17,9 @@ export default function PopularWorks(): JSX.Element {
         <div className={classes.explore}>
           <div className={classes.exploreBlock}>
             <div className={classes.introText}>
-              <div className={classes.firstPartOfIntroText}>{'allThe'}</div>
+              <div className={classes.firstPartOfIntroText}>All The</div>
               <img src={nftImg} alt='Nft' />
-              <div className={classes.secondPartOfIntroText}>{'inTheWorldNowTogetherHereForYou'}</div>
+              <div className={classes.secondPartOfIntroText}>in the world, now together. Here for you.</div>
             </div>
             {/*<Link to="/search" className={classes.exploreLink}>*/}
             {/*    <Button*/}
