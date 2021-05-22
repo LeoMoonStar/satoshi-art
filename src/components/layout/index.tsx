@@ -94,6 +94,8 @@ ILayoutProps): JSX.Element => {
             console.log(err);
           }
         }
+      } else {
+        eraseLoginAsCookies();
       }
     };
     sign();
