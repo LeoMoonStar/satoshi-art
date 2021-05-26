@@ -9,7 +9,7 @@ import store from './state';
 import { createBrowserHistory } from 'history';
 import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from './utils/helpers';
-import Home from 'pages/home';
+import Home from './pages/Home';
 
 const routes = (
   <Web3ReactProvider getLibrary={getLibrary}>

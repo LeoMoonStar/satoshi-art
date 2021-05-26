@@ -57,11 +57,6 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
   return (
     <div className={classes.container}>
-      {/*<div className={classes.topNavs}>
-                <Link to="/" className={cx(classes.topNav)}>{t('howItWorks')}</Link>
-                <Link to="/" className={cx(classes.topNav)}>{t('Community')}</Link>
-                <Link to="/" className={cx(classes.topNav)}>{t('Following')}</Link>
-            </div>*/}
       <div className={classes.topRow}>
         <Link to='/' className={classes.logo}>
           {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
@@ -141,12 +136,6 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
               </div>
             )}
           </div>
-
-          {/*<div className={classes.bottomNavs}>
-                        <Link to="/" className={cx(classes.bottomNav)}>{t('howItWorks')}</Link>
-                        <Link to="/" className={cx(classes.bottomNav)}>{t('Community')}</Link>
-                        <Link to="/" className={cx(classes.bottomNav)}>{t('Following')}</Link>
-                    </div>*/}
         </div>
       )}
     </div>

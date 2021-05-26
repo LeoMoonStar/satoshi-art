@@ -15,18 +15,18 @@ export type UserProfile = {
   };
 };
 
-export const getDropOfTheDay = (): Promise<any> => {
+export const getDropOfTheDay = () => {
   return axios.get(`/api/public/home/dropOfTheDay`);
 };
 
-export const getUserProfile = (userId: string): Promise<UserProfile> => {
-  return axios.get(`/api/public/user/${userId}/profile`);
+export const getUserProfile = (metamaskId: string): Promise<UserProfile> => {
+  return axios.get(`/api/public/user/${metamaskId}/profile`);
 };
 
-export const followUser = (otherUserId: string): Promise<any> => {
-  return axios.post(
+export const followUser = async (otherMetamaskId: string) => {
+  await axios.post(
     `/api/auth/user/follow`,
-    { followingMetamaskId: otherUserId },
+    { followingMetamaskId: otherMetamaskId },
     {
       headers: {
         id: readCookie('id'),
@@ -35,33 +35,46 @@ export const followUser = (otherUserId: string): Promise<any> => {
       },
     }
   );
+
+  return;
 };
 
-export const unfollowUser = async (otherUserId: string): Promise<any> => {
-  return axios.delete(`/api/auth/user/${otherUserId}/unfollow`, {
+export const unfollowUser = async (otherMetamaskId: string) => {
+  await axios.delete(`/api/auth/user/${otherMetamaskId}/unfollow`, {
     headers: {
       id: readCookie('id'),
       token: readCookie('token'),
       metamask_address: readCookie('metamask_address'),
     },
   });
+
+  return;
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const updateProfile = (data: any): Promise<any> => {
-  return axios.put(`/api/auth/user/edit-profile`, data, {
+export const updateProfile = async (data: any) => {
+  await axios.put(`/api/auth/user/edit-profile`, data, {
     headers: {
       id: readCookie('id'),
       token: readCookie('token'),
       metamask_address: readCookie('metamask_address'),
     },
   });
+
+  return 'success';
 };
 
-export const getFollowers = (userId: string, pageSize: number, page: number): Promise<any> => {
-  return axios.get(`/api/public/user/${userId}/followers?pageSize=${pageSize}&page=${page}`);
+export const checkIfArtist = (metamaskId: string) => {
+  return axios.get(`/api/public/user/${metamaskId}/profile`);
 };
 
-export const getFollowings = (userId: string, pageSize: number, page: number): Promise<any> => {
-  return axios.get(`/api/public/user/${userId}/followings?pageSize=${pageSize}&page=${page}`);
+export const getFollowers = (metamaskId: string) => {
+  return axios.get(`/api/public/user/${metamaskId}/followers?pageSize=5&page=1`);
+};
+
+export const getFollowings = (metamaskId: string) => {
+  return axios.get(`/api/public/user/${metamaskId}/followings?pageSize=5&page=1`);
+};
+
+export const getUserInfo = (metamaskId: string) => {
+  return axios.get(`/api/public/user/${metamaskId}/profile`);
 };
