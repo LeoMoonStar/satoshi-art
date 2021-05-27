@@ -25,7 +25,7 @@ const DevelopRoute = (props: RouteProps) => {
 
 function AppRouter(): JSX.Element {
   return (
-    <Router history={createBrowserHistory()}>
+    <BrowserRouter>
       <Switch>
         <Route path='/connect'>
           <ConnectWallet />
@@ -83,7 +83,7 @@ function AppRouter(): JSX.Element {
         </Route>
         <Route exact path='/' component={Home}></Route>
       </Switch>
-    </Router>
+    </BrowserRouter>
   );
 }
 

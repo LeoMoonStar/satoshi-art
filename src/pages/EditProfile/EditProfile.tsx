@@ -12,7 +12,7 @@ import useStyles from './EditProfile.style';
 export default function EditProfile(): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
-  const handleGoBack = () => history.back(); // might be goBack or back
+  const handleGoBack = () => history.goBack(); // might be goBack or back
 
   return (
     <Layout>

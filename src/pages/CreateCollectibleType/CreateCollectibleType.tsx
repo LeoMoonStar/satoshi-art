@@ -14,7 +14,7 @@ export default function CreateCollectibleType(): JSX.Element {
 
   const history = useHistory<{ isAllowedGoBack: boolean }>();
 
-  const handleGoBack = () => history.back();
+  const handleGoBack = () => history.goBack();
   const isAllowedGoBack = history.location.state?.isAllowedGoBack;
 
   return (

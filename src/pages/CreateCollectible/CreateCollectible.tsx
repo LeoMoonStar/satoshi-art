@@ -15,7 +15,7 @@ const CreateCollectible = (): JSX.Element => {
 
   const handleGoBack = () => {
     if (history.location.state?.isAllowedGoBack) {
-      history.back();
+      history.goBack();
       return;
     }
 

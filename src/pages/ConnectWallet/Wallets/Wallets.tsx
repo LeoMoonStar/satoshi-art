@@ -13,7 +13,6 @@ import { useWallets } from '../../../hooks/useWallet';
 import Modal from 'components/widgets/Modal';
 import Button from 'components/button';
 import { changePermittedToUseWallet } from 'state/app/actions';
-// import { addUser } from 'api/user'
 import useStyles from './Wallets.style';
 import WalletOption from '../WalletOption';
 
@@ -44,7 +43,7 @@ function Wallets(): JSX.Element {
       history.push('/');
     }
   };
-  const handleGoBack = () => history.back();
+  const handleGoBack = () => history.goBack();
 
   const { age, terms } = fields;
   const error = [age, terms].filter(v => v).length !== 2;
