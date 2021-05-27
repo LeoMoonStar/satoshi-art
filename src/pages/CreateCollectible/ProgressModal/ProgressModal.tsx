@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Stepper, Step, StepLabel, StepIconProps, CircularProgress } from '@material-ui/core';
 import clsx from 'clsx';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Modal from 'components/widgets/Modal';
 import Button from 'components/button';
 import { CheckIcon } from 'components/icons';

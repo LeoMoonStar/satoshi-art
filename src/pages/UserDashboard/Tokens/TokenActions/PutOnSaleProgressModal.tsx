@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 import { CircularProgress, Step, StepLabel, Stepper } from '@material-ui/core';
 import useStyles from './Modals.style';
 import Modal from '../../../../components/widgets/Modal';

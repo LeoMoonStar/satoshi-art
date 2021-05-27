@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuItem } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { EditIcon, CalendarIcon } from 'components/icons';
 import Select from 'components/widgets/Select';
 

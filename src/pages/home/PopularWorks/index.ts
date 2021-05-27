@@ -1,1 +1,1 @@
-export { default } from './PopularWorks'
+export { default } from './PopularWorks';

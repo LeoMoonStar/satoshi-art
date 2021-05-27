@@ -6,7 +6,7 @@ import { Contract } from '@ethersproject/contracts';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useDispatch, useSelector } from 'react-redux';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { Close } from '@material-ui/icons';
 import { useForm, Controller } from 'react-hook-form';
 import { LogoIcon, PlusCircle } from 'components/icons';

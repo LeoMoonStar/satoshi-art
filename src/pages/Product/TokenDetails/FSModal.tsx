@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton, Modal } from '@material-ui/core';
 import { ExpandIcon } from 'components/icons';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import useStyles from './Modals.style';
 
 type FullScreenModalProps = {

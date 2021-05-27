@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 
 import { HouseIcon, OrderDetailsIcon, LogOutIcon } from 'components/icons';
 import useStyles from './Sidebar.style';

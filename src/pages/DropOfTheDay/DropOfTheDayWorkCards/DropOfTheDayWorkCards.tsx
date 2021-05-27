@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Button from 'components/button';
 import card1 from 'components/images/dropOfTheDay/card1.png';
 import card2 from 'components/images/dropOfTheDay/card2.png';

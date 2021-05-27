@@ -1,1 +1,1 @@
-export { default } from './TopSellersAndBuyers'
+export { default } from './TopSellersAndBuyers';

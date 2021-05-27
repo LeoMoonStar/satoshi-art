@@ -1,1 +1,1 @@
-export { default } from './BidHistory'
+export { default } from './BidHistory';

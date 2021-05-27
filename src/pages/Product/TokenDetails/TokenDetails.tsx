@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { styled, Grid, Typography, IconButton, Tab, Tabs, Theme } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon } from 'components/icons';
 import Button from 'components/button';
 import Loader from 'components/widgets/Loader';

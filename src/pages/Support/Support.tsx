@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormControl, FormHelperText, Input, Select, MenuItem, TextField, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
-import text from '../../../public/content';
+import text from '../../constants/content';
 import { Link } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';

@@ -7,7 +7,7 @@ import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useDispatch } from 'react-redux';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { FullLogo } from 'components/icons';
 import { useWallets } from '../../../hooks/useWallet';
 import Modal from 'components/widgets/Modal';

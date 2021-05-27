@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconButton } from '@material-ui/core';
 
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 
 import bradPitPaintImage from 'components/images/home/bradPitPaint.png';
 import Avatar from 'components/avatar';

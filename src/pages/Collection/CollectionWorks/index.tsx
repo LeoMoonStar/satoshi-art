@@ -1,1 +1,1 @@
-export { default } from './CollectionWorks'
+export { default } from './CollectionWorks';

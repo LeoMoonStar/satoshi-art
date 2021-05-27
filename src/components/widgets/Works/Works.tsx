@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork';
 import Button from '../../button';

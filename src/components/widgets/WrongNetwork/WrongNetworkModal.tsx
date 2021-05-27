@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Typography, CircularProgress } from '@material-ui/core';
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork';
 import useStyles from './WrongNetworkModal.style';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 //temporary modal for displaying wrong network
 const WrongNetworkModal = (): JSX.Element => {
   const { accepted } = useCurrentNetwork();

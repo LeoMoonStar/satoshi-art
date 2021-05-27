@@ -2,7 +2,7 @@ import React from 'react';
 import { SpecialSliderArrowIcon } from '../../../../components/icons';
 import Slider from 'react-slick';
 import cx from 'classnames';
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 

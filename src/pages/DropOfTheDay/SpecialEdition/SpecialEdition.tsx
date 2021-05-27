@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Button from 'components/button';
 import specialEditionImage from 'components/images/dropOfTheDay/specialEdition.png';
 import useStyles from './SpecialEditon.style';

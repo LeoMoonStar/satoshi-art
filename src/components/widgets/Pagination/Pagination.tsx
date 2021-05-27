@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import cx from 'classnames';
 
 import { DoubleArrowLeft } from 'components/icons';

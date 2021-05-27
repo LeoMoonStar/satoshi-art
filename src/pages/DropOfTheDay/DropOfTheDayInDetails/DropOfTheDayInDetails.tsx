@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import detail1 from 'components/images/dropOfTheDay/detail1.svg';
 import detail2 from 'components/images/dropOfTheDay/detail2.svg';
 import detail3 from 'components/images/dropOfTheDay/detail3.svg';

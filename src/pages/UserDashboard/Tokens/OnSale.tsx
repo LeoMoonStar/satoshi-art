@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { IconButton } from '@material-ui/core';
 import { Popover } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { ShowMoreIcon } from 'components/icons';
 import { EditIcon, RemoveIcon, TransferIcon, BurnIcon } from 'components/icons/dashboard';
 import useStyles from './Tokens.style';

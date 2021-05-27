@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { BidsLostIcon, BidsWonIcon, DecreaseIcon, IncreaseIcon, TotalBidsIcon } from 'components/icons/dashboard';
 
 import useStyles from './CardsStatistics.style';

@@ -1,1 +1,1 @@
-export { default } from './DropOfTheDayWorkCards'
+export { default } from './DropOfTheDayWorkCards';

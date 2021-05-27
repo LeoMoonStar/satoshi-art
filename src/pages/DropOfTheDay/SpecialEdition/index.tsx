@@ -1,1 +1,1 @@
-export { default } from './SpecialEdition'
+export { default } from './SpecialEdition';

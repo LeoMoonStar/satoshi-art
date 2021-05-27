@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import text from '../../../public/content.js';
+import text from 'constants/content';
 import { useHistory } from 'react-router-dom';
 
 import { LeftArrowIcon } from 'components/icons';

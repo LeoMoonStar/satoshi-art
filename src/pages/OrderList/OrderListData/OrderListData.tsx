@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { IconButton, Button, Popover } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { ShowMoreIcon, SortedArrowsDownIcon, SortedArrowsUpIcon } from 'components/icons';
 import Pagination from 'components/widgets/Pagination';
 

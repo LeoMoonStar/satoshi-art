@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { FormControl, InputLabel, Input } from '@material-ui/core';
 
 import Button from 'components/button';

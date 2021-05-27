@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork';

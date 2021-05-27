@@ -1,1 +1,1 @@
-export { default } from './TokensSlider'
+export { default } from './TokensSlider';

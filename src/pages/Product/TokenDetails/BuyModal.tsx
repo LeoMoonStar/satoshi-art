@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormControl, InputLabel, Input } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Button from 'components/button';
 import Modal from 'components/widgets/Modal';
 import useStyles from './Modals.style';

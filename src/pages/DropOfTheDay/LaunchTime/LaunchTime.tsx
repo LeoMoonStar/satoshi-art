@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import useStyles from './LaunchTime.style';
 
 const getTimeDurationInCharsToTargetTime = (date: Date) => {

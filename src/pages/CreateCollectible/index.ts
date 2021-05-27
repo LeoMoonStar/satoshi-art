@@ -1,1 +1,1 @@
-export { default } from './CreateCollectible'
+export { default } from './CreateCollectible';

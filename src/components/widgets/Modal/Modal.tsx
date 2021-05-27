@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal as MUIModal, IconButton } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 
 import { Close } from '@material-ui/icons';
 

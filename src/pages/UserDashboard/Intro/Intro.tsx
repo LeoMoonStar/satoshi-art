@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 import { IconButton } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { CalendarIcon } from '../../../components/icons/dashboard';
 import { AngleDownIcon, RoundedAngleLeftIcon } from '../../../components/icons';
 import Button from '../../../components/button';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { IconButton } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { useParams } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';

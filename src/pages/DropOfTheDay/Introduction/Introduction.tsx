@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import bradImage from 'components/images/dropOfTheDay/bradPit.png';
 
 import useStyles from './Introduction.style';

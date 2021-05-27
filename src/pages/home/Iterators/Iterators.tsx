@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Button from 'components/button';
 import iterator1 from 'components/images/home/iterator1.png';
 import iterator2 from 'components/images/home/iterator2.png';

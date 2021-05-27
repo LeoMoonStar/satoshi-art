@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getCollectibles, Collectible } from 'apis/collectibles';
 import { IconButton } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Modal from 'components/widgets/Modal';
 import Works from 'components/widgets/Works';
 import Button from 'components/button';

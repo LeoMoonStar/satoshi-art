@@ -1,1 +1,1 @@
-export const SERVICE_FEE = 0.025
+export const SERVICE_FEE = 0.025;

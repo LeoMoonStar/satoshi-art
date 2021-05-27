@@ -1,1 +1,1 @@
-export { default } from './FollowersList'
+export { default } from './FollowersList';

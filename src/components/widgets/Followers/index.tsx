@@ -1,1 +1,1 @@
-export { default, TabVariants } from './Followers'
+export { default, TabVariants } from './Followers';

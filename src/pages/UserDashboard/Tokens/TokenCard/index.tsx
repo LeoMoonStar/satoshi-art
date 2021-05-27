@@ -1,1 +1,1 @@
-export { default } from './TokenCard'
+export { default } from './TokenCard';

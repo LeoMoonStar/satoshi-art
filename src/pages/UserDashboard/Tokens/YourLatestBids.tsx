@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { ViewsIcon, EditIcon, TrashIcon } from 'components/icons';
 import preview from 'components/images/artist/work.jpg';
 import useStyles from './Tokens.style';

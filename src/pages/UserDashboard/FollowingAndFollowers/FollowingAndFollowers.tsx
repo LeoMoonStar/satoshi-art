@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Avatar from 'components/avatar';
 import Button from 'components/button';
 import { LikeIcon, ViewsIcon } from 'components/icons';

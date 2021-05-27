@@ -1,6 +1,6 @@
 import { MenuItem, SelectProps } from '@material-ui/core';
 import React from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Select from 'components/widgets/Select';
 import useStyles from './Introduction.style';
 import { ExpandMore } from '@material-ui/icons';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from '@material-ui/core';
 import cx from 'clsx';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import useStyles from './Search.style';
 
 import { SearchIcon } from 'components/icons';

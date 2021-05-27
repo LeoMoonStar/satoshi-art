@@ -1,1 +1,1 @@
-export { default } from './CardsStatistics'
+export { default } from './CardsStatistics';

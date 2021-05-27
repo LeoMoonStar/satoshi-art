@@ -116,9 +116,7 @@ ILayoutProps): JSX.Element => {
         {children}
       </div>
       <footer className={classes.footer}>
-        <Footer
-        // justifyTopRow={justifyTopRowFooter}
-        />
+        <Footer />
       </footer>
     </div>
   );

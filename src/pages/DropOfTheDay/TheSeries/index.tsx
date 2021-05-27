@@ -1,1 +1,1 @@
-export { default } from './TheSeries'
+export { default } from './TheSeries';

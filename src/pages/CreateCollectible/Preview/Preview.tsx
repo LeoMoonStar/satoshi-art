@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Avatar from 'components/avatar';
 import avatar from 'components/images/artist/avatar.jpg';
 import useStyles from './Preview.style';

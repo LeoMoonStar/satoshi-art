@@ -1,1 +1,1 @@
-export { default } from './WarningMobileResolutions'
+export { default } from './WarningMobileResolutions';

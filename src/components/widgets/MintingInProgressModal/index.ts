@@ -1,1 +1,1 @@
-export { default } from './MintingInProgressModal'
+export { default } from './MintingInProgressModal';

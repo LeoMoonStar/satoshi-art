@@ -15,7 +15,7 @@ import { TotalBidsIcon } from 'components/icons/dashboard';
 import avatar from 'components/images/artist/avatar.jpg';
 import useDisconnect from 'hooks/useDisconnect';
 import { getUserInfo } from 'apis/users';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import useStyles from './userMenu.style';
 
 const userLinks = [{ title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> }];

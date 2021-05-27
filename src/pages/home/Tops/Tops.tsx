@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from 'components/button';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Avatar from 'components/avatar';
 import img from 'components/images/artist/avatar.jpg';
 import top1 from 'components/images/home/tops1.png';

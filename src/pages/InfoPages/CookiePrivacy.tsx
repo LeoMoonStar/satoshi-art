@@ -1,5 +1,5 @@
 import React from 'react';
-import text from '../../../public/content';
+import text from '../../constants/content';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Layout from 'components/layout';

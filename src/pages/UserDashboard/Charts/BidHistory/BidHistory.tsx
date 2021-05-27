@@ -1,6 +1,6 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 import useStyles from './BidHistory.style';
 
 const data = [

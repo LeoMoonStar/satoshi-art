@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 import Button from '../../../../components/button';
 import Modal from '../../../../components/widgets/Modal';
 import { TokenType } from 'state/transactions/actions';

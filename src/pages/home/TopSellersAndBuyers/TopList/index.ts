@@ -1,1 +1,1 @@
-export { default } from './TopList'
+export { default } from './TopList';

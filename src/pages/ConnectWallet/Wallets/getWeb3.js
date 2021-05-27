@@ -1,4 +1,4 @@
-import Web3 from "web3";
+import Web3 from 'web3';
 
 // const getWeb3 = () =>
 //   new Promise((resolve, reject) => {
@@ -16,18 +16,18 @@ import Web3 from "web3";
 
 const getWeb3 = () => {
   return new Promise((resolve, reject) => {
-    window.addEventListener("load", async () => {
+    window.addEventListener('load', async () => {
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
         try {
           // ask user permission to access his accounts
-          await window.ethereum.request({ method: "eth_requestAccounts" });
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
           resolve(web3);
         } catch (error) {
           reject(error);
         }
       } else {
-        reject("Must install MetaMask");
+        reject('Must install MetaMask');
       }
     });
   });

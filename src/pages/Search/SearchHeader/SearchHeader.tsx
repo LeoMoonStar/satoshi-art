@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Divider, Chip, MenuItem } from '@material-ui/core';
 import { Close as CloseIcon, ExpandMore } from '@material-ui/icons';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';

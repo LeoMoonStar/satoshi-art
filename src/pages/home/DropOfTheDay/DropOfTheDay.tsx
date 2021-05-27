@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import colorsDissolvingImage from 'components/nts/images/home/colorsDissolving.png';
+import colorsDissolvingImage from 'components/images/home/colorsDissolving.png';
 import bradPitImage from 'components/images/home/bradPit.png';
 import DropOfTheDaySlider from 'components/widgets/DropOfTheDaySlider';
 

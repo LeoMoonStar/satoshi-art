@@ -1,1 +1,1 @@
-export { default } from './DropOfTheDayInDetails'
+export { default } from './DropOfTheDayInDetails';

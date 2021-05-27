@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useState, useEffect } from 'react';
 import { getCollectibles, Collectible } from 'apis/collectibles';
 import { APIErrorContext } from '../components/provider/APIErrorProvider';
-import text from '../../public/content';
+import text from '../constants/content';
 
 const useWalletTokens = () => {
   const [collectibles, setCollectibles] = useState<Collectible[]>([]);

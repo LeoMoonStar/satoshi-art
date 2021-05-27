@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { IconButton } from '@material-ui/core';
 import { Popover } from '@material-ui/core';
 import { Link } from 'react-router-dom';

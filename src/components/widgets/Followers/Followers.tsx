@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { getFollowers, getFollowings } from '../../../apis/users';
 import { useParams } from 'react-router-dom';
 import FollowersList from './FollowersList';

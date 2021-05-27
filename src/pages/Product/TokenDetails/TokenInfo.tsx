@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import Avatar from 'components/avatar';
 import useStyles from './TokenInfo.style';
 import { CollectibleInfo } from 'apis/collectibles';

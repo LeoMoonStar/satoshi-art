@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { PieChart, Pie, ResponsiveContainer } from 'recharts';
-import text from '../../../../../public/content';
+import text from '../../../../constants/content';
 import Checkbox from '../../../../components/widgets/CheckBox';
 
 import useStyles from './PieChart.style';

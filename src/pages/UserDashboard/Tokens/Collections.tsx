@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import text from '../../../../public/content';
+import text from '../../../constants/content';
 import { ShowMoreIcon } from '../../../components/icons';
 import { TransferIcon, BurnIcon, PriceIcon } from '../../../components/icons/dashboard';
 import useStyles from './Tokens.style';
