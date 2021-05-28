@@ -51,9 +51,7 @@ ILayoutProps): JSX.Element => {
             if (isInLoginAsMode()) {
               console.log('user sign in');
             } else {
-              const res = await axios.get(
-                `${process.env.REACT_APP_API_NEWURL}/api/public/auth/${account.toLowerCase()}`
-              );
+              const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
 
               const challenge = res.data;
 
@@ -68,7 +66,7 @@ ILayoutProps): JSX.Element => {
 
                   axios
                     .get(
-                      `${process.env.REACT_APP_API_NEWURL}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
+                      `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
                     )
                     .then(sigRes => {
                       console.log(sigRes.status);
