@@ -11,6 +11,7 @@ import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from './utils/helpers';
 import Home from './pages/Home';
 import AppRouter from 'routes';
+import './index.css';
 
 const routes = (
   <Web3ReactProvider getLibrary={getLibrary}>
