@@ -13,23 +13,9 @@ import { BellIcon, NavbarBurgerIcon, FullLogo, SearchIcon, LogoHeaderWhiteIcon }
 import useStyles from './header.style';
 import { useConnect } from 'hooks/useDisconnect';
 import { readCookie } from 'apis/cookie';
+import { getCollectibleAndNumber } from 'apis/collectibles';
 
-const artists: any[] = [
-  { id: 1, name: 'this' },
-  { id: 2, name: 'this' },
-  { id: 3, name: 'this' },
-  { id: 4, name: 'this' },
-  { id: 5, name: 'this' },
-  { id: 6, name: 'this' },
-  { id: 7, name: 'this' },
-  { id: 8, name: 'this' },
-  { id: 9, name: 'this' },
-  { id: 10, name: 'this' },
-  { id: 11, name: 'this' },
-  { id: 12, name: 'this' },
-  { id: 13, name: 'this' },
-  { id: 14, name: 'this' },
-];
+const mockSample: any[] = [['sample', 2]];
 const SearchPopper = function (props: PopperProps) {
   return <Popper {...props} style={{ width: '672px' }} placement='bottom-start' />;
 };
@@ -45,15 +31,15 @@ type HeaderProps = { inverseHeader?: boolean; hasDivider?: boolean };
 //   return Object.entries(result);
 // }
 
-const SearchResultCell = ({ key, artist, classes, number }: any) => {
+const SearchResultCell = ({ key, name, classes, number }: any) => {
   return (
     <Link
       key={key}
-      to={`/search/${artist.name}`}
-      style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between' }}
+      to={`/search/${name}`}
+      style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between', marginRight: '5px' }}
     >
-      <div className={classes.searchResult}>{artist.name}</div>
-      <div> {`${number} items`}</div>
+      <div className={classes.searchResult}>{name}</div>
+      <div> {`${number ? number : 0} items`}</div>
     </Link>
   );
 };
@@ -64,6 +50,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   const isWalletPermitted = useSelector<any, boolean>(permittedToUseWalletSelector);
   const [InSearch, setInSearch] = useState(false);
   const [searchArtist, setSearchArtist] = useState('');
+  const [searchResult, setSearchResult] = useState([...mockSample]);
   const [showNotif, setShowNotif] = useState(false);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [avatar, setAvatar] = useState('');
@@ -79,6 +66,19 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
       }
     }
   });
+
+  useEffect(() => {
+    if (searchArtist) {
+      getCollectibleAndNumber(searchArtist)
+        .then(res => {
+          const { data } = res;
+          console.log(data);
+          const result = Object.entries(data);
+          setSearchResult(result);
+        })
+        .catch(err => console.log(err));
+    }
+  }, [searchArtist]);
 
   return (
     <div className={classes.container}>
@@ -153,8 +153,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
             {InSearch && (
               <div className={classes.nftSearchBox}>
-                {artists.map((artist, index) => (
-                  <SearchResultCell key={index} artist={artist} classes={classes} />
+                {searchResult.map((item, index) => (
+                  <SearchResultCell key={index} name={item[0]} classes={classes} number={item[1]} />
                 ))}
               </div>
             )}

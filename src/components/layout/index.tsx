@@ -38,26 +38,25 @@ ILayoutProps): JSX.Element => {
   const classes = useStyles();
   useUserWhiteListChecking();
   let { account } = useWeb3React();
+  // const { account } = useWeb3React();
   const connected = useConnect();
-  console.log(account);
   const sign = async () => {
     console.log('Use effect triggered');
     if (connected) {
       // resolve temporary problem
-      const id = readCookie('id');
-      account = readCookie('metamask_address');
+      account = window.ethereum.selectedAddress;
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
         try {
-          await (window as any).ethereum.request({
+          await window.ethereum.request({
             method: 'eth_requestAccounts',
           });
 
           if (isInLoginAsMode()) {
             console.log('user sign in');
           } else {
-            const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${id}`);
-
+            console.log(`Account before get challenge ${account}`);
+            const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account}`);
             const challenge = res.data;
 
             (web3 as any).currentProvider.send(
@@ -98,11 +97,10 @@ ILayoutProps): JSX.Element => {
       }
     } else {
       console.log('No account detected');
-      eraseLoginAsCookies();
+      //eraseLoginAsCookies();
     }
   };
   useEffect(() => {
-    console.log(`Account:${account}`);
     sign();
   });
 

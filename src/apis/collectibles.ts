@@ -68,6 +68,10 @@ export type CreateCollectible = {
   };
 };
 
+export const getCollectibleAndNumber = (name?: string): Promise<Response> => {
+  return axios.get(`/api/public/search/collectibles/names?field=${name}`);
+};
+
 export const getCollectibles = (name?: string): Promise<Response> => {
   if (!name) {
     return axios.get(`/api/public/home/collectibles?pageSize=8&page=$1`);
