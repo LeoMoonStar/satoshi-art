@@ -15,7 +15,10 @@ function Search(): JSX.Element {
             setTokens(tokens)
         )*/
 
-    getCollectibles(artist).then(res => setCollectibles(res.data));
+    getCollectibles(artist).then(res => {
+      console.log(res.data);
+      setCollectibles(res.data);
+    });
   }, []);
 
   return (

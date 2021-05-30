@@ -36,7 +36,7 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms, onRequestError
       const connector = wallet.createConnector();
 
       await activate(connector, undefined, true);
-
+      console.log(wallet);
       dispatch(changeLoggedWith(wallet.name));
       setIsConnectTriggered(false);
 
@@ -59,7 +59,6 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms, onRequestError
   const connectOption = (
     <Button className={classes.connectBtn} onClick={connectWallet}>
       <Logo className={classes.iconWrapper} />
-
       {!hasInjectedProvider && wallet.name === 'Metamask' ? <span>Install Metamask</span> : <span>{wallet.name}</span>}
     </Button>
   );

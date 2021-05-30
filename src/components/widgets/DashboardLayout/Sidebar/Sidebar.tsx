@@ -4,7 +4,7 @@ import text from '../../../../constants/content';
 
 import { HouseIcon, OrderDetailsIcon, LogOutIcon } from 'components/icons';
 import useStyles from './Sidebar.style';
-import useDisconnect from 'hooks/useDisconnect';
+import { useDisconnect } from 'hooks/useDisconnect';
 
 const navItems = [
   {

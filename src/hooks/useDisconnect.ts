@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { eraseLoginAsCookies } from 'apis/cookie';
 import { disconnectAccount } from 'state/app/actions';
 import Web3 from 'web3';
+declare let window: any;
 
 /**
  * Disconnect user wallet and clear redux state related to this wallet
@@ -18,4 +19,8 @@ const useDisconnect = (): (() => void) => {
   };
 };
 
-export default useDisconnect;
+const useConnect = (): boolean => {
+  return window.ethereum && window.ethereum.selectedAddress;
+};
+
+export { useDisconnect, useConnect };

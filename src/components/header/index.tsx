@@ -11,6 +11,8 @@ import Button from 'components/button';
 // import Notifications from './Notifications';
 import { BellIcon, NavbarBurgerIcon, FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'components/icons';
 import useStyles from './header.style';
+import { useConnect } from 'hooks/useDisconnect';
+import { readCookie } from 'apis/cookie';
 
 const artists: any[] = [
   { id: 1, name: 'this' },
@@ -34,24 +36,47 @@ const SearchPopper = function (props: PopperProps) {
 
 type HeaderProps = { inverseHeader?: boolean; hasDivider?: boolean };
 
+// function processedArtist(artist: [{ name: string; id: number }]) {
+//   let result: { [name: string]: number } = {};
+//   for (let i of artist) {
+//     if (!result[i.name]) result[i.name] = 0;
+//     result[i.name]++;
+//   }
+//   return Object.entries(result);
+// }
+
+const SearchResultCell = ({ key, artist, classes, number }: any) => {
+  return (
+    <Link
+      key={key}
+      to={`/search/${artist.name}`}
+      style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between' }}
+    >
+      <div className={classes.searchResult}>{artist.name}</div>
+      <div> {`${number} items`}</div>
+    </Link>
+  );
+};
+
 export default function Header({ inverseHeader = false, hasDivider = true }: HeaderProps): JSX.Element {
   const classes = useStyles();
-
   const { account } = useWeb3React();
-
   const isWalletPermitted = useSelector<any, boolean>(permittedToUseWalletSelector);
   const [InSearch, setInSearch] = useState(false);
   const [searchArtist, setSearchArtist] = useState('');
   const [showNotif, setShowNotif] = useState(false);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [avatar, setAvatar] = useState('');
-
+  const connected = useConnect();
   useEffect(() => {
-    if (account) {
-      getUserProfile(account.toLowerCase()).then((res: any) => {
-        setIsArtist(res.data.isArtist);
-        setAvatar(res.data.avatarUrl);
-      });
+    if (connected) {
+      const id = readCookie('id');
+      if (id) {
+        getUserProfile(id).then((res: any) => {
+          setIsArtist(res.data.isArtist);
+          setAvatar(res.data.avatarUrl);
+        });
+      }
     }
   });
 
@@ -129,9 +154,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
             {InSearch && (
               <div className={classes.nftSearchBox}>
                 {artists.map((artist, index) => (
-                  <Link key={index} to={`/search/${artist.name}`} style={{ textDecoration: 'none' }}>
-                    <div className={classes.searchResult}>{artist.name}</div>
-                  </Link>
+                  <SearchResultCell key={index} artist={artist} classes={classes} />
                 ))}
               </div>
             )}

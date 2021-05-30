@@ -76,22 +76,16 @@ export const getCollectibles = (name?: string): Promise<Response> => {
   }
 };
 
-export const getOnSaleCollectibles = (metamaskId: string, pageSize = 8, page = 1): Promise<Response> => {
-  return axios.get(
-    `/api/public/user/${metamaskId.toLowerCase()}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=owner`
-  );
+export const getOnSaleCollectibles = (Id: string, pageSize = 8, page = 1): Promise<Response> => {
+  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=owner`);
 };
 
-export const getOnHoldCollectibles = (metamaskId: string, pageSize = 8, page = 1): Promise<Response> => {
-  return axios.get(
-    `/api/public/user/${metamaskId.toLowerCase()}/collectibles?pageSize=${pageSize}&page=${page}&tradable=0&user=owner`
-  );
+export const getOnHoldCollectibles = (Id: string, pageSize = 8, page = 1): Promise<Response> => {
+  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=0&user=owner`);
 };
 
-export const getCreatorsCollectibles = (metamaskId: string, pageSize = 8, page = 1): Promise<Response> => {
-  return axios.get(
-    `/api/public/user/${metamaskId.toLowerCase()}/collectibles?pageSize=${pageSize}&page=${page}&user=creator`
-  );
+export const getCreatorsCollectibles = (Id: string, pageSize = 8, page = 1): Promise<Response> => {
+  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&user=creator`);
 };
 
 export const getCollectible = (id: string): Promise<CollectibleInfoResponse> => {

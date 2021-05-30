@@ -65,7 +65,7 @@ export default function PageDetails(): JSX.Element {
     getFollowers(id).then(res => setNumFollowers(res.data.length));
 
     if (account) {
-      getFollowings(account) // account from login
+      getFollowings(id) // account from login
         .then(res => {
           const followings = res.data;
           const isfollowing = followings.some((follow: any) => follow.metamaskId == id);
