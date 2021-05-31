@@ -9,6 +9,7 @@ import axios from 'axios';
 import useStyles from './layout.style';
 import { useConnect } from 'hooks/useDisconnect';
 import { readCookie } from '../../apis/cookie';
+
 declare let window: any;
 
 type HeaderVariants = 'none' | 'full';
@@ -36,9 +37,9 @@ const Layout = ({
 }: // justifyTopRowFooter,
 ILayoutProps): JSX.Element => {
   const classes = useStyles();
-  // useUserWhiteListChecking();
-  // let { account } = useWeb3React();
-  const { account } = useWeb3React();
+  useUserWhiteListChecking();
+  let { account } = useWeb3React();
+  // const { account } = useWeb3React();
   const connected = useConnect();
   const sign = async () => {
     console.log('Use effect triggered');
@@ -98,7 +99,7 @@ ILayoutProps): JSX.Element => {
       }
     } else {
       console.log('No account detected');
-      eraseLoginAsCookies();
+      //eraseLoginAsCookies();
     }
   };
   useEffect(() => {
