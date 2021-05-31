@@ -24,19 +24,16 @@ export default function Avatar({
   const classes = useStyles();
 
   return (
-    <>
-      <div
-        role={onClick ? 'button' : 'presentation'}
-        className={clsx(classes.container, className, {
-          [classes.pointer]: onClick,
-        })}
-        style={{ fontSize: size }}
-        onClick={onClick}
-      >
-        {status && <img className={classes.status} src={artistStatus} alt={status} />}
-        <img className={classes.image} src={image ? image : '/favicon.ico'} />
-        {/*<img className={classes.image} src={image} alt={alt} />*/}
-      </div>
-    </>
+    <div
+      role={onClick ? 'button' : 'presentation'}
+      className={clsx(classes.container, className, {
+        [classes.pointer]: onClick,
+      })}
+      style={{ fontSize: size }}
+      onClick={onClick}
+    >
+      {status && <img className={classes.status} src={artistStatus} alt={status} />}
+      <img className={classes.image} src={image ? image : '/favicon.ico'} />
+    </div>
   );
 }

@@ -44,9 +44,11 @@ ILayoutProps): JSX.Element => {
     console.log('Use effect triggered');
     if (connected) {
       // resolve temporary problem
-      account = window.ethereum.selectedAddress;
       if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        console.log('Accounts', accounts);
+        account = accounts[0];
         try {
           await window.ethereum.request({
             method: 'eth_requestAccounts',
@@ -56,7 +58,7 @@ ILayoutProps): JSX.Element => {
             console.log('user sign in');
           } else {
             console.log(`Account before get challenge ${account}`);
-            const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account}`);
+            const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
             const challenge = res.data;
 
             (web3 as any).currentProvider.send(
@@ -77,7 +79,6 @@ ILayoutProps): JSX.Element => {
 
                     if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
                       console.log('Signature verified');
-
                       createLoginAsCookies({
                         id: sigRes.data.id,
                         metamask_address: sigRes.data.metamaskId,

@@ -14,6 +14,8 @@ import useStyles from './header.style';
 import { useConnect } from 'hooks/useDisconnect';
 import { readCookie } from 'apis/cookie';
 import { getCollectibleAndNumber } from 'apis/collectibles';
+import Avatar from 'components/avatar';
+import UserMenu from './userMenu';
 
 const mockSample: any[] = [['sample', 2]];
 const SearchPopper = function (props: PopperProps) {
@@ -60,6 +62,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
       const id = readCookie('id');
       if (id) {
         getUserProfile(id).then((res: any) => {
+          console.log('Get user profile', res.data);
           setIsArtist(res.data.isArtist);
           setAvatar(res.data.avatarUrl);
         });
@@ -99,9 +102,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
             )}
 
             {account && isWalletPermitted && (
-              <>
+              <div className={classes.profileBar}>
                 <div className={classes.notificationBox}>
-                  {/*<div><NavbarBurgerIcon height="15" width="15"/></div>*/}
                   <div>
                     <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
                   </div>
@@ -118,10 +120,9 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                     <Button variantCustom='linkButton' label={'create'} />
                   </Link>
                 )}
-              </>
+                <UserMenu />
+              </div>
             )}
-
-            {/* <UserMenu /> */}
           </div>
 
           {showNotif && <div style={{ marginLeft: 'calc(100vw - 500px)' }}>{/* <Notifications /> */}</div>}
