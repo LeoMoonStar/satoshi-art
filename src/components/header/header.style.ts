@@ -81,6 +81,12 @@ const useStyles = makeStyles(theme => {
       marginTop: 33,
       position: 'absolute',
     },
+    profileBar: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
     notificationBox: {
       backgroundColor: 'white',
       borderColor: '#C4C4C4',
@@ -89,8 +95,8 @@ const useStyles = makeStyles(theme => {
       borderRadius: 30,
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-around',
-      width: 40,
+      justifyContent: 'center',
+      height: 40,
 
       '& div': {
         '&:hover': {
@@ -101,13 +107,15 @@ const useStyles = makeStyles(theme => {
     },
 
     createLink: {
-      marginLeft: 10,
+      marginLeft: 20,
+      marginRight: 20,
       textDecoration: 'none',
       '& button[class]:hover': {
         transform: 'scale(1.03, 1.03)',
         backgroundColor: '#5113D5',
       },
     },
+    profileAvatar: {},
     div: {
       borderColor: '#C4C4C4',
       borderStyle: 'solid',

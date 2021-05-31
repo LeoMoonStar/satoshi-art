@@ -17,6 +17,7 @@ import { useDisconnect } from 'hooks/useDisconnect';
 import { getUserInfo } from 'apis/users';
 import text from 'constants/content';
 import useStyles from './userMenu.style';
+import { readCookie } from '../../../apis/cookie';
 
 const userLinks = [{ title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> }];
 
@@ -36,6 +37,7 @@ const UserMenu = (): JSX.Element | null => {
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
+  const Id = account ? readCookie('id') : null;
 
   useEffect(() => {
     async function getBalance() {
@@ -48,7 +50,7 @@ const UserMenu = (): JSX.Element | null => {
     getBalance();
 
     if (account) {
-      getUserInfo(account).then(res => {
+      getUserInfo(Id!).then(res => {
         setIsArtist(res.data.isArtist);
         setUserAvatar(res.data.avatarUrl);
       });
@@ -62,12 +64,22 @@ const UserMenu = (): JSX.Element | null => {
   if (!account || !isWalletPermitted) return null;
 
   return (
-    <div className={classes.userMenu}>
-      <Link to='/dashboard/user'>
-        <div ref={anchorElRef} onMouseEnter={() => setOpen(!isOpen)}>
+    <div
+      className={classes.userMenu}
+      onMouseEnter={() => {
+        console.log('Mouse over');
+        setOpen(!isOpen);
+      }}
+      onMouseLeave={() => {
+        setOpen(!isOpen);
+      }}
+    >
+      <div ref={anchorElRef}>
+        <Link to='/dashboard/user'>
           <Avatar size={40} image={userAvatar ? userAvatar : avatar} />
-        </div>
-      </Link>
+        </Link>
+      </div>
+
       <Popover
         open={isOpen}
         anchorEl={anchorElRef?.current}

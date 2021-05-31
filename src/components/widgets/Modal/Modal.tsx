@@ -20,7 +20,6 @@ const Modal: React.FC<ModalProps> = ({ open, children, onClose, className = '' }
     <MUIModal open={open} className={className} onClose={onClose}>
       <div className={classes.wrapper}>
         {children}
-
         <IconButton className={classes.closeBtn} title={text['close']} onClick={onClose}>
           <Close />
         </IconButton>
