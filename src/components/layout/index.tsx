@@ -38,7 +38,7 @@ ILayoutProps): JSX.Element => {
   const classes = useStyles();
   // useUserWhiteListChecking();
   // let { account } = useWeb3React();
-  const { account } = useWeb3React();
+  let { account } = useWeb3React();
   const connected = useConnect();
   const sign = async () => {
     console.log('Use effect triggered');
