@@ -36,9 +36,9 @@ const Layout = ({
 }: // justifyTopRowFooter,
 ILayoutProps): JSX.Element => {
   const classes = useStyles();
-  useUserWhiteListChecking();
-  let { account } = useWeb3React();
-  // const { account } = useWeb3React();
+  // useUserWhiteListChecking();
+  // let { account } = useWeb3React();
+  const { account } = useWeb3React();
   const connected = useConnect();
   const sign = async () => {
     console.log('Use effect triggered');
@@ -98,7 +98,7 @@ ILayoutProps): JSX.Element => {
       }
     } else {
       console.log('No account detected');
-      //eraseLoginAsCookies();
+      eraseLoginAsCookies();
     }
   };
   useEffect(() => {
