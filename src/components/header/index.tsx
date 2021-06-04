@@ -39,6 +39,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   const [InSearch, setInSearch] = useState(false);
   const [searches, setSearches] = useState('');
   const [searchResult, setSearchResult] = useState([...mockSample]);
+  const [searchCollectible, setSearchCollectible] = useState('')
   const [showNotif, setShowNotif] = useState(false);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [avatar, setAvatar] = useState('');
@@ -133,7 +134,10 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
   const getSearches = (name: string) => {
       getCollectibleAndNumber(name)
-          .then(({ data }) => setSearchResult(data))
+          .then(({ data }) => {
+            setSearchResult(data)
+            setSearchCollectible(name)
+          })
   }
 
   return (
@@ -151,6 +155,9 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                 <div className={classes.searchIcon}><SearchIcon /></div>
                 <TextField
                   onMouseEnter={() => setInSearch(true)}
+                  onKeyUp={(e) => {
+                      if (e.keyCode == 13) location.replace('/search/' + searchCollectible)
+                  }}
                   InputProps={{
                     disableUnderline: true,
                     type: 'search',
