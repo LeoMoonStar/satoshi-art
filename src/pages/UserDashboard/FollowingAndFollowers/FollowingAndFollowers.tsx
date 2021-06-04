@@ -63,9 +63,22 @@ export default function Collections(): JSX.Element {
               followings.forEach(async function (follow: any) {
                   const collectibles = await getUserCollectibles(follow.id)
 
+                  const thumbnailOne = collectibles.data[0] ? 
+                    collectibles.data[0].thumbnailUrl ? collectibles.data[0].thumbnailUrl
+                      :
+                      '/collectible-image.jpeg'
+                    :
+                    '/collectible-image.jpeg'
+                  const thumbnailTwo = collectibles.data[1] ? 
+                    collectibles.data[1].thumbnailUrl ? collectibles.data[1].thumbnailUrl 
+                      : 
+                      '/collectible-image.jpeg'
+                    :
+                    '/collectible-image.jpeg'
+
                   follow['id'] = follow.id
-                  follow['thumbnailOne'] = collectibles.data[0].thumbnailUrl
-                  follow['thumbnailTwo'] = collectibles.data[1].thumbnailUrl
+                  follow['thumbnailOne'] = thumbnailOne
+                  follow['thumbnailTwo'] = thumbnailTwo
               })
 
               setUserFollowings(followings)
@@ -78,9 +91,22 @@ export default function Collections(): JSX.Element {
               followers.forEach(async function (follow: any) {
                   const collectibles = await getUserCollectibles(follow.id)
 
+                  const thumbnailOne = collectibles.data[0] ? 
+                    collectibles.data[0].thumbnailUrl ? collectibles.data[0].thumbnailUrl
+                      :
+                      '/collectible-image.jpeg'
+                    :
+                    '/collectible-image.jpeg'
+                  const thumbnailTwo = collectibles.data[1] ? 
+                    collectibles.data[1].thumbnailUrl ? collectibles.data[1].thumbnailUrl 
+                      : 
+                      '/collectible-image.jpeg'
+                    :
+                    '/collectible-image.jpeg'
+
                   follow['id'] = follow.id
-                  follow['thumbnailOne'] = collectibles.data[0].thumbnailUrl
-                  follow['thumbnailTwo'] = collectibles.data[1].thumbnailUrl
+                  follow['thumbnailOne'] = thumbnailOne
+                  follow['thumbnailTwo'] = thumbnailTwo
               })
 
               setUserFollowers(followers)

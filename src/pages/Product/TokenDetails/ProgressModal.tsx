@@ -52,8 +52,8 @@ export default function ProgressModal({ numCopies, userAction, onClose }: Progre
     const owner = '0xf42f3440594434ee7405b8bacd04ff683797ea8b';
     console.log(metamaskId.ownerMetamaskId);
     if (metamaskId.ownerMetamaskId != '') {
-      const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, 89 as number);
-      if (balance >= 0) {
+      const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, metamaskId.tokenId as number);
+      if (balance > 0) {
         setApprove(true);
         setActiveStep(1);
       } else {
@@ -72,7 +72,7 @@ export default function ProgressModal({ numCopies, userAction, onClose }: Progre
     const metamaskId: any = data;
     setClickedSigned(true);
     const result = await web3Contract.marketplaceBuyCollectible(
-      89,
+      metamaskId.tokenId,
       metamaskId.ownerMetamaskId,
       metamaskId.price.toString()
     );
