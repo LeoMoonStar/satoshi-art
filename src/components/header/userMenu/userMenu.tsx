@@ -6,6 +6,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useSelector } from 'react-redux';
 import { AppState } from 'state';
+import { permittedToUseWalletAndWhiteListedSelector, permittedToUseWalletSelector } from 'state/app/selectors';
 import { shortAddress } from 'utils/helpers';
 
 import Avatar from 'components/avatar';
@@ -31,25 +32,28 @@ const UserMenu = (): JSX.Element | null => {
   const anchorElRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState('');
-  const { account, library } = useWeb3React<Web3Provider>();
-  const isWalletPermitted = true
+  const { library } = useWeb3React<Web3Provider>();
+  const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
   const handleDisconnect = useDisconnect();
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
-  const Id = readCookie('id')
+  const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
+  const connected = useConnect()
+  const { account } = useWeb3React();
+  const Id = account ? readCookie('id') : null
 
   useEffect(() => {
     async function getBalance() {
       if (library && account && isWalletPermitted) {
-        //const userEthBalance = await library.getBalance(account);
+        const userEthBalance = await library.getBalance(account);
 
-        //setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
+        setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
       }
     }
-    //getBalance();
+    getBalance();
 
-    if (Id) {
-      getUserInfo(Id).then(({ data }) => {
+    if (account) {
+      getUserInfo(Id!).then(({ data }) => {
         setIsArtist(data.isArtist);
         setUserAvatar(data.avatarUrl);
       });
@@ -60,10 +64,10 @@ const UserMenu = (): JSX.Element | null => {
   }, [account, library, isWalletPermitted]);
 
   const userAddress = useMemo(() => {
-    //if (!!account) return shortAddress(account, 10);
+    if (!!account) return shortAddress(account, 10);
   }, [account]);
 
-  if (!account || !isWalletPermitted) return null;
+  if (!account) return null;
 
   return (
     <div className={classes.userMenu}>
@@ -91,7 +95,7 @@ const UserMenu = (): JSX.Element | null => {
             <div className={classes.managefunds}>Manage funds on Zerion</div>
           </ul>
 
-          {account && (
+          {!isWhiteListedAndHasPermittedWallet && (
             <ul className={classes.links}>
               {userLinks.map((link, index) => (
                 <li key={index}>

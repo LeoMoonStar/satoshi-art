@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import { getCelebrityInfo } from 'apis/users'
 
@@ -14,9 +14,14 @@ import bradImage from 'components/images/dropOfTheDay/bradPit.png'
 import rihanna from 'components/images/dropOfTheDay/rihanna.png'
 import specialEditionImage from 'components/images/dropOfTheDay/specialEdition.png'
 
+const month: any = {
+    "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": 
+    "June", "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
+}
+
 export default function DropOfTheDay(): JSX.Element {
   const { id } = useParams<{ id: string }>()
-  const [name, setName] = useState('Brad Pitt')
+  const [name, setName] = useState("Brad Pitt") 
   const [introContent, setIntroContent] = useState(
     'William Bradley Pitt (born December 18, 1963) is an American ' + 
     'actor and film producer. He has received multiple awards, ' +
@@ -59,8 +64,30 @@ export default function DropOfTheDay(): JSX.Element {
         'Nulla pulvinar sed nisl'
     ],
     addContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam iaculis, nulla eu sodales sagittis.',
-    productId: '8d8d8d-dfdfd-df9sdf9ds9fd9f'
+    //productId: '8d8d8d-dfdfd-df9sdf9ds9fd9f'
   })
+
+  useEffect(() => {
+    if (id) {
+      getCelebrityInfo(id)
+        .then(({ data }) => {
+          const specialEdition = data.specialEdition
+          const newSpecialEdition = {
+            image: specialEdition.imageUrl,
+            title: specialEdition.introduction,
+            content: specialEdition.header,
+            year: specialEdition.date.split(".")[0],
+            items: specialEdition.bulletPoints,
+            addContent: specialEdition.conclusion
+          }
+
+          setSeriesContent(data.theSeries)
+          setNextActionDate(month[specialEdition.date.split(".")[1]] + " : " + specialEdition.date.split(".")[2])
+          setSpecialEdition(newSpecialEdition)
+        })
+    }
+  }, [])
+
   return (
     <Layout
       hasHeaderDivider={false}
@@ -75,7 +102,7 @@ export default function DropOfTheDay(): JSX.Element {
       <SpecialEdition 
           image={specialEdition.image} title={specialEdition.title} 
           year={specialEdition.year} content={specialEdition.content} contentList={specialEdition.items} 
-          addContent={specialEdition.addContent} productId={specialEdition.productId}
+          addContent={specialEdition.addContent} productId={'8d8d8d-dfdfd-df9sdf9ds9fd9f'}
       />
       <DropOfTheDayWorkCards/>
       <DropOfTheDayInDetails />

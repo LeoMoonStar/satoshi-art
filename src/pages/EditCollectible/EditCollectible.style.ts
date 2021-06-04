@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
             marginBottom: 57,
         },
         leftCol: {
-            flex: '1 1 833px'
+            flex: '1 1 833px',
         },
         rightCol: {
             backgroundSize: 'cover',
@@ -32,6 +32,14 @@ const useStyles = makeStyles((theme) => {
                 objectFit: 'cover',
                 height: '100%',
             },
+            width: '40%'
+        },
+        rightColContainer: {
+            margin: '0 auto'
+        },
+        rightColHeader: {
+            margin: 'auto',
+            width: '50%'
         },
         ownerContainer: {
             display: 'flex',
@@ -53,7 +61,7 @@ const useStyles = makeStyles((theme) => {
             flexDirection: 'column',
             justifyContent: 'space-around',
             position: 'relative',
-            width: 885,
+            width: '100%',
             height: 959,
             '& > *': {
                 width: '100%',
@@ -85,7 +93,7 @@ const useStyles = makeStyles((theme) => {
             color: 'red',
         },
         form: {
-            marginTop: 60,
+            margin: '60px auto 0 auto',
             '& label': {
                 marginBottom: 20,
                 fontSize: 14,
@@ -111,9 +119,10 @@ const useStyles = makeStyles((theme) => {
             '& .MuiSelect-icon': {
                 right: 8,
             },
+            width: '50%'
         },
         fieldGroup: {
-            width: '70%',
+            width: '100%',
             marginBottom: 40,
             '& Button': {
             	marginTop: 10
@@ -121,13 +130,15 @@ const useStyles = makeStyles((theme) => {
         },
         submits: {
         	display: 'flex',
-        	flexDirection: 'row',
+        	flexDirection: 'column',
         	justifyContent: 'space-between',
-        	width: '70%',
+            margin: '10px auto',
 
         	'& Button': {
-        		backgroundColor: '#5113D5'
-        	}
+        		backgroundColor: '#5113D5',
+                margin: '10px'
+        	},
+            width: '50%'
         }
 	}
 })

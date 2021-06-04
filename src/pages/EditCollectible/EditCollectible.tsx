@@ -3,7 +3,7 @@ import { styled, Grid, FormControl, FormHelperText, Input, Select, MenuItem, Tex
 import text from 'constants/content';
 import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon, LeftArrowIcon } from 'components/icons'
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes'
-import { getCollectible, putCollectibleOnSale } from 'apis/collectibles'
+import { getCollectible, putCollectibleOnSale, removeCollectibleFromSale } from 'apis/collectibles'
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import Layout from 'components/layout'
@@ -34,6 +34,7 @@ export default function EditCollectible() {
 		name: "",
 		price: 0,
 	})
+	const [priceError, setPriceError] = useState(false)
 	const renderSwitch = (url: string) => {
         const extension = url.split('.').pop()
 
@@ -56,7 +57,7 @@ export default function EditCollectible() {
     				const newInfo = {...info}
 
     				newInfo.status = data.status
-    				newInfo.thumbnailUrl = data.thumbnailUrl ? data.thumbnailUrl : './collectible-image.jpeg'
+    				newInfo.thumbnailUrl = data.thumbnailUrl ? data.thumbnailUrl : '/collectible-image.jpeg'
     				newInfo.name = data.name
     				newInfo.price = data.price
 
@@ -69,7 +70,21 @@ export default function EditCollectible() {
     	const { status, price } = info
     	const data = { price: price, status: status }
 
-    	putCollectibleOnSale(id, data)
+    	if (price) {
+    		putCollectibleOnSale(id, data)
+	    		.then(() => {
+	    			location.replace('/dashboard/user')
+	    		})
+    	} else {
+    		setPriceError(true)
+    	}
+    }
+
+    const removeFromSale = () => {
+    	removeCollectibleFromSale(id)
+    		.then(() => {
+    			location.replace('/dashboard/user')
+    		})
     }
 
 	return (
@@ -78,17 +93,18 @@ export default function EditCollectible() {
 				<Link className={classes.goBack} to="/"><LeftArrowIcon /> {text['backToHomePage']}</Link>
 				<Typography variant="h2">Collectible editing</Typography>
 			</div>
-
-
-				<div className={classes.container}>
-					<div className={classes.leftCol}>
-						<div className={classes.fileWrapper}>
-		                    {renderSwitch(info.thumbnailUrl)}
-		                </div>
-		            </div>
-					<div className={classes.rightCol}>
-						<Typography variant="h6" className={classes.artLabel}>ART</Typography>
-						<Typography variant="h1">{info.name}</Typography>
+			<div className={classes.container}>
+				<div className={classes.leftCol}>
+					<div className={classes.fileWrapper}>
+	                    {renderSwitch(info.thumbnailUrl)}
+	                </div>
+	            </div>
+				<div className={classes.rightCol}>
+					<div className={classes.rightColContainer}>
+						<div className={classes.rightColHeader}>
+							<Typography variant="h6" className={classes.artLabel}>ART</Typography>
+							<Typography variant="h1">{info.name}</Typography>
+						</div>
 
 						{/*<div className={classes.ownerContainer}>
 		                    <div className={classes.imageWrapper}>
@@ -109,12 +125,12 @@ export default function EditCollectible() {
 				                	const newInfo = {...info, price: Number(e.target.value) }
 
 				                	setInfo(newInfo)
-				                }}/>
-				                <small className={classes.inputError}>{text['fieldIsRequired']}</small>
-				                <Button variantCustom="action" type="submit">Change price</Button>
+				                }} value={info.price}/>
+				                {priceError && <small className={classes.inputError}>{text['fieldIsRequired']}</small>}
+				                {/*<Button variantCustom="action" type="submit">Change price</Button>*/}
 				            </FormControl>
 
-				            <FormControl className={classes.fieldGroup}>
+				            {/*<FormControl className={classes.fieldGroup}>
 				                <label htmlFor="issue">Collection</label>
 				                <Select id="issue" name="issue">
 				                    {COLLECTION_OPTIONS.map((issue: string, index: number) => (
@@ -129,14 +145,16 @@ export default function EditCollectible() {
 
 				                	setInfo({...info, status: "remove"})
 				                }}>Remove From Sale</Button>
-				            </FormControl>
+				            </FormControl>*/}
 				        </div>
 			            <div className={classes.submits}>
-			            	<Button variantCustom="action" type="submit" onClick={() => putOnSale()}>Put on Sale</Button>
+			            	<Button variantCustom="action" onClick={() => putOnSale()}>Put on Sale</Button>
+			            	<Button variantCustom="action" onClick={() => removeFromSale()}>Remove from sale</Button>
 			            	{/*<Button variantCustom="action" type="submit">Put on Auction</Button>*/}
 			            </div>
 			        </div>
 		        </div>
+	        </div>
 		</Layout>
 	)
 }

@@ -74,7 +74,7 @@ export const getCollectibleAndNumber = (name?: string) => {
 
 export const getCollectibles = (name?: string) => {
   if (!name) {
-    return axios.get(`/api/public/home/collectibles?pageSize=8&page=$1`);
+    return axios.get(`/api/public/home/collectibles?pageSize=8&page=1`);
   } else {
     return axios.get(`/api/public/search/collectibles?field=${name}`);
   }
@@ -112,6 +112,19 @@ export const putCollectibleOnSale = async(Id: string, data: any) => {
   return axios.put(
     `/api/auth/${Id}/put-on-sale`,
     data,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
+}
+
+export const removeCollectibleFromSale = async(Id: string) => {
+  return axios.put(
+    `/api/auth/${Id}/remove-on-sale`,
     {
       headers: {
         id: readCookie('id'),

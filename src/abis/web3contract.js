@@ -1,10 +1,7 @@
 import Web3 from 'web3';
 import satoshiMarketplaceABI from './SatoshiART1155Marketplace.json';
 import tokenContractABI from './SatoshiART1155.json';
-import { getToken } from 'apis/token';
-import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/bc7b2cf614a04ab3b4acbcd09a43dc6b'));
 
 const getWeb3Instance = () => {
@@ -12,8 +9,6 @@ const getWeb3Instance = () => {
 };
 
 const gas = web3.utils.toHex(300000);
-
-// console.log(provider);
 
 const requestMetamaskAccess = async () => {
   if (window.ethereum) {
@@ -46,6 +41,8 @@ const getTokenContract = () => {
   const contractWithSigner = contractInstance.connect(signer);
   return { contractWithSigner, contractInstance };
 };
+
+//to buy the collectiblw
 const marketplaceBuyCollectible = async (tokenId, sellerAddress, price) => {
   const { contractWithSigner, contractInstance } = getMarketplaceContract();
   console.log(contractWithSigner);
@@ -56,9 +53,11 @@ const marketplaceBuyCollectible = async (tokenId, sellerAddress, price) => {
   const priceToWei = ethers.utils.parseEther(price);
   console.log(priceToWei);
   const receipt = await contractWithSigner.buy(tokenId, sellerAddress, { value: priceToWei });
+
   return receipt;
 };
 
+//put the item on sale
 const marketplacePutOnSaleCollectible = async (tokenId, price, fromAddress) => {
   const { contractWithSigner } = getMarketplaceContract();
 
@@ -68,7 +67,25 @@ const marketplacePutOnSaleCollectible = async (tokenId, price, fromAddress) => {
   return receipt;
 };
 
+//marketplace: assigne the drop of the day role to user
+const grantDropCreatorRole = async accountAddr => {
+  const { contractWithSigner, contractInstance } = getMarketplaceContract();
+
+  const creatorRoleBytes = await contractInstance.DROP_OF_THE_DAY_CREATOR_ROLE();
+  const granted = await contractWithSigner.grantRole(creatorRoleBytes, accountAddr);
+  granted
+    .wait()
+    .then(async res => {
+      const approval = await contractInstance.hasRole(creatorRoleBytes, accountAddr);
+      return approval;
+    })
+    .catch(err => {
+      return err.message;
+    });
+};
 /** tokenContract */
+
+//check how many copies user/artist owns of a collectible
 const checkTokenBalance = async (artistAddress, tokenId) => {
   const { contractInstance } = getTokenContract();
   const tokenBalance = await contractInstance.balanceOf(artistAddress, tokenId);
@@ -76,6 +93,7 @@ const checkTokenBalance = async (artistAddress, tokenId) => {
   return tokenBalance;
 };
 
+//check if user is artist or not
 const isApprovedArtist = async artistAddress => {
   const { contractInstance } = getTokenContract();
 
@@ -83,20 +101,26 @@ const isApprovedArtist = async artistAddress => {
   const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress);
 
   console.log(`The creator approval status of address(${artistAddress}) is ${approval}.`);
-
   return approval;
 };
-const grantRole = async (artistAddress, adminAddress) => {
-  const { contractInstance } = getTokenContract();
+//assign the artist role only by admin addr
+const grantArtistRole = async artistAddress => {
+  const { contractInstance, contractWithSigner } = getTokenContract();
 
-  const creatorRoleByte = await contractInstance.CREATOR_ROLE().call();
-  const granted = await contractInstance
-    .grantRole(creatorRoleByte, artistAddress)
-    .call({ from: '0x37eFfFd3894cE8D6c8F67629f60B86505407aA29' });
+  const creatorRoleByte = await contractInstance.CREATOR_ROLE();
+  const granted = await contractWithSigner.grantRole(creatorRoleByte, artistAddress);
 
-  const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress).call();
-  return granted;
+  granted
+    .wait()
+    .then(async res => {
+      const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress);
+      return approval;
+    })
+    .catch(err => {
+      return err.message;
+    });
 };
+
 const isApprovedForAll = async (address1, address2) => {
   const contract = getTokenContract();
 
@@ -104,23 +128,24 @@ const isApprovedForAll = async (address1, address2) => {
   return result;
 };
 
+//create the item
 const etherFunctionCreateItem = async (collectibleCount, royalty) => {
   const { contractWithSigner } = getTokenContract();
 
   const receipt = await contractWithSigner.createItem(collectibleCount, royalty);
   const log = await receipt.wait();
   const ids = log.events[0].args.ids;
-  console.log(ids[0]._hex);
-  const idinhex = ids[0]._hex;
-  const inString = idinhex.toString();
-  console.log(inString);
+  console.log(ids);
+  const BN = web3.utils.BN;
+  const idInString = [];
 
-  const id = web3.utils.hexToNumber(inString);
-
-  console.log(147, id);
-  // const id = new BN(inString).toString();
-
-  return id;
+  for (let i = 0; i < ids.length; i++) {
+    const value = ids[i]._hex;
+    console.log('144', value);
+    const id = new BN(value.toString()).toString();
+    idInString.push(id);
+  }
+  return idInString;
 };
 
 export default {
@@ -128,23 +153,10 @@ export default {
   requestMetamaskAccess,
   marketplaceBuyCollectible,
   marketplacePutOnSaleCollectible,
+  grantDropCreatorRole,
   checkTokenBalance,
-
   isApprovedArtist,
-  grantRole,
+  grantArtistRole,
   isApprovedForAll,
   etherFunctionCreateItem,
 };
-
-// privateKey_admin:
-//     "aa99b53179487fff65b145b5a8f939c815a6b130aa6a5ce3fa223d5a6ed16407",
-//   address_admin: "0x37eFfFd3894cE8D6c8F67629f60B86505407aA29",
-//   privateKey_dropOfTheDayCreator:
-//     "aa99b53179487fff65b145b5a8f939c815a6b130aa6a5ce3fa223d5a6ed16407",
-//   address_dropOfTheDayCreator: "0x37eFfFd3894cE8D6c8F67629f60B86505407aA29",
-//   privateKey_artist1:
-//     "293a001c3d0d203e7005d76d8e432193d6400fc245bb1a948e589dbf44bd6be0",
-//   address_artist1: "0xF42f3440594434EE7405b8Bacd04FF683797EA8b",
-//   privateKey_buyer1:
-//     "03f04401a43e1316e410d0ff8e6b40cd4fe47dfcefe9479c66c1e8e2de422096",
-//   address_buyer1: "0x8a3AE0687966A9cF5Bf84675C0D2823CECda525B",

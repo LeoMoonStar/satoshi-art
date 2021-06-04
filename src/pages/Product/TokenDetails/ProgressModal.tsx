@@ -23,11 +23,11 @@ export function MyStepCircle(props: StepIconProps): JSX.Element {
   return <div className={clsx(classes.label, {[classes.active]: active,[classes.completed]: completed })}/>;
 }
 type ProgressModalProps = {
-  start: () => void
-  stepState: number
+  numCopies: string;
+  userAction: string;
   onClose: () => void;
 };
-export default function ProgressModal({ start, stepState, onClose }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ numCopies, userAction, onClose }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0)
@@ -107,14 +107,14 @@ export default function ProgressModal({ start, stepState, onClose }: ProgressMod
         <div className={classes.stepsContent}>
           <div className={classes.step}>
             <div className={classes.stepDescription}>
-              {stepState == 0 ? <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/> : <CheckIcon/>}
+              {activeStep == 0 ? <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/> : <CheckIcon/>}
 
               <div className={classes.stepTitle}>
                 <span>Approve</span>
                 <span>Checking balance and approving</span>
               </div>
             </div>
-            {stepState == 0 ? 
+            {activeStep == 0 ? 
                 <Button disabled={true}>In progress...</Button>
                 :
                 <Button disabled={true} style={{ backgroundColor: '#FF0099' }}>Completed</Button>
@@ -122,15 +122,15 @@ export default function ProgressModal({ start, stepState, onClose }: ProgressMod
           </div>
           <div className={classes.step}>
             <div className={classes.stepDescription}>
-              {stepState == 1 ? <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/> : <CheckIcon/>}
+              {activeStep == 1 ? <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/> : <CheckIcon/>}
               
               <div className={classes.stepTitle}>
                 <span>Signature</span>
                 <span>Create a signature to place a bid</span>
               </div>
             </div>
-            {stepState == 2 ? 
-                <Button style={{ backgroundColor: '#FF0099' }} onClick={start}>Start</Button>
+            {activeStep == 2 ? 
+                <Button style={{ backgroundColor: '#FF0099' }}>Start</Button>
                 :
                 <Button disabled={true}>Start</Button>
             }

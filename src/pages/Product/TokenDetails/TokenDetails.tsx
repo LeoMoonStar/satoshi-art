@@ -50,7 +50,6 @@ const TokenDetails = (): JSX.Element => {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [collectible, setCollectible] = useState<CollectibleInfo>();
   const [isProgressModal, setIsProgressModal] = useState<boolean>(false);
-  const [stepState, setStepState] = useState(0)
   const { id } = useParams<{ id: string }>();
   const classes = useStyles();
   const [userCollectibles, setUserCollectibles] = useState([])
@@ -119,7 +118,7 @@ const TokenDetails = (): JSX.Element => {
   if (isLoading) return <Loader />;
   if (!collectible) return <h1>Oops something went wrong</h1>;
 
-  const thumbnailUrl = collectible.thumbnailUrl ? collectible.thumbnailUrl : './collectible-image.jpeg'
+  const thumbnailUrl = collectible.thumbnailUrl ? collectible.thumbnailUrl : '/collectible-image.jpeg'
 
   return (
     <div className={classes.container}>
@@ -215,20 +214,7 @@ const TokenDetails = (): JSX.Element => {
         <BidModal
           onSubmit={() => {
             setIsProgressModal(true);
-            setStepState(0)
             setUserAction('bid')
-
-            setTimeout(function () {
-                setStepState(0)
-
-                setTimeout(function () {
-                    setStepState(1)
-
-                    setTimeout(function () {
-                        setStepState(2)
-                    }, 2000)
-                })
-            }, 2000)
 
             setIsBidModal(false)
           }}
@@ -241,20 +227,7 @@ const TokenDetails = (): JSX.Element => {
           numCopies={numCopies}
           onSubmit={() => {
             setIsProgressModal(true);
-            setStepState(0)
             setUserAction('buy')
-
-            setTimeout(function () {
-                setStepState(0)
-
-                setTimeout(function () {
-                    setStepState(1)
-
-                    setTimeout(function () {
-                        setStepState(2)
-                    }, 2000)
-                })
-            }, 2000)
 
             setIsBuyModal(false);
           }}
@@ -262,7 +235,7 @@ const TokenDetails = (): JSX.Element => {
         />
       )}
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
-      {isProgressModal && <ProgressModal start={() => start()} stepState={stepState} onClose={() => setIsProgressModal(false)} />}
+      {isProgressModal && <ProgressModal numCopies={numCopies} userAction={userAction} onClose={() => setIsProgressModal(false)} />}
     </div>
   );
 };
