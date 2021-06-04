@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, IconButton } from '@material-ui/core';
 import Modal from 'components/widgets/Modal';
 import Works from 'components/widgets/Works';
 import Followers, { TabVariants } from 'components/widgets/Followers';
 import { useParams } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
-import { FilterIcon } from 'components/icons';
+//import { FilterIcon } from 'components/icons';
 
 import useStyles from './ArtistWorks.style';
-import { Collectible, getOnSaleCollectibles, getOnHoldCollectibles, getCreatorsCollectibles } from 'apis/collectibles';
+import { Collectible, getOnSaleCollectibles, getCreatedCollectibles } from 'apis/collectibles';
 
 type CategoryType = {
   id: number;
@@ -41,48 +41,43 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
     setActive(activeType);
     setOpen(true);
   };
-
+  
   const closeModal = () => {
     setOpen(false);
     setActive(0);
   };
+
+  useEffect(() => {
+    if (id) {
+      getOnSaleCollectibles(id).then(({ data }) => {
+        setCollections(data);
+        setNumCollections(data.length);
+      });
+    }
+  }, [])
 
   const getCategoryList = (category: CategoryType) => {
     setSelectedCategory(category);
 
     switch (category.title) {
       case 'On sale':
-        getOnSaleCollectibles(id).then(res => {
-          const data = res.data;
-
-          setCollections(res.data);
-          setNumCollections(res.data.length);
+        getOnSaleCollectibles(id).then(({ data }) => {
+          setCollections(data);
+          setNumCollections(data.length);
         });
 
         break;
       case 'Collectibles':
-        getOnHoldCollectibles(id).then(res => {
-          const data = res.data;
-
-          setCollections(res.data);
-          setNumCollections(res.data.length);
-        });
+        getCreatedCollectibles(id).then(({ data }) => {
+          setCollections(data)
+          setNumCollections(data.length)
+      })
 
         break;
       case 'Created':
-        getCreatorsCollectibles(id).then(res => {
-          const data = res.data;
-
-          setCollections(res.data);
-          setNumCollections(res.data.length);
-        });
 
         break;
       case 'Liked':
-        // unknown for now
-
-        break;
-      case 'Activity':
         // unknown for now
 
         break;
@@ -94,26 +89,23 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
   return (
     <div className={classes.container}>
       <div className={classes.navigationRow}>
-        <div className={classes.selectedCategory}>
-          {selectedCategory.title} <span>{numCollections} Views</span>
-        </div>
+        <div className={classes.selectedCategory}>{selectedCategory.title} <span>{numCollections} Views</span></div>
         <nav className={classes.navigation}>
           {categories.map(category => (
-            <Button key={category.id} disabled={category.isEmpty} onClick={() => getCategoryList(category)}>
+            <Button 
+              key={category.id} disabled={category.isEmpty} 
+              onClick={() => getCategoryList(category)}
+            >
               {category.title}
             </Button>
           ))}
           <Button onClick={() => openModal(TabVariants.Following)}>Following</Button>
           <Button onClick={() => openModal(TabVariants.Followers)}>Followers</Button>
         </nav>
-        <IconButton className={classes.filterButton}>
-          <FilterIcon />
-        </IconButton>
+        {/*<IconButton className={classes.filterButton}><FilterIcon /></IconButton>*/}
       </div>
       <Works collectibles={collections} isLoading={false} isArtistPage={account == id} />
-      <Modal open={open} onClose={closeModal}>
-        <Followers active={active} />
-      </Modal>
+      <Modal open={open} onClose={closeModal}><Followers active={active} /></Modal>
     </div>
   );
 }

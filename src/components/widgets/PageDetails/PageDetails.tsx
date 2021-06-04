@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { IconButton } from '@material-ui/core';
-import text from '../../../constants/content';
+import text from 'constants/content';
 import { useParams } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
-import { followUser, unfollowUser, getUserInfo, getFollowers, getFollowings } from 'apis/users';
+import { followUser, unfollowUser, userBecomeArtist, getUserInfo, getFollowers, getFollowings } from 'apis/users';
 
 import Button from 'components/button';
 import Avatar from 'components/avatar';
@@ -21,59 +21,72 @@ export default function PageDetails(): JSX.Element {
 
   const { account } = useWeb3React<Web3Provider>();
   const { id } = useParams<{ id: string }>();
+  const [userId, setUserId] = useState('')
   const [isArtist, setIsArtist] = useState(false);
   const [username, setUsername] = useState('');
   const [description, setDescription] = useState('Good collection. Stay tune'); // fetch from server
   const [url, setUrl] = useState('twitter.com/username'); // fetch from server
   const [avatar, setAvatar] = useState('');
+  const [cover, setCover] = useState('')
   const [numFollowers, setNumFollowers] = useState(0);
   const [numFollowings, setNumFollowings] = useState(0);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isFollower, setIsFollower] = useState<boolean>(false)
 
   const handleToggleActions = () => {
     setIsOpenActions(!isOpenActions);
   };
 
-  const followArtist = (otherMetamask: string) => {
-    followUser(otherMetamask)
+  const followArtist = (userId: string) => {
+    followUser(userId)
       .then(res => setIsFollowing(true))
       .catch(error => console.error(error.message));
   };
 
-  const unfollowArtist = (otherMetamask: string) => {
-    unfollowUser(otherMetamask)
+  const unfollowArtist = (userId: string) => {
+    unfollowUser(userId)
       .then(res => setIsFollowing(false))
       .catch(error => console.error(error.message));
   };
+
+  const becomeArtist = () => {
+      userBecomeArtist()
+          .then((res) => setIsArtist(true))
+  }
 
   const addToFavourite = () => console.log('add to favourite');
   const sendMessage = () => console.log('send message');
   const addToFriends = () => console.log('add to friends');
 
   useEffect(() => {
-    getUserInfo(id) // id from param
-      .then(res => {
-        setIsArtist(res.data.isArtist);
-        setUsername(res.data.name);
-        // fetch description
-        // fetch url
-        setAvatar(res.data.avatarUrl);
-      });
-
-    getFollowings(id).then(res => setNumFollowings(res.data.length));
-
-    getFollowers(id).then(res => setNumFollowers(res.data.length));
-
     if (account) {
+      getUserInfo(id)
+        .then(({ data }) => {
+          setUserId(data.id)
+          setIsArtist(data.isArtist);
+          setUsername(data.name);
+          // fetch description
+          // fetch url
+          setAvatar(data.avatarUrl);
+          setCover(data.coverUrl)
+        });
       getFollowings(id) // account from login
-        .then(res => {
-          const followings = res.data;
-          const isfollowing = followings.some((follow: any) => follow.metamaskId == id);
+        .then(({ data }) => {
+          const isfollowing = data.some((follow: any) => follow.metamaskId == id);
 
           setIsFollowing(isfollowing);
         });
+      getFollowers(id)
+        .then(({ data }) => {
+            const isfollow = data.some((follow: any) => follow.id == account)
+
+            setIsFollower(isfollow)
+        })
+
+      getFollowings(id).then(({ data }) => setNumFollowings(data.length));
+      getFollowers(id).then(({ data }) => setNumFollowers(data.length));
     }
-  });
+  }, []);
 
   return (
     <>
@@ -93,21 +106,23 @@ export default function PageDetails(): JSX.Element {
               220
             </div>
 
-            {account && account.toLowerCase() != id && (
+            {userId != id ?
               <Button
                 variantCustom='action'
-                className={classes.followButton}
+                className={classes.actionButton}
                 onClick={() => {
-                  if (isFollowing) {
+                  if (isFollowing || isFollower) {
                     unfollowArtist(id);
                   } else {
                     followArtist(id);
                   }
                 }}
               >
-                {isFollowing ? text['Unfollow'] : text['follow']}
+                {isFollowing || isFollower ? text['Unfollow'] : text['follow']}
               </Button>
-            )}
+              :
+              <Button variantCustom="action" className={classes.actionButton} onClick={() => becomeArtist()}>{!isArtist && text['becomeArtist']}</Button>
+            }
           </div>
         </div>
       </div>
@@ -134,7 +149,6 @@ export default function PageDetails(): JSX.Element {
             <div className={classes.artistInfoList}>
               <div>{isArtist ? 'Artist' : ''}</div>
               <div className={classes.name}>{username}</div>
-              <div className={classes.code}>{id}</div>
               <div className={classes.helpText}>{description}</div>
               <a href='' className={classes.linkToWebPage}>
                 {url}

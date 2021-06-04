@@ -5,7 +5,7 @@ const FollowersGallery = ({ images }: { images: { id: number; src: string }[] })
   const classes = useStyles();
 
   if (!images.length) return <div className={classes.noData}>This user has not uploaded any items yet</div>;
-
+  
   return (
     <div className={classes.imgRow}>
       {images.map(img => (

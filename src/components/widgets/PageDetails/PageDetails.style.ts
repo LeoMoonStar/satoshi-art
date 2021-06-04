@@ -133,7 +133,7 @@ const useStyles = makeStyles(() => ({
     top: 23,
     right: 0,
   },
-  followButton: {
+  actionButton: {
     marginLeft: 35,
   },
 }));

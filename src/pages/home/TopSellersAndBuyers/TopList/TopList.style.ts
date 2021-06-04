@@ -109,6 +109,10 @@ const useStyles = makeStyles(() => {
     currency: {
       fontSize: 11,
     },
+    noResult: {
+            color: 'white',
+            margin: '0 auto'
+        }
   };
 });
 export default useStyles;

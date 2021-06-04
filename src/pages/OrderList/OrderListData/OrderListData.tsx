@@ -1,18 +1,16 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IconButton, Button, Popover } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@material-ui/data-grid';
 import text from '../../../constants/content';
 import { ShowMoreIcon, SortedArrowsDownIcon, SortedArrowsUpIcon } from 'components/icons';
 import Pagination from 'components/widgets/Pagination';
+import { getOrderList, getUserInfo } from 'apis/users'
+import { getCollectible } from 'apis/collectibles'
 
 import useStyles from './OrderListData.style';
 
-enum OrderEvents {
-  Bid,
-  Buy,
-  Sell,
-}
+enum OrderEvents { Bid, Buy, Sell }
 
 type OrderEventType = {
   label: string;
@@ -64,70 +62,23 @@ type RowType = {
   event: OrderEvents;
 };
 
-// todo: will be removed after integration with API
-const rows: any = [
-  {
-    id: 555231,
-    date: '26 March 2020, 12:42 AM',
-    artist: 'Mikasa Ackerman',
-    artName: 'Wrapped MoonCats',
-    cost: 0.87,
-    event: 1,
-  },
-  {
-    id: 555232,
-    date: '26 March 2020, 12:22 AM',
-    artist: 'Grisha Yeager',
-    artName: 'Feeling the vibe',
-    cost: 0.214,
-    event: 2,
-  },
-  { id: 555233, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 },
-  {
-    id: 555234,
-    date: '26 March 2020, 12:42 AM',
-    artist: 'Mikasa Ackerman',
-    artName: 'Wrapped MoonCats',
-    cost: 0.87,
-    event: 1,
-  },
-  {
-    id: 555235,
-    date: '26 March 2020, 12:22 AM',
-    artist: 'Grisha Yeager',
-    artName: 'Feeling the vibe',
-    cost: 0.214,
-    event: 2,
-  },
-  { id: 555236, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 },
-  {
-    id: 555237,
-    date: '26 March 2020, 12:42 AM',
-    artist: 'Mikasa Ackerman',
-    artName: 'Wrapped MoonCats',
-    cost: 0.87,
-    event: 1,
-  },
-  {
-    id: 555238,
-    date: '26 March 2020, 12:22 AM',
-    artist: 'Grisha Yeager',
-    artName: 'Feeling the vibe',
-    cost: 0.214,
-    event: 2,
-  },
-  { id: 555239, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 },
-];
-
 export default function OrderListData(): JSX.Element {
   const classes = useStyles();
+  const [orders, setOrders] = useState([
+      { id: 555231, date: '26 March 2020, 12:42 AM', artist: 'Mikasa Ackerman', artName: 'Wrapped MoonCats', cost: 0.87, event: 1 },
+      { id: 555232, date: '26 March 2020, 12:22 AM', artist: 'Grisha Yeager', artName: 'Feeling the vibe', cost: 0.214, event: 2 },
+      { id: 555233, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 },
+      { id: 555234, date: '26 March 2020, 12:42 AM', artist: 'Mikasa Ackerman', artName: 'Wrapped MoonCats', cost: 0.87, event: 1 },
+      { id: 555235, date: '26 March 2020, 12:22 AM', artist: 'Grisha Yeager', artName: 'Feeling the vibe', cost: 0.214, event: 2 },
+      { id: 555236, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 },
+      { id: 555237, date: '26 March 2020, 12:42 AM', artist: 'Mikasa Ackerman', artName: 'Wrapped MoonCats', cost: 0.87, event: 1 },
+      { id: 555238, date: '26 March 2020, 12:22 AM', artist: 'Grisha Yeager', artName: 'Feeling the vibe', cost: 0.214, event: 2 },
+      { id: 555239, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 },
+  ])
 
   // todo: use correct type for columns
-  const columns: any[] = useMemo(() => {
-    return [
-      {
-        field: 'id',
-        headerName: text['orderId'],
+  const columns: any[] = [
+      { field: 'id', headerName: text['orderId'],
         width: 140,
         renderCell({ row }: { row: RowType }) {
           return <Link to={`dashboard/order-list/${row.id}`}>#{row.id}</Link>;
@@ -135,24 +86,18 @@ export default function OrderListData(): JSX.Element {
       },
       { field: 'date', headerName: text['date'], flex: 1 },
       { field: 'artist', headerName: text['artist'], flex: 1 },
-      {
-        field: 'artName',
-        headerName: text['artName'],
+      { field: 'artName', headerName: text['artName'],
         flex: 2,
         renderCell({ row }: { row: RowType }) {
           return <Link to={`dashboard/order-list/${row.id}`}>{row.artName}</Link>;
         },
       },
-      {
-        field: 'cost',
-        headerName: text['cost'],
+      { field: 'cost', headerName: text['cost'],
         valueGetter({ row, field }: { row: RowType; field: keyof RowType }) {
           return `$${row[field]}`;
         },
       },
-      {
-        field: 'event',
-        headerName: text['event'],
+      { field: 'event', headerName: text['event'],
         renderCell({ row }: { row: RowType }) {
           const targetEvent: OrderEvents = row.event;
           const event: OrderEventType = orderEvents[targetEvent];
@@ -164,35 +109,53 @@ export default function OrderListData(): JSX.Element {
           );
         },
       },
-      {
-        field: '',
-        headerName: '',
+      { field: '', headerName: '',
         renderCell() {
           return <Controls />;
         },
-      },
-    ];
-  }, [text]);
+      }
+  ]
+
+  useEffect(() => {
+      // fetch orders from db
+      getOrderList()
+          .then(({ data }) => {
+              const orderList: any = []
+
+              data.forEach(async function (info: any, index: number) {
+                  const collectible = await getCollectible(info.collectibleId)
+                  const userInfo = await getUserInfo(collectible.data.creatorUserId)
+
+                  orderList.push({
+                      id: index,
+                      date: info.createDate,
+                      artist: userInfo.data.name,
+                      artName: collectible.data.name,
+                      cost: collectible.data.price,
+                      event: 1
+                  })
+              })
+
+              setOrders(orderList)
+          })
+  })
 
   return (
     <>
       <DataGrid
-        className={classes.dataGrid}
-        rows={rows}
+        className={classes.dataGrid} rows={orders}
         components={{ ColumnSortedDescendingIcon: SortedArrowsUpIcon, ColumnSortedAscendingIcon: SortedArrowsDownIcon }}
         columns={columns}
         pageSize={10}
-        autoHeight
-        hideFooterRowCount
-        hideFooterPagination
-        hideFooterSelectedRowCount
-        hideFooter
+        autoHeight hideFooterRowCount hideFooterPagination hideFooterSelectedRowCount hideFooter
         disableColumnMenu
       />
-      <div className={classes.paginationRow}>
-        <div className={classes.countsOfRow}>{text['showingCountOfData'] + 12}</div>
-        <Pagination />
-      </div>
+      {orders.length > 0 && (
+        <div className={classes.paginationRow}>
+          <div className={classes.countsOfRow}>Showing 1 from {orders.length} data</div>
+          <Pagination />
+        </div>
+      )}
     </>
   );
 }

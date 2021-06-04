@@ -5,27 +5,9 @@ import { BidsLostIcon, BidsWonIcon, DecreaseIcon, IncreaseIcon, TotalBidsIcon } 
 import useStyles from './CardsStatistics.style';
 
 const items = [
-  {
-    id: 1,
-    amount: 357,
-    icon: <TotalBidsIcon />,
-    title: 'totalBids',
-    update: 4,
-  },
-  {
-    id: 2,
-    amount: 57,
-    icon: <BidsWonIcon />,
-    title: 'bidsWon',
-    update: 12,
-  },
-  {
-    id: 3,
-    amount: 300,
-    icon: <BidsLostIcon />,
-    title: 'bidsLost',
-    update: -25,
-  },
+  { id: 1, amount: 357, icon: <TotalBidsIcon />, title: 'totalBids', update: 4 },
+  { id: 2, amount: 57, icon: <BidsWonIcon />, title: 'bidsWon', update: 12 },
+  { id: 3, amount: 300, icon: <BidsLostIcon />, title: 'bidsLost', update: -25 },
 ];
 
 type CardProps = {

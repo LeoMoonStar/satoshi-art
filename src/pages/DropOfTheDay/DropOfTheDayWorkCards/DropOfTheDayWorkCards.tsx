@@ -7,22 +7,25 @@ import card2 from 'components/images/dropOfTheDay/card2.png';
 import card3 from 'components/images/dropOfTheDay/card3.png';
 import card4 from 'components/images/dropOfTheDay/card4.png';
 import useStyles from './DropOfTheDayWorkCards.style';
-import { getDropOfTheDay, User } from 'apis/users';
+import { getDropOfTheDay } from 'apis/users';
 
 export default function OrderListFilters(): JSX.Element {
   const classes = useStyles();
-
-  const [artists, setArtists] = useState<User[]>([]);
+  const [collectibles, setCollectibles] = useState([]);
 
   useEffect(() => {
-    getDropOfTheDay().then(res => setArtists(res.data));
+    getDropOfTheDay().then(({ data }) => setCollectibles(data));
   });
 
   return (
     <section className={classes.container}>
-      {artists.map(({ id, thumbnailUrl }) => (
+      {collectibles.length > 0 && collectibles.map(({ id, thumbnailUrl }) => (
         <div key={id} className={classes.card}>
-          <img src={!thumbnailUrl.includes('s3.thumbnailurl') ? thumbnailUrl : '/collectible-image.jpeg'} alt='' />
+          {/*<img 
+            src={!thumbnailUrl.includes('s3.thumbnailurl') ? thumbnailUrl : '/collectible-image.jpeg'} 
+            alt='' 
+          />*/}
+          
           <div className={classes.header}>
             <h2 className={classes.title}>Pittful#1</h2>
             <div className={classes.count}>{text['countOfCount'] + 2 + 10}</div>

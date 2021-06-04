@@ -18,12 +18,7 @@ import { useAPIError } from '../../../hooks/useApiError';
 import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721';
 import { addTransaction, TokenType } from 'state/transactions/actions';
 import { percentageToBasicPoints, convertEthToUsd } from 'utils/helpers';
-import {
-  Engine1155ABI,
-  Satoshi1155ABI,
-  use1155EngineSmartContractNetworkData,
-  use1155SmartContractNetworkData,
-} from 'utils/erc1155';
+import { Engine1155ABI, Satoshi1155ABI, use1155EngineSmartContractNetworkData, use1155SmartContractNetworkData } from 'utils/erc1155';
 import { uploadFile, uploadMetaData, updateMetaData, MetaDataType } from 'apis/createItem';
 import Preview from '../Preview';
 import ProgressModal from '../ProgressModal';
@@ -32,48 +27,27 @@ import { AppState } from 'state';
 import { ethToUsdRateSelector } from 'state/app/selectors';
 import { updateTransactionInMintingProcess } from 'state/app/actions';
 
+// create item abis
+import web3Contract from '../../../abis/web3contract';
+
 const FILE_SIZE = 31457280;
 const schema = yup.object().shape({
   name: yup.string().required('You need to enter the name'),
-  file: yup
-    .mixed()
-    .required('A file is required')
+  file: yup.mixed().required('A file is required')
     .test('fileSize', 'File is required', value => value && value.hasOwnProperty(0))
-    .test(
-      'fileSize',
-      'The file is too big. You need to upload a smaller one',
-      value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
-    )
-    .test(
-      'fileFormat',
-      'Unsupported Format',
-      value => value && value.hasOwnProperty(0) && ALL_SUPPORTED_TYPES.includes(value[0].type)
-    ),
+    .test('fileSize','The file is too big. You need to upload a smaller one',value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE)
+    .test('fileFormat','Unsupported Format',value => value && value.hasOwnProperty(0) && ALL_SUPPORTED_TYPES.includes(value[0].type)),
   cover: yup.mixed().when('file', {
     is: (file: FileList) => {
       return file && file.hasOwnProperty(0) && VALID_FILE_TYPES.includes(file[0].type);
     },
-    then: yup
-      .mixed()
+    then: yup.mixed()
       .required('A file is required')
       .test('fileRequired', 'Cover is required', value => value && value.hasOwnProperty(0))
-      .test(
-        'fileSize',
-        'The file is too big. You need to upload a smaller one',
-        value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
-      )
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)
-      ),
+      .test('fileSize','The file is too big. You need to upload a smaller one',value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE)
+      .test('fileFormat','Unsupported Format',value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)),
   }),
-  royalties: yup
-    .number()
-    .min(0, 'Min is 0')
-    .max(10, 'Max is 10')
-    .typeError('You need to enter number')
-    .required('Royalties must be less than or equal to 10'),
+  royalties: yup.number().min(0, 'Min is 0').max(10, 'Max is 10').typeError('You need to enter number').required('Royalties must be less than or equal to 10'),
   copiesCount: yup.number().typeError('You need to enter number'),
   properties: yup.object().shape({
     name: yup.string().required('You need to enter the size'),
@@ -123,37 +97,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [createTokenError, setCreateTokenError] = useState<string>('');
   const currency = useSelector<AppState, number>(ethToUsdRateSelector);
   const [tempToken, setTempToken] = useState<TempTokenData | null>(null);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm<ICollectibleForm>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      onSale: true,
-      instantPrice: true,
-      unlock: true,
-      unlockContent: 'content',
-      price: 10,
-      collection: 'collection name',
-      name: 'name',
-      description: 'description',
-      royalties: 10,
-      copiesCount: 1,
-      properties: {
-        name: '5',
-        value: 'M',
-      },
+  const { register, handleSubmit, setValue, control, watch, formState: { errors }} = useForm<ICollectibleForm>({ resolver: yupResolver(schema), defaultValues: {
+      onSale: false, instantPrice: false, unlock: false, unlockContent: 'content', price: 10,
+      collection: 'collection name', name: 'name', description: 'description', royalties: 1, copiesCount: 1,
+      properties: { name: '5', value: 'M' },
     },
   });
   const [singleContract, setSingleContract] = useState<any>();
   const [erc1155contract, setErc1155contract] = useState<any>();
   const [engine1155contract, setEngine1155contract] = useState<any>();
-
   const engineAddress = engine1155NetworkData?.address;
+
+  const [stepState, setStepState] = useState<number>(0)
 
   useEffect(() => {
     if (isSingle) {
@@ -181,31 +136,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const createItem = async (payload: MetaDataType) => {
     const royaltiesInBasicPoint = percentageToBasicPoints(payload.royalties);
 
-    {
-      /* @TODO: get data for methods from API
-            phase 1 includes only createItem method
-                if (onSale) {
-                 if (instantPrice) {
-                     return await contract.CreateAndPutOnAuction(
-                         JSON.stringify(tokenDataMock), //tokenURI
-                         0, //startDate
-                         10, //auction duration
-                         10, //royalties assigned to the token by the creator, in bps
-                         { from: account }
-                     )
-                 }
-                 return await contract.createAndPutOnSale(
-                     JSON.stringify(tokenDataMock),
-                     1000, //price in wei of the token
-                     10, //royalties assigned to the token by the creator, in bps
-                     {
-                         from: account,
-                     }
-                 )
-             }
-        */
-    }
-
     if (isSingle) {
       const singleTokenResponse = await singleContract.createItem(
         JSON.stringify(payload),
@@ -225,7 +155,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
   const [preview, setPreview] = useState<PreviewType>({ file: '', cover: '', type: '', base64: '', imagetype: '' });
   const tryCreateItem = async (data: TempTokenData) => {
-    if (!chainId) return;
+    /*if (!chainId) return;
 
     try {
       const { response, tokenType } = await createItem(data.payload);
@@ -245,10 +175,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
         return;
       }
-
+      
       throw err;
-    }
+    }*/
   };
+  const [accountAddress, setAccountAddress] = useState('');
+  const [itemCreated, setItemCreated] = useState(false);
+  const [onSale, setOnSale] = useState(false);
+  const [confirmOnSale, setConfirmOnSale] = useState(false);
   const tryUploadFiles = async (files: Array<Promise<any>>) => {
     try {
       return await Promise.all(files);
@@ -258,61 +192,124 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     }
   };
   const onSubmit = async (data: ICollectibleForm) => {
-    const { properties, copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
-      data;
-    /*const collectible = { 
-            status: 'onSale', 
-            copies: copiesCount,
-            name: name, 
-            tokenId: 'tokenid', 
-            royalties: royalties, 
-            collectionId: 'collectionid', 
-            price: price, 
-            file: { 
-                filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                mediaType: preview.imagetype, 
-                content: preview.base64
-            },
-            thumbnail: {
-                filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                mediaType: preview.imagetype, 
-                content: preview.base64
-            }
-        }*/
+    const { 
+      properties, copiesCount, royalties, name, instantPrice, price, unlock, 
+      unlockContent, collection, description, onSale 
+    } = data
+    const owner = '0xf42f3440594434ee7405b8bacd04ff683797ea8b'
+    const approval = await web3Contract.isApprovedArtist(owner)
+
+    console.log(approval)
+
+    if (approval) {
+      console.log(data);
+      const result = await web3Contract.etherFunctionCreateItem(copiesCount, royalties);
+      console.log(result.hash);
+      setItemCreated(true);
+      console.log('In Progress...');
+      result.wait().then(async (res: any) => {
+        console.log('Item is created successfully');
+        //call backend api
+        setItemCreated(false);
+        if (onSale) {
+          const buyResult = await web3Contract.marketplacePutOnSaleCollectible(89, price.toString());
+          setOnSale(true);
+          buyResult
+            .wait()
+            .then((res: any) => {
+              setOnSale(false);
+              setConfirmOnSale(true);
+              console.log('Item is on sale now');
+            })
+            .catch((err: { message: any }) => {
+              setOnSale(false);
+              console.log(err.message);
+            });
+        }
+      });
+    } else {
+      alert('You are not approved to create collectibles');
+    }
+
+    const collectible = { 
+        status: 'onSale', 
+        copies: copiesCount,
+        name: name, 
+        tokenId: 'tokenid', 
+        royalties: royalties, 
+        collectionId: 'collectionid', 
+        price: price, 
+        unlock: unlock,
+        unlockContent: unlockContent,
+        file: { 
+            fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+            mediaType: preview.imagetype, 
+            content: preview.base64
+        },
+        thumbnail: {
+            fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+            mediaType: preview.imagetype, 
+            content: preview.base64
+        }
+    }
+
+    console.log(collectible)
+
+    /*setOpenSubmitModal(true)
+
+    setTimeout(function () {
+        setStepState(1)
+
+        console.log("show 1")
+
+        setTimeout(function () {
+            setStepState(2)
+
+            console.log("show 2")
+
+            setTimeout(function () {
+                setStepState(3)
+
+                console.log("show 3")
+            }, 2000)
+        }, 2000)
+    }, 2000)*/
 
     /*createCollection(name)
-            .then((res) => {
-                const collectible = { 
-                    status: 'onSale', 
-                    copies: copiesCount,
-                    name: name, 
-                    tokenId: 'tokenid', 
-                    royalties: royalties, 
-                    collectionId: 'collectionid', 
-                    price: price, 
-                    file: { 
-                        filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    },
-                    thumbnail: {
-                        filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    }
-                }
+      .then((res) => {
+          const collectible = { 
+              status: 'onSale', 
+              copies: copiesCount,
+              name: name, 
+              tokenId: 'tokenid', 
+              royalties: royalties, 
+              collectionId: 'collectionid', 
+              price: price, 
+              unlock: unlock,
+              unlockContent: unlockContent,
+              file: { 
+                  fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                  mediaType: preview.imagetype, 
+                  content: preview.base64
+              },
+              thumbnail: {
+                  fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                  mediaType: preview.imagetype, 
+                  content: preview.base64
+              }
+          }
 
-                createCollectible(collectible)
-                    .then((res) => {
-                        location.replace('/')
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            })
-            .catch((error) => {
-                console.log(error)
-            })*/
+          createCollectible(collectible)
+              .then((res) => {
+                  location.replace('/')
+              })
+              .catch((error) => {
+                  console.log(error)
+              })
+      })
+      .catch((error) => {
+          console.log(error)
+      })*/
 
     /*if (!chainId) return
         if (!account) return
@@ -370,13 +367,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       });
     };
   };
-  const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(e.target.name, e.target.value.split(/\D/).join(''));
+  const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.name, e.target.value.split(/\D/).join(''));
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     let index = 0;
-    setValue(
-      e.target.name,
-      e.target.value
+    setValue(e.target.name,e.target.value
         .replace(/[^\d.,]/g, '') //replace everything but valid symbols
         .replace(/,/g, '.') // replace comma to dot
         .replace(/\./g, (item: string) => (!index++ ? item : '')) // replace all but the first occurence of dot
@@ -390,12 +384,20 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       tryCreateItem(tempToken);
     }
   };
-  useEffect(() => {
+  /*useEffect(() => {
     if (!OpenSubmitModal) {
       setCreateTokenError('');
       setTempToken(null);
     }
-  }, [OpenSubmitModal]);
+  }, [OpenSubmitModal]);*/
+
+  useEffect(() => {
+    const init = async () => {
+      const managerAddress = await web3Contract.requestMetamaskAccess();
+      setAccountAddress(managerAddress[0]);
+    };
+    init();
+  }, []);
 
   const { price } = previewFields;
   const ethAmount = price ? price - price * 0.025 : 0;
@@ -408,44 +410,28 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           <div className={classes.upload}>
             <div className={classes.subtitle}>{text['uploadFile']}</div>
             <div className={clsx(classes.uploadWrapper, { [classes.uploadError]: errors.file })}>
-              <input
-                accept={ALL_SUPPORTED_TYPES}
-                className={classes.input}
-                ref={register}
-                onChange={handleFileChange}
-                id='uploadFile'
-                name='file'
-                type='file'
-                hidden
-              />
+              <input accept={ALL_SUPPORTED_TYPES} className={classes.input} ref={register} onChange={handleFileChange} id='uploadFile' name='file' type='file' hidden/>
 
-              {!preview.file ? (
+              {!preview.file ? 
                 <div>
                   <div>PNG, GIF, WEBP, MP4 or MP3. Max 30mb.</div>
                   <label htmlFor='uploadFile'>
-                    <Button component='span' className={classes.chooseBtn}>
-                      {text['chooseFile']}
-                    </Button>
+                    <Button component='span' className={classes.chooseBtn}>{text['chooseFile']}</Button>
                   </label>
                 </div>
-              ) : (
+                :
                 <div className={classes.uploadPreview}>
                   {preview.type === 'image' && <img src={preview.file} />}
                   {preview.type === 'audio' && <audio src={preview.file} controls />}
                   {preview.type === 'video' && <video src={preview.file} controls />}
                 </div>
-              )}
+              }
 
               {preview.file && (
-                <IconButton
-                  className={classes.closeBtn}
-                  onClick={() => {
+                <IconButton className={classes.closeBtn} onClick={() => {
                     setValue('file', null);
                     setPreview({ file: '', cover: '', type: '', base64: '', imagetype: '' });
-                  }}
-                >
-                  <Close />
-                </IconButton>
+                }}><Close /></IconButton>
               )}
             </div>
           </div>
@@ -454,60 +440,33 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             <div className={classes.upload}>
               <div className={classes.subtitle}>{text['uploadCover']}</div>
               <div className={clsx(classes.uploadWrapper, { [classes.uploadError]: errors.cover })}>
-                <input
-                  accept={VAlID_IMAGES_TYPES}
-                  className={classes.input}
-                  onChange={handleFileChange}
-                  ref={register}
-                  name='cover'
-                  id='uploadCover'
-                  type='file'
-                  hidden
-                />
+                <input accept={VAlID_IMAGES_TYPES} className={classes.input} onChange={handleFileChange} ref={register} name='cover' id='uploadCover' type='file' hidden/>
 
-                {!preview.cover ? (
-                  <div>
+                {!preview.cover ? <div>
                     <div>JPG, PNG, GIF or WEBP. Max 30mb.</div>
-                    <label htmlFor='uploadCover'>
-                      <Button component='span' className={classes.chooseBtn}>
-                        {text['chooseFile']}
-                      </Button>
-                    </label>
+                    <label htmlFor='uploadCover'><Button component='span' className={classes.chooseBtn}>{text['chooseFile']}</Button></label>
                   </div>
-                ) : (
+                  :
                   <div className={classes.uploadPreview}>
                     <img src={preview.cover} />
                   </div>
-                )}
+                }
 
                 {preview.cover && (
-                  <IconButton
-                    className={classes.closeBtn}
-                    onClick={() => {
+                  <IconButton className={classes.closeBtn} onClick={() => {
                       setValue('cover', null);
                       setPreview({ ...preview, cover: '' });
-                    }}
-                  >
-                    <Close />
-                  </IconButton>
+                  }}><Close /></IconButton>
                 )}
               </div>
             </div>
           )}
           {errors.cover && <p className={classes.textError}>{errors.cover.message}</p>}
           <FormControl className={classes.controls}>
-            <Controller
-              name='onSale'
-              control={control}
+            <Controller name='onSale' control={control}
               render={props => (
                 <FormControlLabel
-                  control={
-                    <Switch
-                      inputRef={register}
-                      onChange={e => props.onChange(e.target.checked)}
-                      checked={props.value}
-                    />
-                  }
+                  control={<Switch inputRef={register} onChange={e => props.onChange(e.target.checked)} checked={props.value}/>}
                   classes={{ root: classes.switchLabel }}
                   labelPlacement='start'
                   label={
@@ -521,10 +480,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             />
             {watch('onSale') && (
               <div>
-                <FormControlLabel
-                  control={<Switch inputRef={register} name='instantPrice' />}
-                  classes={{ root: classes.switchLabel }}
-                  labelPlacement='start'
+                <FormControlLabel control={<Switch inputRef={register} name='instantPrice' />} classes={{ root: classes.switchLabel }} labelPlacement='start'
                   label={
                     <span>
                       <span className={classes.price}>{text['instantSalePrice']}</span>
@@ -538,23 +494,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     <Input
                       placeholder='Enter price for one piece'
                       onChange={handlePriceInput}
-                      inputRef={register}
-                      name='price'
-                      disableUnderline
+                      inputRef={register} name='price' disableUnderline
                     />
                     <div className={classes.priceInfo}>
-                      <span>{text['serviceFeeProgress'] + '2.5'}</span>
-                      {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
+                      <span>Service fee 2.5%.</span>
+                      <span>You will receive {ethAmount} ETH $ usdAmount</span>
                     </div>
 
                     {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
                   </div>
                 )}
 
-                <FormControlLabel
-                  control={<Switch inputRef={register} name='unlock' />}
-                  classes={{ root: classes.switchLabel }}
-                  labelPlacement='start'
+                <FormControlLabel control={<Switch inputRef={register} name='unlock' />} classes={{ root: classes.switchLabel }} labelPlacement='start'
                   label={
                     <span>
                       <span className={classes.unlock}>{text['unlockOncePurchased']}</span>
@@ -577,121 +528,43 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               </div>
             )}
           </FormControl>
-          {/*<div className={classes.collectionType}>
-                        <div className={classes.subtitle}>{t('chooseCollection')}</div>
-                        <div className={classes.cards}>
-                            <Controller name="collection" control={control}
-                                as={
-                                    <Button className={clsx(classes.card, {[classes.cardActive]:watch('collection') === 'new'})}
-                                        onClick={() => setValue('collection', 'new')}>
-                                        <PlusCircle />
-                                        <span className={classes.cardName}>{t('create')}</span>
-                                        <span className={classes.cardDscr}>ERC-721</span>
-                                    </Button>
-                                }
-                            />
-                            <Controller name="collection" control={control}
-                                as={
-                                    <Button className={clsx(classes.card, {[classes.cardActive]:watch('collection') === 'sart'})}
-                                        onClick={() => setValue('collection', 'sart')}>
-                                        <LogoIcon />
-                                        <span className={classes.cardName}>Satoshi.ART</span>
-                                        <span className={classes.cardDscr}>SART</span>
-                                    </Button>
-                                }
-                            />
-                        </div>
-                    </div>*/}
           <div className={classes.propertiesWrapper}>
             <div className={classes.input}>
-              <label htmlFor='collection' className={classes.label}>
-                {/* <Trans i18nKey='Collection' components={{ 1: <span /> }} /> */}
-              </label>
-              <Input
-                id='collection'
-                placeholder='e. g. “loren ipsum lormspum loren”'
-                inputRef={register}
-                name='collection'
-                disableUnderline
-              />
+              <label htmlFor='collection' className={classes.label}>Collection</label>
+              <Input id='collection' placeholder='e. g. “loren ipsum lormspum loren”' inputRef={register} name='collection' disableUnderline/>
             </div>
             <div className={clsx(classes.input, { [classes.inputError]: errors.name })}>
-              <label htmlFor='name' className={classes.label}>
-                {text['name']}
-              </label>
-              <Input
-                id='name'
-                placeholder='e. g. “Redeemable T-Shirt with logo”'
-                name='name'
-                inputRef={register}
-                disableUnderline
-              />
+              <label htmlFor='name' className={classes.label}>{text['name']}</label>
+              <Input id='name' placeholder='e. g. “Redeemable T-Shirt with logo”' name='name' inputRef={register} disableUnderline/>
 
               {errors.name && <p className={classes.textError}>{errors.name.message}</p>}
             </div>
             <div className={classes.input}>
-              <label htmlFor='description' className={classes.label}>
-                {/* <Trans i18nKey='descriptionOptional' components={{ 1: <span /> }} /> */}
-              </label>
-              <Input
-                id='description'
-                placeholder='e. g. “After purchasing you’ll be able to get the real Tee”'
-                inputRef={register}
-                name='description'
-                disableUnderline
-              />
+              <label htmlFor='description' className={classes.label}>Description <span>(Optional)</span></label>
+              <Input id='description' placeholder='e. g. “After purchasing you’ll be able to get the real Tee”' inputRef={register} name='description' disableUnderline/>
               <span>With preserved line-breaks</span>
             </div>
             <div className={clsx({ [classes.sizes]: !isSingle })}>
               <div className={clsx(classes.input, { [classes.inputError]: errors.royalties })}>
-                <label htmlFor='royalties' className={classes.label}>
-                  {text['royalties']}
-                </label>
-                <Input
-                  id='royalties'
-                  defaultValue='10'
-                  onChange={handleNumberInput}
-                  inputRef={register}
-                  disableUnderline
-                  name='royalties'
-                  endAdornment={<span>%</span>}
-                />
-                <span>{text['suggestedPercentages']}, 20%, 30%</span>
+                <label htmlFor='royalties' className={classes.label}>{text['royalties']}</label>
+                <Input id='royalties' defaultValue='10' onChange={handleNumberInput} inputRef={register} disableUnderline name='royalties' endAdornment={<span>%</span>}/>
+                <span>Suggested: 10%, 20%, 30%</span>
                 {errors.royalties && <p className={classes.textError}>{errors.royalties.message}</p>}
               </div>
               {!isSingle && (
                 <div className={classes.input}>
-                  <label htmlFor='copiesCount' className={classes.label}>
-                    {text['numberOfCopies']}
-                  </label>
-                  <Input
-                    id='copiesCount'
-                    placeholder='e. g. 10'
-                    inputRef={register}
-                    onChange={handleNumberInput}
-                    disableUnderline
-                    name='copiesCount'
-                  />
+                  <label htmlFor='copiesCount' className={classes.label}>{text['numberOfCopies']}</label>
+                  <Input id='copiesCount' placeholder='e. g. 10' inputRef={register} onChange={handleNumberInput} disableUnderline name='copiesCount'/>
                   {errors.copiesCount && <p className={classes.textError}>{errors.copiesCount.message}</p>}
                 </div>
               )}
             </div>
             <div className={classes.input}>
-              <label htmlFor='size' className={classes.label}>
-                {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
-              </label>
+              <label htmlFor='size' className={classes.label}>Properties <span>(Optional)</span></label>
               <div className={classes.sizes}>
                 <div>
-                  <Input
-                    id='size'
-                    placeholder='e. g. Size'
-                    disableUnderline
-                    inputRef={register}
-                    name='properties.name'
-                  />
-                  {errors.properties && (
-                    <p className={classes.textError}>{errors.properties.name ? errors.properties.name.message : ''}</p>
-                  )}
+                  <Input id='size' placeholder='e. g. Size' disableUnderline inputRef={register} name='properties.name'/>
+                  {errors.properties && <p className={classes.textError}>{errors.properties.name ? errors.properties.name.message : ''}</p>}
                 </div>
                 <div>
                   <Input placeholder='e. g. M' disableUnderline inputRef={register} name='properties.value' />
@@ -705,9 +578,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </div>
           </div>
           <div className={classes.footer}>
-            <Button disabled={isErrors()} type='submit'>
-              {text['createItem']}
-            </Button>
+            <Button type='submit'>{text['createItem']}</Button>
+
+            {itemCreated ? <span>Creating item in progress....</span> : ''}
+            {onSale ? (
+              <>
+                <span>Item created successfully!</span>
+                <span>Putting item on sale in progress...</span>
+              </>
+            ) : (
+              ''
+            )}
+            {confirmOnSale ? <span>Item is on sale now!</span> : ''}
           </div>
 
           {isErrors() && (
@@ -718,17 +600,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           )}
         </div>
       </form>
-      <Preview
-        fileSrc={preview.type === 'image' ? preview.file : preview.cover}
-        fields={previewFields}
-        isSingle={isSingle}
-      />
-      <ProgressModal
-        createTokenError={createTokenError}
-        onTryAgain={handleTryAgain}
-        open={OpenSubmitModal}
-        onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
-      />
+      <Preview fileSrc={preview.type === 'image' ? preview.file : preview.cover} fields={previewFields} isSingle={isSingle}/>
+      <ProgressModal createTokenError={createTokenError} onTryAgain={handleTryAgain} open={OpenSubmitModal} stepState={stepState} onClose={() => {
+        setOpenSubmitModal(!OpenSubmitModal)
+        setStepState(0)
+      }}/>
     </div>
   );
 };

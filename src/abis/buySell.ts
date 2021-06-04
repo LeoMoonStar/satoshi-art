@@ -5,14 +5,27 @@ const tokenContractBuildJSON = require('./SatoshiART1155.json');
 const marketplaceContractBuildJSON = require('./SatoshiART1155Marketplace.json');
 
 const config = process.env;
+console.log(process.env);
 
-const web3 = new Web3(config.rpcURL as string);
-
+export const web3 = new Web3(
+  (config.RPC_URL as string) || 'https://ropsten.infura.io/v3/bc7b2cf614a04ab3b4acbcd09a43dc6b'
+);
+console.log(web3.currentProvider);
 const marketplaceContractAbi = marketplaceContractBuildJSON.abi;
-const marketplaceContract = new web3.eth.Contract(marketplaceContractAbi, config.marketplaceContractAddress);
-
+const marketplaceContract = new web3.eth.Contract(marketplaceContractAbi, '0xa7545B8b319F779289369DFe4075bab3D249b5f6');
+// config.marketplaceContractAddress
 const tokenContractAbi = tokenContractBuildJSON.abi;
-const tokenContract = new web3.eth.Contract(tokenContractAbi, config.tokenContractAddress);
+const tokenContract = new web3.eth.Contract(tokenContractAbi, '0x253d17745A67eA4F6d6320B6fcD669B0E3B5174b');
+
+//token and marketplace contract is ours..
+
+export const createSignature = async (from: string): Promise<void> => {
+  const txData = { from: from, to: '0xDe4BC510A1B704A7FFCa7D7ebC9c697f3c23b1d9', value: 1, gas: 500000 };
+  const signedReceipt = await web3.eth.sendTransaction(txData);
+  console.log(signedReceipt);
+  return signedReceipt as any;
+};
+
 
 const sendTransaction = async (
   fromKey: string,
@@ -122,6 +135,8 @@ export const checkTokenBalance = async (artistAddress: string, tokenId: number):
  * The price is in ether.
  *
  * The current owner (seller) of the collectible can call this method.
+ *
+ * if you create wiht put on sale need to call this funciton...creare collecitble
  **/
 export const putOnSale = async (sellerPrivateKey: string, tokenId: number, price: number): Promise<void> => {
   await sendTransaction(

@@ -29,39 +29,21 @@ const schema = yup.object().shape({
     is: (file: FileList) => {
       return file && file.hasOwnProperty(0) && VALID_FILE_TYPES.includes(file[0].type);
     },
-    then: yup
-      .mixed()
+    then: yup.mixed()
       .required('A file is required')
       .test('fileRequired', 'Cover is required', value => value && value.hasOwnProperty(0))
-      .test(
-        'fileSize',
-        'The file is too big. You need to upload a smaller one',
-        value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
-      )
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)
-      ),
+      .test('fileSize','The file is too big. You need to upload a smaller one',value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE)
+      .test('fileFormat','Unsupported Format',value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)),
   }),
   avatar: yup.mixed().when('file', {
     is: (file: FileList) => {
       return file && file.hasOwnProperty(0) && VALID_FILE_TYPES.includes(file[0].type);
     },
-    then: yup
-      .mixed()
+    then: yup.mixed()
       .required('A file is required')
       .test('fileRequired', 'Avatar is required', value => value && value.hasOwnProperty(0))
-      .test(
-        'fileSize',
-        'The file is too big. You need to upload a smaller one',
-        value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
-      )
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)
-      ),
+      .test('fileSize','The file is too big. You need to upload a smaller one',value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE)
+      .test('fileFormat','Unsupported Format',value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)),
   }),
 });
 
@@ -83,17 +65,11 @@ const EditForm = (): JSX.Element => {
   const classes = useStyles();
 
   const { account } = useWeb3React<Web3Provider>();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<EditProfileForm>({
+  const { register, handleSubmit, formState: { errors }} = useForm<EditProfileForm>({
     resolver: yupResolver(schema),
     defaultValues: {
-      displayName: 'displayname',
-      customUrl: 'url.com',
-      twitterUsername: 'twitterusername',
-      personalSite: 'person.com',
+      displayName: 'displayname',customUrl: 'url.com',
+      twitterUsername: 'twitterusername',personalSite: 'person.com',
       email: 'email@gmail.com',
     },
   });
@@ -110,8 +86,6 @@ const EditForm = (): JSX.Element => {
     const file = fileList[0];
     const src = URL.createObjectURL(file);
     const type = file.type.split('/')[0];
-
-    // convert base 64
 
     const reader = new FileReader();
 
@@ -135,12 +109,12 @@ const EditForm = (): JSX.Element => {
     const profile = {
       name: displayName,
       avatar: {
-        filenName: 'image.' + avatar.type.replace('image/', ''),
+        fileName: 'image.' + avatar.type.replace('image/', ''),
         mediaType: avatar.type,
         content: avatar.base64,
       },
       cover: {
-        filenName: 'image.' + cover.type.replace('image/', ''),
+        fileName: 'image.' + cover.type.replace('image/', ''),
         mediaType: cover.type,
         content: cover.base64,
       },
@@ -150,9 +124,7 @@ const EditForm = (): JSX.Element => {
       email: email,
     };
 
-    updateProfile(profile).then(res => {
-      location.replace('/');
-    });
+    updateProfile(profile).then(() => location.replace('/'));
   };
 
   return (
@@ -161,15 +133,7 @@ const EditForm = (): JSX.Element => {
         <div className={classes.subtitle}>Upload Cover image</div>
         <div className={classes.input}>
           <div className={cx(classes.wrapper, classes.upload)}>
-            <input
-              ref={register}
-              accept={VALID_TYPES}
-              onChange={handleFileChange}
-              id='cover'
-              name='cover'
-              type='file'
-              hidden
-            />
+            <input ref={register} accept={VALID_TYPES} onChange={handleFileChange} id='cover' name='cover' type='file' hidden/>
             {preview.cover.name && (
               <div className={classes.coverHolder}>
                 <img src={preview.cover.name} />
@@ -189,60 +153,27 @@ const EditForm = (): JSX.Element => {
           {errors.cover && <p className={classes.textError}>{errors.cover.message}</p>}
         </div>
         <div className={classes.input}>
-          <Input
-            id='displayName'
-            register={register}
-            placeholder='Enter your display name'
-            name='displayName'
-            label={'Display name'}
-          />
+          <Input id='displayName' register={register} placeholder='Enter your display name' name='displayName' label={'Display name'}/>
 
           {errors.displayName && <p className={classes.textError}>{errors.displayName.message}</p>}
         </div>
         <div className={classes.input}>
-          <Input
-            id='customUrl'
-            register={register}
-            placeholder='Custom URL'
-            label={'Custom URL'}
-            name='customUrl'
-            startAdornment={<b>Satoshi.art/</b>}
-          />
+          <Input id='customUrl' register={register} placeholder='Custom URL' label={'Custom URL'} name='customUrl' startAdornment={<b>Satoshi.art/</b>}/>
 
           {errors.customUrl && <p className={classes.textError}>{errors.customUrl.message}</p>}
         </div>
         <div className={classes.input}>
-          <Input
-            id='twitterUsername'
-            register={register}
-            placeholder='@'
-            label={'Twitter Username'}
-            name='twitterUsername'
-            endAdornment={<Button className={classes.linkBtn}>Link</Button>}
-          />
+          <Input id='twitterUsername' register={register} placeholder='@' label={'Twitter Username'} name='twitterUsername' endAdornment={<Button className={classes.linkBtn}>Link</Button>}/>
 
           {errors.twitterUsername && <p className={classes.textError}>{errors.twitterUsername.message}</p>}
         </div>
         <div className={classes.input}>
-          <Input
-            id='personalSite'
-            register={register}
-            placeholder='Enter your custom URL'
-            label={'Personal site or portfolio'}
-            name='personalSite'
-            startAdornment={<b>Satoshi.art/</b>}
-          />
+          <Input id='personalSite' register={register} placeholder='Enter your custom URL' label={'Personal site or portfolio'} name='personalSite' startAdornment={<b>Satoshi.art/</b>}/>
 
           {errors.personalSite && <p className={classes.textError}>{errors.personalSite.message}</p>}
         </div>
         <div className={classes.input}>
-          <Input
-            id='email'
-            register={register}
-            placeholder='Your email for marketplace notifications'
-            name='email'
-            label={'Email'}
-          />
+          <Input id='email' register={register} placeholder='Your email for marketplace notifications' name='email' label={'Email'}/>
           <span className={classes.tooltip}>
             You must sign message to view or manage your email. <a href='#'>Sign message</a>
           </span>
@@ -252,30 +183,19 @@ const EditForm = (): JSX.Element => {
         <div className={classes.verification}>
           <div className={classes.subtitle}>Verification</div>
           <div className={classes.verificationContent}>
-            <p>
-              Proceed with verification proccess to get more visibility and gain trust on Rarible Marketplace. Please
-              allow up to several weeks for the proccess
-            </p>
+            <p>Proceed with verification proccess to get more 
+            visibility and gain trust on Rarible Marketplace. Please
+            allow up to several weeks for the proccess</p>
             <Button className={classes.btn}>Get verifed</Button>
           </div>
         </div>
-        <Button className={classes.submit} type='submit'>
-          Update profile
-        </Button>
+        <Button className={classes.submit} type='submit'>Update profile</Button>
       </div>
       <div className={classes.avatarUpdate}>
         <div className={classes.subtitle}>Profile Picture</div>
         <div className={classes.avatar}>
           <div className={cx(classes.wrapper)}>
-            <input
-              ref={register}
-              accept={VAlID_IMAGES_TYPES}
-              onChange={handleFileChange}
-              id='avatar'
-              name='avatar'
-              type='file'
-              hidden
-            />
+            <input ref={register} accept={VAlID_IMAGES_TYPES} onChange={handleFileChange} id='avatar' name='avatar' type='file' hidden/>
             {preview.avatar.name && (
               <div className={classes.imgHolder}>
                 <img src={preview.avatar.name} />
@@ -285,9 +205,7 @@ const EditForm = (): JSX.Element => {
         </div>
         <span className={classes.tooltip}>We recommend an image of at least 400x400px. Gifs work too.</span>
         <label htmlFor='avatar'>
-          <Button className={classes.btn} component='span'>
-            {text['chooseFile']}
-          </Button>
+          <Button className={classes.btn} component='span'>{text['chooseFile']}</Button>
         </label>
       </div>
     </form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import text from '../../../constants/content';
 import { FormControl, InputLabel, Input } from '@material-ui/core';
 
@@ -14,13 +14,29 @@ type BidModalProps = {
 export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Element {
   const classes = useStyles();
 
-  // todo: Temp solution to demonstrate error handling
-  //  I think we should use formik and yup for error handling in future
-  const yourBalance = 22.237;
+  const [numCopies, setNumCopies] = useState('1')
+  const [userBalance, setUserBalance] = useState(22.237)
+  const [serviceFee, setServiceFee] = useState(0.005)
+  const [totalBidAmount, setTotalBidAmount] = useState(0.305)
+
   const [error, setError] = useState<string | null>(null);
   const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
-    if (name === 'bid') setError(Number(value) > yourBalance ? 'Not enough funds' : null);
+    if (name === 'bid') {
+      setError(Number(value) > userBalance ? 'Not enough funds' : null)
+    }
   };
+
+  const [info, setInfo] = useState({
+      name: 'Invisible Doge | #0038 Weensy  Card Collection',
+      creator: 'Weensy',
+      copiesCount: 50
+  })
+
+  useEffect(() => {
+      // get user's balance
+
+      // get collectible info
+  })
 
   return (
     <Modal open className={classes.modal} onClose={onClose}>
@@ -43,27 +59,16 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
             {text['enterQuantity']}
             <small>({text['countAvailable'] + 24})</small>
           </InputLabel>
-          <Input id='quantity' placeholder='1' />
+          <Input id='quantity' placeholder='1' onChange={(e) => setNumCopies(e.target.value)}/>
         </FormControl>
         <ul className={classes.additionalInfo}>
-          <li>
-            {text['yourBalance']} <b>{yourBalance} ETH</b>
-          </li>
-          <li>
-            {text['serviceFee']} <b>0.005 ETH</b>
-          </li>
-          <li>
-            {text['totalBidAmount']}
-            <b>0.205 ETH</b>
-          </li>
+          <li>{text['yourBalance']} <b>{userBalance} ETH</b></li>
+          <li>{text['serviceFee']} <b>0.005 ETH</b></li>
+          <li>{text['totalBidAmount']}<b>0.205 ETH</b></li>
         </ul>
         <div className={classes.buttons}>
-          <Button onClick={onSubmit} variantCustom='action' className={classes.buttonFilled} disabled={!!error}>
-            {text['placeABid']}
-          </Button>
-          <Button variantCustom='outlined' className={classes.buttonOutlined} onClick={onClose}>
-            {text['cancel']}
-          </Button>
+          <Button onClick={onSubmit} variantCustom='action' className={classes.buttonFilled} disabled={!!error}>{text['placeABid']}</Button>
+          <Button variantCustom='outlined' className={classes.buttonOutlined} onClick={onClose}>{text['cancel']}</Button>
         </div>
 
         {error && <div className={classes.errorMessage}>{error}</div>}

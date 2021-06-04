@@ -10,12 +10,8 @@ export default function ConnectWallet(): JSX.Element {
 
   return (
     <div className={classes.container}>
-      <div className={classes.content}>
-        <Wallets />
-      </div>
-      <footer className={classes.footer}>
-        <Footer />
-      </footer>
+      <div className={classes.content}><Wallets /></div>
+      <footer className={classes.footer}><Footer /></footer>
     </div>
   );
 }

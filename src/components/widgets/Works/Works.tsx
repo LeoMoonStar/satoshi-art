@@ -16,7 +16,6 @@ import { Collectible } from '../../../apis/collectibles';
 import useStyles from './Works.style';
 import { shortAddress } from 'utils/helpers';
 import Price from '../Price';
-import useWalletTokens from 'hooks/useWalletTokens';
 import { isCollectibleOwned } from 'utils/common';
 
 type WorksListProps = {
@@ -35,10 +34,7 @@ export default function WorksList({
   isArtistPage = false,
 }: WorksListProps): JSX.Element {
   const { explorer } = useCurrentNetwork();
-
   const classes = useStyles();
-
-  const userCollectibles = useWalletTokens();
   const viewThumbnail = (file: any, thumbnailUrl: any) => {
     if (file && file.thumbnailUrl) {
       return file.thumbnailUrl;
@@ -47,22 +43,6 @@ export default function WorksList({
     } else {
       return '/collectible-image.jpeg';
     }
-  };
-
-  const followingCollection = (collectionid: string) => {
-    console.log('following collection');
-  };
-
-  const followerCollection = (collectionid: string) => {
-    console.log('follower collection');
-  };
-
-  const placeABid = (collectionid: string) => {
-    console.log('place a bid');
-  };
-
-  const buyNow = (collectionid: string) => {
-    console.log('buy now');
   };
 
   if (isLoading) return <Loader />;
@@ -87,33 +67,33 @@ export default function WorksList({
               </div>
               <div className={classes.infoHead}>
                 <h2 className={classes.name}>{name}</h2>
-                <div className={classes.actionButtons}>
+                {/*<div className={classes.actionButtons}>
                   <IconButton className={classes.actionButton}>
                     <SaveIcon onClick={() => followingCollection(id)} />
                   </IconButton>
-                  {/*<IconButton className={classes.actionButton}><ViewsIcon onClick={() => followerCollection(id)}/></IconButton>*/}
-                </div>
+                </div>*/}
               </div>
               <div className={classes.authorInfo}>
+                {/* ignore
                 <a target='_blank' rel='noreferrer' href={`${explorer}/address/${creatorId}`}>
                   {shortAddress(creatorId)}
-                </a>
+                </a>*/}
                 {price && <Price.WeiToEth value={price} />}
               </div>
               <div className={classes.workInfo}>
                 <span className={classes.count}>1 of 1</span>
 
                 <Button className={classes.bidButton}>
-                  <div onClick={() => buyNow(id)}>
+                  <div onClick={() => location.replace(`/product/${id}`)}>
                     <TextGradient colors='#FF0099, #6A2FE7'>{text['buyNow']}</TextGradient>
                   </div>
                 </Button>
 
-                {isCollectibleOwned(id, userCollectibles) || isArtistPage ? (
+                {isCollectibleOwned(id, collectibles) || isArtistPage ? (
                   <span style={{ marginLeft: '5px' }}>You are the Owner</span>
                 ) : (
                   <Button className={classes.bidButton}>
-                    <div onClick={() => placeABid(id)}>
+                    <div>
                       <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
                     </div>
                   </Button>

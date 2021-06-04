@@ -7,18 +7,8 @@ import useStyles from './Sidebar.style';
 import { useDisconnect } from 'hooks/useDisconnect';
 
 const navItems = [
-  {
-    id: 1,
-    label: 'dashboard',
-    href: '/dashboard/user',
-    Icon: HouseIcon,
-  },
-  {
-    id: 2,
-    label: 'orderList',
-    href: '/dashboard/order-list',
-    Icon: OrderDetailsIcon,
-  },
+  { id: 1, label: 'dashboard', href: '/dashboard/user', Icon: HouseIcon },
+  { id: 2, label: 'orderList', href: '/dashboard/order-list', Icon: OrderDetailsIcon },
 ];
 
 function Header(): JSX.Element {
@@ -31,7 +21,7 @@ function Header(): JSX.Element {
         {navItems.map(({ id, label, href, Icon }) => (
           <NavLink to={href} activeClassName={classes.navItemActive} key={id} className={classes.navItem}>
             <Icon />
-            {}
+            {text[label]}
           </NavLink>
         ))}
         <button type='button' onClick={handleDisconnect} className={classes.navItem}>

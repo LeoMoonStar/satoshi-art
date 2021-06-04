@@ -31,25 +31,25 @@ const getTimeDurationInCharsToTargetTime = (date: Date) => {
   };
 };
 
-export default function LaunchTime(): JSX.Element {
+type LaunchTimeProp = {
+    content: string,
+    nextActionDate: string
+}
+
+export default function LaunchTime({ content, nextActionDate }: LaunchTimeProp): JSX.Element {
   const classes = useStyles();
   const targetTime = '2021-04-06';
 
   const [time, setTimer] = useState(getTimeDurationInCharsToTargetTime(new Date(targetTime)));
 
   useEffect(() => {
-    setInterval(() => {
-      setTimer(getTimeDurationInCharsToTargetTime(new Date(targetTime)));
-    }, 1000);
+    setInterval(() => setTimer(getTimeDurationInCharsToTargetTime(new Date(targetTime))), 1000);
   }, []);
 
   return (
     <section className={classes.container}>
       <h2 className={classes.mainTitle}>{text['launchTime']}</h2>
-      <div className={classes.info}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. <br />
-        Etiam iaculis, nulla eu sodales sagittis, lorem felis pellentesque nibh, in varius ipsum orci et est.
-      </div>
+      <div className={classes.info}>{content}</div>
       <div className={classes.timer}>
         <div className={classes.col}>
           <b>{time.days}</b>
@@ -69,7 +69,8 @@ export default function LaunchTime(): JSX.Element {
         </div>
       </div>
       <div className={classes.additionalInfo}>
-        {text['theNextActionWillBeAvailableOn']} <Link to='/'>April 12th</Link>.
+        {text['theNextActionWillBeAvailableOn']} 
+        <Link to='/'>{nextActionDate}</Link>.
       </div>
     </section>
   );

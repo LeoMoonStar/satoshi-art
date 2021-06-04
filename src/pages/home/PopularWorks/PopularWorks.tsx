@@ -19,12 +19,6 @@ export default function PopularWorks(): JSX.Element {
   const [isExistNewTokens, setExistNewTokens] = useState<boolean>(false);
 
   useEffect(() => {
-    // todo: We should implement error handling
-    /*getTokens({ sort: 'published_at:desc' }).then((res) => {
-            setTokens(res)
-            setLoading(false)
-        })*/
-
     getCollectibles().then(({ data }) => {
       setCollectibles(data);
       setLoading(false);
@@ -41,9 +35,6 @@ export default function PopularWorks(): JSX.Element {
             <Button key={category}>{text['category']}</Button>
           ))}
         </nav>
-        <IconButton className={classes.filterButton}>
-          <FilterIcon />
-        </IconButton>
       </div>
       <Modal open={isExistNewTokens} onClose={() => setExistNewTokens(false)}>
         <div className={classes.newTokensContainer}>

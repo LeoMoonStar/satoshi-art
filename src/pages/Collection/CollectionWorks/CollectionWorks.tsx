@@ -27,7 +27,11 @@ export default function CollectionWorks(): JSX.Element {
         </div>
         <nav className={classes.navigation}>
           {categories.map(category => (
-            <Button key={category.id} disabled={category.isEmpty} onClick={() => setSelectedCategory(category)}>
+            <Button 
+              key={category.id} 
+              disabled={category.isEmpty} 
+              onClick={() => setSelectedCategory(category)}
+            >
               {category.title}
             </Button>
           ))}

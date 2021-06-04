@@ -3,13 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(() => {
   return {
     container: {
-      maxWidth: 1440,
       margin: '0 auto',
       width: '100%',
       display: 'flex',
       alignItems: 'flex-end',
-      justifyContent: 'space-between',
-      padding: '0 70px',
+      justifyContent: 'space-between'
     },
     titleWrapper: {
       display: 'flex',
@@ -19,7 +17,7 @@ const useStyles = makeStyles(() => {
       fontWeight: 800,
       fontSize: 30,
       letterSpacing: '-0.04em',
-      margin: 0,
+      marginLeft: 70
     },
     resultsCount: {
       fontSize: 20,
@@ -51,6 +49,8 @@ const useStyles = makeStyles(() => {
       marginTop: 25,
     },
     tabs: {
+      marginRight: 100,
+      
       '& button': {
         marginRight: 4,
         fontSize: 13,

@@ -7,14 +7,17 @@ import EditProfile from 'pages/EditProfile';
 import UserDashboard from 'pages/UserDashboard';
 import Artist from 'pages/Artist';
 import Users from 'pages/Users';
+import User from 'pages/User';
 import Collection from 'pages/Collection';
 import Search from 'pages/Search';
 import DropOfTheDay from 'pages/Home/DropOfTheDay';
 import DropOfTheDayHistory from 'pages/DropOfTheDayHistory';
 import Product from 'pages/Product';
 import OrderList from 'pages/OrderList';
+import OrderItem from 'pages/OrderItem';
 import CreateCollectible from 'pages/CreateCollectible';
-import AdminLogin from 'pages/AdminLogin';
+import EditCollectible from 'pages/EditCollectible';
+import EditCelebrityProfile from 'pages/EditCelebrityProfile';
 import Home from 'pages/Home';
 import { createBrowserHistory } from 'history';
 
@@ -27,60 +30,26 @@ function AppRouter(): JSX.Element {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path='/connect'>
-          <ConnectWallet />
-        </Route>
-        <Route path='/support'>
-          <Support />
-        </Route>
-        <Route path='/privacy'>
-          <Privacy />
-        </Route>
-        <Route path='/about-satoshi-art'>
-          <SatoshiArt />
-        </Route>
-        <Route path='/cookie-privacy'>
-          <CookiePrivacy />
-        </Route>
-        <Route path='/terms-and-conditions'>
-          <TermsAndConditions />
-        </Route>
-        <DevelopRoute path='/edit-profile'>
-          <EditProfile />
-        </DevelopRoute>
-        <Route path='/dashboard/user'>
-          <UserDashboard />
-        </Route>
-        <DevelopRoute path='/artists/:id'>
-          <Artist />
-        </DevelopRoute>
-        <DevelopRoute path='/users'>
-          <Users />
-        </DevelopRoute>
-        <DevelopRoute path='/collections/:id'>
-          <Collection />
-        </DevelopRoute>
-        <DevelopRoute path='/search/:artist'>
-          <Search />
-        </DevelopRoute>
-        <DevelopRoute path='/drop-of-the-day'>
-          <DropOfTheDay />
-        </DevelopRoute>
-        <DevelopRoute path='/drop-of-the-day-history'>
-          <DropOfTheDayHistory />
-        </DevelopRoute>
-        <DevelopRoute path='/product/:id'>
-          <Product />
-        </DevelopRoute>
-        <Route path='/dashboard/order-list'>
-          <OrderList />
-        </Route>
-        <Route exact path='/create-collectible'>
-          <CreateCollectible />
-        </Route>
-        <Route path='/admin/login'>
-          <AdminLogin />
-        </Route>
+        <Route path='/connect'><ConnectWallet /></Route>
+        <Route path='/support'><Support /></Route>
+        <Route path='/privacy'><Privacy /></Route>
+        <Route path='/about-satoshi-art'><SatoshiArt /></Route>
+        <Route path='/cookie-privacy'><CookiePrivacy /></Route>
+        <Route path='/terms-and-conditions'><TermsAndConditions /></Route>
+        <DevelopRoute path='/edit-profile'><EditProfile /></DevelopRoute>
+        <Route path='/dashboard/user'><UserDashboard /></Route>
+        <DevelopRoute path='/artists/:id'><Artist /></DevelopRoute>
+        <DevelopRoute path='/users'><Users /></DevelopRoute>
+        <DevelopRoute path='/user/:id'><User /></DevelopRoute>
+        <DevelopRoute path='/collections/:id'><Collection /></DevelopRoute>
+        <DevelopRoute path='/search/:artist'><Search /></DevelopRoute>
+        <DevelopRoute path='/drop-of-the-day'><DropOfTheDay /></DevelopRoute>
+        <DevelopRoute path='/drop-of-the-day-history'><DropOfTheDayHistory /></DevelopRoute>
+        <DevelopRoute path='/product/:id'><Product /></DevelopRoute>
+        <Route path='/dashboard/order-list'><OrderList /></Route>
+        <Route exact path='/create-collectible'><CreateCollectible /></Route>
+        <Route exact path='/edit-collectible/:id'><EditCollectible /></Route>
+        <Route exact path='/edit-celebrity-profile/:id'><EditCelebrityProfile /></Route>
         <Route exact path='/' component={Home}></Route>
       </Switch>
     </BrowserRouter>

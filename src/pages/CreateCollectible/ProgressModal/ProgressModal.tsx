@@ -9,28 +9,24 @@ import { CheckIcon } from 'components/icons';
 // import { CheckIcon } from 'components/icons'
 import useStyles from './ProgressModal.style';
 
-const CONNECTION_STEPS = ['Approval', 'Token', 'Sign', 'Complete'];
-
-function MyStepCircle(props: StepIconProps) {
-  const classes = useStyles();
-  const { active, completed } = props;
-
-  return <div className={clsx(classes.label, { [classes.active]: active, [classes.completed]: completed })} />;
-}
 type ProgressModalProps = {
   open: boolean;
+  stepState: number;
   onClose: () => void;
   onTryAgain: () => void;
   createTokenError: string;
 };
-export default function ProgressModal({
-  open,
-  onTryAgain,
-  createTokenError,
-  onClose,
-}: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ open, stepState, onTryAgain, createTokenError, onClose }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
-  const [activeStep] = useState<number>(2);
+  const [activeStep, setActiveStep] = useState<number>(0)
+
+  const CONNECTION_STEPS = ['Approval', 'Token', 'Sign', 'Complete'];
+  const MyStepCircle = (props: StepIconProps) => {
+    const classes = useStyles();
+    const { active, completed } = props;
+
+    return <div className={clsx(classes.label, { [classes.active]: active, [classes.completed]: completed })} />;
+  }
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -39,40 +35,43 @@ export default function ProgressModal({
         <Stepper alternativeLabel activeStep={activeStep} classes={{ root: classes.stepper }}>
           {CONNECTION_STEPS.map(label => (
             <Step key={label}>
-              <StepLabel classes={{ labelContainer: classes.labelContainer }} StepIconComponent={MyStepCircle}>
-                {label}
-              </StepLabel>
+              <StepLabel classes={{ labelContainer: classes.labelContainer }} StepIconComponent={MyStepCircle}>{label}</StepLabel>
             </Step>
           ))}
         </Stepper>
         <div className={classes.stepsContent}>
           <div className={classes.step}>
             <div className={classes.stepDescription}>
-              <CheckIcon />
+              {stepState == 0 ? 
+                <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/>
+                :
+                <CheckIcon />
+              }
 
               <div className={classes.stepTitle}>
                 <span>Approve</span>
                 <span>Approve performing transactions with your wallet</span>
               </div>
             </div>
-            <Button className={classes.disableButton}>In progress...</Button>
+            <Button className={classes.disableButton}>{stepState > 0 ? 'Successful' : 'In progress...'}</Button>
           </div>
 
-          {createTokenError ? (
-            <div className={classes.step}>
+          {createTokenError ? <div className={classes.step}>
               <div className={classes.stepDescription}>
                 <div className={classes.stepTitle}>
                   <span className={classes.error}>{createTokenError}</span>
                 </div>
               </div>
-              <Button variantCustom='action' className={classes.tryAgain} onClick={onTryAgain}>
-                {text['tryAgain']}
-              </Button>
+              <Button variantCustom='action' className={classes.tryAgain} onClick={onTryAgain}>{text['tryAgain']}</Button>
             </div>
-          ) : (
+            : 
             <div className={classes.step}>
               <div className={classes.stepDescription}>
-                <CircularProgress classes={{ root: classes.loader }} size={22} color='secondary' />
+                {stepState == 1 ? 
+                  <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/>
+                  :
+                  <CheckIcon />
+                }
 
                 <div className={classes.stepTitle}>
                   <span>Upload files & Mint token</span>
@@ -80,20 +79,24 @@ export default function ProgressModal({
                 </div>
               </div>
 
-              <Button className={classes.disableButton}>In progress...</Button>
+              <Button className={classes.disableButton}>{stepState > 1 ? 'Successful' : 'In progress...'}</Button>
             </div>
-          )}
+          }
 
           <div className={classes.step}>
             <div className={classes.stepDescription}>
-              <CheckIcon />
+              {stepState == 2 ? 
+                  <CircularProgress classes={{ root: classes.loader }} size={22} color="secondary"/>
+                  :
+                  <CheckIcon />
+              }
 
               <div className={classes.stepTitle}>
                 <span>Sign sell order</span>
                 <span>Sign sell order using your Wallet</span>
               </div>
             </div>
-            <Button className={classes.disableButton}>In progress...</Button>
+            <Button className={classes.disableButton}>{stepState > 2 ? 'Successful' : 'In progress...'}</Button>
           </div>
         </div>
       </div>

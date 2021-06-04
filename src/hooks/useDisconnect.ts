@@ -16,6 +16,8 @@ const useDisconnect = (): (() => void) => {
     deactivate();
     dispatch(disconnectAccount());
     eraseLoginAsCookies();
+
+    location.replace('/')
   };
 };
 

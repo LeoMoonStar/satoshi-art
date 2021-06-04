@@ -1,35 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { getTopSellers, getTopBuyers, getTopCollectors, getTopArtists } from 'apis/users'
 
 import Layout from 'components/layout';
 import UserList from './UsersList';
 import Introduction from './Introduction';
 
-const items = [
-  { id: 1, name: 'Fimbim', currency: 124.563 },
-  { id: 2, name: 'dfdf', currency: 121.563 },
-  { id: 3, name: 'Fimbim', currency: 12.563 },
-  { id: 4, name: 'Redlioneye', currency: 1.563 },
-  { id: 5, name: 'Fimbim', currency: 0.563 },
-  { id: 6, name: 'Fimbim', currency: 124.563 },
-  { id: 7, name: 'Redlioneye', currency: 121.563 },
-  { id: 8, name: 'Fimbim', currency: 12.563 },
-  { id: 9, name: 'Redlioneye', currency: 1.563 },
-  { id: 10, name: 'Fimbim', currency: 0.563 },
-];
-
 export default function Users() {
   const [subject, setSubject] = useState('Sellers');
-  const [list, setList] = useState(items);
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    getTopSellers()
+          .then(({ data }) => setList(data))
+  }, [])
 
   const seeAll = (type: string) => {
-    const newList = list.reverse();
+    switch (type) {
+      case "Sellers":
+        getTopSellers()
+          .then(({ data }) => setList(data))
+
+        break;
+      case "Buyers":
+        getTopBuyers()
+          .then(({ data }) => setList(data))
+        break;
+      case "Collectors":
+        getTopCollectors()
+          .then(({ data }) => setList(data))
+
+        break
+      case "Artists":
+        getTopArtists()
+          .then(({ data }) => setList(data))
+
+        break
+      default:
+    }
 
     setSubject(type);
-    setList(newList);
   };
   return (
     <Layout headerVariant='full'>
-      <Introduction seeAll={seeAll} subject={subject} />
+      <Introduction numitems={list.length} seeAll={seeAll} subject={subject} />
       <UserList items={list} />
     </Layout>
   );

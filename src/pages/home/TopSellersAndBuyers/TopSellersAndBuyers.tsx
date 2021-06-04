@@ -9,7 +9,7 @@ export default function TopSellersAndBuyers(): JSX.Element {
 
   return (
     <div className={classes.container}>
-      <TopList titleColor='#FF0099' title={text['topSeller']} />
+      <TopList titleColor='#FF0099' title={text['topSellers']} />
       <TopList titleColor='#6A2FE7' title={text['topBuyers']} />
     </div>
   );

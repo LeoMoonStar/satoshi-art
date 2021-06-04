@@ -1,6 +1,6 @@
 import axios from './axios';
 import { readCookie } from './cookie';
-//import { isApprovedArtist, createCollectibleBlock } from './collectibleBlockchain'
+import { createCollectibleToken, getOutstandingBalance } from './createcollectible'
 
 export type MetaData = {
   page: number;
@@ -68,11 +68,11 @@ export type CreateCollectible = {
   };
 };
 
-export const getCollectibleAndNumber = (name?: string): Promise<Response> => {
+export const getCollectibleAndNumber = (name?: string) => {
   return axios.get(`/api/public/search/collectibles/names?field=${name}`);
 };
 
-export const getCollectibles = (name?: string): Promise<Response> => {
+export const getCollectibles = (name?: string) => {
   if (!name) {
     return axios.get(`/api/public/home/collectibles?pageSize=8&page=$1`);
   } else {
@@ -80,21 +80,47 @@ export const getCollectibles = (name?: string): Promise<Response> => {
   }
 };
 
-export const getOnSaleCollectibles = (Id: string, pageSize = 8, page = 1): Promise<Response> => {
-  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=owner`);
-};
+export const getHistory = (collectibleId: string) => {
+  return axios.get(`/api/public/collectibles/trade/${collectibleId}/history`)
+}
 
-export const getOnHoldCollectibles = (Id: string, pageSize = 8, page = 1): Promise<Response> => {
+export const getCollectibleSearches = (name: string) => {
+  return axios.get(`/api/public/search/collectibles?field=${name}`)
+}
+
+export const getUserCollectibles = (Id: string, pageSize = 8, page = 1) => {
+  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=2&user=owner`)
+}
+
+export const getOnSaleCollectibles = (Id: string, pageSize = 8, page = 1, tradable = 1, user = "owner") => {
+  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=owner`)
+}
+
+export const getOnHoldCollectibles = (Id: string, pageSize = 8, page = 1) => {
   return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=0&user=owner`);
 };
 
-export const getCreatorsCollectibles = (Id: string, pageSize = 8, page = 1): Promise<Response> => {
-  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&user=creator`);
+export const getCreatedCollectibles = (Id: string, pageSize = 8, page = 1) => {
+  return axios.get(`/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&user=creator`)
+}
+
+export const getCollectible = (Id: string) => {
+  return axios.get(`/api/public/collectibles/${Id}`);
 };
 
-export const getCollectible = (id: string): Promise<CollectibleInfoResponse> => {
-  return axios.get(`/api/public/collectibles/${id}`);
-};
+export const putCollectibleOnSale = async(Id: string, data: any) => {
+  return axios.put(
+    `/api/auth/${Id}/put-on-sale`,
+    data,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
+}
 
 export const createCollection = (name: string) => {
   return axios.post(
@@ -110,20 +136,24 @@ export const createCollection = (name: string) => {
   );
 };
 
+export const getBalance = async() => {
+  return await getOutstandingBalance(readCookie("metamask_address"));
+}
+
 export const createCollectible = async (data: any) => {
-  //const isApproved = isApprovedArtist(account)
+  const { copies, royalties } = data
 
-  /*if (isApproved) {
-		data.tokenIds = createCollectibleBlock()
-	}*/
+  data.tokenId = await createCollectibleToken(copies, royalties);
 
-  await axios.post(`/api/auth/user/collectibles/create`, data, {
-    headers: {
-      id: readCookie('id'),
-      token: readCookie('token'),
-      metamask_address: readCookie('metamask_address'),
-    },
-  });
-
-  return;
+  await axios.post(
+    `/api/auth/user/collectibles/create`, 
+    data, 
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  );
 };

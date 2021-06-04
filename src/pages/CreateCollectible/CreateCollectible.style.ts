@@ -5,7 +5,7 @@ const useStyles = makeStyles(() => {
     container: {
       width: '100%',
       boxSizing: 'border-box',
-      padding: '147px 236px 100px',
+      padding: '0px 236px 100px',
     },
     goBack: {
       display: 'block',

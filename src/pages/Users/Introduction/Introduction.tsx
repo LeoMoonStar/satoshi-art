@@ -7,17 +7,17 @@ import { ExpandMore } from '@material-ui/icons';
 import { IconButton } from '@material-ui/core';
 import { FilterIcon } from '../../../components/icons';
 
-export default function Introduction({ subject, seeAll }: any): JSX.Element {
+export default function Introduction({ numitems, subject, seeAll }: any): JSX.Element {
   const classes = useStyles();
 
   return (
     <section className={classes.container}>
       <div className={classes.titleWrapper}>
         <h1 className={classes.title}>Top {subject}</h1>
-        <div className={classes.resultsCount}>7.943 results</div>
+        <div className={classes.resultsCount}>{numitems} results</div>
       </div>
       <div className={classes.rightCol}>
-        <div className={classes.selectsGroup}>
+        {/*<div className={classes.selectsGroup}>
           <Select
             className={classes.select}
             label={text['All items ']}
@@ -50,25 +50,29 @@ export default function Introduction({ subject, seeAll }: any): JSX.Element {
             <MenuItem value='Option2'>Oldest</MenuItem>
             <MenuItem value='Option3'>Expensive</MenuItem>
           </Select>
-        </div>
+        </div>*/}
         <div className={classes.filterGroup}>
           <div className={classes.tabs}>
-            <button type='button' className='selected'>
-              Top Sellers
-            </button>
-            <button type='button' onClick={() => seeAll('Buyers')}>
-              Top Buyers
-            </button>
-            <button type='button' onClick={() => seeAll('Collectors')}>
-              Top Collectors
-            </button>
-            <button type='button' onClick={() => seeAll('Artists')}>
-              Top Artists
-            </button>
+            <button type="button" 
+                className={subject == "Sellers" ? "selected" : ""}
+                onClick={() => seeAll('Sellers')}
+            >Top Sellers</button>
+            <button type="button" 
+                className={subject == "Buyers" ? "selected": ""}
+                onClick={() => seeAll('Buyers')}
+            >Top Buyers</button>
+            <button type="button" 
+                className={subject == "Collectors" ? "selected": ""}
+                onClick={() => seeAll('Collectors')}
+            >Top Collectors</button>
+            <button type="button" 
+                className={subject == "Artists" ? "selected": ""}
+                onClick={() => seeAll('Artists')}
+            >Top Artists</button>
           </div>
-          <IconButton className={classes.filterButton}>
+          {/*<IconButton className={classes.filterButton}>
             <FilterIcon />
-          </IconButton>
+          </IconButton>*/}
         </div>
       </div>
     </section>

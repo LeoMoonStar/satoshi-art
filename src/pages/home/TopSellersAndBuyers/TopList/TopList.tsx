@@ -1,17 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import text from '../../../../constants/content';
 import Button from 'components/button';
 import Avatar from 'components/avatar';
 import bradPit from 'components/images/home/bradPitPaint.png';
+import { getTopSellers, getTopBuyers } from 'apis/users'
 
 import useStyles from './TopList.style';
-
-//todo: must be deleted after integration with api
-const items = [
-  { id: 1, metamaskid: '0x194ec3a371463639fd917245405ea3357ff16d36', name: 'Dada', currency: 124.563 },
-  { id: 2, metamaskid: '0x244af495b432dcd987d73441fc05892a8fe7593c', name: 'Kevin', currency: 121.563 },
-];
 
 type TopListProps = {
   titleColor: string;
@@ -20,28 +15,49 @@ type TopListProps = {
 
 export default function TopList({ titleColor, title }: TopListProps): JSX.Element {
   const classes = useStyles();
+  const [topList, setTopList] = useState([])
+
+  useEffect(() => {
+        switch (title) {
+            case "Top Sellers":
+                // fetching top sellers here
+                getTopSellers()
+                    .then((res) => setTopList(res.data))
+
+
+                break
+            case "Top Buyers":
+                // fetching top buyers here
+                getTopBuyers()
+                    .then((res) => setTopList(res.data))
+
+                break
+        }
+    }, [])
 
   return (
     <div className={classes.group}>
       <div className={classes.groupWrapper}>
-        <h2 className={classes.mainTitle} style={{ color: titleColor }}>
-          {title}
-        </h2>
+        <h2 className={classes.mainTitle} style={{ color: titleColor }}>{title}</h2>
         <div className={classes.groupItems}>
-          {items.map(({ id, metamaskid, name, currency }) => {
-            return (
-              <Link to={`/artists/${metamaskid}`} key={id} className={classes.topsItem}>
-                <div className={classes.index}>{id}</div>
+            {topList.length > 0 ? 
+              topList.map(({ isArtist, id, name, avatarUrl, currency }, index) => {
+                return (
+                  <Link to={isArtist ? `/artists/${id}` : `/users/${id}`} key={index} className={classes.topsItem}>
+                    <div className={classes.index}>{index + 1}</div>
 
-                <Avatar size={48} image={bradPit} status='premium' />
+                    <Avatar size={48} image={avatarUrl} status='premium' />
 
-                <div className={classes.info}>
-                  <b className={classes.userName}>{name}</b>
-                  <div className={classes.currency}>{currency}</div>
-                </div>
-              </Link>
-            );
-          })}
+                    <div className={classes.info}>
+                      <b className={classes.userName}>{name}</b>
+                      <div className={classes.currency}>{currency}</div>
+                    </div>
+                  </Link>
+                );
+              })
+              :
+              <div className={classes.noResult}>No {title.toLowerCase()}</div>
+            }
         </div>
         <Link to='/users'>
           <Button className={classes.seeAll}>{text['seeAll']}</Button>

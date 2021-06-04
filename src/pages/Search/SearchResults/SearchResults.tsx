@@ -3,7 +3,6 @@ import SearchHeader from '../SearchHeader';
 import Works from 'components/widgets/Works';
 
 import useStyles from './SearchResults.style';
-import { Token } from 'apis/token';
 import { getCollectibles, Collectible } from 'apis/collectibles';
 
 const tags: TagType[] = [
@@ -47,7 +46,7 @@ export default function SearchResults({ collectibles }: SearchResultsProps): JSX
   const removeTag = (tag: TagType) => {
     const searchtag = selectedTag.length > 0 ? selectedTag[0].title : null;
 
-    setSelectedTag(state => state.filter(item => item.id !== tag.id));
+    setSelectedTag((state) => state.filter(item => item.id !== tag.id));
 
     if (searchtag) {
       getCollectiblesByName(searchtag);
@@ -61,7 +60,8 @@ export default function SearchResults({ collectibles }: SearchResultsProps): JSX
   };
 
   const getCollectiblesByName = (title?: string) => {
-    getCollectibles(title).then(res => setArtistCollectibles(res.data));
+    getCollectibles(title)
+      .then(({ data }) => setArtistCollectibles(data));
   };
 
   return (

@@ -9,7 +9,6 @@ import { changeLoggedWith } from 'state/app/actions';
 import { permittedToUseWalletSelector } from 'state/app/selectors';
 import Button from 'components/button';
 // import { checkUser } from 'api/user'
-
 import useStyles from './WalletOption.style';
 
 type OptionProps = {
@@ -36,7 +35,6 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms, onRequestError
       const connector = wallet.createConnector();
 
       await activate(connector, undefined, true);
-      console.log(wallet);
       dispatch(changeLoggedWith(wallet.name));
       setIsConnectTriggered(false);
 
@@ -65,9 +63,7 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms, onRequestError
 
   if (wallet.href && wallet.name === 'Metamask' && !hasInjectedProvider) {
     return (
-      <a href={wallet.href} target='_blank' rel='noreferrer' className={classes.externalLink}>
-        {connectOption}
-      </a>
+      <a href={wallet.href} target='_blank' rel='noreferrer' className={classes.externalLink}>{connectOption}</a>
     );
   }
 

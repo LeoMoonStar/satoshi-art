@@ -20,7 +20,7 @@ export default function TokenCard({ token, renderContent: RenderContent }: Token
   } = token?.metadata;
 
   return (
-    <Link to={`/product/${token.id}`} className={classes.card} key={token.id}>
+    <Link to={`/edit-collectible/${token.id}`} className={classes.card} key={token.id}>
       <div className={classes.topWrapper}>
         <TokenPreview className={classes.tokenPreview} src='/static/media/work.f8ed0952.jpg' alt={description} />
       </div>

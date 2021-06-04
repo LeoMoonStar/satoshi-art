@@ -17,14 +17,7 @@ import { VAlID_IMAGES_TYPES, VALID_FILE_TYPES } from 'constants/supportedFileTyp
 const FILE_SIZE = 31457280;
 import useStyles from './Support.style';
 
-const ISSUES_THEMES = [
-  'brokenImageOrVideo',
-  'itemNotDisplayed',
-  'other',
-  'questionOrComment',
-  'securityVulnerability',
-  'verificationIssueOrQuestion',
-];
+const ISSUES_THEMES = ['brokenImageOrVideo','itemNotDisplayed','other','questionOrComment','securityVulnerability','verificationIssueOrQuestion'];
 
 const schema = yup.object().shape({
   email: yup.string().required('Your e-mail is required'),
@@ -36,18 +29,9 @@ const schema = yup.object().shape({
     is: (file: FileList) => {
       return file && file.hasOwnProperty(0) && VALID_FILE_TYPES.includes(file[0].type);
     },
-    then: yup
-      .mixed()
-      .test(
-        'fileSize',
-        'The files are too big. You need to upload a smaller ones',
-        value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE
-      )
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)
-      ),
+    then: yup.mixed()
+      .test('fileSize','The files are too big. You need to upload a smaller ones',value => value && value.hasOwnProperty(0) && value[0].size <= FILE_SIZE)
+      .test('fileFormat','Unsupported Format',value => value && value.hasOwnProperty(0) && VAlID_IMAGES_TYPES.includes(value[0].type)),
   }),
 });
 
@@ -63,17 +47,10 @@ interface SupportForm {
 export default function Support() {
   const classes = useStyles();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SupportForm>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      email: 'djfkldsjflkdsjf',
-      issue: 'djfldskjflsdjf',
-      issueSubject: 'issue subject',
-      yourAddress: 'your address',
+  const { register, handleSubmit, formState: { errors }} = useForm<SupportForm>({
+    resolver: yupResolver(schema), defaultValues: {
+      email: 'djfkldsjflkdsjf', issue: 'djfldskjflsdjf',
+      issueSubject: 'issue subject', yourAddress: 'your address',
       describe: 'dsjfkdsjf sljfl jfslajf sdlafj dsf',
     },
   });
@@ -85,7 +62,7 @@ export default function Support() {
     setFiles(prevFiles => [...newFiles, ...prevFiles]);
   };
   const submit = async (data: SupportForm) => {
-    alert(JSON.stringify(data));
+    console.log(data)
   };
 
   return (
@@ -111,9 +88,7 @@ export default function Support() {
               <label htmlFor='issue'>{text['whatDoYouNeedToHelpWith']}</label>
               <Select id='issue' name='issue'>
                 {ISSUES_THEMES.map((issue: string, index: number) => (
-                  <MenuItem value={index} key={index}>
-                    {text[issue]}
-                  </MenuItem>
+                  <MenuItem value={index} key={index}>{text[issue]}</MenuItem>
                 ))}
               </Select>
               <FormHelperText>Please select your issue above</FormHelperText>
@@ -143,18 +118,12 @@ export default function Support() {
               {files.map((file: any, index: number) => (
                 <div key={index} className={classes.fileItem}>
                   {file.name}
-                  <IconButton>
-                    <Close />
-                  </IconButton>
+                  <IconButton><Close /></IconButton>
                 </div>
               ))}
             </FormControl>
-            <Button variantCustom='action' type='submit'>
-              {text['submit']}
-            </Button>
-            <div className={classes.recaptchaWrapper}>
-              <ReCAPTCHA sitekey='SomeKey' />
-            </div>
+            <Button variantCustom='action' type='submit'>{text['submit']}</Button>
+            <div className={classes.recaptchaWrapper}><ReCAPTCHA sitekey='SomeKey' /></div>
           </form>
         </div>
         <div className={classes.rightCol}>

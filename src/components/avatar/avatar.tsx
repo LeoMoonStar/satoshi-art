@@ -16,7 +16,6 @@ type AvatarProps = {
 export default function Avatar({
   size = 60,
   image,
-  // alt = '',
   className = '',
   onClick,
   status = null,

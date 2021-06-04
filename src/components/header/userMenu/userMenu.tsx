@@ -6,15 +6,15 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useSelector } from 'react-redux';
 import { AppState } from 'state';
-import { permittedToUseWalletAndWhiteListedSelector, permittedToUseWalletSelector } from 'state/app/selectors';
 import { shortAddress } from 'utils/helpers';
 
 import Avatar from 'components/avatar';
 import { CopyIcon, BalanceIcon, ProfileIcon, ItemsIcon, DisconnectIcon } from 'components/icons';
 import { TotalBidsIcon } from 'components/icons/dashboard';
 import avatar from 'components/images/artist/avatar.jpg';
-import { useDisconnect } from 'hooks/useDisconnect';
+import { useConnect, useDisconnect } from 'hooks/useDisconnect';
 import { getUserInfo } from 'apis/users';
+import { getBalance } from 'apis/collectibles'
 import text from 'constants/content';
 import useStyles from './userMenu.style';
 import { readCookie } from '../../../apis/cookie';
@@ -32,72 +32,53 @@ const UserMenu = (): JSX.Element | null => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState('');
   const { account, library } = useWeb3React<Web3Provider>();
-  const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
+  const isWalletPermitted = true
   const handleDisconnect = useDisconnect();
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
-  const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
-  const Id = account ? readCookie('id') : null;
+  const Id = readCookie('id')
 
   useEffect(() => {
     async function getBalance() {
       if (library && account && isWalletPermitted) {
-        const userEthBalance = await library.getBalance(account);
+        //const userEthBalance = await library.getBalance(account);
 
-        setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
+        //setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
       }
     }
-    getBalance();
+    //getBalance();
 
-    if (account) {
-      getUserInfo(Id!).then(res => {
-        setIsArtist(res.data.isArtist);
-        setUserAvatar(res.data.avatarUrl);
+    if (Id) {
+      getUserInfo(Id).then(({ data }) => {
+        setIsArtist(data.isArtist);
+        setUserAvatar(data.avatarUrl);
       });
+
+      getBalance()
+        .then((res: any) => setBalance(res))
     }
   }, [account, library, isWalletPermitted]);
 
   const userAddress = useMemo(() => {
-    if (!!account) return shortAddress(account, 10);
+    //if (!!account) return shortAddress(account, 10);
   }, [account]);
 
   if (!account || !isWalletPermitted) return null;
 
   return (
-    <div
-      className={classes.userMenu}
-      onMouseEnter={() => {
-        console.log('Mouse over');
-        setOpen(!isOpen);
-      }}
-      onMouseLeave={() => {
-        setOpen(!isOpen);
-      }}
-    >
-      <div ref={anchorElRef}>
-        <Link to='/dashboard/user'>
-          <Avatar size={40} image={userAvatar ? userAvatar : avatar} />
-        </Link>
-      </div>
+    <div className={classes.userMenu}>
+      <Link to='/dashboard/user'>
+        <div ref={anchorElRef} onMouseEnter={() => setOpen(!isOpen)}>
+            <Avatar size={40} image={userAvatar ? userAvatar : avatar}/>
+        </div>
+      </Link>
 
-      <Popover
-        open={isOpen}
-        anchorEl={anchorElRef?.current}
-        onClose={() => setOpen(false)}
-        classes={{ root: classes.popover }}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
+      <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <div>
           <div className={classes.nickName}>
             {userAddress}
-            <IconButton onClick={() => navigator.clipboard.writeText(account)}>
-              <CopyIcon />
-            </IconButton>
+            <IconButton onClick={() => navigator.clipboard.writeText(account)}><CopyIcon /></IconButton>
           </div>
-          <Link to='/' className={classes.profileLink}>
-            Set display name
-          </Link>
           <ul className={classes.balances}>
             <li>
               <BalanceIcon />
@@ -110,7 +91,7 @@ const UserMenu = (): JSX.Element | null => {
             <div className={classes.managefunds}>Manage funds on Zerion</div>
           </ul>
 
-          {!isWhiteListedAndHasPermittedWallet && (
+          {account && (
             <ul className={classes.links}>
               {userLinks.map((link, index) => (
                 <li key={index}>

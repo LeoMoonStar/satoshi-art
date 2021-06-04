@@ -5,13 +5,13 @@ import Select from 'components/widgets/Select';
 import useStyles from './Introduction.style';
 import { ExpandMore } from '@material-ui/icons';
 
-export default function Introduction(): JSX.Element {
+export default function Introduction({ numitems}: any): JSX.Element {
   const classes = useStyles();
 
   return (
     <section className={classes.container}>
       <h1 className={classes.title}>Drop of the day history</h1>
-      <div className={classes.resultsCount}>7.943 results</div>
+      <div className={classes.resultsCount}>{numitems} results</div>
       <Select
         className={classes.select}
         label={text['All items ']}

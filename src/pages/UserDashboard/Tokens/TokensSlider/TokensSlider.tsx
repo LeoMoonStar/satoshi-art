@@ -115,18 +115,23 @@ export default function TokensSlider({
             </Button>
           )}
         </div>
-        <div className={classes.sliderRow}>
-          <Slider
-            className={cx(classes.slider, {
-              [classes.sliderHasNotMore]: !isHasMore,
-            })}
-            responsive={responsive}
-            infinite={isHasMore}
-            {...sliderConfig}
-          >
-            {children}
-          </Slider>
-        </div>
+        
+        {count > 0 ? 
+          <div className={classes.sliderRow}>
+            <Slider
+              className={cx(classes.slider, {
+                [classes.sliderHasNotMore]: !isHasMore,
+              })}
+              responsive={responsive}
+              infinite={isHasMore}
+              {...sliderConfig}
+            >
+              {children}
+            </Slider>
+          </div>
+          :
+          <div>There is nothing here</div>
+        }
       </div>
     </>
   );
