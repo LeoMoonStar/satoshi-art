@@ -4,6 +4,7 @@ import tokenContractABI from './SatoshiART1155.json';
 import { getToken } from 'apis/token';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/bc7b2cf614a04ab3b4acbcd09a43dc6b'));
 
 const getWeb3Instance = () => {
@@ -78,13 +79,12 @@ const checkTokenBalance = async (artistAddress, tokenId) => {
 const isApprovedArtist = async artistAddress => {
   const { contractInstance } = getTokenContract();
 
-    const creatorRoleByte = await contractInstance.CREATOR_ROLE();
-    const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress);
+  const creatorRoleByte = await contractInstance.CREATOR_ROLE();
+  const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress);
 
-    console.log(`The creator approval status of address(${artistAddress}) is ${approval}.`);
+  console.log(`The creator approval status of address(${artistAddress}) is ${approval}.`);
 
-    return approval;
-
+  return approval;
 };
 const grantRole = async (artistAddress, adminAddress) => {
   const { contractInstance } = getTokenContract();
@@ -103,34 +103,6 @@ const isApprovedForAll = async (address1, address2) => {
   const result = await contract.methods.isApprovedForAll(address1, address2).call({ from: address1 });
   return result;
 };
-// const tokenContractCreateItem = async (collectibleCount, royalty, fromAddress) => {
-//   // const contract = getTokenContract();
-//   const networkId = Object.keys(tokenContractABI.networks)[0];
-//   const deployedNetwork = tokenContractABI.networks[networkId];
-//   console.log(deployedNetwork);
-//   const contract = new web3.eth.Contract(tokenContractABI.abi, deployedNetwork && deployedNetwork.address);
-
-//   const provider = await detectEthereumProvider();
-//   console.log(contract.methods.createItem(collectibleCount, royalty));
-//   console.log(collectibleCount, royalty, fromAddress);
-//   const transactionParameters = {
-//     from: fromAddress,
-//     gas: gas, // 30400
-//     data: contract.methods.createItem(collectibleCount, royalty).encodeABI(),
-//   };
-
-//   if (provider) {
-//     console.log(provider.isConnected());
-//     const result = await provider.request({
-//       method: 'eth_sendTransaction',
-//       params: [transactionParameters],
-//     });
-//     return result;
-//   } else {
-//     alert('Please connect with metamask first.');
-//   }
-//   // return contract.methods.createItem(collectibleCount, royalty).send({ from: fromAddress, gas: gas });
-// };
 
 const etherFunctionCreateItem = async (collectibleCount, royalty) => {
   const { contractWithSigner } = getTokenContract();
@@ -138,17 +110,17 @@ const etherFunctionCreateItem = async (collectibleCount, royalty) => {
   const receipt = await contractWithSigner.createItem(collectibleCount, royalty);
   const log = await receipt.wait();
   const ids = log.events[0].args.ids;
-  console.log(ids);
-  const BN = web3.utils.BN;
-  const idInString = [];
+  console.log(ids[0]._hex);
+  const idinhex = ids[0]._hex;
+  const inString = idinhex.toString();
+  console.log(inString);
 
-  for (let i = 0; i < ids.length; i++) {
-    const value = ids[i]._hex;
-    console.log('144', value);
-    const id = new BN(value.toString()).toString();
-    idInString.push(id);
-  }
-  return idInString;
+  const id = web3.utils.hexToNumber(inString);
+
+  console.log(147, id);
+  // const id = new BN(inString).toString();
+
+  return id;
 };
 
 export default {
