@@ -151,9 +151,6 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                 <div className={classes.searchIcon}><SearchIcon /></div>
                 <TextField
                   onMouseEnter={() => setInSearch(true)}
-                  onKeyUp={e => {
-                    if (e.keyCode == 13) location.replace('/search/' + searches);
-                  }}
                   InputProps={{
                     disableUnderline: true,
                     type: 'search',
@@ -170,7 +167,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
                 {InSearch && (
                   <div className={classes.nftSearchBox}>
-                    {searchResult.map((item, index) => (
+                    {searchResult.length > 0 && searchResult.map((item: any, index: number) => (
                       <Link key={index} to={`/search/${item[1]}`} style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between', marginRight: '5px' }}>
                         <div className={classes.searchResult}>{item[0]}</div>
                       </Link>

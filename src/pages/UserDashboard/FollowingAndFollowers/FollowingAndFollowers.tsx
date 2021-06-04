@@ -4,9 +4,9 @@ import text from '../../../constants/content';
 import Avatar from 'components/avatar';
 import Button from 'components/button';
 import { LikeIcon, ViewsIcon } from 'components/icons';
-import { readCookie } from 'apis/cookie'
-import { getUserInfo, getFollowers, getFollowings } from 'apis/users'
-import { getUserCollectibles } from 'apis/collectibles'
+import { readCookie } from '../../../apis/cookie'
+import { getUserInfo, getFollowers, getFollowings } from '../../../apis/users'
+import { getUserCollectibles } from '../../../apis/collectibles'
 
 import useStyles from './FollowingAndFollowers.style';
 
