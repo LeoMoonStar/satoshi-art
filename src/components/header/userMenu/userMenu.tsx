@@ -72,11 +72,11 @@ const UserMenu = (): JSX.Element | null => {
 
   return (
     <div className={classes.userMenu}>
-      <div ref={anchorElRef}>
-        <Link to='/dashboard/user'>
-          <Avatar size={40} image={userAvatar ? userAvatar : avatar} />
-        </Link>
-      </div>
+      <Link to='/dashboard/user'>
+        <div ref={anchorElRef} onMouseEnter={() => setOpen(!isOpen)}>
+            <Avatar size={40} image={userAvatar ? userAvatar : avatar}/>
+        </div>
+      </Link>
 
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <div>
