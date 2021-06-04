@@ -8,17 +8,19 @@ import { useSelector } from 'react-redux';
 import { AppState } from 'state';
 import { permittedToUseWalletAndWhiteListedSelector, permittedToUseWalletSelector } from 'state/app/selectors';
 import { shortAddress } from 'utils/helpers';
+import Web3 from 'web3';
 
 import Avatar from 'components/avatar';
 import { CopyIcon, BalanceIcon, ProfileIcon, ItemsIcon, DisconnectIcon } from 'components/icons';
 import { TotalBidsIcon } from 'components/icons/dashboard';
 import avatar from 'components/images/artist/avatar.jpg';
-import { useConnect, useDisconnect } from 'hooks/useDisconnect';
+import { useDisconnect } from 'hooks/useDisconnect';
 import { getUserInfo } from 'apis/users';
 import { getBalance } from 'apis/collectibles'
 import text from 'constants/content';
 import useStyles from './userMenu.style';
 import { readCookie } from '../../../apis/cookie';
+declare let window: any;
 
 const userLinks = [{ title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> }];
 
@@ -33,33 +35,32 @@ const UserMenu = (): JSX.Element | null => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [balance, setBalance] = useState('');
   const { library } = useWeb3React<Web3Provider>();
+  const [account, setAccount] = useState<string>('');
   const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
-  const handleDisconnect = useDisconnect();
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
+  const handleDisconnect = useDisconnect();
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
-  const connected = useConnect()
-  const { account } = useWeb3React();
-  const Id = account ? readCookie('id') : null
+  const Id = window.ethereum.selectedAddress ? readCookie('id') : null;
 
   useEffect(() => {
     async function getBalance() {
-      if (library && account && isWalletPermitted) {
-        const userEthBalance = await library.getBalance(account);
-
+      if (window.ethereum.selectedAddress) {
+        const web3 = new Web3(window.ethereum);
+        const Accounts = await web3.eth.getAccounts();
+        setAccount(Accounts[0]);
+        const userEthBalance = await web3.eth.getBalance(window.ethereum.selectedAddress);
+        console.log('Balance', userEthBalance);
         setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
       }
     }
     getBalance();
 
-    if (account) {
-      getUserInfo(Id!).then(({ data }) => {
+    if (Id) {
+      getUserInfo(Id).then(({ data }) => {
         setIsArtist(data.isArtist);
         setUserAvatar(data.avatarUrl);
       });
-
-      getBalance()
-        .then((res: any) => setBalance(res))
     }
   }, [account, library, isWalletPermitted]);
 
@@ -67,15 +68,15 @@ const UserMenu = (): JSX.Element | null => {
     if (!!account) return shortAddress(account, 10);
   }, [account]);
 
-  if (!account) return null;
+  if (!window.ethereum.selectedAddress || !isWalletPermitted) return null;
 
   return (
     <div className={classes.userMenu}>
-      <Link to='/dashboard/user'>
-        <div ref={anchorElRef} onMouseEnter={() => setOpen(!isOpen)}>
-            <Avatar size={40} image={userAvatar ? userAvatar : avatar}/>
-        </div>
-      </Link>
+      <div ref={anchorElRef}>
+        <Link to='/dashboard/user'>
+          <Avatar size={40} image={userAvatar ? userAvatar : avatar} />
+        </Link>
+      </div>
 
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <div>
