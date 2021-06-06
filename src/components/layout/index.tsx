@@ -1,7 +1,13 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import Header from '../header';
 import Footer from './footer';
 import useStyles from './layout.style';
+import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies } from 'apis/cookie';
+import Web3 from 'web3';
+import axios from 'axios';
+import { useWeb3React } from '@web3-react/core';
+import { useConnect } from 'hooks/useDisconnect';
+
 
 declare let window: any;
 
@@ -31,6 +37,75 @@ const Layout = ({
 ILayoutProps): JSX.Element => {
   const classes = useStyles();
   //useUserWhiteListChecking();
+
+  let { account } = useWeb3React();
+  const connected = useConnect();
+  const sign = async () => {
+    if (window.ethereum.selectedAddress) {
+      // resolve temporary problem
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        console.log('Accounts', accounts);
+        account = accounts[0];
+        try {
+          await window.ethereum.request({
+            method: 'eth_requestAccounts',
+          });
+
+          if (isInLoginAsMode()) {
+            console.log('user sign in');
+          } else {
+            console.log(`Account before get challenge ${account}`);
+            const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
+            const challenge = res.data;
+
+            (web3 as any).currentProvider.send(
+              {
+                method: 'eth_signTypedData',
+                params: [challenge.challenge, account],
+                from: account,
+              },
+              (error: any, res: any) => {
+                eraseLoginAsCookies();
+                axios
+                  .get(
+                    `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
+                  )
+                  .then(sigRes => {
+                    if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
+                      console.log('Signature verified');
+                      createLoginAsCookies({
+                        id: sigRes.data.id,
+                        metamask_address: sigRes.data.metamaskId,
+                        token: sigRes.data.token,
+                      });
+                    } else {
+                      console.log('Signature not verified');
+                    }
+                  })
+                  .catch(err => console.log(err));
+              }
+            );
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    } else {
+      console.log('No account detected');
+      eraseLoginAsCookies();
+    }
+  };
+  useEffect(() => {
+    sign();
+  });
+
+  useEffect(() => {
+    window.ethereum.on('disconnect', () => {
+      console.log('detect disconnection');
+    });
+  });
 
   return (
     <div className={classes.container}>

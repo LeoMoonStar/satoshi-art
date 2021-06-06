@@ -5,6 +5,7 @@ import { disconnectAccount } from 'state/app/actions';
 import Web3 from 'web3';
 declare let window: any;
 
+const web3 = new Web3(window.ethereum);
 /**
  * Disconnect user wallet and clear redux state related to this wallet
  */

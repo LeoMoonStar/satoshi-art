@@ -13,9 +13,9 @@ import useStyles from './header.style';
 import { useConnect } from 'hooks/useDisconnect';
 import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies, readCookie } from 'apis/cookie';
 import { getCollectibleAndNumber } from 'apis/collectibles';
-import Avatar from 'components/avatar';
 import UserMenu from './userMenu';
 import Notifications from './Notifications'
+declare let window: any;
 
 const mockSample: any[] = [['sample', 2]];
 const SearchPopper = function (props: PopperProps) {
@@ -33,87 +33,45 @@ type HeaderProps = { inverseHeader?: boolean; hasDivider?: boolean };
 //   return Object.entries(result);
 // }
 
+
+  
+const SearchResultCell = ({ key, name, classes, number }: any) => {
+  return (
+    <Link
+      to={`/search/${name}`}
+      style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between', marginRight: '5px' }}
+    >
+      <div className={classes.searchResult}>{name}</div>
+      <div> {`${number ? number : 0} items`}</div>
+    </Link>
+  );
+};
+
 export default function Header({ inverseHeader = false, hasDivider = true }: HeaderProps): JSX.Element {
+  const userId = readCookie("id");
   const classes = useStyles();
-  const userId = readCookie("id")
   const [InSearch, setInSearch] = useState(false);
   const [searches, setSearches] = useState('');
   const [searchResult, setSearchResult] = useState([...mockSample]);
   const [searchCollectible, setSearchCollectible] = useState('')
   const [showNotif, setShowNotif] = useState(false);
   const [isArtist, setIsArtist] = useState<boolean>(false);
-  const [avatar, setAvatar] = useState('');
-  let { account } = useWeb3React();
+  const [userAvatar, setUserAvatar] = useState('');
   const connected = useConnect();
-  
-  const getSignature = async() => {
-      if (connected) {
-        if ((window as any).ethereum) {
-            const web3 = new Web3((window as any).ethereum);
-            const accounts = await web3.eth.getAccounts();
-
-            account = accounts[0]
-
-            try {
-                await (window as any).ethereum.request({ method: "eth_requestAccounts" });
-
-                if (isInLoginAsMode()) {
-                    console.log("cookie")
-                    console.log("id", readCookie("id"))
-                    console.log("metamask_address", readCookie("metamask_address"))
-                    console.log("token", readCookie("token"))
-                } else {
-                    const res = await fetch(
-                        `${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`
-                    );
-                    const challenge = await res.json();
-                    
-                    (web3 as any).currentProvider.send({
-                        method: "eth_signTypedData",
-                        params: [challenge.challenge, connected],
-                        from: connected
-                    },
-                    (error: any, res: any) => {
-                        eraseLoginAsCookies()
-
-                        console.log("signature: " + res.result)
-                        console.log("metamessage: " + challenge.challenge[1].value)
-                        console.log("metasignature: " + res.result)
-                        console.log("metaaddress: " + connected)
-                        
-                        axios.get(
-                            `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
-                        ).then(sigRes => {                                 
-                            if (sigRes.status === 200 && sigRes.data.recover === connected) {
-                                const { id, metamaskId, token } = sigRes.data
-
-                                createLoginAsCookies({ id: id, metamask_address: metamaskId, token: token })
-
-                                console.log("id", id)
-                                console.log("metamask_address", metamaskId)
-                                console.log("token", token)
-                                
-                                console.log("Signature verified")
-                            } else {
-                                console.log("Signature not verified")
-                            }
-
-
-                        }).catch(err => console.log(err))
-                    });
-                }
-            } catch (err) {
-                console.log(err)
-            }
-        }
-      } else {
-        console.log('No account detected');
-        eraseLoginAsCookies();
+  useEffect(() => {
+    console.log('header rendered');
+    if (connected) {
+      const id = readCookie('id');
+      if (id) {
+        getUserInfo(id).then((res: any) => {
+          setIsArtist(res.data.isArtist);
+          console.log('setting avatar');
+          setUserAvatar(res.data.avatarUrl);
+        });
       }
-  }
+  }})
 
   useEffect(() => {
-    getSignature()
     if (searches) {
       getCollectibleAndNumber(searches)
         .then(({ data }) => {
@@ -127,7 +85,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
     if (userId) {
       getUserInfo(userId).then(({ data }) => {
         setIsArtist(data.isArtist);
-        setAvatar(data.avatarUrl);
+        setUserAvatar(data.avatarUrl);
       });
     }
   }, [searches]);
@@ -207,7 +165,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
               </>
             )}
 
-            <UserMenu />
+            <UserMenu avatarUrl={userAvatar} />
           </div>
         </div>
       </div>

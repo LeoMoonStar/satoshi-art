@@ -31,9 +31,7 @@ const WalletOption: React.FC<OptionProps> = ({ wallet, openTerms, onRequestError
   const connectWallet = async () => {
     try {
       setIsConnectTriggered(true);
-
       const connector = wallet.createConnector();
-
       await activate(connector, undefined, true);
       dispatch(changeLoggedWith(wallet.name));
       setIsConnectTriggered(false);

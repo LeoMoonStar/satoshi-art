@@ -1,5 +1,6 @@
 import { TokenType } from 'state/transactions/actions';
 import axios from './axios';
+import { putOnSaleAbi } from 'abis/buy_and_sell';
 
 export type Token = {
   TokenID: string;
@@ -40,6 +41,12 @@ export const getToken = (id: string): Promise<Token> => {
   return axios.get(`/products/${id}`);
 };
 
-export const putTokenOnSaleAPI = ({ id, tx_hash, price, copiesOnSale, offerIndex }: PutOnSaleParams): Promise<void> => {
+export const putTokenOnSaleAPI = async ({
+  id,
+  tx_hash,
+  price,
+  copiesOnSale,
+  offerIndex,
+}: PutOnSaleParams): Promise<void> => {
   return axios.put(`/products/${id}`, { status: 'waitForSale', tx_hash, price, copiesOnSale, offerIndex });
 };

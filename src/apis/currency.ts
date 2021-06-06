@@ -6,6 +6,5 @@ type CurrencyType = {
 
 export const getCurrency = async (): Promise<string> => {
   const { currency }: CurrencyType = await axios.get('et-hto-us-dcurrency');
-
   return currency;
 };

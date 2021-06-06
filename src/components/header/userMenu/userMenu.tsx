@@ -29,7 +29,7 @@ if (process.env.REACT_APP_SPECIAL_MODE !== 'production') {
   userLinks.push({ title: 'editProfile', href: '/edit-profile', icon: <ProfileIcon /> });
 }
 
-const UserMenu = (): JSX.Element | null => {
+const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
   const classes = useStyles();
   const anchorElRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -71,12 +71,22 @@ const UserMenu = (): JSX.Element | null => {
   if (!window.ethereum.selectedAddress || !isWalletPermitted) return null;
 
   return (
-    <div className={classes.userMenu}>
-      <Link to='/dashboard/user'>
-        <div ref={anchorElRef} onMouseEnter={() => setOpen(!isOpen)}>
-            <Avatar size={40} image={userAvatar ? userAvatar : avatar}/>
-        </div>
-      </Link>
+    <div
+      className={classes.userMenu}
+      onMouseEnter={() => {
+        console.log('Mouse over');
+        setOpen(!isOpen);
+      }}
+      onMouseLeave={() => {
+        setOpen(!isOpen);
+      }}
+    > 
+
+      <div ref={anchorElRef}>
+        <Link to='/dashboard/user'>
+          <Avatar size={40} image={avatarUrl ? avatarUrl : avatar} />
+        </Link>
+      </div>
 
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <div>

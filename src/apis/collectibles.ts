@@ -1,6 +1,8 @@
 import axios from './axios';
 import { readCookie } from './cookie';
 import { createCollectibleToken, getOutstandingBalance } from './createcollectible'
+//import { isApprovedArtist, createCollectibleBlock } from './collectibleBlockchain'
+import { createCollectibleAbi } from 'abis/buy_and_sell';
 
 export type MetaData = {
   page: number;
@@ -136,14 +138,15 @@ export const removeCollectibleFromSale = async(Id: string) => {
 }
 
 export const createCollection = (name: string) => {
+  const [id, token, metamask_address] = [readCookie('id'), readCookie('token'), readCookie('metamask_address')];
   return axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/collections/create`,
     { collectionName: name },
     {
       headers: {
-        id: readCookie('id'),
-        token: readCookie('token'),
-        metamask_address: readCookie('metamask_address'),
+        id,
+        token,
+        metamask_address,
       },
     }
   );

@@ -26,23 +26,29 @@ export const createSignature = async (from: string): Promise<void> => {
   return signedReceipt as any;
 };
 
+const tokenContractAddress = config.tokenContractAddress;
+const marketplaceContractAddress = config.marketplaceContractAddress;
+// const marketplaceContract = new web3.eth.Contract(marketplaceContractAbi, marketplaceContractAddress);
+
+// const tokenContractAbi = tokenContractBuildJSON.abi;
+// const tokenContract = new web3.eth.Contract(tokenContractAbi, tokenContractAddress);
 
 const sendTransaction = async (
-  fromKey: string,
+  from: string,
   to: string,
   abiEncoding: string,
   value = 0,
   gas = 200000
 ): Promise<any> => {
   const txData = {
-    from: web3.eth.accounts.privateKeyToAccount(fromKey).address,
+    from: from,
     to: to,
     data: abiEncoding,
     gas: gas,
     value: value,
   };
 
-  const signedTx = await web3.eth.accounts.signTransaction(txData, fromKey).then(res => res);
+  const signedTx = await web3.eth.accounts.signTransaction(txData, from).then(res => res);
 
   const tx = web3.eth.sendSignedTransaction(signedTx.rawTransaction as string);
 
@@ -68,7 +74,7 @@ const sendTransaction = async (
  *
  * 1. Create Process
  * - Validate whether the user is an approved artist by isApprovedArtist()
- * - Creat the item on blokchain by createCollectible()
+ * - Creat the item on blokchain by createCollectibleAbi()
  * - Get the tokenId from the previous step
  * - Call our backend API to store the newly created item in our database
  *
@@ -98,14 +104,14 @@ export const isApprovedArtist = async (artistAddress: string): Promise<boolean> 
  *
  * To add more testing artist, please contact lucas.pan@fintelics.com.
  **/
-export const createCollectible = async (
-  private_key: string,
+export const createCollectibleAbi = async (
+  creatorAddress: string,
   collectibleCount: number,
   royalty: number // royalty ranges from 0 to 1000, corresponding to 0% to 10%
 ): Promise<number[]> => {
   const res = await sendTransaction(
-    private_key,
-    config.tokenContractAddress as string,
+    creatorAddress,
+    tokenContractAddress as string,
     tokenContract.methods.createItem(collectibleCount, royalty).encodeABI(),
     0,
     500000
@@ -138,10 +144,10 @@ export const checkTokenBalance = async (artistAddress: string, tokenId: number):
  *
  * if you create wiht put on sale need to call this funciton...creare collecitble
  **/
-export const putOnSale = async (sellerPrivateKey: string, tokenId: number, price: number): Promise<void> => {
+export const putOnSaleAbi = async (sellerAddress: string, tokenId: number, price: number): Promise<void> => {
   await sendTransaction(
-    sellerPrivateKey,
-    config.marketplaceContractAddress as string,
+    sellerAddress,
+    marketplaceContractAddress as string,
     marketplaceContract.methods.putOnSale(tokenId, web3.utils.toWei(String(price), 'ether')).encodeABI()
   );
 
@@ -156,14 +162,14 @@ export const putOnSale = async (sellerPrivateKey: string, tokenId: number, price
  * The buyer can call this method.
  **/
 export const buy = async (
-  buyerPrivateKey: string,
+  buyerAddress: string,
   tokenId: number,
   sellerAddress: string,
   payment: number
 ): Promise<void> => {
   await sendTransaction(
-    buyerPrivateKey,
-    config.marketplaceContractAddress as string,
+    buyerAddress,
+    marketplaceContractAddress as string,
     marketplaceContract.methods.buy(tokenId, sellerAddress).encodeABI(),
     parseInt(web3.utils.toWei(String(payment), 'ether') as string)
   );
@@ -176,16 +182,14 @@ export const buy = async (
  *
  * The seller can call this method.
  **/
-export const withdrawOutstandingBalance = async (privateKey: string): Promise<void> => {
+export const withdrawOutstandingBalance = async (address: string): Promise<void> => {
   await sendTransaction(
-    privateKey,
-    config.marketplaceContractAddress as string,
+    address,
+    marketplaceContractAddress as string,
     marketplaceContract.methods.withdrawPayment().encodeABI()
   );
 
-  console.log(
-    `The outstanding balance has been withdrawn to ${web3.eth.accounts.privateKeyToAccount(privateKey).address}.`
-  );
+  console.log(`The outstanding balance has been withdrawn to ${address}.`);
 };
 
 export const getOutstandingBalance = async (address: string): Promise<string> => {
@@ -204,14 +208,14 @@ export const getOutstandingBalance = async (address: string): Promise<string> =>
  * Only marketplace owner can call the function
  */
 export const dropOfTheDayBuy = async (
-  buyerPrivateKey: string,
+  buyerAddress: string,
   tokenId: number,
   sellerAddress: number,
   payment: number
 ): Promise<void> => {
   await sendTransaction(
-    buyerPrivateKey,
-    config.marketplaceContractAddress as string,
+    buyerAddress,
+    marketplaceContractAddress as string,
     marketplaceContract.methods.dropOfTheDayBuy(tokenId, sellerAddress).encodeABI(),
     parseInt(web3.utils.toWei(String(payment), 'ether'))
   );

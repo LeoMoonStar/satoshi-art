@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+
 import { useHistory } from 'react-router-dom';
 import { Typography, Divider, FormControl, FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Web3 from 'web3';
+
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { useDispatch } from 'react-redux';
@@ -27,10 +27,6 @@ function Wallets(): JSX.Element {
   const wallets = useWallets();
   const history = useHistory();
 
-  const [web3, setWeb3] = useState(null);
-  const [accounts, setAccounts] = useState([]);
-  const [challenge, setChallege] = useState(null);
-  const [signature, setSignature] = useState(null);
 
   const openTerms = () => setOpen(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setFields({ ...fields, [event.target.name]: event.target.checked });
