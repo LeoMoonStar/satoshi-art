@@ -15,18 +15,14 @@ export type UserProfile = {
   };
 };
 
-export const getDropOfTheDay = (): Promise<any> => {
-  return axios.get(`/api/public/home/dropOfTheDay`);
+export const getDropOfTheDay = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/home/dropOfTheDay`);
 };
 
-export const getUserProfile = (userId: string): Promise<UserProfile> => {
-  return axios.get(`/api/public/user/${userId}/profile`);
-};
-
-export const followUser = (otherUserId: string): Promise<any> => {
-  return axios.post(
+export const followUser = async (otherMetamaskId: string) => {
+  await axios.post(
     `/api/auth/user/follow`,
-    { followingMetamaskId: otherUserId },
+    { followingMetamaskId: otherMetamaskId },
     {
       headers: {
         id: readCookie('id'),
@@ -35,33 +31,114 @@ export const followUser = (otherUserId: string): Promise<any> => {
       },
     }
   );
+
+  return;
 };
 
-export const unfollowUser = async (otherUserId: string): Promise<any> => {
-  return axios.delete(`/api/auth/user/${otherUserId}/unfollow`, {
+export const unfollowUser = async (otherMetamaskId: string) => {
+  await axios.delete(`${process.env.REACT_APP_API}/api/auth/user/${otherMetamaskId}/unfollow`, {
     headers: {
       id: readCookie('id'),
       token: readCookie('token'),
       metamask_address: readCookie('metamask_address'),
     },
   });
+
+  return;
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const updateProfile = (data: any): Promise<any> => {
-  return axios.put(`/api/auth/user/edit-profile`, data, {
+export const updateProfile = async (data: any) => {
+  await axios.put(
+    `/api/auth/user/edit-profile`, 
+    data, {
     headers: {
       id: readCookie('id'),
       token: readCookie('token'),
       metamask_address: readCookie('metamask_address'),
     },
   });
+
+  return 'success';
 };
 
-export const getFollowers = (userId: string, pageSize: number, page: number): Promise<any> => {
-  return axios.get(`/api/public/user/${userId}/followers?pageSize=${pageSize}&page=${page}`);
+export const getFollowers = (Id: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/followers?pageSize=5&page=1`);
 };
 
-export const getFollowings = (userId: string, pageSize: number, page: number): Promise<any> => {
-  return axios.get(`/api/public/user/${userId}/followings?pageSize=${pageSize}&page=${page}`);
+export const getFollowings = (Id: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/followings?pageSize=5&page=1`);
 };
+
+export const userBecomeArtist = () => {
+  return axios.post(
+    `/api/auth/user/request`,
+    { headers: {
+      id: readCookie("id"), 
+      token: readCookie('token'), 
+      metamask_address: readCookie('metamask_address') 
+    }}
+  )
+}
+
+export const getUserInfo = (Id: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/profile?=`)
+}
+
+export const getCelebrityInfo = (Id: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/celebrity-profile`)
+}
+
+export const getChallenge = (metamaskId: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/auth/${metamaskId.toLowerCase()}`)
+}
+
+export const getSignature = (challenge: string, token: string, metamaskId: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/auth/${challenge}/${token}/${metamaskId}`)
+}
+
+export const getTopSellers = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/top-seller`)
+}
+
+export const getTopBuyers = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/top-buyer`)
+}
+
+export const getTopCollectors = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/top-collector`)
+}
+
+export const getTopArtists = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/top-artist`)
+}
+
+export const getLargestCollections = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/largest-collections`)
+}
+
+export const getOrderList = (pageSize = 8, page = 1) => {
+  return axios.get(
+    `/api/auth/user/order-list?pageSize=${pageSize}&page=${page}`,
+    { headers: {
+      id: readCookie("id"), 
+      token: readCookie('token'), 
+      metamask_address: readCookie('metamask_address') 
+    }}
+  )
+}
+
+export const updateCelebrityProfile = (data: any) => {
+  return axios.post(
+    `/api/auth/user/celebrity/profile`,
+    data,
+    { headers: {
+      id: readCookie("id"), 
+      token: readCookie('token'), 
+      metamask_address: readCookie('metamask_address') 
+    }}
+  )
+}
+
+export const getNotifications = () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/auth/notification`)
+}

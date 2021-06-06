@@ -1,9 +1,8 @@
 import React from 'react';
 // import { Input } from '@material-ui/core'
-// import Button from 'shared/Button'
-// import { useTranslation } from 'react-i18next'
+// import Button from 'components/button'
+// import text from 'public/content.js'
 import { TwitterIcon, InstagramIcon, SatoshiArtIcon } from 'components/icons';
-// import TextGradient from 'shared/TexGradient'
 
 import FooterMenu from './footerMenu';
 import useStyles from './footer.style';

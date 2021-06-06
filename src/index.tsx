@@ -9,17 +9,15 @@ import store from './state';
 import { createBrowserHistory } from 'history';
 import { Web3ReactProvider } from '@web3-react/core';
 import { getLibrary } from './utils/helpers';
-import Home from 'pages/home';
+import Home from './pages/Home';
+import AppRouter from 'routes';
+import './index.css';
 
 const routes = (
   <Web3ReactProvider getLibrary={getLibrary}>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <Router history={createBrowserHistory()}>
-          <Switch>
-            <Route exact path='/' component={Home} />
-          </Switch>
-        </Router>
+        <AppRouter />
       </ThemeProvider>
     </Provider>
   </Web3ReactProvider>

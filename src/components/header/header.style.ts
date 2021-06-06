@@ -44,80 +44,24 @@ const useStyles = makeStyles(theme => {
     },
     bottomRow: {
       display: 'flex',
-      width: '100%',
-      height: 51,
-    },
-    innerBottomRow: {
-      width: '100%',
-      marginTop: -55,
-      alignItems: 'center ',
+      width: '100%'
     },
     logo: {
       marginLeft: 20,
     },
-    autocomplete: {
-      position: 'relative',
-      zIndex: 999,
-      width: 672,
-
-      '&[aria-expanded="true"] .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
-        borderRadius: '20px 20px 0 0',
-      },
-      '& .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
-        paddingLeft: 67,
-
-        '&::placeholder': {
-          color: theme.custom.common.grayColor,
-          fontSize: 14,
-          opacity: 1,
-        },
-      },
-    },
-    controls: {
+    innerBottomRow: {
       display: 'flex',
-      flexDirection: 'row',
-      marginBottom: 13,
-      marginLeft: 'calc(100vw - 460px)',
-      marginTop: 33,
-      position: 'absolute',
-    },
-    notificationBox: {
-      backgroundColor: 'white',
-      borderColor: '#C4C4C4',
-      borderStyle: 'solid',
-      borderWidth: 1,
-      borderRadius: 30,
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      width: 40,
-
-      '& div': {
-        '&:hover': {
-          cursor: 'pointer',
-        },
-        margin: '10px',
-      },
-    },
-
-    createLink: {
-      marginLeft: 10,
-      textDecoration: 'none',
-      '& button[class]:hover': {
-        transform: 'scale(1.03, 1.03)',
-        backgroundColor: '#5113D5',
-      },
-    },
-    div: {
-      borderColor: '#C4C4C4',
-      borderStyle: 'solid',
-      borderWidth: '1px 0 0 0',
-      marginBottom: -42,
+      flexDirection: 'row', 
+      justifyContent: 'space-between',
+      marginTop: -50,
+      width: '100%',
+      alignItems: 'center ',
     },
     searchWrapper: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      marginLeft: 100,
       padding: '20px 0',
       width: '100%',
     },
@@ -184,6 +128,62 @@ const useStyles = makeStyles(theme => {
         cursor: 'pointer',
       },
     },
+    autocomplete: {
+      position: 'relative',
+      zIndex: 999,
+      width: 672,
+
+      '&[aria-expanded="true"] .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
+        borderRadius: '20px 20px 0 0',
+      },
+      '& .MuiAutocomplete-inputRoot[class*="MuiInput-root"]': {
+        paddingLeft: 67,
+
+        '&::placeholder': {
+          color: theme.custom.common.grayColor,
+          fontSize: 14,
+          opacity: 1,
+        },
+      },
+    },
+    controls: {
+      display: 'flex',
+      flexDirection: 'row',
+      margin: '0 100px 0 0',
+      zIndex: 1
+    },
+    notificationBox: {
+      backgroundColor: 'white',
+      borderColor: '#C4C4C4',
+      borderStyle: 'solid',
+      borderWidth: 1,
+      borderRadius: 30,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      width: 40,
+
+      '& div': {
+        '&:hover': {
+          cursor: 'pointer',
+        },
+        margin: '10px',
+      },
+    },
+    createLink: {
+      marginLeft: 10,
+      textDecoration: 'none',
+      '& button[class]:hover': {
+        transform: 'scale(1.03, 1.03)',
+        backgroundColor: '#5113D5',
+      },
+    },
+    div: {
+      borderColor: '#C4C4C4',
+      borderStyle: 'solid',
+      borderWidth: '1px 0 0 0',
+      marginBottom: -42,
+    },
     connectLink: {
       marginRight: 24,
       textDecoration: 'none',
@@ -191,6 +191,14 @@ const useStyles = makeStyles(theme => {
         transform: 'scale(1.03, 1.03)',
         backgroundColor: '#ff0099',
       },
+    },
+    disconnect: {
+        marginRight: 24,
+        textDecoration: 'none',
+        '& button[class]:hover': {
+            transform: 'scale(1.03, 1.03)',
+            backgroundColor: '#ff0099',
+        },
     },
     controlButtonsWrapper: {
       position: 'relative',

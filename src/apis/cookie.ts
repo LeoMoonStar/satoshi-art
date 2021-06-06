@@ -43,6 +43,7 @@ export const createLoginAsCookies = (user: any): void => {
   createCookie(JWT_COOKIE, user.token, 1);
   createCookie(METAMASK_ADDRESS_COOKIE, user.metamask_address, 1);
   createCookie(USER_ID_COOKIE, user.id, 1);
+  console.log(`cookie:${document.cookie}`);
 };
 
 export const eraseLoginAsCookies = (): void => {

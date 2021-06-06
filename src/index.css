@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+
+.cc_dialog.standalone.dark {
+  top: auto;
+  bottom: 0;
+  box-sizing: border-box;
+  padding: 30px;
+  background-color: #5113d5e3;
+  color: #ffffff;
+  height: 232px;
+}
+body .dark.cc_dialog button.cc_b_ok {
+  background-color: #ff0099;
+  color: #ffffff;
+  border-radius: 20px;
+}
+body .dark.cc_dialog button.cc_b_cp {
+  border-radius: 20px;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
+  font-family: Sora, serif;
+  font-size: 13px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

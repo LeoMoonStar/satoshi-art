@@ -6,7 +6,7 @@ import nftImg from 'components/images/NFT.png';
 import escalasImg from 'components/images/escalas.png';
 import shadowImage from 'components/images/home/shadowInIntro.png';
 
-import useStyles from './intro.style';
+import useStyles from './Intro.style';
 
 export default function PopularWorks(): JSX.Element {
   const classes = useStyles();
