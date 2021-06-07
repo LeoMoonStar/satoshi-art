@@ -10,6 +10,11 @@ import { getCollectible } from 'apis/collectibles'
 
 import useStyles from './OrderListData.style';
 
+const month: any = {
+  "01": "January", "02": "February", "03": "March", "04": "April", "05": "May", "06": 
+  "June", "07": "July", "08": "August", "09": "September", "10": "October", "11": "November", "12": "December"
+}
+
 enum OrderEvents { Bid, Buy, Sell }
 
 type OrderEventType = {
@@ -56,7 +61,9 @@ const Controls = () => {
 type RowType = {
   id: number;
   date: string;
+  artistId: string;
   artist: string;
+  artId: string;
   artName: string;
   cost: number;
   event: OrderEvents;
@@ -81,15 +88,20 @@ export default function OrderListData(): JSX.Element {
       { field: 'id', headerName: text['orderId'],
         width: 140,
         renderCell({ row }: { row: RowType }) {
-          return <Link to={`dashboard/order-list/${row.id}`}>#{row.id}</Link>;
+          return <Link to={`/dashboard/order-list/${row.id}`}>#{row.id}</Link>;
         },
       },
       { field: 'date', headerName: text['date'], flex: 1 },
-      { field: 'artist', headerName: text['artist'], flex: 1 },
+      { field: 'artist', headerName: text['artist'], 
+        flex: 1,
+        renderCell({ row }: { row: RowType }) {
+          return <Link to={`/product/${row.artId}`}>{row.artist}</Link>;
+        },
+      },
       { field: 'artName', headerName: text['artName'],
         flex: 2,
         renderCell({ row }: { row: RowType }) {
-          return <Link to={`dashboard/order-list/${row.id}`}>{row.artName}</Link>;
+          return <Link to={`/artists/${row.artistId}`}>{row.artName}</Link>;
         },
       },
       { field: 'cost', headerName: text['cost'],
@@ -116,6 +128,27 @@ export default function OrderListData(): JSX.Element {
       }
   ]
 
+  const displayDate = (createdate: number) => {
+    /*const timestr = JSON.stringify(new Date(createdate))
+    const time = timestr.substr(1, timestr.length - 2)
+    const thedate = time.split("T")
+    const adate = thedate[0]
+    const atime = thedate[1]
+    const dateobj = adate.split("-")
+    const timeobj = atime.split(":")
+
+    const date = dateobj[2]
+    const themonth = month[dateobj[1]]
+    const theyear = dateobj[0]
+    const hour = timeobj[0] > 12 ? timeobj[0] - 12 : timeobj[0]
+    const minute = timeobj[1]
+    const period = timeobj[0] > 12 ? 'PM' : 'AM'
+
+    const datestring = date + " " + themonth + " " + theyear + ", " + hour + ":" + minute + " " + period*/
+
+    return ""
+  }
+
   useEffect(() => {
       // fetch orders from db
       getOrderList()
@@ -128,8 +161,10 @@ export default function OrderListData(): JSX.Element {
 
                   orderList.push({
                       id: index,
-                      date: info.createDate,
+                      date: displayDate(parseInt(info.createDate)),
+                      artistId: collectible.data.creatorUserId,
                       artist: userInfo.data.name,
+                      artId: info.collectibleId,
                       artName: collectible.data.name,
                       cost: collectible.data.price,
                       event: 1

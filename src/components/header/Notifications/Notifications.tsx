@@ -20,11 +20,11 @@ export default function Notifications(): JSX.Element {
         getNotifications()
             .then(({ data }) => {
                 data.forEach(async function (info: any) {
-                    const { data } = await getUserInfo(info.userId)
+                    const userInfo: any = await getUserInfo(info.userId)
 
-                    info['isArtist'] = data.isArtist
-                    info['name'] = data.name
-                    info['avatarUrl'] = data.avatarUrl
+                    info['isArtist'] = userInfo.data.isArtist
+                    info['name'] = userInfo.data.name
+                    info['avatarUrl'] = userInfo.data.avatarUrl
                 })
 
                 setNotifications(data)

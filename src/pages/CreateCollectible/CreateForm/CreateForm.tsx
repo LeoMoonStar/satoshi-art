@@ -316,41 +316,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     } else {
       alert('You are not approved to create collectibles');
     }
-    /**/
-
-    /*createCollection(name)
-            .then((res) => {
-                const collectible = { 
-                    status: 'onSale', 
-                    copies: copiesCount,
-                    name: name, 
-                    tokenId: 'tokenid', 
-                    royalties: royalties, 
-                    collectionId: 'collectionid', 
-                    price: price, 
-                    file: { 
-                        filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    },
-                    thumbnail: {
-                        filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    }
-                }
-
-                createCollectible(collectible)
-                    .then((res) => {
-                        location.replace('/')
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            })
-            .catch((error) => {
-                console.log(error)
-            })*/
 
     /*if (!chainId) return
         if (!account) return

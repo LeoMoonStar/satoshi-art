@@ -63,8 +63,7 @@ export default function DropOfTheDay(): JSX.Element {
         'Aliquam posuere purus mi, vitae luctus justo',
         'Nulla pulvinar sed nisl'
     ],
-    addContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam iaculis, nulla eu sodales sagittis.',
-    //productId: '8d8d8d-dfdfd-df9sdf9ds9fd9f'
+    addContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam iaculis, nulla eu sodales sagittis.'
   })
 
   useEffect(() => {
@@ -102,7 +101,7 @@ export default function DropOfTheDay(): JSX.Element {
       <SpecialEdition 
           image={specialEdition.image} title={specialEdition.title} 
           year={specialEdition.year} content={specialEdition.content} contentList={specialEdition.items} 
-          addContent={specialEdition.addContent} productId={'8d8d8d-dfdfd-df9sdf9ds9fd9f'}
+          addContent={specialEdition.addContent} productId=""
       />
       <DropOfTheDayWorkCards/>
       <DropOfTheDayInDetails />
