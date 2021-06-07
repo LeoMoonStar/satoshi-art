@@ -56,11 +56,11 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
     setTokenId(parseInt(data.tokenId));
-    const owner = '0xf42f3440594434ee7405b8bacd04ff683797ea8b';
+    
     console.log(metamaskId.ownerMetamaskId);
     if (metamaskId.ownerMetamaskId != '') {
       const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, 89 as number);
-      if (balance >= 0) {
+      if (balance > 0) {
         setApprove(true);
         setActiveStep(1);
       } else {

@@ -256,14 +256,15 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     if (approval) {
       console.log(data);
       const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-      console.log(tokenId);
+      console.log('createForm-259',tokenId);
       setItemCreated(true);
       console.log('In Progress...');
 
       // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
       if (onSale) {
-        const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
+        const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
         setOnSale(true);
+        setItemCreated(false);
         buyResult
           .wait()
           .then((res: any) => {
@@ -273,6 +274,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           })
           .catch((err: { message: any }) => {
             setOnSale(false);
+            alert(err.message);
             console.log(err.message);
           });
       }

@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import satoshiMarketplaceABI from './SatoshiART1155Marketplace.json';
 import tokenContractABI from './SatoshiART1155.json';
 import { ethers } from 'ethers';
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/bc7b2cf614a04ab3b4acbcd09a43dc6b'));
+const web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.RPC_URL}`));
 
 const getWeb3Instance = () => {
   return this.web3;
@@ -136,13 +136,14 @@ const etherFunctionCreateItem = async (collectibleCount, royalty) => {
   const log = await receipt.wait();
   const ids = log.events[0].args.ids;
   console.log(ids);
-  const BN = web3.utils.BN;
+
   const idInString = [];
 
   for (let i = 0; i < ids.length; i++) {
     const value = ids[i]._hex;
     console.log('144', value);
-    const id = new BN(value.toString()).toString();
+    const id = web3.utils.hexToNumberString(String(value));
+    console.log('num146', id);
     idInString.push(id);
   }
   return idInString;
