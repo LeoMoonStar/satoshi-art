@@ -130,7 +130,7 @@ const useStyles = makeStyles((theme) => {
         },
         submits: {
         	display: 'flex',
-        	flexDirection: 'column',
+        	flexDirection: 'row',
         	justifyContent: 'space-between',
             margin: '10px auto',
 
@@ -138,7 +138,8 @@ const useStyles = makeStyles((theme) => {
         		backgroundColor: '#5113D5',
                 margin: '10px'
         	},
-            width: '50%'
+
+            width: 350
         }
 	}
 })

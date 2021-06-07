@@ -112,6 +112,10 @@ export const getOnSaleCollectibles = (Id: string, pageSize = 8, page = 1, tradab
   return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=owner`)
 }
 
+export const getLikedCollectibles = (Id: string, pageSize = 8, page = 1) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/get-user-liked`)
+}
+
 export const getOnHoldCollectibles = (Id: string, pageSize = 8, page = 1) => {
   return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=0&user=owner`);
 };
@@ -219,11 +223,11 @@ export const thumbsdownCollectible = (Id: string) => {
 }
 
 export const getCollectibleThumbs = (Id: string) => {
-  // api
+  return axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/${Id}/number-thumbups`)
 }
 
 export const getCollectibleLikes = (Id: string) => {
-  // api
+  return axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/${Id}/number-likes`)
 }
 
 export const getBalance = async() => {

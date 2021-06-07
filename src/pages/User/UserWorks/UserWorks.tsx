@@ -8,7 +8,7 @@ import { useWeb3React } from '@web3-react/core'
 import { FilterIcon } from 'components/icons'
 
 import useStyles from './UserWorks.style'
-import { Collectible, getOnSaleCollectibles, getUserCollectibles } from 'apis/collectibles'
+import { Collectible, getOnSaleCollectibles, getUserCollectibles, getLikedCollectibles } from 'apis/collectibles'
 import { readCookie } from 'apis/cookie'
 
 type CategoryType = {
@@ -66,6 +66,13 @@ export default function UserWorks(): JSX.Element {
                 getUserCollectibles(id).then((res) => {
                     setCollectibles(res.data)
                     setNumCollectibles(res.data.length)
+                })
+
+                break
+            case 'Liked':
+                getLikedCollectibles(id).then(({ data }) => {
+                  setCollectibles(data)
+                  setNumCollectibles(data.length)
                 })
 
                 break

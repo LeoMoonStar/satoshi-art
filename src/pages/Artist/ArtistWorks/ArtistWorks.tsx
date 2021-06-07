@@ -8,7 +8,7 @@ import { useWeb3React } from '@web3-react/core';
 //import { FilterIcon } from 'components/icons';
 
 import useStyles from './ArtistWorks.style';
-import { Collectible, getOnSaleCollectibles, getCreatedCollectibles } from 'apis/collectibles';
+import { Collectible, getOnSaleCollectibles, getCreatedCollectibles, getLikedCollectibles } from 'apis/collectibles';
 
 type CategoryType = {
   id: number;
@@ -78,7 +78,10 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
 
         break;
       case 'Liked':
-        // unknown for now
+        getLikedCollectibles(id).then(({ data }) => {
+          setCollections(data)
+          setNumCollections(data.length)
+        })
 
         break;
     }

@@ -10,6 +10,8 @@ import Layout from 'components/layout'
 import Button from 'components/button'
 import Avatar from 'components/avatar'
 
+import web3Contract from '../../abis/web3contract';
+
 const IconWrapper = styled(Grid)(
     ({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
         width: dots ? 82 : 40,
@@ -33,6 +35,7 @@ export default function EditCollectible() {
 		thumbnailUrl: "",
 		name: "",
 		price: 0,
+		tokenId: ""
 	})
 	const [priceError, setPriceError] = useState(false)
 	const renderSwitch = (url: string) => {
@@ -60,21 +63,26 @@ export default function EditCollectible() {
     				newInfo.thumbnailUrl = data.thumbnailUrl ? data.thumbnailUrl : '/collectible-image.jpeg'
     				newInfo.name = data.name
     				newInfo.price = data.price
+    				newInfo.tokenId = data.tokenId
 
     				setInfo(newInfo)
     			})
     	}
     }, [])
 
-    const putOnSale = () => {
-    	const { status, price } = info
-    	const data = { price: price, status: status }
+    const putOnSale = async() => {
+    	const { price, tokenId } = info
+    	const data = { price: price, status: "onSale" }
 
     	if (price) {
-    		putCollectibleOnSale(id, data)
-	    		.then(() => {
-	    			location.replace('/dashboard/user')
-	    		})
+    		const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price)
+
+    		if (receipt) {
+    			putCollectibleOnSale(id, data)
+		    		.then(() => {
+		    			location.replace('/dashboard/user')
+		    		})
+		    }
     	} else {
     		setPriceError(true)
     	}
@@ -127,7 +135,8 @@ export default function EditCollectible() {
 				                	setInfo(newInfo)
 				                }} value={info.price}/>
 				                {priceError && <small className={classes.inputError}>{text['fieldIsRequired']}</small>}
-				                <Button variantCustom="action" type="submit">Change price</Button>
+
+				                <Button variantCustom="action" type="submit" style={{ backgroundColor: '#5113D5' }}>Change price</Button>
 				            </FormControl>
 
 				            <FormControl className={classes.fieldGroup}>
@@ -141,15 +150,15 @@ export default function EditCollectible() {
 				                        }}>{text[issue]}</MenuItem>
 				                    ))}
 				                </Select>
-				                <Button variantCustom="action" type="submit" onClick={() => {
+				                <Button variantCustom="action" type="submit" style={{ backgroundColor: '#5113D5' }} onClick={() => {
 
 				                	setInfo({...info, status: "remove"})
 				                }}>Remove From Sale</Button>
 				            </FormControl>
 				        </div>
 			            <div className={classes.submits}>
-			            	<Button variantCustom="action" onClick={() => putOnSale()}>Put on Sale</Button>
-			            	<Button variantCustom="action" type="submit">Put on Auction</Button>
+			            	<Button variantCustom="action" style={{ backgroundColor: '#ff0099' }} onClick={() => putOnSale()}>Put on Sale</Button>
+			            	<Button variantCustom="action" style={{ backgroundColor: '#ff0099' }} type="submit">Put on Auction</Button>
 			            </div>
 			        </div>
 		        </div>

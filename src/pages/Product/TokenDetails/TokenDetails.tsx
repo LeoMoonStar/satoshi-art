@@ -79,7 +79,7 @@ const TokenDetails = (): JSX.Element => {
   const [numCopies, setNumCopies] = useState('1')
   const [typeShow, setTypeShow] = useState('Info')
   const [numThumbs, setNumThumbs] = useState(false)
-  const [numLikes, setNumLikes] = useState(false)
+  const [numLikes, setNumLikes] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -98,6 +98,10 @@ const TokenDetails = (): JSX.Element => {
 
       setHistory(data)
     })
+    getCollectibleLikes(id)
+      .then(({ data }) => setNumLikes(data))
+    getCollectibleThumbs(id)
+      .then(({ data }) => setNumThumbs(data))
 
     setLoading(false)
   }, [id]);
@@ -169,7 +173,7 @@ const TokenDetails = (): JSX.Element => {
         <div className={classes.socialActivityContainer}>
           <InfoIconWrapper item direction='row' alignItems='center'>
             <GreySaveIcon />
-            <Typography variant='h6' className={classes.socialActivityAmount}>2k</Typography>
+            <Typography variant='h6' className={classes.socialActivityAmount}>{numLikes}</Typography>
           </InfoIconWrapper>
           <InfoIconWrapper item direction='row' alignItems='center'>
             <ViewsIcon />
@@ -177,7 +181,7 @@ const TokenDetails = (): JSX.Element => {
           </InfoIconWrapper>
           <InfoIconWrapper item direction='row' alignItems='center' lastIcon={true}>
             <LikeIcon />
-            <Typography variant='h6' className={classes.socialActivityAmount}>220</Typography>
+            <Typography variant='h6' className={classes.socialActivityAmount}>{numThumbs}</Typography>
           </InfoIconWrapper>
         </div>
       </div>
