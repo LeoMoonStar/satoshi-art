@@ -19,7 +19,8 @@ type CategoryType = {
 
 const categories: CategoryType[] = [
     { id: 1, title: 'On sale' },
-    { id: 2, title: 'Collectibles' }
+    { id: 2, title: 'Collectibles' },
+    { id: 3, title: 'Liked' }
 ]
 
 export default function UserWorks(): JSX.Element {
