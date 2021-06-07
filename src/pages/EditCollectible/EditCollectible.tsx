@@ -77,12 +77,19 @@ export default function EditCollectible() {
     	if (price) {
     		const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price)
 
-    		if (receipt) {
-    			putCollectibleOnSale(id, data)
-		    		.then(() => {
-		    			location.replace('/dashboard/user')
-		    		})
-		    }
+    		// if (receipt) {
+    		// 	putCollectibleOnSale(id, data)
+		    // 		.then(() => {
+		    // 			location.replace('/dashboard/user')
+		    // 		})
+		    // }
+			receipt.wait().then((res:any) => {
+				console.log(res);
+				putCollectibleOnSale(id, data)
+				.then(() => {
+					location.replace('/dashboard/user')
+				})
+			})
     	} else {
     		setPriceError(true)
     	}
