@@ -43,7 +43,7 @@ export default function TopList({ titleColor, title }: TopListProps): JSX.Elemen
             {topList.length > 0 ? 
               topList.map(({ isArtist, id, name, avatarUrl, currency }, index) => {
                 return (
-                  <Link to={isArtist ? `/artists/${id}` : `/users/${id}`} key={index} className={classes.topsItem}>
+                  <Link to={isArtist ? `/artists/${id}` : `/user/${id}`} key={index} className={classes.topsItem}>
                     <div className={classes.index}>{index + 1}</div>
 
                     <Avatar size={48} image={avatarUrl} status='premium' />
@@ -59,7 +59,7 @@ export default function TopList({ titleColor, title }: TopListProps): JSX.Elemen
               <div className={classes.noResult}>No {title.toLowerCase()}</div>
             }
         </div>
-        <Link to='/users'>
+        <Link to={`/users/${title}`}>
           <Button className={classes.seeAll}>{text['seeAll']}</Button>
         </Link>
       </div>

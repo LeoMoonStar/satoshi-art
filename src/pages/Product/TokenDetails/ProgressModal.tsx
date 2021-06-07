@@ -82,6 +82,10 @@ export default function ProgressModal({ numCopies, userAction, onClose }: Progre
       setClickedSigned(false);
       setActiveStep(2);
       setShowTxHash(res.transactionHash);
+
+      setTimeout(function () {
+        onClose()
+      }, 1000)
     });
   };
 

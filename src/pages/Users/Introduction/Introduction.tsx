@@ -13,7 +13,7 @@ export default function Introduction({ numitems, subject, seeAll }: any): JSX.El
   return (
     <section className={classes.container}>
       <div className={classes.titleWrapper}>
-        <h1 className={classes.title}>Top {subject}</h1>
+        <h1 className={classes.title}>{subject}</h1>
         <div className={classes.resultsCount}>{numitems} results</div>
       </div>
       <div className={classes.rightCol}>
@@ -54,21 +54,25 @@ export default function Introduction({ numitems, subject, seeAll }: any): JSX.El
         <div className={classes.filterGroup}>
           <div className={classes.tabs}>
             <button type="button" 
-                className={subject == "Sellers" ? "selected" : ""}
-                onClick={() => seeAll('Sellers')}
+                className={subject == "Top Sellers" ? "selected" : ""}
+                onClick={() => seeAll("Top Sellers")}
             >Top Sellers</button>
             <button type="button" 
-                className={subject == "Buyers" ? "selected": ""}
-                onClick={() => seeAll('Buyers')}
+                className={subject == "Top Buyers" ? "selected": ""}
+                onClick={() => seeAll("Top Buyers")}
             >Top Buyers</button>
             <button type="button" 
-                className={subject == "Collectors" ? "selected": ""}
-                onClick={() => seeAll('Collectors')}
+                className={subject == "Top Collectors" ? "selected": ""}
+                onClick={() => seeAll("Top Collectors")}
             >Top Collectors</button>
             <button type="button" 
-                className={subject == "Artists" ? "selected": ""}
-                onClick={() => seeAll('Artists')}
+                className={subject == "Top Artists" ? "selected": ""}
+                onClick={() => seeAll("Top Artists")}
             >Top Artists</button>
+            <button type="button" 
+                className={subject == "Largest Collections" ? "selected": ""}
+                onClick={() => seeAll("Largest Collections")}
+            >Largest Collections</button>
           </div>
           {/*<IconButton className={classes.filterButton}>
             <FilterIcon />

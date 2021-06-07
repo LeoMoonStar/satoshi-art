@@ -127,10 +127,10 @@ export default function EditCollectible() {
 				                	setInfo(newInfo)
 				                }} value={info.price}/>
 				                {priceError && <small className={classes.inputError}>{text['fieldIsRequired']}</small>}
-				                {/*<Button variantCustom="action" type="submit">Change price</Button>*/}
+				                <Button variantCustom="action" type="submit">Change price</Button>
 				            </FormControl>
 
-				            {/*<FormControl className={classes.fieldGroup}>
+				            <FormControl className={classes.fieldGroup}>
 				                <label htmlFor="issue">Collection</label>
 				                <Select id="issue" name="issue">
 				                    {COLLECTION_OPTIONS.map((issue: string, index: number) => (
@@ -145,12 +145,11 @@ export default function EditCollectible() {
 
 				                	setInfo({...info, status: "remove"})
 				                }}>Remove From Sale</Button>
-				            </FormControl>*/}
+				            </FormControl>
 				        </div>
 			            <div className={classes.submits}>
 			            	<Button variantCustom="action" onClick={() => putOnSale()}>Put on Sale</Button>
-			            	<Button variantCustom="action" onClick={() => removeFromSale()}>Remove from sale</Button>
-			            	{/*<Button variantCustom="action" type="submit">Put on Auction</Button>*/}
+			            	<Button variantCustom="action" type="submit">Put on Auction</Button>
 			            </div>
 			        </div>
 		        </div>

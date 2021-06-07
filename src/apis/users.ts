@@ -21,7 +21,7 @@ export const getDropOfTheDay = () => {
 
 export const followUser = async (otherMetamaskId: string) => {
   await axios.post(
-    `/api/auth/user/follow`,
+    `${process.env.REACT_APP_API}/api/auth/user/follow`,
     { followingMetamaskId: otherMetamaskId },
     {
       headers: {
@@ -49,7 +49,7 @@ export const unfollowUser = async (otherMetamaskId: string) => {
 
 export const updateProfile = async (data: any) => {
   await axios.put(
-    `/api/auth/user/edit-profile`, 
+    `${process.env.REACT_APP_API}/api/auth/user/edit-profile`, 
     data, {
     headers: {
       id: readCookie('id'),
@@ -71,7 +71,7 @@ export const getFollowings = (Id: string) => {
 
 export const userBecomeArtist = () => {
   return axios.post(
-    `/api/auth/user/request`,
+    `${process.env.REACT_APP_API}/api/auth/user/request`,
     { headers: {
       id: readCookie("id"), 
       token: readCookie('token'), 
@@ -118,7 +118,7 @@ export const getLargestCollections = () => {
 
 export const getOrderList = (pageSize = 8, page = 1) => {
   return axios.get(
-    `/api/auth/user/order-list?pageSize=${pageSize}&page=${page}`,
+    `${process.env.REACT_APP_API}/api/auth/user/order-list?pageSize=${pageSize}&page=${page}`,
     { headers: {
       id: readCookie("id"), 
       token: readCookie('token'), 
@@ -129,7 +129,7 @@ export const getOrderList = (pageSize = 8, page = 1) => {
 
 export const updateCelebrityProfile = (data: any) => {
   return axios.post(
-    `/api/auth/user/celebrity/profile`,
+    `${process.env.REACT_APP_API}/api/auth/user/celebrity/profile`,
     data,
     { headers: {
       id: readCookie("id"), 

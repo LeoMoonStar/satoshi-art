@@ -66,7 +66,7 @@ export default function Tops(): JSX.Element {
               );
             })}
           </div>
-          <Link to='/users' className={classes.seeAllLink}>
+          <Link to='/users/Top Collectors' className={classes.seeAllLink}>
             <Button>{text['seeAll']}</Button>
           </Link>
         </div>
@@ -87,7 +87,7 @@ export default function Tops(): JSX.Element {
               );
             })}
           </div>
-          <Link to='/users' className={classes.seeAllLink}>
+          <Link to='/users/Top Artists' className={classes.seeAllLink}>
             <Button>{text['seeAll']}</Button>
           </Link>
         </div>
@@ -108,7 +108,7 @@ export default function Tops(): JSX.Element {
               );
             })}
           </div>
-          <Link to='/users' className={classes.seeAllLink}>
+          <Link to='/users/Largest Collections' className={classes.seeAllLink}>
             <Button>{text['seeAll']}</Button>
           </Link>
         </div>

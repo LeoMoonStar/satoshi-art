@@ -144,13 +144,74 @@ export const createCollection = (name: string) => {
     { collectionName: name },
     {
       headers: {
-        id,
-        token,
-        metamask_address,
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
       },
     }
   );
 };
+
+export const likeCollectible = (Id: string) => {
+  return axios.post(
+    `${process.env.REACT_APP_API}/api/auth/user/:collectibleId/like`,
+    { collectibleId: Id },
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
+}
+
+export const dislikeCollectible = (Id: string) => {
+  return axios.delete(
+    `${process.env.REACT_APP_API}/api/auth/user/${Id}/unlike`,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
+}
+
+export const thumbsupCollectible = (Id: string) => {
+  return axios.post(
+    `${process.env.REACT_APP_API}/api/auth/user/${Id}/thumbup`,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
+}
+
+export const thumbsdownCollectible = (Id: string) => {
+  return axios.delete(
+    `${process.env.REACT_APP_API}/api/auth/user/${Id}/unthumbup`,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
+}
+
+export const getCollectibleThumbs = (Id: string) => {
+  // api
+}
+
+export const getCollectibleLikes = (Id: string) => {
+  // api
+}
 
 export const getBalance = async() => {
   return await getOutstandingBalance(readCookie("metamask_address"));

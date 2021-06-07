@@ -25,6 +25,7 @@ import {
   use1155SmartContractNetworkData,
 } from 'utils/erc1155';
 import { uploadFile, uploadMetaData, updateMetaData, MetaDataType } from 'apis/createItem';
+import { createCollection, createCollectible } from 'apis/collectibles';
 import Preview from '../Preview';
 import ProgressModal from '../ProgressModal';
 import useStyles from './CreateForm.style';
@@ -238,128 +239,79 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     }
   };
   const onSubmit = async (data: ICollectibleForm) => {
-    const {
-      properties,
-      copiesCount,
-      royalties,
-      name,
-      instantPrice,
-      price,
-      unlock,
-      unlockContent,
-      collection,
-      description,
-      onSale,
-    } = data;
+    const { properties, copiesCount, royalties, name, instantPrice, price, unlock, unlockContent, collection, description, onSale } = data;
     const metamaskAddr = readCookie('metamask_address');
+
+    setOpenSubmitModal(true)
     const approval = await web3Contract.isApprovedArtist(metamaskAddr);
 
-    console.log(approval);
+    createCollection(name)
+      .then(async({ data }) => {
+          if (approval) {
+            setStepState(1)
 
-    if (approval) {
-      console.log(data);
-      const tokenId = await web3Contract.etherFunctionCreateItem(copiesCount, royalties);
-      setItemCreated(true);
-      console.log('In Progress...');
-      console.log('264',tokenId);
-      if (onSale) {
-        const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
-        setOnSale(true);
-        buyResult
-          .wait()
-          .then((res: any) => {
-            setOnSale(false);
-            setConfirmOnSale(true);
-            console.log('Item is on sale now');
-          })
-          .catch((err: { message: any }) => {
-            setOnSale(false);
-            console.log(err.message);
-          });
-      }
-    } else {
-      alert('You are not approved to create collectibles');
-    }
+            const tokenId = await web3Contract.etherFunctionCreateItem(copiesCount, royalties);
 
-    const collectible = {
-      status: 'onSale',
-      copies: copiesCount,
-      name: name,
-      tokenId: 'tokenid',
-      royalties: royalties,
-      collectionId: 'collectionid',
-      price: price,
-      unlock: unlock,
-      unlockContent: unlockContent,
-      file: {
-        fileName: 'image.' + preview.imagetype.replace('image/', ''),
-        mediaType: preview.imagetype,
-        content: preview.base64,
-      },
-      thumbnail: {
-        fileName: 'image.' + preview.imagetype.replace('image/', ''),
-        mediaType: preview.imagetype,
-        content: preview.base64,
-      },
-    };
-
-    console.log(collectible);
-
-    /*setOpenSubmitModal(true)
-
-    setTimeout(function () {
-        setStepState(1)
-
-        console.log("show 1")
-
-        setTimeout(function () {
+            const collectible = { 
+                status: 'onSale', 
+                copies: copiesCount,
+                name: name, 
+                tokenId: tokenId, 
+                royalties: royalties, 
+                collectionId: data.id, 
+                price: price, 
+                unlock: unlock,
+                unlockContent: unlockContent,
+                file: { 
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                    mediaType: preview.imagetype, 
+                    content: preview.base64
+                },
+                thumbnail: {
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                    mediaType: preview.imagetype, 
+                    content: preview.base64
+                }
+            }
+          
+            setItemCreated(true);
             setStepState(2)
 
-            console.log("show 2")
+            console.log('In Progress...');
+            console.log('264',tokenId);
+            if (onSale) {
+              const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
+              setOnSale(true);
+              buyResult
+                .wait()
+                .then((res: any) => {
+                  setOnSale(false);
+                  setConfirmOnSale(true);
+                  console.log('Item is on sale now');
+                  setStepState(3)
 
-            setTimeout(function () {
-                setStepState(3)
-
-                console.log("show 3")
-            }, 2000)
-        }, 2000)
-    }, 2000)*/
-
-    /*createCollection(name)
-      .then((res) => {
-          const collectible = { 
-              status: 'onSale', 
-              copies: copiesCount,
-              name: name, 
-              tokenId: 'tokenid', 
-              royalties: royalties, 
-              collectionId: 'collectionid', 
-              price: price, 
-              unlock: unlock,
-              unlockContent: unlockContent,
-              file: { 
-                  fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                  mediaType: preview.imagetype, 
-                  content: preview.base64
-              },
-              thumbnail: {
-                  fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                  mediaType: preview.imagetype, 
-                  content: preview.base64
-              }
+                  createCollectible(collectible)
+                    .then((res) => {
+                        location.replace('/')
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                      })
+                      .catch((err: { message: any }) => {
+                        setOnSale(false);
+                        console.log(err.message);
+                      });
+            }
+          } else {
+            alert('You are not approved to create collectibles');
           }
-
-          createCollectible(collectible)
-              .then((res) => {
-                  location.replace('/')
-              })
-              .catch((error) => {
-                  console.log(error)
-              })
       })
       .catch((error) => {
           console.log(error)
-      })*/
+      })
+
+          
 
     /*if (!chainId) return
         if (!account) return

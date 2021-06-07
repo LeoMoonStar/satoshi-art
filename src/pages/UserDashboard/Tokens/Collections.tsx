@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import text from '../../../constants/content';
 import { ShowMoreIcon } from '../../../components/icons';
 import { TransferIcon, BurnIcon, PriceIcon } from '../../../components/icons/dashboard';
@@ -17,13 +18,11 @@ const RenderCardContent = ({ token }: any) => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const anchorElRef = useRef();
 
-  const { payload, type } = token?.metadata;
-
   return (
     <>
       <div className={classes.head}>
-        <h3 className={classes.tokenName}>{payload}</h3>
-        {/*<IconButton className={classes.showMoreButton} buttonRef={anchorElRef}
+        <h3 className={classes.tokenName}>{token.name}</h3>
+        <IconButton className={classes.showMoreButton} buttonRef={anchorElRef}
           onClick={e => {
             setOpen(!isOpen);
 
@@ -43,7 +42,7 @@ const RenderCardContent = ({ token }: any) => {
             <div className={classes.controlsButtons}>
               <button type='button'>
                 <div><TransferIcon /></div>
-                {text['putOnSaleBtn']}
+                <Link to={`/edit-collectible/${token.id}`} style={{ textDecoration: 'none' }}>{text['putOnSaleBtn']}</Link>
               </button>
               <button type='button'>
                 <div><TransferIcon /></div>
@@ -59,7 +58,7 @@ const RenderCardContent = ({ token }: any) => {
               </button>
             </div>
           </Popover>
-        </IconButton>*/}
+        </IconButton>
       </div>
       {/*type === 'multiple' && (
         <div className={classes.count}>
@@ -88,9 +87,11 @@ export default function Collections(): JSX.Element {
                       const collectible = await getCollectible(info.id)
                       const creatorInfo = await getUserInfo(collectible.data.creatorUserId)
 
+                      const thumbnail = collectible.data.thumbnailUrl ? collectible.data.thumbnailUrl : '/collectible-image.jpeg'
+
                       list.push({
                           id: info.id,
-                          preview: collectible.data.thumbnailUrl,
+                          preview: thumbnail,
                           name: collectible.data.name,
                           author: { image: creatorInfo.data.thumbnailUrl, name: creatorInfo.data.name, price: info.price }
                       })

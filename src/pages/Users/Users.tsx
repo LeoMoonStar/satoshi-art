@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getTopSellers, getTopBuyers, getTopCollectors, getTopArtists } from 'apis/users'
+import { useParams } from 'react-router-dom'
+import { getTopSellers, getTopBuyers, getTopCollectors, getTopArtists, getLargestCollections } from 'apis/users'
 
 import Layout from 'components/layout';
 import UserList from './UsersList';
@@ -8,37 +9,84 @@ import Introduction from './Introduction';
 export default function Users() {
   const [subject, setSubject] = useState('Sellers');
   const [list, setList] = useState([]);
+  const { type } = useParams<{ type: string }>()
 
   useEffect(() => {
-    getTopSellers()
-          .then(({ data }) => setList(data))
+    seeAll(type)
   }, [])
 
   const seeAll = (type: string) => {
-    switch (type) {
-      case "Sellers":
-        getTopSellers()
-          .then(({ data }) => setList(data))
+    if (type.includes("Top")) {
+      switch (type.replace("Top ", "")) {
+        case "Sellers":
+          getTopSellers()
+            .then(({ data }) => {
+              data.forEach(function (info: any) {
+                const avatar = info.avatarUrl ? info.avatarUrl : '/default-avatar.jpeg'
 
-        break;
-      case "Buyers":
-        getTopBuyers()
-          .then(({ data }) => setList(data))
-        break;
-      case "Collectors":
-        getTopCollectors()
-          .then(({ data }) => setList(data))
+                data['avatarUrl'] = avatar
+              })
 
-        break
-      case "Artists":
-        getTopArtists()
-          .then(({ data }) => setList(data))
+              setList(data)
+            })
 
-        break
-      default:
+          break;
+        case "Buyers":
+          getTopBuyers()
+            .then(({ data }) => {
+              data.forEach(function (info: any) {
+                const avatar = info.avatarUrl ? info.avatarUrl : '/default-avatar.jpeg'
+
+                data['avatarUrl'] = avatar
+              })
+
+              setList(data)
+            })
+          break;
+        case "Collectors":
+          getTopCollectors()
+            .then(({ data }) => {
+              data.forEach(function (info: any) {
+                const avatar = info.avatarUrl ? info.avatarUrl : '/default-avatar.jpeg'
+
+                data['avatarUrl'] = avatar
+              })
+
+              setList(data)
+            })
+
+          break
+        case "Artists":
+          getTopArtists()
+            .then(({ data }) => {
+              data.forEach(function (info: any) {
+                const avatar = info.avatarUrl ? info.avatarUrl : '/default-avatar.jpeg'
+
+                data['avatarUrl'] = avatar
+              })
+
+              setList(data)
+            })
+
+          break
+        default:
+      }
+
+      setSubject(type);
+    } else {
+      getLargestCollections()
+        .then(({ data }) => {
+            data.forEach(function (info: any) {
+              const avatar = info.avatarUrl ? info.avatarUrl : '/default-avatar.jpeg'
+
+              data['avatarUrl'] = avatar
+            })
+
+            setList(data)
+          })
+
+      setSubject("Largest Collections")
     }
-
-    setSubject(type);
   };
   return (
     <Layout headerVariant='full'>

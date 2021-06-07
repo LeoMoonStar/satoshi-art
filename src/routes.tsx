@@ -10,7 +10,7 @@ import Users from 'pages/Users';
 import User from 'pages/User';
 import Collection from 'pages/Collection';
 import Search from 'pages/Search';
-import DropOfTheDay from 'pages/Home/DropOfTheDay';
+import DropOfTheDay from 'pages/DropOfTheDay';
 import DropOfTheDayHistory from 'pages/DropOfTheDayHistory';
 import Product from 'pages/Product';
 import OrderList from 'pages/OrderList';
@@ -39,7 +39,7 @@ function AppRouter(): JSX.Element {
         <DevelopRoute path='/edit-profile'><EditProfile /></DevelopRoute>
         <Route path='/dashboard/user'><UserDashboard /></Route>
         <DevelopRoute path='/artists/:id'><Artist /></DevelopRoute>
-        <DevelopRoute path='/users'><Users /></DevelopRoute>
+        <DevelopRoute path='/users/:type'><Users /></DevelopRoute>
         <DevelopRoute path='/user/:id'><User /></DevelopRoute>
         <DevelopRoute path='/collections/:id'><Collection /></DevelopRoute>
         <DevelopRoute path='/search/:artist'><Search /></DevelopRoute>

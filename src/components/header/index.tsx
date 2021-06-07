@@ -10,6 +10,8 @@ import { getUserInfo } from 'apis/users';
 import Button from 'components/button';
 import { BellIcon, NavbarBurgerIcon, FullLogo, SearchIcon, LogoHeaderWhiteIcon } from 'components/icons';
 import useStyles from './header.style';
+import { permittedToUseWalletAndWhiteListedSelector, permittedToUseWalletSelector } from 'state/app/selectors';
+import { AppState } from 'state';
 import { useConnect } from 'hooks/useDisconnect';
 import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies, readCookie } from 'apis/cookie';
 import { getCollectibleAndNumber } from 'apis/collectibles';
@@ -17,7 +19,6 @@ import UserMenu from './userMenu';
 import Notifications from './Notifications'
 declare let window: any;
 
-const mockSample: any[] = [['sample', 2]];
 const SearchPopper = function (props: PopperProps) {
   return <Popper {...props} style={{ width: '672px' }} placement='bottom-start' />;
 };
@@ -52,35 +53,84 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   const classes = useStyles();
   const [InSearch, setInSearch] = useState(false);
   const [searches, setSearches] = useState('');
-  const [searchResult, setSearchResult] = useState([...mockSample]);
-  const [searchCollectible, setSearchCollectible] = useState('')
+  const [searchResult, setSearchResult] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
+  let { account } = useWeb3React();
   const connected = useConnect();
-  useEffect(() => {
-    console.log('header rendered');
-    if (connected) {
-      const id = readCookie('id');
-      if (id) {
-        getUserInfo(id).then((res: any) => {
-          setIsArtist(res.data.isArtist);
-          console.log('setting avatar');
-          setUserAvatar(res.data.avatarUrl);
-        });
-      }
-  }})
+  const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
+
 
   useEffect(() => {
-    if (searches) {
-      getCollectibleAndNumber(searches)
-        .then(({ data }) => {
-          console.log(data);
-          const result = Object.entries(data);
-          setSearchResult(result);
-        })
-        .catch(err => console.log(err));
+    const getSignature = async() => {
+        if (isWalletPermitted) {
+          if (window.ethereum) {
+              const web3 = new Web3(window.ethereum);
+              const accounts = await web3.eth.getAccounts();
+
+              account = accounts[0]
+
+              try {
+                  await window.ethereum.request({ method: "eth_requestAccounts" });
+
+                  if (isInLoginAsMode()) {
+                      console.log("cookie")
+                      console.log("id", readCookie("id"))
+                      console.log("metamask_address", readCookie("metamask_address"))
+                      console.log("token", readCookie("token"))
+                  } else {
+                      const res = await fetch(
+                          `${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`
+                      );
+                      const challenge = await res.json();
+                      
+                      (web3 as any).currentProvider.send({
+                          method: "eth_signTypedData",
+                          params: [challenge.challenge, connected],
+                          from: connected
+                      },
+                      (error: any, res: any) => {
+                          eraseLoginAsCookies()
+
+                          console.log("signature: " + res.result)
+                          console.log("metamessage: " + challenge.challenge[1].value)
+                          console.log("metasignature: " + res.result)
+                          console.log("metaaddress: " + connected)
+                          
+                          axios.get(
+                              `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
+                          ).then(sigRes => {                                 
+                              if (sigRes.status === 200 && sigRes.data.recover === connected) {
+                                  const { id, metamaskId, token } = sigRes.data
+
+                                  createLoginAsCookies({ id: id, metamask_address: metamaskId, token: token })
+
+                                  console.log("id", id)
+                                  console.log("metamask_address", metamaskId)
+                                  console.log("token", token)
+                                  
+                                  console.log("Signature verified")
+
+                                  location.replace('/')
+                              } else {
+                                  console.log("Signature not verified")
+                              }
+
+
+                          }).catch(err => console.log(err))
+                      });
+                  }
+              } catch (err) {
+                  console.log(err)
+              }
+          }
+        } else {
+          console.log('No account detected');
+        }
     }
+
+    getSignature()
 
     if (userId) {
       getUserInfo(userId).then(({ data }) => {
@@ -91,11 +141,15 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   }, [searches]);
 
   const getSearches = (name: string) => {
+    if (name.length >= 2) { 
       getCollectibleAndNumber(name)
           .then(({ data }) => {
-            setSearchResult(data)
-            setSearchCollectible(name)
+            const res: any = Object.entries(data);
+
+            setSearchResult(res)
+            setSearches(name)
           })
+    }
   }
 
   return (
@@ -114,7 +168,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                 <TextField
                   onMouseEnter={() => setInSearch(true)}
                   onKeyUp={(e) => {
-                      if (e.keyCode == 13) location.replace('/search/' + searchCollectible)
+                      if (e.keyCode == 13) location.replace('/search/' + searches)
                   }}
                   InputProps={{
                     disableUnderline: true,
@@ -132,10 +186,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
                 {InSearch && (
                   <div className={classes.nftSearchBox}>
-                    {searchResult.length > 0 && searchResult.map((item: any, index: number) => (
-                      <Link key={index} to={`/search/${item[1]}`} style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between', marginRight: '5px' }}>
-                        <div className={classes.searchResult}>{item[0]}</div>
-                      </Link>
+                    {searchResult.map((item: any, index: number) => (
+                      <SearchResultCell key={index} name={item[0]} classes={classes} number={item[1]} />
                     ))}
                   </div>
                 )}
@@ -143,13 +195,13 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
             </div>
           )}
           <div className={classes.controls}>
-            {!connected && (
+            {!userId && (
               <Link to={'/connect'} className={classes.connectLink}>
                 <Button variantCustom='action' label={'Connect Wallet'} />
               </Link>
             )}
 
-            {(connected && isArtist) && (
+            {(userId) && (
               <>
                 <div className={classes.notificationBox}>
                   <div>
