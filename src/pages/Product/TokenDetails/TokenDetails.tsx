@@ -154,7 +154,7 @@ const TokenDetails = (): JSX.Element => {
       }
     }
   };
-  
+
   if (isLoading) return <Loader />;
   if (!collectible) return <h1>Oops something went wrong</h1>;
 
@@ -289,7 +289,7 @@ const TokenDetails = (): JSX.Element => {
         />
       )}
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
-      {isProgressModal && <ProgressModal numCopies={numCopies} userAction={userAction} onClose={() => setIsProgressModal(false)} />}
+      {isProgressModal && <ProgressModal price={collectible.price} onClose={() => setIsProgressModal(false)} />}
     </div>
   );
 };

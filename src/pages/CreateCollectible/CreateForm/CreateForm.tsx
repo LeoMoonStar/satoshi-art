@@ -15,26 +15,28 @@ import { VAlID_IMAGES_TYPES, VALID_FILE_TYPES, ALL_SUPPORTED_TYPES } from '../..
 import * as yup from 'yup';
 
 import { useAPIError } from '../../../hooks/useApiError';
-import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721';
-import { addTransaction, TokenType } from 'state/transactions/actions';
+// import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721';
+// import { addTransaction, TokenType } from 'state/transactions/actions';
 import { percentageToBasicPoints, convertEthToUsd } from 'utils/helpers';
-import {
-  Engine1155ABI,
-  Satoshi1155ABI,
-  use1155EngineSmartContractNetworkData,
-  use1155SmartContractNetworkData,
-} from 'utils/erc1155';
+// import {
+//   Engine1155ABI,
+//   Satoshi1155ABI,
+//   use1155EngineSmartContractNetworkData,
+//   use1155SmartContractNetworkData,
+// } from 'utils/erc1155';
 import { uploadFile, uploadMetaData, updateMetaData, MetaDataType } from 'apis/createItem';
-import { createCollection, createCollectible } from 'apis/collectibles';
 import Preview from '../Preview';
 import ProgressModal from '../ProgressModal';
 import useStyles from './CreateForm.style';
 import { AppState } from 'state';
 import { ethToUsdRateSelector } from 'state/app/selectors';
 import { updateTransactionInMintingProcess } from 'state/app/actions';
+
+import web3Contract from 'abis/web3contract';
+import { createCollectible } from 'apis/collectibles';
 import { readCookie } from '../../../apis/cookie';
-// create item abis
-import web3Contract from '../../../abis/web3contract';
+import classNames from 'classnames';
+import web3contract from 'abis/web3contract';
 
 const FILE_SIZE = 31457280;
 const schema = yup.object().shape({
@@ -120,9 +122,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const history = useHistory();
   const { account, library, chainId } = useWeb3React<Web3Provider>();
   const { setError } = useAPIError();
-  const erc721NetworkData = useSmartContractNetworkData(chainId);
-  const erc1155NetworkData = use1155SmartContractNetworkData(chainId);
-  const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId);
+  // const erc721NetworkData = useSmartContractNetworkData(chainId);
+  // const erc1155NetworkData = use1155SmartContractNetworkData(chainId);
+  // const engine1155NetworkData = use1155EngineSmartContractNetworkData(chainId);
   const [OpenSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
   const [createTokenError, setCreateTokenError] = useState<string>('');
   const currency = useSelector<AppState, number>(ethToUsdRateSelector);
@@ -137,96 +139,93 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   } = useForm<ICollectibleForm>({
     resolver: yupResolver(schema),
     defaultValues: {
-      onSale: false,
-      instantPrice: false,
-      unlock: false,
+      onSale: true,
+      instantPrice: true,
+      unlock: true,
       unlockContent: 'content',
       price: 10,
       collection: 'collection name',
       name: 'name',
       description: 'description',
-      royalties: 1,
+      royalties: 10,
       copiesCount: 1,
-      properties: { name: '5', value: 'M' },
+      properties: {
+        name: '5',
+        value: 'M',
+      },
     },
   });
-  const [singleContract, setSingleContract] = useState<any>();
-  const [erc1155contract, setErc1155contract] = useState<any>();
-  const [engine1155contract, setEngine1155contract] = useState<any>();
-  const engineAddress = engine1155NetworkData?.address;
 
-  const [stepState, setStepState] = useState<number>(0);
+  // const [singleContract, setSingleContract] = useState<any>();
+  // const [erc1155contract, setErc1155contract] = useState<any>();
+  // const [engine1155contract, setEngine1155contract] = useState<any>();
 
-  useEffect(() => {
-    if (isSingle) {
-      if (library && erc721NetworkData) {
-        const address = erc721NetworkData.address;
-        const singleContract = new Contract(address, Satoshi721ABI, library.getSigner());
+  // const engineAddress = engine1155NetworkData?.address;
 
-        setSingleContract(singleContract);
-      }
-    }
-  }, [erc721NetworkData, isSingle, library]);
+  // useEffect(() => {
+  //   if (isSingle) {
+  //     if (library && erc721NetworkData) {
+  //       const address = erc721NetworkData.address;
+  //       const singleContract = new Contract(address, Satoshi721ABI, library.getSigner());
 
-  useEffect(() => {
-    if (!isSingle) {
-      if (library && erc1155NetworkData && engine1155NetworkData) {
-        const erc1155Address = erc1155NetworkData.address;
-        const engine1155Contract = new Contract(engine1155NetworkData.address, Engine1155ABI, library.getSigner());
-        setEngine1155contract(engine1155Contract);
-        const erc1155Contract = new Contract(erc1155Address, Satoshi1155ABI, library.getSigner());
-        setErc1155contract(erc1155Contract);
-      }
-    }
-  }, [library, chainId, isSingle, erc1155NetworkData, engine1155NetworkData, engineAddress]);
+  //       setSingleContract(singleContract);
+  //     }
+  //   }
+  // }, [erc721NetworkData, isSingle, library]);
 
-  const createItem = async (payload: MetaDataType) => {
-    const royaltiesInBasicPoint = percentageToBasicPoints(payload.royalties);
+  // useEffect(() => {
+  //   if (!isSingle) {
+  //     if (library && erc1155NetworkData && engine1155NetworkData) {
+  //       const erc1155Address = erc1155NetworkData.address;
+  //       const engine1155Contract = new Contract(engine1155NetworkData.address, Engine1155ABI, library.getSigner());
+  //       setEngine1155contract(engine1155Contract);
+  //       const erc1155Contract = new Contract(erc1155Address, Satoshi1155ABI, library.getSigner());
+  //       setErc1155contract(erc1155Contract);
+  //     }
+  //   }
+  // }, [library, chainId, isSingle, erc1155NetworkData, engine1155NetworkData, engineAddress]);
 
-    if (isSingle) {
-      const singleTokenResponse = await singleContract.createItem(
-        JSON.stringify(payload),
-        royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
-        { from: account }
-      );
-      return { response: singleTokenResponse, tokenType: TokenType.SINGLE };
-    }
-    const multipleTokenResponse = await erc1155contract.createItem(
-      engine1155contract.address,
-      payload.copiesCount, //number of copies
-      royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
-      { from: account }
-    );
-    return { response: multipleTokenResponse, tokenType: TokenType.MULTIPLE };
-  };
+  // const createItem = async (payload: MetaDataType) => {
+  //   const royaltiesInBasicPoint = percentageToBasicPoints(payload.royalties);
+  //   if (isSingle) {
+  //     const singleTokenResponse = await singleContract.createItem(
+  //       JSON.stringify(payload),
+  //       royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
+  //       { from: account }
+  //     );
+  //     return { response: singleTokenResponse, tokenType: TokenType.SINGLE };
+  //   }
+  //   const multipleTokenResponse = await erc1155contract.createItem(
+  //     engine1155contract.address,
+  //     payload.copiesCount, //number of copies
+  //     royaltiesInBasicPoint, //royalties assigned to the token by the creator, in bps
+  //     { from: account }
+  //   );
+  //   return { response: multipleTokenResponse, tokenType: TokenType.MULTIPLE };
+  // };
 
   const [preview, setPreview] = useState<PreviewType>({ file: '', cover: '', type: '', base64: '', imagetype: '' });
   const tryCreateItem = async (data: TempTokenData) => {
-    /*if (!chainId) return;
-
-    try {
-      const { response, tokenType } = await createItem(data.payload);
-
-      await updateMetaData(data.id, response.hash, data.authToken);
-
-      dispatch(addTransaction({ type: tokenType, hash: response.hash, chainId }));
-      dispatch(updateTransactionInMintingProcess(response.hash));
-
-      history.push('/');
-    } catch (err) {
-      const serverError = err?.data?.message;
-      const metamaskError = err?.message;
-
-      if (serverError || metamaskError) {
-        setCreateTokenError(serverError || metamaskError);
-
-        return;
-      }
-      
-      throw err;
-    }*/
+    console.log(data);
+    // if (!chainId) return;
+    // try {
+    // const { response, tokenType } = await createItem(data.payload);
+    // await updateMetaData(data.id, response.hash, data.authToken);
+    // dispatch(addTransaction({ type: tokenType, hash: response.hash, chainId }));
+    // dispatch(updateTransactionInMintingProcess(response.hash));
+    //   history.push('/');
+    // } catch (err) {
+    //   const serverError = err?.data?.message;
+    //   const metamaskError = err?.message;
+    //   if (serverError || metamaskError) {
+    //     setCreateTokenError(serverError || metamaskError);
+    //     return;
+    //   }
+    //   throw err;
+    //}
   };
   const [accountAddress, setAccountAddress] = useState('');
+  const [showTxHash, setShowTxHash] = useState('');
   const [itemCreated, setItemCreated] = useState(false);
   const [onSale, setOnSale] = useState(false);
   const [confirmOnSale, setConfirmOnSale] = useState(false);
@@ -238,80 +237,102 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       //setOpenSubmitModal(false)
     }
   };
+  useEffect(() => {
+    const init = async () => {
+      const managerAddress = await web3Contract.requestMetamaskAccess();
+      console.log(managerAddress);
+      setAccountAddress(managerAddress[0]);
+    };
+    init();
+  }, []);
   const onSubmit = async (data: ICollectibleForm) => {
-    const { properties, copiesCount, royalties, name, instantPrice, price, unlock, unlockContent, collection, description, onSale } = data;
+    const { properties, copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
+      data;
+    console.log(data);
+    console.log(preview)
     const metamaskAddr = readCookie('metamask_address');
-
-    setOpenSubmitModal(true)
     const approval = await web3Contract.isApprovedArtist(metamaskAddr);
+    console.log('isAPprovedArtist', approval);
+    if (approval) {
+      console.log(data);
+      const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+      console.log(tokenId);
+      setItemCreated(true);
+      console.log('In Progress...');
 
-    createCollection(name)
-      .then(async({ data }) => {
-          if (approval) {
-            setStepState(1)
-
-            const tokenId = await web3Contract.etherFunctionCreateItem(copiesCount, royalties);
-
-            const collectible = { 
-                status: 'onSale', 
-                copies: copiesCount,
-                name: name, 
-                tokenId: tokenId, 
-                royalties: royalties, 
-                collectionId: data.id, 
-                price: price, 
-                unlock: unlock,
-                unlockContent: unlockContent,
-                file: { 
-                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                    mediaType: preview.imagetype, 
-                    content: preview.base64
-                },
-                thumbnail: {
-                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                    mediaType: preview.imagetype, 
-                    content: preview.base64
-                }
+      // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
+      if (onSale) {
+        const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
+        setOnSale(true);
+        buyResult
+          .wait()
+          .then((res: any) => {
+            setOnSale(false);
+            setConfirmOnSale(true);
+            console.log('Item is on sale now');
+          })
+          .catch((err: { message: any }) => {
+            setOnSale(false);
+            console.log(err.message);
+          });
+      }
+    
+    } else {
+      alert('You are not approved to create collectibles');
+    }
+    /*const collectible = { 
+            status: 'onSale', 
+            copies: copiesCount,
+            name: name, 
+            tokenId: 'tokenid', 
+            royalties: royalties, 
+            collectionId: 'collectionid', 
+            price: price, 
+            file: { 
+                filenName: 'image.' + preview.imagetype.replace('image/', ''), 
+                mediaType: preview.imagetype, 
+                content: preview.base64
+            },
+            thumbnail: {
+                filenName: 'image.' + preview.imagetype.replace('image/', ''), 
+                mediaType: preview.imagetype, 
+                content: preview.base64
             }
-          
-            setItemCreated(true);
-            setStepState(2)
+        }*/
 
-            console.log('In Progress...');
-            console.log('264',tokenId);
-            if (onSale) {
-              const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
-              setOnSale(true);
-              buyResult
-                .wait()
-                .then((res: any) => {
-                  setOnSale(false);
-                  setConfirmOnSale(true);
-                  console.log('Item is on sale now');
-                  setStepState(3)
+    /*createCollection(name)
+            .then((res) => {
+                const collectible = { 
+                    status: 'onSale', 
+                    copies: copiesCount,
+                    name: name, 
+                    tokenId: 'tokenid', 
+                    royalties: royalties, 
+                    collectionId: 'collectionid', 
+                    price: price, 
+                    file: { 
+                        filenName: 'image.' + preview.imagetype.replace('image/', ''), 
+                        mediaType: preview.imagetype, 
+                        content: preview.base64
+                    },
+                    thumbnail: {
+                        filenName: 'image.' + preview.imagetype.replace('image/', ''), 
+                        mediaType: preview.imagetype, 
+                        content: preview.base64
+                    }
+                }
 
-                  createCollectible(collectible)
+                createCollectible(collectible)
                     .then((res) => {
                         location.replace('/')
                     })
                     .catch((error) => {
                         console.log(error)
                     })
-                      })
-                      .catch((err: { message: any }) => {
-                        setOnSale(false);
-                        console.log(err.message);
-                      });
-            }
-          } else {
-            alert('You are not approved to create collectibles');
-          }
-      })
-      .catch((error) => {
-          console.log(error)
-      })
-
-          
+            })
+            .catch((error) => {
+                console.log(error)
+            })*/
 
     /*if (!chainId) return
         if (!account) return
@@ -389,20 +410,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       tryCreateItem(tempToken);
     }
   };
-  /*useEffect(() => {
+  useEffect(() => {
     if (!OpenSubmitModal) {
       setCreateTokenError('');
       setTempToken(null);
     }
-  }, [OpenSubmitModal]);*/
-
-  useEffect(() => {
-    const init = async () => {
-      const managerAddress = await web3Contract.requestMetamaskAccess();
-      setAccountAddress(managerAddress[0]);
-    };
-    init();
-  }, []);
+  }, [OpenSubmitModal]);
 
   const { price } = previewFields;
   const ethAmount = price ? price - price * 0.025 : 0;
@@ -550,8 +563,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                       disableUnderline
                     />
                     <div className={classes.priceInfo}>
-                      <span>Service fee 2.5%.</span>
-                      <span>You will receive {ethAmount} ETH $ usdAmount</span>
+                      <span>{text['serviceFeeProgress'] + '2.5'}</span>
+                      {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
                     </div>
 
                     {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
@@ -584,10 +597,35 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               </div>
             )}
           </FormControl>
+          {/*<div className={classes.collectionType}>
+                        <div className={classes.subtitle}>{t('chooseCollection')}</div>
+                        <div className={classes.cards}>
+                            <Controller name="collection" control={control}
+                                as={
+                                    <Button className={clsx(classes.card, {[classes.cardActive]:watch('collection') === 'new'})}
+                                        onClick={() => setValue('collection', 'new')}>
+                                        <PlusCircle />
+                                        <span className={classes.cardName}>{t('create')}</span>
+                                        <span className={classes.cardDscr}>ERC-721</span>
+                                    </Button>
+                                }
+                            />
+                            <Controller name="collection" control={control}
+                                as={
+                                    <Button className={clsx(classes.card, {[classes.cardActive]:watch('collection') === 'sart'})}
+                                        onClick={() => setValue('collection', 'sart')}>
+                                        <LogoIcon />
+                                        <span className={classes.cardName}>Satoshi.ART</span>
+                                        <span className={classes.cardDscr}>SART</span>
+                                    </Button>
+                                }
+                            />
+                        </div>
+                    </div>*/}
           <div className={classes.propertiesWrapper}>
             <div className={classes.input}>
               <label htmlFor='collection' className={classes.label}>
-                Collection
+                {/* <Trans i18nKey='Collection' components={{ 1: <span /> }} /> */}
               </label>
               <Input
                 id='collection'
@@ -613,7 +651,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </div>
             <div className={classes.input}>
               <label htmlFor='description' className={classes.label}>
-                Description <span>(Optional)</span>
+                {/* <Trans i18nKey='descriptionOptional' components={{ 1: <span /> }} /> */}
               </label>
               <Input
                 id='description'
@@ -638,7 +676,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   name='royalties'
                   endAdornment={<span>%</span>}
                 />
-                <span>Suggested: 10%, 20%, 30%</span>
+                <span>{text['suggestedPercentages']}, 20%, 30%</span>
                 {errors.royalties && <p className={classes.textError}>{errors.royalties.message}</p>}
               </div>
               {!isSingle && (
@@ -660,7 +698,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </div>
             <div className={classes.input}>
               <label htmlFor='size' className={classes.label}>
-                Properties <span>(Optional)</span>
+                {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
               </label>
               <div className={classes.sizes}>
                 <div>
@@ -687,8 +725,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </div>
           </div>
           <div className={classes.footer}>
-            <Button type='submit'>{text['createItem']}</Button>
-
+            <Button disabled={isErrors()} type='submit'>
+              {text['createItem']}
+            </Button>
             {itemCreated ? <span>Creating item in progress....</span> : ''}
             {onSale ? (
               <>
@@ -718,14 +757,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         createTokenError={createTokenError}
         onTryAgain={handleTryAgain}
         open={OpenSubmitModal}
-        stepState={stepState}
-        onClose={() => {
-          setOpenSubmitModal(!OpenSubmitModal);
-          setStepState(0);
-        }}
+        onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
     </div>
   );
 };
 
 export default CreateForm;
+function res(res: any, arg1: (any: any) => void) {
+  throw new Error('Function not implemented.');
+}

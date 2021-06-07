@@ -82,8 +82,22 @@ export const getCollectibles = (name?: string) => {
   }
 };
 
-export const getHistory = (collectibleId: string) => {
-  return axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/trade/${collectibleId}/history`)
+export const getHistory = (Id: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/trade/${Id}/history`)
+}
+
+export const buyCollectible = (Id: string, price: number) => {
+  return axios.post(
+    `${process.env.REACT_APP_API}/api/auth/trade/${Id}`,
+    { price: price, tradeType: "onSale" },
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  )
 }
 
 export const getCollectibleSearches = (name: string) => {
@@ -154,8 +168,7 @@ export const createCollection = (name: string) => {
 
 export const likeCollectible = (Id: string) => {
   return axios.post(
-    `${process.env.REACT_APP_API}/api/auth/user/:collectibleId/like`,
-    { collectibleId: Id },
+    `${process.env.REACT_APP_API}/api/auth/user/${Id}/like`,
     {
       headers: {
         id: readCookie('id'),
