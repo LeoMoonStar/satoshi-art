@@ -255,9 +255,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     console.log('isAPprovedArtist', approval);
     if (approval) {
       console.log(data);
+      setItemCreated(true);
       const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
       console.log('createForm-259',tokenId);
-      setItemCreated(true);
       console.log('In Progress...');
 
       // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
