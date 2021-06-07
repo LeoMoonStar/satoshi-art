@@ -278,10 +278,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     status: 'onSale', 
                     copies: copiesCount,
                     name: name, 
-                    tokenId, 
+                    tokenIds: tokenId, 
                     royalties: royalties, 
                     collectionId: data.id, 
-                    price: price, 
+                    price: price,
                     file: { 
                         fileName: 'image.' + preview.imagetype.replace('image/', ''), 
                         mediaType: preview.imagetype, 
