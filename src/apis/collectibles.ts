@@ -235,10 +235,6 @@ export const getBalance = async() => {
 }
 
 export const createCollectible = async (data: any) => {
-  const { copies, royalties } = data
-
-  data.tokenId = await createCollectibleToken(copies, royalties);
-
   await axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/collectibles/create`, 
     data, 

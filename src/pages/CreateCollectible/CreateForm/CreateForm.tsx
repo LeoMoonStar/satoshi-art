@@ -33,7 +33,7 @@ import { ethToUsdRateSelector } from 'state/app/selectors';
 import { updateTransactionInMintingProcess } from 'state/app/actions';
 
 import web3Contract from 'abis/web3contract';
-import { createCollectible } from 'apis/collectibles';
+import { createCollection, createCollectible } from 'apis/collectibles';
 import { readCookie } from '../../../apis/cookie';
 import classNames from 'classnames';
 import web3contract from 'abis/web3contract';
@@ -270,7 +270,40 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           .then((res: any) => {
             setOnSale(false);
             setConfirmOnSale(true);
-            console.log('Item is on sale now');
+
+            createCollection(name)
+            .then(({ data }) => {
+                const collectible = { 
+                    status: 'onSale', 
+                    copies: copiesCount,
+                    name: name, 
+                    tokenId: tokenId[0], 
+                    royalties: royalties, 
+                    collectionId: data.id, 
+                    price: price, 
+                    file: { 
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                        mediaType: preview.imagetype, 
+                        content: preview.base64
+                    },
+                    thumbnail: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                        mediaType: preview.imagetype, 
+                        content: preview.base64
+                    }
+                }
+
+                createCollectible(collectible)
+                    .then((res) => {
+                        location.replace('/')
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
           })
           .catch((err: { message: any }) => {
             setOnSale(false);
@@ -282,25 +315,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     } else {
       alert('You are not approved to create collectibles');
     }
-    /*const collectible = { 
-            status: 'onSale', 
-            copies: copiesCount,
-            name: name, 
-            tokenId: 'tokenid', 
-            royalties: royalties, 
-            collectionId: 'collectionid', 
-            price: price, 
-            file: { 
-                filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                mediaType: preview.imagetype, 
-                content: preview.base64
-            },
-            thumbnail: {
-                filenName: 'image.' + preview.imagetype.replace('image/', ''), 
-                mediaType: preview.imagetype, 
-                content: preview.base64
-            }
-        }*/
+    /**/
 
     /*createCollection(name)
             .then((res) => {
