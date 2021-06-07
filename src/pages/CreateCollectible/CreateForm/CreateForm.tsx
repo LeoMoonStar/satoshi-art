@@ -271,6 +271,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             setOnSale(false);
             setConfirmOnSale(true);
 
+            // create a collection token and add the collectible to database
             createCollection(name)
             .then(({ data }) => {
                 const collectible = { 
