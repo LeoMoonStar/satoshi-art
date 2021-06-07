@@ -278,7 +278,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     status: 'onSale', 
                     copies: copiesCount,
                     name: name, 
-                    tokenId: tokenId[0], 
+                    tokenId, 
                     royalties: royalties, 
                     collectionId: data.id, 
                     price: price, 
