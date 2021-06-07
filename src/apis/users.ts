@@ -140,5 +140,12 @@ export const updateCelebrityProfile = (data: any) => {
 }
 
 export const getNotifications = () => {
-  return axios.get(`${process.env.REACT_APP_API}/api/auth/notification`)
+  return axios.get(
+    `${process.env.REACT_APP_API}/api/auth/notification`,
+    { headers: {
+      id: readCookie("id"), 
+      token: readCookie('token'), 
+      metamask_address: readCookie('metamask_address') 
+    }}
+  )
 }
