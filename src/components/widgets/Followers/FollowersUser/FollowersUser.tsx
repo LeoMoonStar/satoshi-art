@@ -6,7 +6,7 @@ import { GreySaveIcon, ViewsIcon } from 'components/icons';
 import artistAvatar from 'components/images/artist/avatar.jpg';
 import useStyles from './FollowersUser.style';
 
-const FollowersUser = ({ name }: { name: string }): JSX.Element => {
+const FollowersUser = ({ name, id, isArtist }: { name: string, id: string, isArtist: boolean }): JSX.Element => {
   const [isFollowing, setIsFollowing] = useState<boolean>();
   const classes = useStyles();
 
@@ -17,7 +17,13 @@ const FollowersUser = ({ name }: { name: string }): JSX.Element => {
       <Avatar size={100} image={artistAvatar} alt='User name' status='premium' />
       <div className={classes.bio}>
         <div className={classes.name}>
-          <div>{name}</div>
+          <div onClick={() => {
+            if (isArtist) {
+              location.replace(`/artists/${id}`)
+            } else {
+              location.replace(`/user/${id}`)
+            }
+          }}>{name}</div>
           <Button className={classes.actionBtn} onClick={() => setIsFollowing(isFollowing => !isFollowing)}>
             {isFollowing ? 'Following' : 'Follow'}{' '}
           </Button>

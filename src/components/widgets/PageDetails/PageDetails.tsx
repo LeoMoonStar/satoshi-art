@@ -96,7 +96,7 @@ export default function PageDetails(): JSX.Element {
       getFollowers(id).then(({ data }) => setNumFollowers(data.length));
     }
   }, []);
-
+  
   return (
     <>
       <div className={classes.intro}>
