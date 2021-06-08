@@ -91,7 +91,7 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
     const metamaskId: any = data;
 
     if (dropOfTheDay) {
-      const dropResult = await web3Contract.marketplaceBuyCollectible(
+      const dropResult = await web3Contract.dropOfTheDayBuy(
         metamaskId.tokenId,
         metamaskId.ownerMetamaskId,
         metamaskId.price.toString()

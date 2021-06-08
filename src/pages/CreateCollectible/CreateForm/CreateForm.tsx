@@ -245,6 +245,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       console.log(managerAddress);
       setAccountAddress(managerAddress[0]);
     };
+    
+    // const check
     init();
   }, []);
   const onSubmit = async (data: ICollectibleForm) => {
@@ -257,8 +259,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     console.log('isAPprovedArtist', approval);
 
     //check if it celebrity or not
-    const userId: any = readCookie('id');
-    const {data: userInfo} = await getUserInfo(userId);
+    
 
 
 
