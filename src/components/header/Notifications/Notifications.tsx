@@ -45,9 +45,9 @@ export default function Notifications(): JSX.Element {
         } else if (timelapse > 3600000) { // > 1 hour
             return (timelapse / 3600000).toFixed(0) + " hour(s) ago"
         } else if (timelapse > 60000) { // > 1 minute
-            return (timelapse / 60000).toFixed(0) + " minth(s) ago"
+            return (timelapse / 60000).toFixed(0) + " minute(s) ago"
         } else if (timelapse > 1000) { // > 1 second
-            return (timelapse / 1000).toFixed(0) + " year(s) ago"
+            return (timelapse / 1000).toFixed(0) + " second(s) ago"
         }
     }
     
