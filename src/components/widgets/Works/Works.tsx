@@ -50,7 +50,7 @@ export default function WorksList({
   return (
     <div>
       <div className={classes.grid}>
-        {collectibles.map(({ id, name, price, status, creatorId, file, thumbnailUrl }) => (
+        {collectibles.map(({ id, status, name, price, status, creatorId, file, thumbnailUrl }) => (
           <div className={classes.work} key={id}>
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
@@ -83,7 +83,7 @@ export default function WorksList({
               <div className={classes.workInfo}>
                 <span className={classes.count}>1 of 1</span>
 
-                {collectible.status == "onSale" && (
+                {status == "onSale" && (
                   <Button className={classes.bidButton}>
                     <div onClick={() => location.replace(`/product/${id}`)}>
                       <TextGradient colors='#FF0099, #6A2FE7'>{text['buyNow']}</TextGradient>
