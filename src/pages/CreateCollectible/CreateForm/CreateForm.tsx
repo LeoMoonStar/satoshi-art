@@ -340,14 +340,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   
               // create a collection token and add the collectible to database
               createCollection(name)
-              .then(({ data: any }) => {
+              .then((response) => {
                   const collectible = { 
                       status: 'onSale', 
                       copies: copiesCount,
                       name: name, 
                       tokenIds: tokenId, 
                       royalties: royalties, 
-                      collectionId: data.id, 
+                      collectionId: response.data.id, 
                       price: price,
                       file: { 
                           fileName: 'image.' + preview.imagetype.replace('image/', ''), 
@@ -383,14 +383,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         else{
           //not on sale it should insert into DB
           createCollection(name)
-              .then(({ data: any }) => {
+              .then((response) => {
                   const collectible = { 
                       status: 'onHold', 
                       copies: copiesCount,
                       name: name, 
                       tokenIds: tokenId, 
                       royalties: royalties, 
-                      collectionId: data.id, 
+                      collectionId: response.data.id, 
                       price: price,
                       file: { 
                           fileName: 'image.' + preview.imagetype.replace('image/', ''), 

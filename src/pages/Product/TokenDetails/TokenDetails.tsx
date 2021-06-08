@@ -97,6 +97,7 @@ const TokenDetails = (): JSX.Element => {
     window.scrollTo(0, 0);
 
     getCollectibles().then(({ data }) => setUserCollectibles(data))
+
     getCollectible(id).then(async({ data }) => {
       const newInfo: any = []
       setCollectible(data)
@@ -113,6 +114,7 @@ const TokenDetails = (): JSX.Element => {
 
         getCollection(id)
           .then(({ data }) => {
+            console.log('collection:',data);
             setCollection({
               name: data.collectionName,
               avatarUrl: avatar
@@ -291,7 +293,7 @@ useEffect(()=>{
             )}
             <Typography variant='h6' className={classes.tokenDollarPrice}>
               {collectible.price && <Price.WeiToUsd value={collectible.price} />}
-              1 of 10
+              {collectible.numberOfCopy+1} of {collectible.totalCopies}
             </Typography>
           </div>
           <div className={classes.descriptionContainer}>

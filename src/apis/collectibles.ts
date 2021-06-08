@@ -45,6 +45,8 @@ export type CollectibleInfo = {
   description: [];
   properties: [];
   walletHash?: string;
+  numberOfCopy: number;
+  totalCopies: number;
 };
 
 export type CollectibleInfoResponse = {
