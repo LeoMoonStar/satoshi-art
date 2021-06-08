@@ -128,6 +128,10 @@ export const getCollectible = (Id: string) => {
   return axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/${Id}`);
 };
 
+export const getCollection = (Id: string) => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/collection/${Id}`);
+}
+
 export const putCollectibleOnSale = async(Id: string, data: any) => {
   return axios.put(
     `${process.env.REACT_APP_API}/api/auth/${Id}/put-on-sale`,
@@ -173,6 +177,7 @@ export const createCollection = (name: string) => {
 export const likeCollectible = (Id: string) => {
   return axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/${Id}/like`,
+    {},
     {
       headers: {
         id: readCookie('id'),
@@ -199,6 +204,7 @@ export const dislikeCollectible = (Id: string) => {
 export const thumbsupCollectible = (Id: string) => {
   return axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/${Id}/thumbup`,
+    {},
     {
       headers: {
         id: readCookie('id'),

@@ -35,19 +35,19 @@ export default function Notifications(): JSX.Element {
         const timelapse = Date.now() - createdate
 
         if (timelapse > 31540000000) { // > 1 year
-            return (timelapse / 31540000000) + " year(s) ago"
+            return (timelapse / 31540000000).toFixed(0) + " year(s) ago"
         } else if (timelapse > 2628000000) { // > 1 month
-            return (timelapse / 2628000000) + " month(s) ago" 
+            return (timelapse / 2628000000).toFixed(0) + " month(s) ago" 
         } else if (timelapse > 604800000) { // > 1 week
-            return (timelapse / 604800000) + " week(s) ago"
+            return (timelapse / 604800000).toFixed(0) + " week(s) ago"
         } else if (timelapse > 86400000) { // > 1 day
-            return (timelapse / 86400000) + " day(s) ago"
+            return (timelapse / 86400000).toFixed(0) + " day(s) ago"
         } else if (timelapse > 3600000) { // > 1 hour
-            return (timelapse / 3600000) + " hour(s) ago"
+            return (timelapse / 3600000).toFixed(0) + " hour(s) ago"
         } else if (timelapse > 60000) { // > 1 minute
-            return (timelapse / 60000) + " minth(s) ago"
+            return (timelapse / 60000).toFixed(0) + " minth(s) ago"
         } else if (timelapse > 1000) { // > 1 second
-            return (timelapse / 1000) + " year(s) ago"
+            return (timelapse / 1000).toFixed(0) + " year(s) ago"
         }
     }
     

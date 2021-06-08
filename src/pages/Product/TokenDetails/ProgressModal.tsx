@@ -31,11 +31,13 @@ export function MyStepCircle(props: StepIconProps): JSX.Element {
   );
 }
 type ProgressModalProps = {
+  name: string;
   price: number;
   onClose: () => void;
+  openFailedBox: () => void;
 };
 
-export default function ProgressModal({ price, onClose }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ name, price, onClose, openFailedBox }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -45,6 +47,7 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
   const [tokenId, setTokenId] = useState<number>(0);
   const [clickedSigned, setClickedSigned] = useState(false);
   const [showTxHash, setShowTxHash] = useState('');
+  
   // console.log(store.getState());
   useEffect(() => {
     console.log('line42', id);
@@ -94,7 +97,14 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
       setActiveStep(2);
       setShowTxHash(res.transactionHash);
 
-      buyCollectible(id, price);
+      buyCollectible(id, price)
+        .then((res) => {
+          onClose()
+        })
+        .catch((error) => {
+          openFailedBox()
+        })
+      
     });
   };
   return (

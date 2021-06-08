@@ -15,36 +15,40 @@ export default function OrderListFilters(): JSX.Element {
 
   useEffect(() => {
     getDropOfTheDay().then(({ data }) => setCollectibles(data));
-  });
+  }, []);
 
   return (
     <section className={classes.container}>
-      {collectibles.length > 0 && collectibles.map(({ id, thumbnailUrl }) => (
-        <div key={id} className={classes.card}>
-          {/*<img 
-            src={!thumbnailUrl.includes('s3.thumbnailurl') ? thumbnailUrl : '/collectible-image.jpeg'} 
-            alt='' 
-          />*/}
-          
-          <div className={classes.header}>
-            <h2 className={classes.title}>Pittful#1</h2>
-            <div className={classes.count}>{text['countOfCount'] + 2 + 10}</div>
+      {collectibles.length > 0 ?
+        collectibles.map(({ id, thumbnailUrl }) => (
+          <div key={id} className={classes.card} onClick={() => location.replace(`/product/${id}`)}>
+            {/*<img 
+              src={!thumbnailUrl.includes('s3.thumbnailurl') ? thumbnailUrl : '/collectible-image.jpeg'} 
+              alt='' 
+            />*/}
+            
+            <div className={classes.header}>
+              <h2 className={classes.title}>Pittful#1</h2>
+              <div className={classes.count}>{text['countOfCount'] + 2 + 10}</div>
+            </div>
+            <div className={classes.subTitle}>Brad’s Vault</div>
+            <ul className={classes.list}>
+              <li>Lorem ipsum dolor sit amet</li>
+              <li>Etiam iaculis nulla eu sodales sagittis</li>
+              <li>Felis pellentesque nibh, in varius ipsum orci et</li>
+              <li>Aliquam posuere purus mi, vitae luctus justo</li>
+              <li>Nulla pulvinar sed nisl</li>
+            </ul>
+            <Link to={`/product/${id}`}>
+              <Button className={classes.buyNow} fullWidth variantCustom='action'>
+                {text['buyNow']}
+              </Button>
+            </Link>
           </div>
-          <div className={classes.subTitle}>Brad’s Vault</div>
-          <ul className={classes.list}>
-            <li>Lorem ipsum dolor sit amet</li>
-            <li>Etiam iaculis nulla eu sodales sagittis</li>
-            <li>Felis pellentesque nibh, in varius ipsum orci et</li>
-            <li>Aliquam posuere purus mi, vitae luctus justo</li>
-            <li>Nulla pulvinar sed nisl</li>
-          </ul>
-          <Link to={`/product/${id}`}>
-            <Button className={classes.buyNow} fullWidth variantCustom='action'>
-              {text['buyNow']}
-            </Button>
-          </Link>
-        </div>
-      ))}
+        ))
+        :
+        <div style={{ fontSize: 20 }}>There are no drop of the day created</div>
+      }
     </section>
   );
 }

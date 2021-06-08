@@ -101,7 +101,7 @@ export default function OnSale({ isOutOfDate }: { isOutOfDate: boolean }): JSX.E
                   setOnsale(list)
               })
       }
-  })
+  }, [])
 
   return (
     <TokensSlider isLoading={isLoading} count={onsale.length} title={text['onSale']}>

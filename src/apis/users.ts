@@ -1,5 +1,7 @@
 import axios from './axios';
 import { readCookie } from './cookie';
+//import { getUserInfo } from 'apis/users'
+import { getCollectible } from 'apis/collectibles'
 
 export type User = {
   thumbnailUrl: string;

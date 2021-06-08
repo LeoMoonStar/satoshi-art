@@ -1,4 +1,5 @@
 export { ReactComponent as LikeIcon } from './like.svg';
+export { ReactComponent as LikedIcon } from './liked.svg';
 export { ReactComponent as SaveIcon } from './save.svg';
 export { ReactComponent as ViewsIcon } from './views.svg';
 export { ReactComponent as ThreeDotsIcon } from './threeDots.svg';
@@ -9,6 +10,7 @@ export { ReactComponent as MetamaskIcon } from './metamask.svg';
 export { ReactComponent as ExpandIcon } from './expand.svg';
 export { ReactComponent as DotsIcon } from './dots.svg';
 export { ReactComponent as GreySaveIcon } from './greySave.svg';
+export { ReactComponent as GreySavedIcon } from './greySaved.svg';
 export { ReactComponent as SatoshiArtIcon } from './Satoshi.ART.svg';
 export { ReactComponent as BellIcon } from './bell.svg';
 export { ReactComponent as SearchIcon } from './searchIcon.svg';

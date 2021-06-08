@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../header';
 import Footer from './footer';
 import useStyles from './layout.style';
-import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies } from 'apis/cookie';
+import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies, readCookie } from 'apis/cookie';
 import Web3 from 'web3';
 import axios from 'axios';
 import { useWeb3React } from '@web3-react/core';
 import { useConnect } from 'hooks/useDisconnect';
+import Popup from 'components/widgets/Popup';
 
 declare let window: any;
 
@@ -55,6 +56,10 @@ ILayoutProps): JSX.Element => {
 
           if (isInLoginAsMode()) {
             console.log('user sign in');
+
+            console.log("id", readCookie("id"))
+            console.log("token", readCookie("token"))
+            console.log("metamask_address", readCookie("metamask_address"))
           } else {
             console.log(`Account before get challenge ${account}`);
             const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
@@ -80,7 +85,14 @@ ILayoutProps): JSX.Element => {
                         metamask_address: sigRes.data.metamaskId,
                         token: sigRes.data.token,
                       });
+
+                      console.log("id", sigRes.data.id)
+                      console.log("token", sigRes.data.token)
+                      console.log("metamask_address", sigRes.data.metamaskId)
+
+                      setShowPopup(true)
                     } else {
+                      setShowFailedPopup(true)
                       console.log('Signature not verified');
                     }
                   })
@@ -97,6 +109,9 @@ ILayoutProps): JSX.Element => {
       eraseLoginAsCookies();
     }
   };
+  const [showPopup, setShowPopup] = useState(false)
+  const [showFailedPopup, setShowFailedPopup] = useState(false)
+
   useEffect(() => {
     sign();
   }, [window.ethereum.selectedAddress]);
@@ -124,6 +139,11 @@ ILayoutProps): JSX.Element => {
       <footer className={classes.footer}>
         <Footer />
       </footer>
+      <Popup open={showPopup} textheader={"Connected wallet;;You successfully connected the wallet"} onClose={() => {
+        setShowPopup(false)
+        location.replace("/")
+      }}></Popup>
+      <Popup open={showFailedPopup} textheader={"Connected wallet;;You failed to connect the wallet"} onClose={() => setShowFailedPopup(false)}></Popup>
     </div>
   );
 };
