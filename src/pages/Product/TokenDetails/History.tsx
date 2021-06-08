@@ -72,9 +72,9 @@ export const History = ({ list, name }: any): JSX.Element => {
                                         ' and bought by ' + firsthistory.buyerUserName + ' '
                                         :
                                         ' and sold by ' + firsthistory.sellerUserName + ' '
-                                : '' }
+                                : ' ' }
 
-                                 on {displayTime(parseInt(creator.createDate))}
+                                on {displayTime(parseInt(creator.createDate))}
                             </div>
                         </div>
                     </div>

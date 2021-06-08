@@ -13,6 +13,7 @@ import { LogoIcon, PlusCircle } from 'components/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { VAlID_IMAGES_TYPES, VALID_FILE_TYPES, ALL_SUPPORTED_TYPES } from '../../../constants/supportedFileTypes';
 import * as yup from 'yup';
+import Popup from 'components/widgets/Popup';
 
 import { useAPIError } from '../../../hooks/useApiError';
 // import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721';
@@ -306,11 +307,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 }
             }
 
+
             createCollectible(collectible)
                 .then((res) => {
+                  
                     location.replace('/')
                 })
                 .catch((error) => {
+                   setShowFailedPopup(true)
                     console.log(error)
                 })
         }).catch(err=>{console.log(err.message)})
@@ -368,6 +372,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               .catch((error: any) => {
                   console.log(error)
               })
+
             })
             .catch((err: { message: any }) => {
               setOnSale(false);
@@ -477,6 +482,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       });
     };
   };
+  const [showPopup, setShowPopup] = useState(false)
+  const [showFailedPopup, setShowFailedPopup] = useState(false)
   const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.name, e.target.value.split(/\D/).join(''));
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -848,6 +855,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         open={OpenSubmitModal}
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
+      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => setShowPopup(false)}></Popup>
+      <Popup open={showFailedPopup} textheader="Edit profile;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
     </div>
   );
 };

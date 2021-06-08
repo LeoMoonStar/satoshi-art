@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => {
       '& svg': {
         marginRight: 7,
       },
-    },
+    }
   };
 });
 export default useStyles;

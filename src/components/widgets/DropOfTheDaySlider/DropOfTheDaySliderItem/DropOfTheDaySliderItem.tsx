@@ -21,13 +21,16 @@ type DropOfTheDaySliderItemProps = {
 export default function DropOfTheDaySliderItem({ id, name, imagePreview, price }: DropOfTheDaySliderItemProps): JSX.Element {
   const classes = useStyles();
   const [userCollectibles, setUserCollectibles] = useState([])
-  const isTokenOwned = useIsCollectibleOwned(id, userCollectibles)
+  const [isTokenOwned, setIsTokenOwned] = useState(false)
 
   useEffect(() => {
-      getCollectibles()
-          .then(({ data }) => {
-              setUserCollectibles(data)
-          })
+    getCollectibles().then(({ data }) => {
+      const owned = data.some((info: any) => {
+        return info.ownerId == id
+      })
+
+      setIsTokenOwned(owned)
+    })
   }, [])
 
   return (

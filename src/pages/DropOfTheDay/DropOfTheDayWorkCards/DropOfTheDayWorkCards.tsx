@@ -15,11 +15,14 @@ export default function OrderListFilters(): JSX.Element {
 
   useEffect(() => {
     getDropOfTheDay().then(({ data }) => setCollectibles(data));
-  });
+  }, []);
 
   return (
     <section className={classes.container}>
-      {collectibles.length > 0 && collectibles.map(({ id, thumbnailUrl, name }) => (
+      
+
+      {collectibles.length > 0 ? 
+          collectibles.map(({ id, thumbnailUrl, name }) => (
         <div key={id} className={classes.card}>
           {/* <img 
             src={!thumbnailUrl.includes('s3.thumbnailurl') ? thumbnailUrl : '/collectible-image.jpeg'} 
@@ -48,7 +51,8 @@ export default function OrderListFilters(): JSX.Element {
             </Button>
           </Link>
         </div>
-      ))}
+      )) : <div style={{ fontSize: 20 }}>There are no drop of the day created</div>}
+
     </section>
   );
 }

@@ -32,11 +32,13 @@ export function MyStepCircle(props: StepIconProps): JSX.Element {
   );
 }
 type ProgressModalProps = {
+  name: string;
   price: number;
   onClose: () => void;
+  openFailedBox: () => void;
 };
 
-export default function ProgressModal({ price, onClose }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ name, price, onClose, openFailedBox }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -46,7 +48,9 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
   const [tokenId, setTokenId] = useState<number>(0);
   const [clickedSigned, setClickedSigned] = useState(false);
   const [showTxHash, setShowTxHash] = useState('');
+
   const [dropOfTheDay, setDropOfTheDay] = useState(false);
+
 
   useEffect(() => {
     checkDropOfTheDay();
@@ -104,8 +108,19 @@ console.log(metamaskId);
         setActiveStep(2);
         setShowTxHash(res.transactionHash);
 
-        buyCollectible(id, price);
-      }).catch((err:any)=>alert(err.message))
+
+   
+
+      buyCollectible(id, price)
+        .then((res) => {
+          onClose()
+        })
+        .catch((error) => {
+          openFailedBox()
+        })
+      
+    });
+       
     }
     else{
       //regular collectible
@@ -129,6 +144,7 @@ console.log(metamaskId);
       }).catch((err:any)=>alert(err.message))
     }
     
+
   };
   return (
     <Modal open onClose={onClose}>

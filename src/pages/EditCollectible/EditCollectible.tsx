@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import Layout from 'components/layout'
 import Button from 'components/button'
 import Avatar from 'components/avatar'
+import Popup from 'components/widgets/Popup';
 
 import web3Contract from '../../abis/web3contract';
 
@@ -76,18 +77,14 @@ export default function EditCollectible() {
 
     	if (price) {
     		const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price)
-
-    		// if (receipt) {
-    		// 	putCollectibleOnSale(id, data)
-		    // 		.then(() => {
-		    // 			location.replace('/dashboard/user')
-		    // 		})
-		    // }
 			receipt.wait().then((res:any) => {
 				console.log(res);
 				putCollectibleOnSale(id, data)
 				.then(() => {
-					location.replace('/dashboard/user')
+					setShowPopup(true)
+				})
+				.catch(() => {
+					setShowFailedPopup(true)
 				})
 			})
     	} else {
@@ -95,12 +92,15 @@ export default function EditCollectible() {
     	}
     }
 
-    const removeFromSale = () => {
+    /*const removeFromSale = () => {
     	removeCollectibleFromSale(id)
     		.then(() => {
     			location.replace('/dashboard/user')
     		})
-    }
+    }*/
+
+    const [showPopup, setShowPopup] = useState(false)
+    const [showFailedPopup, setShowFailedPopup] = useState(false)
 
 	return (
 		<Layout>
@@ -170,6 +170,8 @@ export default function EditCollectible() {
 			        </div>
 		        </div>
 	        </div>
+	        <Popup open={showPopup} textheader={"Owned collectible status change;;Your collectible status has been changed!"} onClose={() => location.replace('/dashboard/user')}></Popup>
+	        <Popup open={showFailedPopup} textheader={"Collectible status;;You failed to update your collectible status, Please try again"} onClose={() => setShowFailedPopup(false)}></Popup>
 		</Layout>
 	)
 }

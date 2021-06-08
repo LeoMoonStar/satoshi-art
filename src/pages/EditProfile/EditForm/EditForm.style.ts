@@ -159,7 +159,7 @@ const useStyles = makeStyles(() => {
     },
     textError: {
       color: '#FF0000',
-    },
+    }
   };
 });
 

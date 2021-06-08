@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { styled, Grid, Typography, IconButton, Tab, Tabs, Theme } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import text from '../../../constants/content';
-import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon } from 'components/icons';
+import { ExpandIcon, GreySaveIcon, GreySavedIcon, ViewsIcon, LikeIcon, LikedIcon, SaveIcon, DotsIcon } from 'components/icons';
 import Button from 'components/button';
 import Loader from 'components/widgets/Loader';
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes';
+import Popup from 'components/widgets/Popup';
 import { 
-  getCollectible, getCollectibles, CollectibleInfo, getHistory, 
+  getCollectible, getCollection, getCollectibles, CollectibleInfo, getHistory, 
   likeCollectible, dislikeCollectible, thumbsupCollectible, thumbsdownCollectible, 
   getCollectibleThumbs, getCollectibleLikes
 } from 'apis/collectibles';
 import { getUserInfo } from 'apis/users'
+import { readCookie } from 'apis/cookie'
 import { Info } from './Info';
 import { History } from './History';
 import BidModal from './BidModal';
@@ -50,10 +52,10 @@ const tabs = [
         label: 'Info',
         value: TabVariants.INFO,
     },
-    {
+    /*{
         label: 'Owners',
         value: TabVariants.OWNERS,
-    },
+    },*/
     {
         label: 'History',
         value: TabVariants.HISTORY,
@@ -72,20 +74,66 @@ const TokenDetails = (): JSX.Element => {
   const [collectible, setCollectible] = useState<CollectibleInfo>();
   const [isProgressModal, setIsProgressModal] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
+  const userId = readCookie("id")
   const classes = useStyles();
   const [userCollectibles, setUserCollectibles] = useState([])
-  const [userAction, setUserAction] = useState<string>('')
+  const [info, setInfo] = useState([])
+  const [collection, setCollection] = useState({
+    name: "",
+    avatarUrl: ""
+  })
   const [history, setHistory] = useState([])
   const [numCopies, setNumCopies] = useState('1')
   const [typeShow, setTypeShow] = useState('Info')
-  const [numThumbs, setNumThumbs] = useState(false)
+  const [numThumbs, setNumThumbs] = useState(0)
   const [numLikes, setNumLikes] = useState(0)
+  const [liked, setLiked] = useState(false)
+  const [thumbedUp, setThumbedUp] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
     getCollectibles().then(({ data }) => setUserCollectibles(data))
-    getCollectible(id).then(({ data }) => setCollectible(data));
+    getCollectible(id).then(async({ data }) => {
+      const newInfo: any = []
+
+      setCollectible(data)
+
+      if (data.ownerUserId) {
+        const ownerInfo = await getUserInfo(data.ownerUserId)
+        const avatar = ownerInfo.data.avatarUrl ? ownerInfo.data.avatarUrl : '/favicon.ico'
+
+        newInfo.push({
+          header: "Owner",
+          name: ownerInfo.data.name,
+          avatarUrl: avatar
+        })
+
+        getCollection(id)
+          .then(({ data }) => {
+            setCollection({
+              name: data.collectionName,
+              avatarUrl: avatar
+            })
+          })
+      }
+
+      if (data.creatorUserId) {
+        const creatorInfo = await getUserInfo(data.creatorUserId)
+        const avatar = creatorInfo.data.avatarUrl ? creatorInfo.data.avatarUrl : '/favicon.ico'
+
+        newInfo.push({
+          header: "Creator",
+          name: creatorInfo.data.name,
+          avatarUrl: avatar
+        })
+      }
+
+      if (newInfo.length > 0) {
+        setInfo(newInfo)
+      }
+    });
+
     getHistory(id).then(({ data }) => {
       data.forEach(async function (info: any) {
           const buyerInfo = await getUserInfo(info.buyerUserId)
@@ -98,33 +146,62 @@ const TokenDetails = (): JSX.Element => {
 
       setHistory(data)
     })
+
     getCollectibleLikes(id)
-      .then(({ data }) => setNumLikes(data))
+      .then(({ data }) => {
+        const liked = data.some((info: any) => {
+          return info.userId == userId
+        })
+
+        setLiked(liked)
+        setNumLikes(data.length)
+      })
     getCollectibleThumbs(id)
-      .then(({ data }) => setNumThumbs(data))
+      .then(({ data }) => {
+        const thumbedup = data.some((info: any) => {
+          return info.userId == userId
+        })
+
+        setThumbedUp(thumbedup)
+        setNumThumbs(data.length)
+      })
 
     setLoading(false)
   }, [id]);
 
   const like = () => {
     likeCollectible(id)
-      .then((res) => console.log("success"))
+      .then((res) => {
+        setLiked(true)
+        setNumLikes(numLikes + 1)
+      })
   }
 
   const dislike = () => {
     dislikeCollectible(id)
-      .then((res) => console.log("success"))
+      .then((res) => {
+        setLiked(false)
+        setNumLikes(numLikes - 1)
+      })
   }
 
   const thumbsup = () => {
     thumbsupCollectible(id)
-      .then((res) => console.log("success"))
+      .then((res) => {
+        setThumbedUp(true)
+        setNumThumbs(numThumbs + 1)
+      })
   }
 
   const thumbsdown = () => {
     thumbsdownCollectible(id)
-      .then((res) => console.log("success"))
+      .then((res) => {
+        setThumbedUp(false)
+        setNumThumbs(numThumbs - 1)
+      })
   }
+  const [showPopup, setShowPopup] = useState(false)
+  const [showFailedPopup, setShowFailedPopup] = useState(false)
 
   const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => selectTab(newValue);
   const isOwner = useIsCollectibleOwned(id, userCollectibles);
@@ -141,18 +218,6 @@ const TokenDetails = (): JSX.Element => {
           return (
             <>
               <img src={url} />
-              <div className={classes.iconsContainer}>
-                <IconWrapper item alignItems='center' justify='center'>
-                  <IconButton onClick={() => like()}><SaveIcon /></IconButton>
-                </IconWrapper>
-                <LikeIcon onClick={() => thumbsup()} style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', color: 'white', borderRadius: 23, borderStyle: 'solid', borderWidth: 2, marginRight: 10, padding: 10, width: 22, height: 20 }}/>
-                <IconWrapper onClick={() => setFSModal(true)} item alignItems='center' justify='center'>
-                  <IconButton><ExpandIcon /></IconButton>
-                </IconWrapper>
-                <IconWrapper item alignItems='center' justify='center' dots={true}>
-                  <IconButton><DotsIcon /></IconButton>
-                </IconWrapper>
-              </div>
             </>
           );
       }
@@ -160,7 +225,7 @@ const TokenDetails = (): JSX.Element => {
   };
 
   if (isLoading) return <Loader />;
-  if (!collectible) return <h1>Oops something went wrong</h1>;
+  if (!collectible) return <h1 style={{ textAlign: 'center' }}>Collectible does not exist</h1>;
 
   const thumbnailUrl = collectible.thumbnailUrl ? collectible.thumbnailUrl : '/collectible-image.jpeg'
 
@@ -172,15 +237,23 @@ const TokenDetails = (): JSX.Element => {
         </div>
         <div className={classes.socialActivityContainer}>
           <InfoIconWrapper item direction='row' alignItems='center'>
-            <GreySaveIcon />
+          {liked ? 
+            <GreySavedIcon onClick={() => dislike()}/>
+            :
+            <GreySaveIcon onClick={() => like()}/>
+          }
             <Typography variant='h6' className={classes.socialActivityAmount}>{numLikes}</Typography>
           </InfoIconWrapper>
-          <InfoIconWrapper item direction='row' alignItems='center'>
+          {/*<InfoIconWrapper item direction='row' alignItems='center'>
             <ViewsIcon />
             <Typography variant='h6' className={classes.socialActivityAmount}>3.5k</Typography>
-          </InfoIconWrapper>
+          </InfoIconWrapper>*/}
           <InfoIconWrapper item direction='row' alignItems='center' lastIcon={true}>
-            <LikeIcon />
+            {thumbedUp ? 
+              <LikedIcon onClick={() => thumbsdown()}/>
+              :
+              <LikeIcon onClick={() => thumbsup()}/>
+            }
             <Typography variant='h6' className={classes.socialActivityAmount}>{numThumbs}</Typography>
           </InfoIconWrapper>
         </div>
@@ -215,62 +288,52 @@ const TokenDetails = (): JSX.Element => {
             />
           ))}
         </Tabs>
-        {tab === TabVariants.INFO && <Info collectible={collectible} />}
-        {tab === TabVariants.OWNERS && <div />}
+        {tab === TabVariants.INFO && <Info info={info} collection={collection}/>}
+        {/*tab === TabVariants.OWNERS && <div />*/}
         {tab === TabVariants.HISTORY && <History list={history} name={collectible.name}/>}
         {tab === TabVariants.BIDS && <div />}
-        <Grid>
-          <div className={classes.highestBidInfoContainer}>
-            <div className={classes.highestBidContainer}>
-              <Typography variant='h6'>{text['highestBidBy']}</Typography>
-              <Typography variant='h6' className={classes.walletAddress}>0xcabb22cb1...ba05</Typography>
+        {typeShow != "History" && (
+          <Grid>
+            <div className={classes.highestBidInfoContainer}>
+              <div className={classes.highestBidContainer}>
+                <Typography variant='h6'>{text['highestBidBy']}</Typography>
+                <Typography variant='h6' className={classes.walletAddress}>0xcabb22cb1...ba05</Typography>
+              </div>
+              <div className={classes.highestBidContainer}>
+                {/*<Typography variant='h2'>2,000 DAI</Typography>*/}
+                <Typography variant='h3' className={classes.bidDollarAmount}>$2,000</Typography>
+              </div>
             </div>
-            <div className={classes.highestBidContainer}>
-              <Typography variant='h2'>2,000 DAI</Typography>
-              <Typography variant='h3' className={classes.bidDollarAmount}>$2,000</Typography>
-            </div>
-          </div>
 
-          {collectible.price && (
+            {isOwner ? (
+              <div className={classes.buttonsContainer}><h1>You are the owner</h1></div>
+            ) : (
+              <div className={classes.buttonsContainer}>
+                {(typeShow != 'Bids' && collectible.status == "onSale") && <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />}
+                <Button onClick={() => setIsBidModal(true)} label={text['placeABid']} className={classes.placeBidButton} />
+              </div>
+            )}
             <div className={classes.serviceFeeInfoContainer}>
-              <Typography variant='h6'>Service fee {SERVICE_FEE}%</Typography>
-              <Typography variant='h6' className={classes.serviceCryptoFee}>
-                <Price.WeiToEth withFee value={collectible.price} />
+              <Typography
+                  variant='h6'
+              >
+                  Service fee 2.5%
               </Typography>
-              <Typography variant='h6' className={classes.serviceDollarFee}>
-                <Price.WeiToUsd withFee value={collectible.price} />
+              <Typography
+                  variant="h6"
+                  className={classes.serviceCryptoFee}
+              >
+                  10.486 ETH
+              </Typography>
+              <Typography
+                  variant="h6"
+                  className={classes.serviceDollarFee}
+              >
+                  $19,333.52
               </Typography>
             </div>
-          )}
-
-          {isOwner ? (
-            <div className={classes.buttonsContainer}><h1>You are the owner</h1></div>
-          ) : (
-            <div className={classes.buttonsContainer}>
-              {typeShow != 'Bids' && <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />}
-              {typeShow == 'Bids' && <Button onClick={() => setIsBidModal(true)} label={text['placeABid']} className={classes.placeBidButton} />}
-            </div>
-          )}
-          <div className={classes.serviceFeeInfoContainer}>
-            <Typography
-                variant='h6'
-            >
-                Service fee 2.5%
-            </Typography>
-            <Typography
-                variant="h6"
-                className={classes.serviceCryptoFee}
-            >
-                10.486 ETH
-            </Typography>
-            <Typography
-                variant="h6"
-                className={classes.serviceDollarFee}
-            >
-                $19,333.52
-            </Typography>
-          </div>
-        </Grid>
+          </Grid>
+        )}
       </div>
       {isBidModal && (
         <BidModal
@@ -292,8 +355,13 @@ const TokenDetails = (): JSX.Element => {
           onClose={() => setIsBuyModal(false)}
         />
       )}
+      <Popup open={showPopup} textheader={"Purchase collectible directly;Congratulation!;Now you are the owner of " + name} onClose={() => setShowPopup(false)}></Popup>
+      <Popup open={showFailedPopup} textheader={"Purchase collectible directly;;You failed to buy this collectible at $" + collectible.price + ", Please try again"} onClose={() => setShowFailedPopup(false)}></Popup>
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
-      {isProgressModal && <ProgressModal price={collectible.price} onClose={() => setIsProgressModal(false)} />}
+      {isProgressModal && <ProgressModal name={collectible.name} price={collectible.price} onClose={() => {
+        setShowPopup(true)
+        setIsProgressModal(false)
+      }} openFailedBox={() => setShowFailedPopup(true)}/>}
     </div>
   );
 };

@@ -4,6 +4,8 @@ import { Button } from '@material-ui/core';
 import text from '../../../constants/content';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
+import Modal from 'components/widgets/Modal';
+import Popup from 'components/widgets/Popup';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -102,6 +104,8 @@ const EditForm = (): JSX.Element => {
       });
     };
   };
+  const [showPopup, setShowPopup] = useState(false)
+  const [showFailedPopup, setShowFailedPopup] = useState(false)
 
   const submit = async (data: EditProfileForm) => {
     const { displayName, customUrl, twitterUsername, personalSite, email } = data;
@@ -124,8 +128,12 @@ const EditForm = (): JSX.Element => {
       email: email,
     };
 
-    updateProfile(profile).then(() => location.replace('/'));
+    updateProfile(profile).then(() => {
+      setShowPopup(true)
+    })
+    .catch((error) => setShowFailedPopup(true));
   };
+  const isErrors = () => Object.keys(errors).length >= 1;
 
   return (
     <form className={classes.form} onSubmit={handleSubmit(submit)}>
@@ -208,6 +216,8 @@ const EditForm = (): JSX.Element => {
           <Button className={classes.btn} component='span'>{text['chooseFile']}</Button>
         </label>
       </div>
+      <Popup open={showPopup} textheader="Successfully updated your profile;;" onClose={() => setShowPopup(false)}></Popup>
+      <Popup open={showFailedPopup} textheader="Edit profile;;You failed to update your profile. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
     </form>
   );
 };
