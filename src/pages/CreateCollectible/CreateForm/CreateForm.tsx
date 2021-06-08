@@ -648,24 +648,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   }
                 />
 
-                {watch('instantPrice') && (
-                  <div className={classes.input}>
-                  <Input
-                    placeholder='Enter price for one piece'
-                    onChange={handlePriceInput}
-                    inputRef={register}
-                    name='price'
-                    disableUnderline
-                  />
-                  <div className={classes.priceInfo}>
-                    <span>{text['serviceFeeProgress'] + '2.5'}</span>
-                    {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
-                  </div>
-
-                  {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
-                </div>
-                )}
-
                 <FormControlLabel
                   control={<Switch inputRef={register} name='unlock' />}
                   classes={{ root: classes.switchLabel }}
@@ -690,6 +672,24 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   </div>
                 )}
               </div>
+            )}
+
+          {watch('instantPrice') && (
+              <div className={classes.input}>
+              <Input
+                placeholder='Enter price for one piece'
+                onChange={handlePriceInput}
+                inputRef={register}
+                name='price'
+                disableUnderline
+              />
+              <div className={classes.priceInfo}>
+                <span>{text['serviceFeeProgress'] + '2.5'}</span>
+                {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
+              </div>
+
+              {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
+            </div>
             )}
             
           </FormControl>
