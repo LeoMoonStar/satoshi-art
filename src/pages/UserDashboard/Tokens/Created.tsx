@@ -101,7 +101,7 @@ export default function Created({ setOutOfDatesSliders }: { setOutOfDatesSliders
                   setCreated(list)
               })
       }
-  })
+  }, [])
   
   const renderContent = useMemo(() => {
     const handlePutOnSale = (token: any) => {

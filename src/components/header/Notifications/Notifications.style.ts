@@ -31,6 +31,7 @@ const useStyles = makeStyles(() => {
         },
         info: {
             marginLeft: 15,
+            fontSize: 10
         },
         title: {},
         time: {},

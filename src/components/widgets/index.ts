@@ -8,6 +8,7 @@ export * from './Form';
 export * from './Loader';
 export * from './MintingInProgressModal';
 export * from './Modal';
+export * from './Popup';
 export * from './PageDetails';
 export * from './Pagination';
 export * from './Price';

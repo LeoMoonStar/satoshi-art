@@ -26,7 +26,7 @@ export default function DropOfTheDayArtist({ color, id, name, artistImage, image
           </div>
         </Link>
         <div className={cx(classes.rightCol, { [classes.whiteSliderDots]: color === '#C4C4C4' })}>
-          <DropOfTheDaySlider id={id} name={name} imagePreview={imagePreview} />
+          <DropOfTheDaySlider name={name} imagePreview={imagePreview} />
         </div>
       </div>
     </div>

@@ -20,7 +20,13 @@ const Item = ({ follow }: any) => {
       <Avatar image={follow.avatarUrl} size={84} />
       <div className={classes.itemInfo}>
         <div className={classes.topRow}>
-          <b className={classes.userName}>{follow.name}</b>
+          <b className={classes.userName} onClick={() => {
+            if (follow.isArtist) {
+              location.replace(`/artists/${follow.id}`)
+            } else {
+              location.replace(`/user/${follow.id}`)
+            }
+          }}>{follow.name}</b>
           {/*<Button variantCustom='outlinedLink' className={classes.followingButton}>
             {text['followingBtn']}
           </Button>*/}
@@ -77,6 +83,7 @@ export default function Collections(): JSX.Element {
                     '/collectible-image.jpeg'
 
                   follow['id'] = follow.id
+                  follow['isArtist'] = follow.isArtist
                   follow['thumbnailOne'] = thumbnailOne
                   follow['thumbnailTwo'] = thumbnailTwo
               })
@@ -105,6 +112,7 @@ export default function Collections(): JSX.Element {
                     '/collectible-image.jpeg'
 
                   follow['id'] = follow.id
+                  follow['isArtist'] = follow.isArtist
                   follow['thumbnailOne'] = thumbnailOne
                   follow['thumbnailTwo'] = thumbnailTwo
               })

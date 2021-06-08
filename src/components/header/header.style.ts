@@ -155,8 +155,10 @@ const useStyles = makeStyles(theme => {
     profileBar: {
       display: 'flex',
       flexDirection: 'row',
+      marginLeft: 'calc(100vw - 300px)',
       alignItems: 'center',
       justifyContent: 'space-between',
+      position: 'absolute',
     },
     notificationBox: {
       backgroundColor: 'white',

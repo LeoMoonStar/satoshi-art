@@ -100,7 +100,7 @@ export default function Collections(): JSX.Element {
                   setCollections(list)
               })
       }
-  })
+  }, [])
 
   return (
     <TokensSlider title={text['collections']} count={collections.length}>

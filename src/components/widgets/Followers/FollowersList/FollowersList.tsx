@@ -5,8 +5,9 @@ import FollowersGallery from '../FollowersGallery';
 import useStyles from './FollowersList.style';
 
 type UserType = {
-  id: number;
+  id: string;
   name: string;
+  isArtist: boolean;
   images?: { id: number; src: string }[];
 };
 
@@ -17,7 +18,7 @@ const FollowersList = ({ users }: { users: Array<UserType> }): JSX.Element => {
     <div>
       {users.map(user => (
         <div key={user.id} className={classes.row}>
-          <FollowersUser name={user.name} />
+          <FollowersUser name={user.name} id={user.id} isArtist={user.isArtist}/>
           {user.images && <FollowersGallery images={user.images} />}
         </div>
       ))}

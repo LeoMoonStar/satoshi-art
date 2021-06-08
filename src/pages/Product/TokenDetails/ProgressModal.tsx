@@ -13,6 +13,7 @@ import { CheckIcon } from 'components/icons';
 import useStyles from './ProgressModal.style';
 
 import { getCollectible, buyCollectible } from 'apis/collectibles';
+import { getDropOfTheDay } from 'apis/users';
 
 import { Receipt } from '@material-ui/icons';
 const CONNECTION_STEPS = ['Approval', 'Signture', 'Complete'];
@@ -31,11 +32,13 @@ export function MyStepCircle(props: StepIconProps): JSX.Element {
   );
 }
 type ProgressModalProps = {
+  name: string;
   price: number;
   onClose: () => void;
+  openFailedBox: () => void;
 };
 
-export default function ProgressModal({ price, onClose }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ name, price, onClose, openFailedBox }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -45,16 +48,29 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
   const [tokenId, setTokenId] = useState<number>(0);
   const [clickedSigned, setClickedSigned] = useState(false);
   const [showTxHash, setShowTxHash] = useState('');
-  // console.log(store.getState());
+
+  const [dropOfTheDay, setDropOfTheDay] = useState(false);
+
+
   useEffect(() => {
-    console.log('line42', id);
+    checkDropOfTheDay();
     checkBalance();
   }, []);
 
+  //check for if productId is dropOsTheDay
+  const checkDropOfTheDay = async () => {
+    const { data: response } = await getDropOfTheDay();
+    console.log(response);
+    const filtered = response.filter((collectibleId: any) => collectibleId.id == id);
+    console.log(filtered.length);
+    if (filtered.length > 0) {
+      console.log('this is drop of the day');
+      setDropOfTheDay(true);
+    }
+  };
   const checkBalance = async () => {
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
-    console.log(data);
     const metamaskId: any = data;
     setTokenId(parseInt(data.tokenId));
 
@@ -77,25 +93,64 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
+console.log(metamaskId);
+    if (dropOfTheDay) {
+      const dropResult = await web3Contract.dropOfTheDayBuy(
+        metamaskId.tokenId,
+        metamaskId.ownerMetamaskId,
+        metamaskId.price.toString()
+      );
+      setClickedSigned(true);
+      setSigned(true);
+      dropResult.wait().then((res: any) => {
+        setSigned(false);
+        setClickedSigned(false);
+        setActiveStep(2);
+        setShowTxHash(res.transactionHash);
 
-    const result = await web3Contract.marketplaceBuyCollectible(
-      metamaskId.tokenId,
-      metamaskId.ownerMetamaskId,
-      metamaskId.price.toString()
-    );
 
-    setClickedSigned(true);
-    setSigned(true);
-    console.log(result);
+   
 
-    result.wait().then((res: any) => {
-      setSigned(false);
-      setClickedSigned(false);
-      setActiveStep(2);
-      setShowTxHash(res.transactionHash);
-
-      buyCollectible(id, price);
+      buyCollectible(id, price)
+        .then((res) => {
+          onClose()
+        })
+        .catch((error) => {
+          openFailedBox()
+        })
+      
     });
+       
+    }
+    else{
+      //regular collectible
+      const result = await web3Contract.marketplaceBuyCollectible(
+        metamaskId.tokenId,
+        metamaskId.ownerMetamaskId,
+        metamaskId.price.toString()
+      );
+  
+      setClickedSigned(true);
+      setSigned(true);
+      console.log(result);
+  
+      result.wait().then((res: any) => {
+        setSigned(false);
+        setClickedSigned(false);
+        setActiveStep(2);
+        setShowTxHash(res.transactionHash);
+  
+        buyCollectible(id, price)
+        .then((res) => {
+          onClose()
+        })
+        .catch((error) => {
+          openFailedBox()
+        })
+      }).catch((err:any)=>alert(err.message))
+    }
+    
+
   };
   return (
     <Modal open onClose={onClose}>

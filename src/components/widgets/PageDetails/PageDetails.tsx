@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import { followUser, unfollowUser, userBecomeArtist, getUserInfo, getFollowers, getFollowings } from 'apis/users';
+import Popup from 'components/widgets/Popup';
 
 import Button from 'components/button';
 import Avatar from 'components/avatar';
@@ -39,13 +40,19 @@ export default function PageDetails(): JSX.Element {
 
   const followArtist = (userId: string) => {
     followUser(userId)
-      .then(res => setIsFollowing(true))
+      .then(res => {
+        setIsFollowing(true)
+        setShowFollowPopup(true)
+      })
       .catch(error => console.error(error.message));
   };
 
   const unfollowArtist = (userId: string) => {
     unfollowUser(userId)
-      .then(res => setIsFollowing(false))
+      .then(res => {
+        setIsFollowing(false)
+        setShowUnfollowPopup(true)
+      })
       .catch(error => console.error(error.message));
   };
 
@@ -57,6 +64,8 @@ export default function PageDetails(): JSX.Element {
   const addToFavourite = () => console.log('add to favourite');
   const sendMessage = () => console.log('send message');
   const addToFriends = () => console.log('add to friends');
+  const [showFollowPopup, setShowFollowPopup] = useState(false)
+  const [showUnfollowPopup, setShowUnfollowPopup] = useState(false)
 
   useEffect(() => {
     if (account) {
@@ -87,7 +96,7 @@ export default function PageDetails(): JSX.Element {
       getFollowers(id).then(({ data }) => setNumFollowers(data.length));
     }
   }, []);
-
+  
   return (
     <>
       <div className={classes.intro}>
@@ -157,6 +166,8 @@ export default function PageDetails(): JSX.Element {
           </div>
         </div>
       </div>
+      <Popup open={showFollowPopup} textheader={"Follow;;You followed " + username} onClose={() => setShowFollowPopup(false)}></Popup>
+      <Popup open={showUnfollowPopup} textheader={"Unfollow;;You unfollowed " + username} onClose={() => setShowUnfollowPopup(false)}></Popup>
     </>
   );
 }

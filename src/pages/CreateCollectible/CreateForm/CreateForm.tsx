@@ -13,6 +13,7 @@ import { LogoIcon, PlusCircle } from 'components/icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { VAlID_IMAGES_TYPES, VALID_FILE_TYPES, ALL_SUPPORTED_TYPES } from '../../../constants/supportedFileTypes';
 import * as yup from 'yup';
+import Popup from 'components/widgets/Popup';
 
 import { useAPIError } from '../../../hooks/useApiError';
 // import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721';
@@ -34,6 +35,7 @@ import { updateTransactionInMintingProcess } from 'state/app/actions';
 
 import web3Contract from 'abis/web3contract';
 import { createCollection, createCollectible } from 'apis/collectibles';
+import {getUserInfo} from 'apis/users';
 import { readCookie } from '../../../apis/cookie';
 import classNames from 'classnames';
 import web3contract from 'abis/web3contract';
@@ -101,6 +103,7 @@ type TempTokenData = {
   };
 };
 interface ICollectibleForm {
+  id: any;
   file: string;
   cover: string;
   onSale: boolean;
@@ -229,6 +232,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [itemCreated, setItemCreated] = useState(false);
   const [onSale, setOnSale] = useState(false);
   const [confirmOnSale, setConfirmOnSale] = useState(false);
+  const [celebrity, setCelebrity] = useState(false);
   const tryUploadFiles = async (files: Array<Promise<any>>) => {
     try {
       return await Promise.all(files);
@@ -243,7 +247,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       console.log(managerAddress);
       setAccountAddress(managerAddress[0]);
     };
+
+    const checkCelebrity = async() =>{
+      const userId: any = readCookie('id');
+      const {data: userInfo} = await getUserInfo(userId);
+      if(userInfo.isCelebrity){
+
+        setCelebrity(true);
+      }
+      else{
+        setCelebrity(false);
+      }
+    }
+    
     init();
+    checkCelebrity()
   }, []);
   const onSubmit = async (data: ICollectibleForm) => {
     const { properties, copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
@@ -253,65 +271,155 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const metamaskAddr = readCookie('metamask_address');
     const approval = await web3Contract.isApprovedArtist(metamaskAddr);
     console.log('isAPprovedArtist', approval);
+
+    //check if it celebrity or not
+    
+
+
+
     if (approval) {
-      console.log(data);
-      setItemCreated(true);
-      const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-      console.log('createForm-259',tokenId);
-      console.log('In Progress...');
+      
+      if(celebrity){
+        console.log(celebrity)
+        setItemCreated(true);
+        const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+        if(tokenId != undefined){
+
+          createCollection(collection).then((response) => {
+            console.log(response)
+            const collectible = { 
+                status: 'onHold', 
+                copies: copiesCount,
+                name: name, 
+                tokenIds: tokenId, 
+                royalties: royalties, 
+                collectionId: response.data.id, 
+                price: price,
+                file: { 
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                    mediaType: preview.imagetype, 
+                    content: preview.base64
+                },
+                thumbnail: {
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                    mediaType: preview.imagetype, 
+                    content: preview.base64
+                }
+            }
+
+
+            createCollectible(collectible)
+                .then((res) => {
+                  setShowPopup(true)
+                })
+                .catch((error) => {
+                   setShowFailedPopup(true)
+                    console.log(error)
+                })
+        }).catch(err=>{console.log(err.message)})
+
+        }
+
+      }
+      else{
+        setItemCreated(true);
+        const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+        console.log('createForm-259',tokenId);
+
+        //check if item is on sale or not
+        if (onSale) {
+          const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
+          setOnSale(true);
+          setItemCreated(false);
+          buyResult
+            .wait()
+            .then((res: any) => {
+              setOnSale(false);
+              setConfirmOnSale(true);
+  
+              // create a collection token and add the collectible to database
+              createCollection(collection)
+              .then((response) => {
+                  const collectible = { 
+                      status: 'onSale', 
+                      copies: copiesCount,
+                      name: name, 
+                      tokenIds: tokenId, 
+                      royalties: royalties, 
+                      collectionId: response.data.id, 
+                      price: price,
+                      file: { 
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      },
+                      thumbnail: {
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      }
+                  }
+  
+                  createCollectible(collectible)
+                      .then((res) => {
+                          setShowPopup(true)
+                      })
+                      .catch((error) => {
+                          console.log(error)
+                      })
+              })
+              .catch((error: any) => {
+                  console.log(error)
+              })
+
+            })
+            .catch((err: { message: any }) => {
+              setOnSale(false);
+              alert(err.message);
+              console.log(err.message);
+            });
+        }
+        else{
+          //not on sale it should insert into DB
+          createCollection(collection)
+              .then((response) => {
+                  const collectible = { 
+                      status: 'onHold', 
+                      copies: copiesCount,
+                      name: name, 
+                      tokenIds: tokenId, 
+                      royalties: royalties, 
+                      collectionId: response.data.id, 
+                      price: price,
+                      file: { 
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      },
+                      thumbnail: {
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      }
+                  }
+  
+                  createCollectible(collectible)
+                      .then((res) => {
+                          setShowPopup(true)
+                      })
+                      .catch((error) => {
+                          console.log(error)
+                      })
+              })
+              .catch((error: any) => {
+                  console.log(error)
+              })
+        }
+      }
+      
 
       // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
-      if (onSale) {
-        const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
-        setOnSale(true);
-        setItemCreated(false);
-        buyResult
-          .wait()
-          .then((res: any) => {
-            setOnSale(false);
-            setConfirmOnSale(true);
-
-            // create a collection token and add the collectible to database
-            createCollection(name)
-            .then(({ data }) => {
-                const collectible = { 
-                    status: 'onSale', 
-                    copies: copiesCount,
-                    name: name, 
-                    tokenIds: tokenId, 
-                    royalties: royalties, 
-                    collectionId: data.id, 
-                    price: price,
-                    file: { 
-                        fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    },
-                    thumbnail: {
-                        fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    }
-                }
-
-                createCollectible(collectible)
-                    .then((res) => {
-                        location.replace('/')
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-          })
-          .catch((err: { message: any }) => {
-            setOnSale(false);
-            alert(err.message);
-            console.log(err.message);
-          });
-      }
+      
     
     } else {
       alert('You are not approved to create collectibles');
@@ -373,6 +481,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       });
     };
   };
+  const [showPopup, setShowPopup] = useState(false)
+  const [showFailedPopup, setShowFailedPopup] = useState(false)
   const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.name, e.target.value.split(/\D/).join(''));
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -498,7 +608,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </div>
           )}
           {errors.cover && <p className={classes.textError}>{errors.cover.message}</p>}
-          <FormControl className={classes.controls}>
+          {!celebrity && (
+            <FormControl className={classes.controls}>
             <Controller
               name='onSale'
               control={control}
@@ -522,37 +633,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 />
               )}
             />
+            
             {watch('onSale') && (
               <div>
-                <FormControlLabel
-                  control={<Switch inputRef={register} name='instantPrice' />}
-                  classes={{ root: classes.switchLabel }}
-                  labelPlacement='start'
-                  label={
-                    <span>
-                      <span className={classes.price}>{text['instantSalePrice']}</span>
-                      <span>{text['enterThePriceForInstantlySold']}</span>
-                    </span>
-                  }
-                />
-
-                {watch('instantPrice') && (
-                  <div className={classes.input}>
-                    <Input
-                      placeholder='Enter price for one piece'
-                      onChange={handlePriceInput}
-                      inputRef={register}
-                      name='price'
-                      disableUnderline
-                    />
-                    <div className={classes.priceInfo}>
-                      <span>{text['serviceFeeProgress'] + '2.5'}</span>
-                      {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
-                    </div>
-
-                    {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
-                  </div>
-                )}
+            
 
                 <FormControlLabel
                   control={<Switch inputRef={register} name='unlock' />}
@@ -579,7 +663,43 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 )}
               </div>
             )}
-          </FormControl>
+            </FormControl>
+        
+          )}
+
+
+          <FormControlLabel
+            control={<Switch inputRef={register} name='instantPrice' />}
+            classes={{ root: classes.switchLabel }}
+            labelPlacement='start'
+            label={
+              <span>
+                <span className={classes.price}>{text['instantSalePrice']}</span>
+                <span>{text['enterThePriceForInstantlySold']}</span>
+              </span>
+            }
+          />
+
+        {watch('instantPrice') && (
+            <div className={classes.input}>
+              <Input
+                placeholder='Enter price for one piece'
+                onChange={handlePriceInput}
+                inputRef={register}
+                name='price'
+                disableUnderline
+              />
+              <div className={classes.priceInfo}>
+                <span>{text['serviceFeeProgress'] + '2.5'}</span>
+                {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
+              </div>
+
+              {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
+            </div>
+          )}
+          
+        
+            
           {/*<div className={classes.collectionType}>
                         <div className={classes.subtitle}>{t('chooseCollection')}</div>
                         <div className={classes.cards}>
@@ -742,6 +862,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         open={OpenSubmitModal}
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
+      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => {
+        setShowPopup(false)
+        location.replace('/')
+      }}></Popup>
+      <Popup open={showFailedPopup} textheader="Create collectible;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
     </div>
   );
 };
