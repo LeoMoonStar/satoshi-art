@@ -89,7 +89,7 @@ const dropOfTheDayBuy = async (buyerAddress, tokenId, sellerAddress, price) => {
   const { contractWithSigner } = getMarketplaceContract();
   const priceToWei = ethers.utils.parseEther(price);
   const response = contractWithSigner.dropOfTheDayBuy(tokenId, sellerAddress, { value: priceToWei });
-  return;
+  return response;
 };
 /** tokenContract */
 
