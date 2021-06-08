@@ -22,7 +22,7 @@ export default function OrderListFilters(): JSX.Element {
       
 
       {collectibles.length > 0 ? 
-          collectibles.map(({ id, thumbnailUrl, name }) => (
+          collectibles.map(({ id, status, thumbnailUrl, name }) => (
         <div key={id} className={classes.card}>
           {/* <img 
             src={!thumbnailUrl.includes('s3.thumbnailurl') ? thumbnailUrl : '/collectible-image.jpeg'} 
@@ -45,11 +45,13 @@ export default function OrderListFilters(): JSX.Element {
             <li>Aliquam posuere purus mi, vitae luctus justo</li>
             <li>Nulla pulvinar sed nisl</li>
           </ul> */}
-          <Link to={`/product/${id}`}>
-            <Button className={classes.buyNow} fullWidth variantCustom='action'>
-              {text['buyNow']}
-            </Button>
-          </Link>
+          {status == "onSale" && (
+            <Link to={`/product/${id}`}>
+              <Button className={classes.buyNow} fullWidth variantCustom='action'>
+                {text['buyNow']}
+              </Button>
+            </Link>
+          )}
         </div>
       )) : <div style={{ fontSize: 20 }}>There are no drop of the day created</div>}
 
