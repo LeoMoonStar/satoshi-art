@@ -265,17 +265,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     if (approval) {
       
       if(userInfo.isCelebrity){
+        setItemCreated(true);
         const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
         if(tokenId != undefined){
 
-          createCollection(name).then(({ data: any }) => {
+          createCollection(name).then(({ response: any }) => {
+            console.log(response)
             const collectible = { 
-                status: 'onSale', 
+                status: 'onHold', 
                 copies: copiesCount,
                 name: name, 
                 tokenIds: tokenId, 
                 royalties: royalties, 
-                collectionId: data.id, 
+                collectionId: response.data.id, 
                 price: price,
                 file: { 
                     fileName: 'image.' + preview.imagetype.replace('image/', ''), 
@@ -363,7 +365,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           createCollection(name)
               .then(({ data: any }) => {
                   const collectible = { 
-                      status: 'onSale', 
+                      status: 'onHold', 
                       copies: copiesCount,
                       name: name, 
                       tokenIds: tokenId, 
