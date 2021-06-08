@@ -61,6 +61,7 @@ export default function Notifications(): JSX.Element {
                             <div className={classes.info}>
                                 <div className={classes.title}>
                                     <Link to={item.isArtist ? `/artists/${item.userId}` : `/user/${item.userId}`} style={{ color: 'black', fontWeight: 'bold', textDecoration: 'none' }}>{item.name}</Link> 
+                                    <br/>
                                     {item.action}
                                 </div>
                                 <div className={cx(classes.time, classes.justNowTime)}>{displayTime(parseInt(item.createDate))}</div>

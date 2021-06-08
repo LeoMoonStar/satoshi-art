@@ -609,7 +609,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </div>
           )}
           {errors.cover && <p className={classes.textError}>{errors.cover.message}</p>}
-          <FormControl className={classes.controls}>
+          {!celebrity && (
+            <FormControl className={classes.controls}>
             <Controller
               name='onSale'
               control={control}
@@ -693,6 +694,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             )}
             
           </FormControl>
+          )}
+            
           {/*<div className={classes.collectionType}>
                         <div className={classes.subtitle}>{t('chooseCollection')}</div>
                         <div className={classes.cards}>
