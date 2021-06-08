@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import { styled, Grid, Typography, IconButton, Tab, Tabs, Theme } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import text from '../../../constants/content';
@@ -25,6 +26,7 @@ import Price from 'components/widgets/Price';
 import { TokenType } from 'state/transactions/actions';
 import { SERVICE_FEE } from 'constants/common';
 import { useIsCollectibleOwned } from 'utils/common';
+import {getEthPrice} from 'apis/ethPrice';
 
 const IconWrapper = styled(Grid)(({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
   width: dots ? 82 : 40,
@@ -89,6 +91,7 @@ const TokenDetails = (): JSX.Element => {
   const [numLikes, setNumLikes] = useState(0)
   const [liked, setLiked] = useState(false)
   const [thumbedUp, setThumbedUp] = useState(false)
+  const [ethInUSD, SetEthInUSD] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -96,7 +99,6 @@ const TokenDetails = (): JSX.Element => {
     getCollectibles().then(({ data }) => setUserCollectibles(data))
     getCollectible(id).then(async({ data }) => {
       const newInfo: any = []
-
       setCollectible(data)
 
       if (data.ownerUserId) {
@@ -167,8 +169,21 @@ const TokenDetails = (): JSX.Element => {
       })
 
     setLoading(false)
+
+    
   }, [id]);
 
+
+useEffect(()=>{
+  converEthPrice()
+},[])
+  const converEthPrice = async () =>{
+    const {data} = await axios.get('https://api.etherscan.io/api?module=stats&action=ethprice&apikey=YWDKA574NPYT4UE9W1AYY8ZTWY1WPK2N83')
+    console.log('price ether',data);
+    const ethInUsd: any =  data.result.ethusd;
+    SetEthInUSD(ethInUsd);
+    
+  }
   const like = () => {
     likeCollectible(id)
       .then((res) => {
@@ -264,7 +279,15 @@ const TokenDetails = (): JSX.Element => {
           <Typography variant='h1'>{collectible.name}</Typography>
           <div className={classes.tokenPriceContainer}>
             {collectible.price && (
-              <Typography variant='h2'><Price.WeiToEth value={collectible.price} /></Typography>
+              <>
+              <Typography variant='h2'>{collectible.price}</Typography>
+              <Typography
+                  variant="h6"
+                  className={classes.serviceCryptoFee}
+              >
+                  ${ (collectible.price * ethInUSD).toFixed(3)}
+              </Typography>
+              </>
             )}
             <Typography variant='h6' className={classes.tokenDollarPrice}>
               {collectible.price && <Price.WeiToUsd value={collectible.price} />}
@@ -319,18 +342,18 @@ const TokenDetails = (): JSX.Element => {
               >
                   Service fee 2.5%
               </Typography>
-              <Typography
+              {/* <Typography
                   variant="h6"
                   className={classes.serviceCryptoFee}
               >
                   10.486 ETH
-              </Typography>
-              <Typography
+              </Typography> */}
+              {/* <Typography
                   variant="h6"
                   className={classes.serviceDollarFee}
               >
                   $19,333.52
-              </Typography>
+              </Typography> */}
             </div>
           </Grid>
         )}
