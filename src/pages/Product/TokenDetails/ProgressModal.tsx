@@ -140,7 +140,13 @@ console.log(metamaskId);
         setActiveStep(2);
         setShowTxHash(res.transactionHash);
   
-        buyCollectible(id, price);
+        buyCollectible(id, price)
+        .then((res) => {
+          onClose()
+        })
+        .catch((error) => {
+          openFailedBox()
+        })
       }).catch((err:any)=>alert(err.message))
     }
     

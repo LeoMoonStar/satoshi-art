@@ -310,8 +310,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
             createCollectible(collectible)
                 .then((res) => {
-                  
-                    location.replace('/')
+                  setShowPopup(true)
                 })
                 .catch((error) => {
                    setShowFailedPopup(true)
@@ -363,7 +362,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   
                   createCollectible(collectible)
                       .then((res) => {
-                          location.replace('/')
+                          setShowPopup(true)
                       })
                       .catch((error) => {
                           console.log(error)
@@ -406,7 +405,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   
                   createCollectible(collectible)
                       .then((res) => {
-                          location.replace('/')
+                          setShowPopup(true)
                       })
                       .catch((error) => {
                           console.log(error)
@@ -649,24 +648,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   }
                 />
 
-                {watch('instantPrice') && (
-                  <div className={classes.input}>
-                  <Input
-                    placeholder='Enter price for one piece'
-                    onChange={handlePriceInput}
-                    inputRef={register}
-                    name='price'
-                    disableUnderline
-                  />
-                  <div className={classes.priceInfo}>
-                    <span>{text['serviceFeeProgress'] + '2.5'}</span>
-                    {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
-                  </div>
-
-                  {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
-                </div>
-                )}
-
                 <FormControlLabel
                   control={<Switch inputRef={register} name='unlock' />}
                   classes={{ root: classes.switchLabel }}
@@ -691,6 +672,24 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   </div>
                 )}
               </div>
+            )}
+
+          {watch('instantPrice') && (
+              <div className={classes.input}>
+              <Input
+                placeholder='Enter price for one piece'
+                onChange={handlePriceInput}
+                inputRef={register}
+                name='price'
+                disableUnderline
+              />
+              <div className={classes.priceInfo}>
+                <span>{text['serviceFeeProgress'] + '2.5'}</span>
+                {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
+              </div>
+
+              {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
+            </div>
             )}
             
           </FormControl>
@@ -858,8 +857,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         open={OpenSubmitModal}
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
-      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => setShowPopup(false)}></Popup>
-      <Popup open={showFailedPopup} textheader="Edit profile;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
+      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => {
+        setShowPopup(false)
+        location.replace('/')
+      }}></Popup>
+      <Popup open={showFailedPopup} textheader="Create collectible;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
     </div>
   );
 };
