@@ -178,7 +178,7 @@ useEffect(()=>{
   converEthPrice()
 },[])
   const converEthPrice = async () =>{
-    const {data} = await axios.get('https://api.etherscan.io/api?module=stats&action=ethprice&apikey=YWDKA574NPYT4UE9W1AYY8ZTWY1WPK2N83')
+    const {data} = await axios.get(`${process.env.ETHER_PRICE_ID}`)
     console.log('price ether',data);
     const ethInUsd: any =  data.result.ethusd;
     SetEthInUSD(ethInUsd);
