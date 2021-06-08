@@ -285,7 +285,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
         if(tokenId != undefined){
 
-          createCollection(name).then((response) => {
+          createCollection(collection).then((response) => {
             console.log(response)
             const collectible = { 
                 status: 'onHold', 
@@ -338,7 +338,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               setConfirmOnSale(true);
   
               // create a collection token and add the collectible to database
-              createCollection(name)
+              createCollection(collection)
               .then((response) => {
                   const collectible = { 
                       status: 'onSale', 
@@ -381,7 +381,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         }
         else{
           //not on sale it should insert into DB
-          createCollection(name)
+          createCollection(collection)
               .then((response) => {
                   const collectible = { 
                       status: 'onHold', 
