@@ -44,14 +44,14 @@ const useStyles = makeStyles(theme => {
     },
     bottomRow: {
       display: 'flex',
-      width: '100%'
+      width: '100%',
     },
     logo: {
       marginLeft: 20,
     },
     innerBottomRow: {
       display: 'flex',
-      flexDirection: 'row', 
+      flexDirection: 'row',
       justifyContent: 'space-between',
       marginTop: -50,
       width: '100%',
@@ -150,7 +150,13 @@ const useStyles = makeStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       margin: '0 100px 0 0',
-      zIndex: 1
+      zIndex: 1,
+    },
+    profileBar: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
     notificationBox: {
       backgroundColor: 'white',
@@ -193,12 +199,12 @@ const useStyles = makeStyles(theme => {
       },
     },
     disconnect: {
-        marginRight: 24,
-        textDecoration: 'none',
-        '& button[class]:hover': {
-            transform: 'scale(1.03, 1.03)',
-            backgroundColor: '#ff0099',
-        },
+      marginRight: 24,
+      textDecoration: 'none',
+      '& button[class]:hover': {
+        transform: 'scale(1.03, 1.03)',
+        backgroundColor: '#ff0099',
+      },
     },
     controlButtonsWrapper: {
       position: 'relative',
