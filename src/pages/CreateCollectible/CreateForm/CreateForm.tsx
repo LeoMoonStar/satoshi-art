@@ -668,6 +668,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           )}
 
 
+        <FormControl className={classes.controls}>
           <FormControlLabel
             control={<Switch inputRef={register} name='instantPrice' />}
             classes={{ root: classes.switchLabel }}
