@@ -310,8 +310,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
             createCollectible(collectible)
                 .then((res) => {
-                  
-                    location.replace('/')
+                  setShowPopup(true)
                 })
                 .catch((error) => {
                    setShowFailedPopup(true)
@@ -363,7 +362,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   
                   createCollectible(collectible)
                       .then((res) => {
-                          location.replace('/')
+                          setShowPopup(true)
                       })
                       .catch((error) => {
                           console.log(error)
@@ -406,7 +405,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   
                   createCollectible(collectible)
                       .then((res) => {
-                          location.replace('/')
+                          setShowPopup(true)
                       })
                       .catch((error) => {
                           console.log(error)
@@ -858,8 +857,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         open={OpenSubmitModal}
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
-      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => setShowPopup(false)}></Popup>
-      <Popup open={showFailedPopup} textheader="Edit profile;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
+      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => {
+        setShowPopup(false)
+        location.replace('/')
+      }}></Popup>
+      <Popup open={showFailedPopup} textheader="Create collectible;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
     </div>
   );
 };
