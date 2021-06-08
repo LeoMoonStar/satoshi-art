@@ -54,10 +54,9 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
   const checkBalance = async () => {
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
-    console.log(data)
+    console.log(data);
     const metamaskId: any = data;
     setTokenId(parseInt(data.tokenId));
-
 
     console.log(metamaskId.ownerMetamaskId);
     if (metamaskId.ownerMetamaskId != '') {
@@ -78,20 +77,24 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
-    setClickedSigned(true);
+
     const result = await web3Contract.marketplaceBuyCollectible(
       metamaskId.tokenId,
       metamaskId.ownerMetamaskId,
       metamaskId.price.toString()
     );
+
+    setClickedSigned(true);
+    setSigned(true);
     console.log(result);
+
     result.wait().then((res: any) => {
-      setSigned(true);
+      setSigned(false);
       setClickedSigned(false);
       setActiveStep(2);
       setShowTxHash(res.transactionHash);
 
-      buyCollectible(id, price)
+      buyCollectible(id, price);
     });
   };
   return (
@@ -163,16 +166,16 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
                 <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
                   In Progress...
                 </Button>
-                <span>Do not close this window</span>
+                {/* <span>Do not close this window</span> */}
               </>
             ) : (
               <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
-                Start
+                {activeStep == 2 ? 'Done' : 'Start'}
               </Button>
             )}
-            <div className={classes.stepTitle} style={{ overflow: 'scroll' }}>
+            {/* <div className={classes.stepTitle} style={{ overflow: 'scroll' }}>
               <span>{showTxHash}</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
