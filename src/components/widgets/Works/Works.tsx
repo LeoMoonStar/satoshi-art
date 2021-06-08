@@ -50,7 +50,7 @@ export default function WorksList({
   return (
     <div>
       <div className={classes.grid}>
-        {collectibles.map(({ id, status, name, price, status, creatorId, file, thumbnailUrl }) => (
+        {collectibles.map(({ id, status, name, price, creatorId, file, thumbnailUrl }) => (
           <div className={classes.work} key={id}>
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
