@@ -16,7 +16,7 @@ import { useConnect } from 'hooks/useDisconnect';
 import { isInLoginAsMode, createLoginAsCookies, eraseLoginAsCookies, readCookie } from 'apis/cookie';
 import { getCollectibleAndNumber } from 'apis/collectibles';
 import UserMenu from './userMenu';
-import Notifications from './Notifications'
+import Notifications from './Notifications';
 declare let window: any;
 
 const SearchPopper = function (props: PopperProps) {
@@ -34,8 +34,6 @@ type HeaderProps = { inverseHeader?: boolean; hasDivider?: boolean };
 //   return Object.entries(result);
 // }
 
-
-  
 const SearchResultCell = ({ key, name, classes, number }: any) => {
   return (
     <Link
@@ -49,7 +47,7 @@ const SearchResultCell = ({ key, name, classes, number }: any) => {
 };
 
 export default function Header({ inverseHeader = false, hasDivider = true }: HeaderProps): JSX.Element {
-  const userId = readCookie("id");
+  const userId = readCookie('id');
   const classes = useStyles();
   const [InSearch, setInSearch] = useState(false);
   const [searches, setSearches] = useState('');
@@ -61,32 +59,31 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   // const connected = useConnect();
   // const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
 
-
+  const getSearches = (name: string) => {
+    if (name.length >= 2) {
+      getCollectibleAndNumber(name).then(({ data }) => {
+        const res: any = Object.entries(data);
+        setSearchResult(res);
+        setSearches(name);
+      });
+    }
+  };
   useEffect(() => {
     if (userId) {
+      console.log('Start to get user info');
       getUserInfo(userId).then(({ data }) => {
         setIsArtist(data.isArtist);
         setUserAvatar(data.avatarUrl);
       });
     }
-  }, [searches]);
-
-  const getSearches = (name: string) => {
-    if (name.length >= 2) { 
-      getCollectibleAndNumber(name)
-          .then(({ data }) => {
-            const res: any = Object.entries(data);
-
-            setSearchResult(res)
-            setSearches(name)
-          })
-    }
-  }
+  }, [window.ethereum.selectedAddress]);
 
   return (
     <div className={classes.container}>
       <div className={classes.topRow}>
-        <Link to='/' className={classes.logo}>{inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}</Link>
+        <Link to='/' className={classes.logo}>
+          {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
+        </Link>
         {hasDivider && <div className={classes.divider} />}
       </div>
 
@@ -95,11 +92,13 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
           {window.location.pathname != '/drop-of-the-day' && (
             <div className={classes.searchWrapper} onMouseLeave={() => setInSearch(false)}>
               <div className={classes.searchInputContainer}>
-                <div className={classes.searchIcon}><SearchIcon /></div>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
                 <TextField
                   onMouseEnter={() => setInSearch(true)}
-                  onKeyUp={(e) => {
-                      if (e.keyCode == 13) location.replace('/search/' + searches)
+                  onKeyUp={e => {
+                    if (e.keyCode == 13) location.replace('/search/' + searches);
                   }}
                   InputProps={{
                     disableUnderline: true,
@@ -110,8 +109,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                     },
                   }}
                   onChange={e => {
-                    setSearches(e.target.value)
-                    getSearches(e.target.value)
+                    setSearches(e.target.value);
+                    getSearches(e.target.value);
                   }}
                 />
 
@@ -125,35 +124,39 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
               </div>
             </div>
           )}
-          <div className={classes.controls}>
-            {!userId && (
-              <Link to={'/connect'} className={classes.connectLink}>
-                <Button variantCustom='action' label={'Connect Wallet'} />
-              </Link>
-            )}
-
-            {(userId) && (
-              <>
-                <div className={classes.notificationBox}>
-                  <div>
-                    <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
-                  </div>
+          {!window.ethereum.selectedAddress ? (
+            <Link to={'/connect'} className={classes.connectLink}>
+              <Button variantCustom='action' label={'Connect Wallet'} />
+            </Link>
+          ) : (
+            <div className={classes.profileBar}>
+              <div className={classes.notificationBox}>
+                <div>
+                  <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
                 </div>
-
-                {isArtist && (
-                  <Link to={{ pathname: '/create-collectible', state: { isAllowedGoBack: true }}} className={classes.createLink}>
-                    <Button variantCustom='linkButton' label={'create'} />
-                  </Link>
-                )}
-              </>
-            )}
-
-            <UserMenu avatarUrl={userAvatar} />
-          </div>
+              </div>
+              {isArtist && (
+                <Link
+                  to={{
+                    pathname: '/create-collectible',
+                    state: { isAllowedGoBack: true },
+                  }}
+                  className={classes.createLink}
+                >
+                  <Button variantCustom='linkButton' label={'create'} />
+                </Link>
+              )}
+              <UserMenu avatarUrl={userAvatar} />
+            </div>
+          )}
         </div>
       </div>
 
-      {showNotif && <div style={{ marginLeft: 'calc(100vw - 500px)' }}><Notifications /></div>}
+      {showNotif && (
+        <div style={{ marginLeft: 'calc(100vw - 500px)' }}>
+          <Notifications />
+        </div>
+      )}
     </div>
   );
 }

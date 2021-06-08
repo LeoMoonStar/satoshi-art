@@ -8,7 +8,6 @@ import axios from 'axios';
 import { useWeb3React } from '@web3-react/core';
 import { useConnect } from 'hooks/useDisconnect';
 
-
 declare let window: any;
 
 type HeaderVariants = 'none' | 'full';
@@ -41,14 +40,12 @@ ILayoutProps): JSX.Element => {
   let { account } = useWeb3React();
   // const connected = useConnect();
   const sign = async () => {
-
     const web3 = new Web3(window.ethereum);
     const accounts = await web3.eth.getAccounts();
 
     if (window.ethereum.selectedAddress) {
       // resolve temporary problem
       if (window.ethereum) {
-        
         console.log('Accounts', accounts);
         account = accounts[0];
         try {
@@ -102,13 +99,13 @@ ILayoutProps): JSX.Element => {
   };
   useEffect(() => {
     sign();
-  });
+  }, [window.ethereum.selectedAddress]);
 
-  useEffect(() => {
-    window.ethereum.on('disconnect', () => {
-      console.log('detect disconnection');
-    });
-  });
+  // useEffect(() => {
+  //   window.ethereum.on('disconnect', () => {
+  //     console.log('detect disconnection');
+  //   });
+  // });
 
   return (
     <div className={classes.container}>
