@@ -89,7 +89,7 @@ export default function ProgressModal({ price, onClose }: ProgressModalProps): J
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
-
+console.log(metamaskId);
     if (dropOfTheDay) {
       const dropResult = await web3Contract.dropOfTheDayBuy(
         metamaskId.tokenId,
