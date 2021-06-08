@@ -35,6 +35,7 @@ import { updateTransactionInMintingProcess } from 'state/app/actions';
 
 import web3Contract from 'abis/web3contract';
 import { createCollection, createCollectible } from 'apis/collectibles';
+import {getUserInfo} from 'apis/users';
 import { readCookie } from '../../../apis/cookie';
 import classNames from 'classnames';
 import web3contract from 'abis/web3contract';
@@ -102,6 +103,7 @@ type TempTokenData = {
   };
 };
 interface ICollectibleForm {
+  id: any;
   file: string;
   cover: string;
   onSale: boolean;
@@ -230,6 +232,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [itemCreated, setItemCreated] = useState(false);
   const [onSale, setOnSale] = useState(false);
   const [confirmOnSale, setConfirmOnSale] = useState(false);
+  const [celebrity, setCelebrity] = useState(false);
   const tryUploadFiles = async (files: Array<Promise<any>>) => {
     try {
       return await Promise.all(files);
@@ -244,7 +247,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       console.log(managerAddress);
       setAccountAddress(managerAddress[0]);
     };
+
+    const checkCelebrity = async() =>{
+      const userId: any = readCookie('id');
+      const {data: userInfo} = await getUserInfo(userId);
+      if(userInfo.isCelebrity){
+
+        setCelebrity(true);
+      }
+      else{
+        setCelebrity(false);
+      }
+    }
+    
     init();
+    checkCelebrity()
   }, []);
   const onSubmit = async (data: ICollectibleForm) => {
     const { properties, copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
@@ -254,66 +271,156 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const metamaskAddr = readCookie('metamask_address');
     const approval = await web3Contract.isApprovedArtist(metamaskAddr);
     console.log('isAPprovedArtist', approval);
+
+    //check if it celebrity or not
+    
+
+
+
     if (approval) {
-      console.log(data);
-      setItemCreated(true);
-      const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-      console.log('createForm-259',tokenId);
-      console.log('In Progress...');
+      
+      if(celebrity){
+        console.log(celebrity)
+        setItemCreated(true);
+        const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+        if(tokenId != undefined){
+
+          createCollection(name).then((response) => {
+            console.log(response)
+            const collectible = { 
+                status: 'onHold', 
+                copies: copiesCount,
+                name: name, 
+                tokenIds: tokenId, 
+                royalties: royalties, 
+                collectionId: response.data.id, 
+                price: price,
+                file: { 
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                    mediaType: preview.imagetype, 
+                    content: preview.base64
+                },
+                thumbnail: {
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                    mediaType: preview.imagetype, 
+                    content: preview.base64
+                }
+            }
+
+
+            createCollectible(collectible)
+                .then((res) => {
+                  
+                    location.replace('/')
+                })
+                .catch((error) => {
+                   setShowFailedPopup(true)
+                    console.log(error)
+                })
+        }).catch(err=>{console.log(err.message)})
+
+        }
+
+      }
+      else{
+        setItemCreated(true);
+        const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+        console.log('createForm-259',tokenId);
+
+        //check if item is on sale or not
+        if (onSale) {
+          const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
+          setOnSale(true);
+          setItemCreated(false);
+          buyResult
+            .wait()
+            .then((res: any) => {
+              setOnSale(false);
+              setConfirmOnSale(true);
+  
+              // create a collection token and add the collectible to database
+              createCollection(name)
+              .then(({ data: any }) => {
+                  const collectible = { 
+                      status: 'onSale', 
+                      copies: copiesCount,
+                      name: name, 
+                      tokenIds: tokenId, 
+                      royalties: royalties, 
+                      collectionId: data.id, 
+                      price: price,
+                      file: { 
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      },
+                      thumbnail: {
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      }
+                  }
+  
+                  createCollectible(collectible)
+                      .then((res) => {
+                          location.replace('/')
+                      })
+                      .catch((error) => {
+                          console.log(error)
+                      })
+              })
+              .catch((error: any) => {
+                  console.log(error)
+              })
+
+            })
+            .catch((err: { message: any }) => {
+              setOnSale(false);
+              alert(err.message);
+              console.log(err.message);
+            });
+        }
+        else{
+          //not on sale it should insert into DB
+          createCollection(name)
+              .then(({ data: any }) => {
+                  const collectible = { 
+                      status: 'onHold', 
+                      copies: copiesCount,
+                      name: name, 
+                      tokenIds: tokenId, 
+                      royalties: royalties, 
+                      collectionId: data.id, 
+                      price: price,
+                      file: { 
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      },
+                      thumbnail: {
+                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
+                          mediaType: preview.imagetype, 
+                          content: preview.base64
+                      }
+                  }
+  
+                  createCollectible(collectible)
+                      .then((res) => {
+                          location.replace('/')
+                      })
+                      .catch((error) => {
+                          console.log(error)
+                      })
+              })
+              .catch((error: any) => {
+                  console.log(error)
+              })
+        }
+      }
+      
 
       // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
-      if (onSale) {
-        const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
-        setOnSale(true);
-        setItemCreated(false);
-        buyResult
-          .wait()
-          .then((res: any) => {
-            setOnSale(false);
-            setConfirmOnSale(true);
-
-            // create a collection token and add the collectible to database
-            createCollection(name)
-            .then(({ data }) => {
-                const collectible = { 
-                    status: 'onSale', 
-                    copies: copiesCount,
-                    name: name, 
-                    tokenIds: tokenId, 
-                    royalties: royalties, 
-                    collectionId: data.id, 
-                    price: price,
-                    file: { 
-                        fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    },
-                    thumbnail: {
-                        fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                        mediaType: preview.imagetype, 
-                        content: preview.base64
-                    }
-                }
-
-                createCollectible(collectible)
-                    .then((res) => {
-                        location.replace('/')
-                    })
-                    .catch((error) => {
-                        setShowFailedPopup(true)
-                        console.log(error)
-                    })
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-          })
-          .catch((err: { message: any }) => {
-            setOnSale(false);
-            alert(err.message);
-            console.log(err.message);
-          });
-      }
+      
     
     } else {
       alert('You are not approved to create collectibles');
@@ -526,6 +633,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 />
               )}
             />
+            
             {watch('onSale') && (
               <div>
                 <FormControlLabel
@@ -542,20 +650,20 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
                 {watch('instantPrice') && (
                   <div className={classes.input}>
-                    <Input
-                      placeholder='Enter price for one piece'
-                      onChange={handlePriceInput}
-                      inputRef={register}
-                      name='price'
-                      disableUnderline
-                    />
-                    <div className={classes.priceInfo}>
-                      <span>{text['serviceFeeProgress'] + '2.5'}</span>
-                      {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
-                    </div>
-
-                    {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
+                  <Input
+                    placeholder='Enter price for one piece'
+                    onChange={handlePriceInput}
+                    inputRef={register}
+                    name='price'
+                    disableUnderline
+                  />
+                  <div className={classes.priceInfo}>
+                    <span>{text['serviceFeeProgress'] + '2.5'}</span>
+                    {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
                   </div>
+
+                  {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
+                </div>
                 )}
 
                 <FormControlLabel
@@ -583,6 +691,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 )}
               </div>
             )}
+            
           </FormControl>
           {/*<div className={classes.collectionType}>
                         <div className={classes.subtitle}>{t('chooseCollection')}</div>

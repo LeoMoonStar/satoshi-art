@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => {
     },
     subTitle: {
       width: '100%',
-      margin: '16px 0 15px',
+marginTop:'10px',
       fontWeight: 600,
       fontSize: 20,
       letterSpacing: '-0.04em',
