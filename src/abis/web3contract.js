@@ -83,6 +83,14 @@ const grantDropCreatorRole = async accountAddr => {
       return err.message;
     });
 };
+
+//buy drop of the day collectible
+const dropOfTheDayBuy = async (buyerAddress, tokenId, sellerAddress, price) => {
+  const { contractWithSigner } = getMarketplaceContract();
+  const priceToWei = ethers.utils.parseEther(price);
+  const response = contractWithSigner.dropOfTheDayBuy(tokenId, sellerAddress, { value: priceToWei });
+  return;
+};
 /** tokenContract */
 
 //check how many copies user/artist owns of a collectible
@@ -160,4 +168,5 @@ export default {
   grantArtistRole,
   isApprovedForAll,
   etherFunctionCreateItem,
+  dropOfTheDayBuy,
 };
