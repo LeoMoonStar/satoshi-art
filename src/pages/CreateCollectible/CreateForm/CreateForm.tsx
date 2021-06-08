@@ -664,38 +664,41 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               </div>
             )}
 
-          <FormControlLabel
-              control={<Switch inputRef={register} name='instantPrice' />}
-              classes={{ root: classes.switchLabel }}
-              labelPlacement='start'
-              label={
-                <span>
-                  <span className={classes.price}>{text['instantSalePrice']}</span>
-                  <span>{text['enterThePriceForInstantlySold']}</span>
-                </span>
-              }
-            />
-
-          {watch('instantPrice') && (
-              <div className={classes.input}>
-              <Input
-                placeholder='Enter price for one piece'
-                onChange={handlePriceInput}
-                inputRef={register}
-                name='price'
-                disableUnderline
-              />
-              <div className={classes.priceInfo}>
-                <span>{text['serviceFeeProgress'] + '2.5'}</span>
-                {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
-              </div>
-
-              {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
-            </div>
-            )}
-            
-          </FormControl>
+        
           )}
+
+
+          <FormControlLabel
+            control={<Switch inputRef={register} name='instantPrice' />}
+            classes={{ root: classes.switchLabel }}
+            labelPlacement='start'
+            label={
+              <span>
+                <span className={classes.price}>{text['instantSalePrice']}</span>
+                <span>{text['enterThePriceForInstantlySold']}</span>
+              </span>
+            }
+          />
+
+        {watch('instantPrice') && (
+            <div className={classes.input}>
+            <Input
+              placeholder='Enter price for one piece'
+              onChange={handlePriceInput}
+              inputRef={register}
+              name='price'
+              disableUnderline
+            />
+            <div className={classes.priceInfo}>
+              <span>{text['serviceFeeProgress'] + '2.5'}</span>
+              {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
+            </div>
+
+            {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
+          </div>
+          )}
+          
+        </FormControl>
             
           {/*<div className={classes.collectionType}>
                         <div className={classes.subtitle}>{t('chooseCollection')}</div>
