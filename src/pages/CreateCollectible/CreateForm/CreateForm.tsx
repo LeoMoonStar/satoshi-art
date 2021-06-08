@@ -231,6 +231,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [itemCreated, setItemCreated] = useState(false);
   const [onSale, setOnSale] = useState(false);
   const [confirmOnSale, setConfirmOnSale] = useState(false);
+  const [celebrity, setCelebrity] = useState(false);
   const tryUploadFiles = async (files: Array<Promise<any>>) => {
     try {
       return await Promise.all(files);
@@ -245,9 +246,21 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       console.log(managerAddress);
       setAccountAddress(managerAddress[0]);
     };
+
+    const checkCelebrity = async() =>{
+      const userId: any = readCookie('id');
+      const {data: userInfo} = await getUserInfo(userId);
+      if(userInfo.isCelebrity){
+
+        setCelebrity(true);
+      }
+      else{
+        setCelebrity(false);
+      }
+    }
     
-    // const check
     init();
+    checkCelebrity()
   }, []);
   const onSubmit = async (data: ICollectibleForm) => {
     const { properties, copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
@@ -265,7 +278,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
     if (approval) {
       
-      if(userInfo.isCelebrity){
+      if(celebrity){
         setItemCreated(true);
         const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
         if(tokenId != undefined){
