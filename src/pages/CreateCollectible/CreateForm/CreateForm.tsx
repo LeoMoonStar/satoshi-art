@@ -269,7 +269,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
         if(tokenId != undefined){
 
-          createCollection(name).then(({ response: any }) => {
+          createCollection(name).then((response) => {
             console.log(response)
             const collectible = { 
                 status: 'onHold', 
