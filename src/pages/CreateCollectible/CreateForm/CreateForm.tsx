@@ -636,17 +636,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             
             {watch('onSale') && (
               <div>
-                <FormControlLabel
-                  control={<Switch inputRef={register} name='instantPrice' />}
-                  classes={{ root: classes.switchLabel }}
-                  labelPlacement='start'
-                  label={
-                    <span>
-                      <span className={classes.price}>{text['instantSalePrice']}</span>
-                      <span>{text['enterThePriceForInstantlySold']}</span>
-                    </span>
-                  }
-                />
+            
 
                 <FormControlLabel
                   control={<Switch inputRef={register} name='unlock' />}
@@ -673,6 +663,18 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 )}
               </div>
             )}
+
+          <FormControlLabel
+              control={<Switch inputRef={register} name='instantPrice' />}
+              classes={{ root: classes.switchLabel }}
+              labelPlacement='start'
+              label={
+                <span>
+                  <span className={classes.price}>{text['instantSalePrice']}</span>
+                  <span>{text['enterThePriceForInstantlySold']}</span>
+                </span>
+              }
+            />
 
           {watch('instantPrice') && (
               <div className={classes.input}>
