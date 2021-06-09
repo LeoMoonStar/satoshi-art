@@ -5,7 +5,7 @@ import { getCollectible } from 'apis/collectibles';
 import Avatar from 'components/avatar';
 import useStyles from './History.style';
 import { shortAddress } from 'utils/helpers';
-
+import moment from 'moment'
 const month: any = {
   '01': 'January',
   '02': 'February',
@@ -26,12 +26,15 @@ export const History = ({ list, name, collectibleId }: any): JSX.Element => {
 
   const [userName, setUserName] = useState();
   const [collectibleName, setCollectibleName] = useState();
+  const [createDate, setCreateDate] = useState('');
   //getCollectibleBYID() createDate, creator metamskId
   //creatorUserId to get userProgile  and use name
   //collectibleName createdn byusernamw
   useEffect(() => {
     getCollectible(collectibleId).then(response => {
+      console.log(response.data)
       setCollectibleName(response.data.name);
+      setCreateDate(moment.unix(response.data.createDate).format("MMM DD"))
       getUserInfo(response.data.creatorUserId).then(res => {
         setUserName(res.data.name);
       });
@@ -107,7 +110,7 @@ export const History = ({ list, name, collectibleId }: any): JSX.Element => {
             <div className={classes.artistInfo}>
               <div>
                 <strong>{collectibleName} </strong>
-                was created by <strong>{userName}</strong>
+                was created by <strong>{userName}</strong> on {createDate}
               </div>
             </div>
           </div>
