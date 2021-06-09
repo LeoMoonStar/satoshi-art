@@ -40,11 +40,15 @@ const useStyles = makeStyles(() => ({
   artistInfoList: {
     fontWeight: 600,
   },
+  title:{
+marginTop:'-40px',
+
+  },
   name: {
-    marginTop: -12,
-    fontWeight: 800,
-    fontSize: 70,
-    lineHeight: '88px',
+    fontWeight: 500,
+    fontSize: 18,
+    lineHeight:'30px'
+    
   },
   actionsList: {
     display: 'flex',

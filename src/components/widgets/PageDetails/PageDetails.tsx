@@ -26,7 +26,7 @@ export default function PageDetails(): JSX.Element {
   const [isArtist, setIsArtist] = useState(false);
   const [username, setUsername] = useState('');
   const [description, setDescription] = useState('Good collection. Stay tune'); // fetch from server
-  const [url, setUrl] = useState('twitter.com/username'); // fetch from server
+  const [url, setUrl] = useState('twitter.com/'); // fetch from server
   const [avatar, setAvatar] = useState('');
   const [cover, setCover] = useState('')
   const [numFollowers, setNumFollowers] = useState(0);
@@ -39,6 +39,7 @@ export default function PageDetails(): JSX.Element {
   };
 
   const followArtist = (userId: string) => {
+    console.log('follow artist',userId)
     followUser(userId)
       .then(res => {
         setIsFollowing(true)
@@ -68,33 +69,38 @@ export default function PageDetails(): JSX.Element {
   const [showUnfollowPopup, setShowUnfollowPopup] = useState(false)
 
   useEffect(() => {
-    if (account) {
-      getUserInfo(id)
-        .then(({ data }) => {
-          setUserId(data.id)
-          setIsArtist(data.isArtist);
-          setUsername(data.name);
-          // fetch description
-          // fetch url
-          setAvatar(data.avatarUrl);
-          setCover(data.coverUrl)
-        });
-      getFollowings(id) // account from login
-        .then(({ data }) => {
-          const isfollowing = data.some((follow: any) => follow.metamaskId == id);
 
-          setIsFollowing(isfollowing);
-        });
-      getFollowers(id)
-        .then(({ data }) => {
-            const isfollow = data.some((follow: any) => follow.id == account)
 
-            setIsFollower(isfollow)
-        })
-
-      getFollowings(id).then(({ data }) => setNumFollowings(data.length));
-      getFollowers(id).then(({ data }) => setNumFollowers(data.length));
-    }
+    console.log('account',account)
+      
+        getUserInfo(id)
+          .then(({ data }) => {
+            console.log('page details',data)
+            setUserId(data.id)
+            setIsArtist(data.isArtist);
+            setUsername(data.name);
+            // fetch description
+            // fetch url
+            setAvatar(data.avatarUrl);
+            setCover(data.coverUrl)
+          });
+        getFollowings(id) // account from login
+          .then(({ data }) => {
+            const isfollowing = data.some((follow: any) => follow.metamaskId == id);
+  
+            setIsFollowing(isfollowing);
+          });
+        getFollowers(id)
+          .then(({ data }) => {
+              const isfollow = data.some((follow: any) => follow.id == account)
+  
+              setIsFollower(isfollow)
+          })
+  
+        getFollowings(id).then(({ data }) => setNumFollowings(data.length));
+        getFollowers(id).then(({ data }) => setNumFollowers(data.length));
+      
+   
   }, []);
   
   return (
@@ -127,7 +133,7 @@ export default function PageDetails(): JSX.Element {
                   }
                 }}
               >
-                {isFollowing || isFollower ? text['Unfollow'] : text['follow']}
+                {isFollowing || isFollower ? text['unfollow'] : text['follow']}
               </Button>
               :
               <Button variantCustom="action" className={classes.actionButton} onClick={() => becomeArtist()}>{!isArtist && text['becomeArtist']}</Button>
@@ -139,6 +145,7 @@ export default function PageDetails(): JSX.Element {
         <img src={nftImage} alt='' className={classes.nftBackgroundImage} />
         <div className={classes.container}>
           <div>
+            {}
             <div className={clsx(classes.artistInfoWrapper, classes.centerAvatar)}>
               <Avatar size={140} image={avatar} alt='Jack Jackson' status='premium' />
               <div className={classes.actions}>
@@ -156,11 +163,11 @@ export default function PageDetails(): JSX.Element {
               </div>
             </div>
             <div className={classes.artistInfoList}>
-              <div>{isArtist ? 'Artist' : ''}</div>
+              <div className={classes.title}>{isArtist ? 'Artist' : ''}</div>
               <div className={classes.name}>{username}</div>
               <div className={classes.helpText}>{description}</div>
               <a href='' className={classes.linkToWebPage}>
-                {url}
+                {url}{username}
               </a>
             </div>
           </div>

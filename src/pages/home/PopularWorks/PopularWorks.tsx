@@ -31,9 +31,9 @@ export default function PopularWorks(): JSX.Element {
       <h2 className={classes.subTitle}>{text['youWillBeAbleToBuyItSoon']}</h2>
       <div className={classes.filters}>
         <nav className={classes.navigation}>
-          {categories.map(category => (
-            <Button key={category}>{text['category']}</Button>
-          ))}
+          {/* {categories.map(category => (
+            // <Button key={category}>{text['category']}</Button>
+          ))} */}
         </nav>
       </div>
       <Modal open={isExistNewTokens} onClose={() => setExistNewTokens(false)}>
