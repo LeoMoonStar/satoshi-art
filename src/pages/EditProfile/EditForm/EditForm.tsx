@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import { Button } from '@material-ui/core';
 import text from '../../../constants/content';
@@ -6,11 +6,11 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import Modal from 'components/widgets/Modal';
 import Popup from 'components/widgets/Popup';
-
+import {useParams} from 'react-router-dom'
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { updateProfile, getUserInfo } from 'apis/users';
+import { updateProfile, getUserInfo, userBecomeArtist } from 'apis/users';
 
 import { Input, Upload } from 'components/widgets/Form';
 
@@ -134,7 +134,20 @@ const EditForm = (): JSX.Element => {
     .catch((error) => setShowFailedPopup(true));
   };
   const isErrors = () => Object.keys(errors).length >= 1;
+  const { id } = useParams<{ id: string }>();
+  const [isArtist, setIsArtist] = useState(false);
 
+  useEffect(() => {
+    getUserInfo(id).then(response=>{
+      setIsArtist(response.data.isArtist)
+      }
+    )
+  });
+
+  const becomeArtist = () => {
+    userBecomeArtist()
+        .then((res) => setIsArtist(true))
+}
   return (
     <form className={classes.form} onSubmit={handleSubmit(submit)}>
       <div className={classes.bio}>
@@ -152,6 +165,7 @@ const EditForm = (): JSX.Element => {
                 <Button className={classes.chooseFile} component='span'>
                   {text['chooseFile']}
                 </Button>
+                
               </label>
             </div>
           </div>
@@ -214,8 +228,19 @@ const EditForm = (): JSX.Element => {
         <span className={classes.tooltip}>We recommend an image of at least 400x400px. Gifs work too.</span>
         <label htmlFor='avatar'>
           <Button className={classes.btn} component='span'>{text['chooseFile']}</Button>
-        </label>
+          </label>
+       
+          <div style={{marginTop:'10px'}}>
+            
+            {!isArtist?
+            <Button  className={classes.btn} onClick={() => becomeArtist()}>{text['requestToBecomeArtist']}</Button>
+          :
+          (<Button disabled={true}>You are an artist now</Button>)}
+          
+          </div>
+
       </div>
+
       <Popup open={showPopup} textheader="Successfully updated your profile;;" onClose={() => setShowPopup(false)}></Popup>
       <Popup open={showFailedPopup} textheader="Edit profile;;You failed to update your profile. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
     </form>

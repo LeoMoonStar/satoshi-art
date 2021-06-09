@@ -26,7 +26,7 @@ export default function PageDetails(): JSX.Element {
   const [isArtist, setIsArtist] = useState(false);
   const [username, setUsername] = useState('');
   const [description, setDescription] = useState('Good collection. Stay tune'); // fetch from server
-  const [url, setUrl] = useState('twitter.com/username'); // fetch from server
+  const [url, setUrl] = useState('twitter.com/'); // fetch from server
   const [avatar, setAvatar] = useState('');
   const [cover, setCover] = useState('')
   const [numFollowers, setNumFollowers] = useState(0);
@@ -71,11 +71,11 @@ export default function PageDetails(): JSX.Element {
   useEffect(() => {
 
 
-    const init = ()=>{
-      if (account) {
+    console.log('account',account)
+      
         getUserInfo(id)
           .then(({ data }) => {
-            console.log(data)
+            console.log('page details',data)
             setUserId(data.id)
             setIsArtist(data.isArtist);
             setUsername(data.name);
@@ -99,9 +99,8 @@ export default function PageDetails(): JSX.Element {
   
         getFollowings(id).then(({ data }) => setNumFollowings(data.length));
         getFollowers(id).then(({ data }) => setNumFollowers(data.length));
-      }
-    }
-    init()
+      
+   
   }, []);
   
   return (
@@ -146,6 +145,7 @@ export default function PageDetails(): JSX.Element {
         <img src={nftImage} alt='' className={classes.nftBackgroundImage} />
         <div className={classes.container}>
           <div>
+            {}
             <div className={clsx(classes.artistInfoWrapper, classes.centerAvatar)}>
               <Avatar size={140} image={avatar} alt='Jack Jackson' status='premium' />
               <div className={classes.actions}>
@@ -163,11 +163,11 @@ export default function PageDetails(): JSX.Element {
               </div>
             </div>
             <div className={classes.artistInfoList}>
-              <div>{isArtist ? 'Artist' : ''}</div>
+              <div className={classes.title}>{isArtist ? 'Artist' : ''}</div>
               <div className={classes.name}>{username}</div>
               <div className={classes.helpText}>{description}</div>
               <a href='' className={classes.linkToWebPage}>
-                {url}
+                {url}{username}
               </a>
             </div>
           </div>
