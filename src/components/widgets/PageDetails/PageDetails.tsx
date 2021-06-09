@@ -15,6 +15,7 @@ import artistAvatar from 'components/images/artist/avatar.jpg';
 import nftImage from 'components/images/nft.svg';
 
 import useStyles from './PageDetails.style';
+import { readCookie } from 'apis/cookie';
 
 export default function PageDetails(): JSX.Element {
   const classes = useStyles();
@@ -70,13 +71,13 @@ export default function PageDetails(): JSX.Element {
 
   useEffect(() => {
 
-
+    const userid = readCookie('id')
+    setUserId(userid as string);
     console.log('account',account)
       
         getUserInfo(id)
           .then(({ data }) => {
-            console.log('page details',data)
-            setUserId(data.id)
+            console.log('page details',id)
             setIsArtist(data.isArtist);
             setUsername(data.name);
             // fetch description
@@ -102,7 +103,7 @@ export default function PageDetails(): JSX.Element {
       
    
   }, []);
-  
+
   return (
     <>
       <div className={classes.intro}>
