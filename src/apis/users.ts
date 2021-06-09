@@ -22,9 +22,10 @@ export const getDropOfTheDay = () => {
 };
 
 export const followUser = async (otherMetamaskId: string) => {
+  console.log(otherMetamaskId)
   await axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/follow`,
-    { followingMetamaskId: otherMetamaskId },
+    { followingUserId: otherMetamaskId },
     {
       headers: {
         id: readCookie('id'),

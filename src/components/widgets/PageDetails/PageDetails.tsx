@@ -39,6 +39,7 @@ export default function PageDetails(): JSX.Element {
   };
 
   const followArtist = (userId: string) => {
+    console.log('follow artist',userId)
     followUser(userId)
       .then(res => {
         setIsFollowing(true)
@@ -68,33 +69,39 @@ export default function PageDetails(): JSX.Element {
   const [showUnfollowPopup, setShowUnfollowPopup] = useState(false)
 
   useEffect(() => {
-    if (account) {
-      getUserInfo(id)
-        .then(({ data }) => {
-          setUserId(data.id)
-          setIsArtist(data.isArtist);
-          setUsername(data.name);
-          // fetch description
-          // fetch url
-          setAvatar(data.avatarUrl);
-          setCover(data.coverUrl)
-        });
-      getFollowings(id) // account from login
-        .then(({ data }) => {
-          const isfollowing = data.some((follow: any) => follow.metamaskId == id);
 
-          setIsFollowing(isfollowing);
-        });
-      getFollowers(id)
-        .then(({ data }) => {
-            const isfollow = data.some((follow: any) => follow.id == account)
 
-            setIsFollower(isfollow)
-        })
-
-      getFollowings(id).then(({ data }) => setNumFollowings(data.length));
-      getFollowers(id).then(({ data }) => setNumFollowers(data.length));
+    const init = ()=>{
+      if (account) {
+        getUserInfo(id)
+          .then(({ data }) => {
+            console.log(data)
+            setUserId(data.id)
+            setIsArtist(data.isArtist);
+            setUsername(data.name);
+            // fetch description
+            // fetch url
+            setAvatar(data.avatarUrl);
+            setCover(data.coverUrl)
+          });
+        getFollowings(id) // account from login
+          .then(({ data }) => {
+            const isfollowing = data.some((follow: any) => follow.metamaskId == id);
+  
+            setIsFollowing(isfollowing);
+          });
+        getFollowers(id)
+          .then(({ data }) => {
+              const isfollow = data.some((follow: any) => follow.id == account)
+  
+              setIsFollower(isfollow)
+          })
+  
+        getFollowings(id).then(({ data }) => setNumFollowings(data.length));
+        getFollowers(id).then(({ data }) => setNumFollowers(data.length));
+      }
     }
+    init()
   }, []);
   
   return (
@@ -127,7 +134,7 @@ export default function PageDetails(): JSX.Element {
                   }
                 }}
               >
-                {isFollowing || isFollower ? text['Unfollow'] : text['follow']}
+                {isFollowing || isFollower ? text['unfollow'] : text['follow']}
               </Button>
               :
               <Button variantCustom="action" className={classes.actionButton} onClick={() => becomeArtist()}>{!isArtist && text['becomeArtist']}</Button>

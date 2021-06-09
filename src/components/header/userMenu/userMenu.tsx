@@ -29,6 +29,14 @@ if (process.env.REACT_APP_SPECIAL_MODE !== 'production') {
   userLinks.push({ title: 'editProfile', href: '/edit-profile', icon: <ProfileIcon /> });
 }
 
+const userId: any = readCookie('id')
+getUserInfo(userId).then(({ data }) => {
+  console.log(userId)
+  if(data.isCelebrity){
+    userLinks.push({ title: 'editCelebrityProfile', href: `/edit-celebrity-profile/${userId}`, icon: <ProfileIcon /> });
+  }
+});
+
 const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
   const classes = useStyles();
   const anchorElRef = useRef<HTMLDivElement>(null);
@@ -42,7 +50,7 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
   const handleDisconnect = useDisconnect();
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
   const Id = window.ethereum.selectedAddress ? readCookie('id') : null;
-
+  const [celebrity, setCelebrity] = useState(false);
   useEffect(() => {
     async function getBalance() {
       if (window.ethereum.selectedAddress) {
@@ -55,15 +63,26 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
       }
     }
     getBalance();
+   
 
     if (Id) {
       getUserInfo(Id).then(({ data }) => {
         setIsArtist(data.isArtist);
         setUserAvatar(data.avatarUrl);
+        setCelebrity(data.isCelebrity)
+
+
       });
     }
+    
+    // checkCeleb()
   }, [account, library, isWalletPermitted]);
 
+
+  // const checkCeleb = () =>{
+   
+  // }
+  
   const userAddress = useMemo(() => {
     if (!!account) return shortAddress(account, 10);
   }, [account]);

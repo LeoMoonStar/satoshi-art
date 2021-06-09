@@ -21,7 +21,7 @@ const categories: CategoryType[] = [
   { id: 2, title: 'Collectibles' },
   { id: 3, title: 'Created' },
   { id: 4, title: 'Liked' },
-  { id: 5, title: 'Activity' },
+  // { id: 5, title: 'Activity' },
 ];
 
 type ArtistWorksProps = {
@@ -48,12 +48,16 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
   };
 
   useEffect(() => {
-    if (id) {
-      getOnSaleCollectibles(id).then(({ data }) => {
-        setCollections(data);
-        setNumCollections(data.length);
-      });
+
+    const init = () =>{
+      if (id) {
+        getOnSaleCollectibles(id).then(({ data }) => {
+          setCollections(data);
+          setNumCollections(data.length);
+        });
+      }
     }
+   init();
   }, [])
 
   const getCategoryList = (category: CategoryType) => {

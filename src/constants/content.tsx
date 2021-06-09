@@ -42,6 +42,7 @@ const text: { [key: string]: string } = {
   owner: 'Owner',
   creator: 'Creator',
   follow: 'Follow',
+  unfollow:'Unfollow',
   createCollectible: 'Create collectible',
   chooseSingleIfYouWantYourCollectible:
     'Choose “Single” if you want your collectible to be one of a kind or “Multiple” if you want to sell one collectible multiple times',
@@ -266,6 +267,7 @@ const text: { [key: string]: string } = {
   collections: 'Collections',
   myItems: 'My Items',
   editProfile: 'Edit Profile',
+  editCelebrityProfile: 'Edit Celebrity Profile',
   putOnSaleBtn: 'Put on Sale',
   putOnAuctionBtn: 'Put on Auction',
   changePriceBtn: 'Change Price',
