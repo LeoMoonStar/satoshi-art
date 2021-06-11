@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => {
       display: 'flex',
       alignItems: 'flex-end',
       height: 341,
-      backgroundColor: '#7E7E7E',
+     
       borderRadius: 20,
       '&:hover': {
         cursor: 'pointer',

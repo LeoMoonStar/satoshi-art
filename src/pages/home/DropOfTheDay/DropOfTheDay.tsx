@@ -16,17 +16,20 @@ export default function DropOfTheDay(): JSX.Element {
       celebrityId: "",
       avatarUrl: '',
       text: "",
-      paintImage: ''
+      paintImage: '',
+      colorCode:''
   })
 
   useEffect(()=>{
     getCelebrityList().then(({data})=>{
+      console.log("color code",data),
       setProfile({
         name:data.activeCelebrity.name,
         celebrityId:data.activeCelebrity.celebrityUserId,
         avatarUrl:data.activeCelebrity.homePageBarUrl,
         text:'',
-        paintImage:''
+        paintImage:'',
+        colorCode:data.activeCelebrity.colorCode
       })
     })
   },[])
@@ -35,7 +38,7 @@ export default function DropOfTheDay(): JSX.Element {
     <section className={classes.container}>
       <div className={classes.innerContainer}>
         <h2 className={classes.mainTitle}>{text['dropOfTheDay']}</h2>
-        <div className={classes.card}>
+        <div className={classes.card} style={{backgroundColor:`#${profile.colorCode}`}}>
           <Link to={`/drop-of-the-day/${profile.celebrityId}`}>
             <div className={classes.leftCol} >
               <h3>{profile.name}</h3>

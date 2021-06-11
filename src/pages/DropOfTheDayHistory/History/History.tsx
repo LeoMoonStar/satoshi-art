@@ -31,7 +31,7 @@ export default function History({ items }: any): JSX.Element {
         <DropOfTheDayArtist
           key={item.celebrityUserId}
           id={item.celebrityUserId}
-          color='grey'
+          color={`#${item.colorCode}`}
           name={item.name}
           artistImage={item.homePageAvatarUrl}
           imagePreview={item.homePageBarUrl}
