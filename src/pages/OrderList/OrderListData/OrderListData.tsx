@@ -72,6 +72,14 @@ export default function OrderListData(): JSX.Element {
       { id: 555239, date: '26 March 2020, 11:42 AM', artist: 'Eren Yeager', artName: 'Vertigo', cost: 69.99, event: 0 }*/
   ])
 
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
+
+  
+
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
   // todo: use correct type for columns
   const columns: any[] = [
       { field: 'id', headerName: text['orderId'],
@@ -191,7 +199,10 @@ export default function OrderListData(): JSX.Element {
       {orders.length > 0 ?
         <div className={classes.paginationRow}>
           <div className={classes.countsOfRow}>Showing 1 from {orders.length} data</div>
-          <Pagination />
+          {/* <Pagination currentPage={currentPage}
+          pageSize={pageSize}
+          itemsCount={orders.length}
+          onPageChange={handlePageChange}/> */}
         </div>
         :
         <div>No order(s)</div>

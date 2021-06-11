@@ -39,6 +39,7 @@ const useStyles = makeStyles(() => ({
   },
   artistInfoList: {
     fontWeight: 600,
+   
   },
   title:{
 marginTop:'-40px',
@@ -129,7 +130,8 @@ marginTop:'-40px',
     textAlign: 'center',
   },
   centerAvatar: {
-    marginLeft: 118,
+    marginLeft: 158,
+
     justifyContent: 'center',
   },
   nftBackgroundImage: {

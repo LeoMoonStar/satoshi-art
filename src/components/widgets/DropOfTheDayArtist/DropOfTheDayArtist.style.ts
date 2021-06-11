@@ -32,11 +32,11 @@ const useStyles = makeStyles(() => {
         margin: 0,
         left: 50,
         bottom: 32,
-        lineHeight: '80px',
+        
         letterSpacing: '-0.04em',
         zIndex: 3,
         width: 185,
-        fontSize: 80,
+        fontSize: 32,
         fontWeight: 800,
         color: '#fff',
       },

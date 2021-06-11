@@ -24,9 +24,9 @@ const FollowersUser = ({ name, id, isArtist }: { name: string, id: string, isArt
               location.replace(`/user/${id}`)
             }
           }}>{name}</div>
-          <Button className={classes.actionBtn} onClick={() => setIsFollowing(isFollowing => !isFollowing)}>
+          {/* <Button className={classes.actionBtn} onClick={() => setIsFollowing(isFollowing => !isFollowing)}>
             {isFollowing ? 'Following' : 'Follow'}{' '}
-          </Button>
+          </Button> */}
         </div>
         <div className={classes.info}>
           <div>Berlin, Germany</div>

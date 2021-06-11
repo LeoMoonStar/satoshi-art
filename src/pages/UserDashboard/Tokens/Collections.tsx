@@ -82,29 +82,39 @@ export default function Collections(): JSX.Element {
               .then((res) => {
                   const { data } = res
                   const list: any = []
-
+                  console.log(data)
+                  const getCollectibleUserInfo:any = [];
+                  
                   data.forEach(async function (info: any) {
-                      const collectible = await getCollectible(info.id)
-                      const creatorInfo = await getUserInfo(collectible.data.creatorUserId)
+                    getCollectibleUserInfo.push(getCollectible(info.id))
+                      // const collectible = await getCollectible(info.id)
+                      // const creatorInfo = await getUserInfo(collectible.data.creatorUserId)
 
-                      const thumbnail = collectible.data.thumbnailUrl ? collectible.data.thumbnailUrl : '/collectible-image.jpeg'
+                      // const thumbnail = collectible.data.thumbnailUrl ? collectible.data.thumbnailUrl : '/collectible-image.jpeg'
 
-                      list.push({
-                          id: info.id,
-                          preview: thumbnail,
-                          name: collectible.data.name,
-                          author: { image: creatorInfo.data.thumbnailUrl, name: creatorInfo.data.name, price: info.price }
-                      })
+                      // list.push({
+                      //     id: info.id,
+                      //     preview: thumbnail,
+                      //     name: collectible.data.name,
+                      //     author: { image: creatorInfo.data.thumbnailUrl, name: creatorInfo.data.name, price: info.price }
+                      // })
+                  })
+                  Promise.all(getCollectibleUserInfo).then((result) => {
+                    console.log(result);
+                    setCollections(list)
                   })
 
-                  setCollections(list)
               })
       }
   }, [])
-
+  // text['collections']
   return (
-    <TokensSlider title={text['collections']} count={collections.length}>
-      {collections.map((token: any) => <TokenCard key={token.id} token={token} renderContent={RenderCardContent} />)}
+    <TokensSlider title='Collectibles' count={collections.length}>
+      {collections.map((token: any) => {
+        console.log(token)
+        return (
+      <TokenCard key={token.id} token={token} renderContent={RenderCardContent} />
+      )})}
     </TokensSlider>
   );
 }

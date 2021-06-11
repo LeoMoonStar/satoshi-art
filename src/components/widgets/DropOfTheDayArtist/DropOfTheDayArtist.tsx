@@ -16,12 +16,13 @@ type HistoryItemProps = {
 export default function DropOfTheDayArtist({ color, id, name, artistImage, imagePreview }: HistoryItemProps): JSX.Element {
   const classes = useStyles();
 
+  
   return (
     <div className={classes.container}>
       <div className={classes.card} style={{ backgroundColor: color }}>
         <Link to={`/drop-of-the-day/${id}`} style={{ textDecoration: 'none' }}>
           <div className={classes.leftCol}>
-            <h3>{name}</h3>
+            <h3 >{name}</h3>
             <img src={artistImage} />
           </div>
         </Link>

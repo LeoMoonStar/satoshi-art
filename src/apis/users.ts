@@ -131,6 +131,7 @@ export const getOrderList = (pageSize = 8, page = 1) => {
 }
 
 export const updateCelebrityProfile = (data: any) => {
+  console.log('api',data)
   return axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/celebrity/profile`,
     data,

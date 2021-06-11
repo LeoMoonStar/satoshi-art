@@ -4,14 +4,14 @@ import Layout from 'components/layout';
 import History from './History';
 import Introduction from './Introduction';
 
-import { getHistory } from 'apis/dropoftheday'
+import { getCelebrityList } from 'apis/dropoftheday'
 
 export default function DropOfTheDayHistory(): JSX.Element {
   const [history, setHistory] = useState([])
 
   useEffect(() => {
-      getHistory()
-          .then(({ data }) => setHistory(data))
+    getCelebrityList()
+          .then(({ data }) => setHistory(data.previousCelebrities))
   })
 
   return (

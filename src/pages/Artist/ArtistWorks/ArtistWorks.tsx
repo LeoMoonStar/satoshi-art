@@ -36,6 +36,9 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>(categories[0]);
   const { account } = useWeb3React();
   const { id } = useParams<{ id: string }>();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
+  
 
   const openModal = (activeType: number) => {
     setActive(activeType);
@@ -92,7 +95,9 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
   };
 
   const classes = useStyles();
-
+  const handlePageChange = (page:any)=>{
+    setCurrentPage(page)
+  }
   return (
     <div className={classes.container}>
       <div className={classes.navigationRow}>
@@ -111,7 +116,12 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
         </nav>
         {/*<IconButton className={classes.filterButton}><FilterIcon /></IconButton>*/}
       </div>
-      <Works collectibles={collections} isLoading={false} isArtistPage={account == id} />
+      <Works 
+      currentPage={currentPage}
+      pageSize={pageSize}
+      itemsCount={0}
+      onPageChange={handlePageChange}
+      collectibles={collections} isLoading={false} isArtistPage={account == id} />
       <Modal open={open} onClose={closeModal}><Followers active={active} /></Modal>
     </div>
   );

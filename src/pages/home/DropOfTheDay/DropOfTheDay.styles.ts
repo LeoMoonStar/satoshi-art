@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => {
       display: 'flex',
       alignItems: 'flex-end',
       height: 341,
-      backgroundColor: '#7E7E7E',
+     
       borderRadius: 20,
       '&:hover': {
         cursor: 'pointer',
@@ -40,11 +40,12 @@ const useStyles = makeStyles(() => {
       '& h3': {
         position: 'absolute',
         left: 50,
-        zIndex: 0,
+        zIndex: 9999,
         width: 185,
-        fontSize: 80,
+        fontSize: 50,
         fontWeight: 800,
         color: '#fff',
+        top:100
       },
       '& img': {
         position: 'relative',
