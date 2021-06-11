@@ -83,6 +83,12 @@ export default function UserWorks(): JSX.Element {
         setSelectedCategory(category)
     }
     
+    const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
+
+  const handlePageChange = (page:any)=>{
+    setCurrentPage(page)
+  }
     const classes = useStyles()
 
     return (
@@ -102,7 +108,12 @@ export default function UserWorks(): JSX.Element {
 
                 {/*<IconButton className={classes.filterButton}><FilterIcon /></IconButton>*/}
             </div>
-            <Works collectibles={collectibles} isLoading={false} isArtistPage={userId == id} />
+            <Works 
+            currentPage={currentPage}
+            pageSize={pageSize}
+            itemsCount={0}
+            onPageChange={handlePageChange}
+            collectibles={collectibles} isLoading={false} isArtistPage={userId == id} />
             <Modal open={open} onClose={closeModal}><Followers active={active} /></Modal>
         </div>
     )

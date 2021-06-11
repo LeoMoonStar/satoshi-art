@@ -1,34 +1,50 @@
 import React from 'react';
 import Pagination from 'components/widgets/Pagination';
-import { useHistory } from 'react-router-dom'
-
+import { useHistory } from 'react-router-dom';
+import _ from 'lodash';
 import useStyles from './History.style';
 import DropOfTheDayArtist from 'components/widgets/DropOfTheDayArtist';
 
 type Item = {
-    id: string,
-    color: string,
-    name: string,
-    itemPreview: string,
-    artistImage: string
-}
+  id: string;
+  color: string;
+  name: string;
+  itemPreview: string;
+  artistImage: string;
+};
 
 export default function History({ items }: any): JSX.Element {
   const classes = useStyles();
   const history = useHistory();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
+
+  console.log('history', items);
+
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
 
   return (
     <section className={classes.container}>
       {items.map((item: any) => (
         <DropOfTheDayArtist
-          key={item.id}
-          id={item.id} color={item.color} name={item.name}
-          artistImage={item.artistImage} imagePreview={item.itemPreview}
+          key={item.celebrityUserId}
+          id={item.celebrityUserId}
+          color='grey'
+          name={item.name}
+          artistImage={item.homePageAvatarUrl}
+          imagePreview={item.homePageBarUrl}
         />
       ))}
 
       <div className={classes.paginationWrapper}>
-        <Pagination />
+        <Pagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          itemsCount={items.length}
+          onPageChange={handlePageChange}
+        />
       </div>
     </section>
   );

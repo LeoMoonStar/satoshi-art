@@ -76,9 +76,9 @@ export const getCollectibleAndNumber = (name?: string) => {
   return axios.get(`${process.env.REACT_APP_API}/api/public/search/collectibles/names?field=${name}`);
 };
 
-export const getCollectibles = (name?: string) => {
-  if (!name) {
-    return axios.get(`${process.env.REACT_APP_API}/api/public/home/collectibles?pageSize=8&page=1`);
+export const getCollectibles = (name?: string, page?:any) => {
+  if (name==undefined) {
+    return axios.get(`${process.env.REACT_APP_API}/api/public/home/collectibles?pageSize=8&page=${page}`);
   } else {
     return axios.get(`${process.env.REACT_APP_API}/api/public/search/collectibles?field=${name}`);
   }
@@ -110,8 +110,8 @@ export const getUserCollectibles = (Id: string, pageSize = 8, page = 1) => {
   return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=2&user=owner`)
 }
 
-export const getOnSaleCollectibles = (Id: string, pageSize = 8, page = 1, tradable = 1, user = "owner") => {
-  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=owner`)
+export const getOnSaleCollectibles = (Id: string, pageSize = 8, page = 1, tradable = 1, user = "creator") => {
+  return axios.get(`${process.env.REACT_APP_API}/api/public/user/${Id}/collectibles?pageSize=${pageSize}&page=${page}&tradable=1&user=creator`)
 }
 
 export const getLikedCollectibles = (Id: string, pageSize = 8, page = 1) => {

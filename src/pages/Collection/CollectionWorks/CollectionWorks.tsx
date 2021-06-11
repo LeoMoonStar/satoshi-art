@@ -15,10 +15,16 @@ const categories: CategoryType[] = [
   { id: 2, title: 'Collectibles' },
 ];
 
+
 export default function CollectionWorks(): JSX.Element {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>(categories[1]);
   const classes = useStyles();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
 
+  const handlePageChange = (page:any)=>{
+    setCurrentPage(page)
+  }
   return (
     <div className={classes.container}>
       <div className={classes.navigationRow}>
@@ -37,7 +43,10 @@ export default function CollectionWorks(): JSX.Element {
           ))}
         </nav>
       </div>
-      <Works />
+      <Works currentPage={currentPage}
+      pageSize={pageSize}
+      itemsCount={0}
+      onPageChange={handlePageChange}/>
     </div>
   );
 }

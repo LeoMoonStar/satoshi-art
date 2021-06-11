@@ -64,12 +64,23 @@ export default function SearchResults({ collectibles }: SearchResultsProps): JSX
       .then(({ data }) => setArtistCollectibles(data));
   };
 
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
+
+  const handlePageChange = (page:any)=>{
+    setCurrentPage(page)
+  }
   return (
     <div>
       <SearchHeader selectedTag={selectedTag} addTag={addTag} removeTag={removeTag} clearAll={clearAll} />
 
       <div className={classes.container}>
-        <Works isLoading={false} collectibles={artistCollectibles.length > 0 ? artistCollectibles : collectibles} />
+        <Works 
+        currentPage={currentPage}
+        pageSize={pageSize}
+        itemsCount={0}
+        onPageChange={handlePageChange}
+        isLoading={false} collectibles={artistCollectibles.length > 0 ? artistCollectibles : collectibles} />
       </div>
     </div>
   );

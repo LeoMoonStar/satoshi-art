@@ -803,7 +803,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               <label htmlFor='size' className={classes.label}>
                 {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
               </label>
-              <div className={classes.sizes}>
+              {/* <div className={classes.sizes}>
                 <div>
                   <Input
                     id='size'
@@ -824,7 +824,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     </p>
                   )}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className={classes.footer}>

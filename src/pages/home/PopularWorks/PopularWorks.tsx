@@ -7,7 +7,10 @@ import Works from 'components/widgets/Works';
 import Button from 'components/button';
 import { FilterIcon } from 'components/icons';
 
+
 import useStyles from './PopularWorks.style';
+import { current } from '@reduxjs/toolkit';
+
 
 const categories = ['creator', 'collectible', 'collection'];
 
@@ -17,14 +20,24 @@ export default function PopularWorks(): JSX.Element {
   const [collectibles, setCollectibles] = useState<Collectible[]>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [isExistNewTokens, setExistNewTokens] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [pageSize, setPageSize] = React.useState(4);
+  const name = undefined;
 
   useEffect(() => {
-    getCollectibles().then(({ data }) => {
+
+    getCollectibles(name, currentPage).then(({ data }) => {
       setCollectibles(data);
+      console.log(data.metadata)
+      // console.log(data.metadata.page)
+      // setCurrentPage(data.metadata.page)
+      // setPageSize(data.metadata.pageSize)
       setLoading(false);
     });
-  }, []);
-
+  }, [currentPage]);
+const handlePageChange = (page:any)=>{
+  setCurrentPage(page)
+}
   return (
     <section className={classes.container}>
       <h3 className={classes.title}>{text['takeTimeToAppreciateTheArtWork']}</h3>
@@ -46,7 +59,12 @@ export default function PopularWorks(): JSX.Element {
           </Button>
         </div>
       </Modal>
-      <Works collectibles={collectibles} borderWidth={0} isLoading={isLoading} variant='rounded' />
+      <Works currentPage={currentPage}
+          pageSize={pageSize}
+          itemsCount={collectibles.length}
+          onPageChange={handlePageChange}
+      collectibles={collectibles} borderWidth={0} isLoading={isLoading} variant='rounded' />
+      
     </section>
   );
 }

@@ -113,10 +113,10 @@ export default function PageDetails(): JSX.Element {
               <SaveIcon />
               {numFollowings}
             </div>
-            <div className={classes.artistStatisticItem}>
+            {/* <div className={classes.artistStatisticItem}>
               <ViewsIcon />
               {numFollowers}
-            </div>
+            </div> */}
             <div className={classes.artistStatisticItem}>
               <LikeIcon />
               220
@@ -136,8 +136,8 @@ export default function PageDetails(): JSX.Element {
               >
                 {isFollowing || isFollower ? text['unfollow'] : text['follow']}
               </Button>
-              :
-              <Button variantCustom="action" className={classes.actionButton} onClick={() => becomeArtist()}>{!isArtist && text['becomeArtist']}</Button>
+              :''
+              // <Button variantCustom="action" className={classes.actionButton} onClick={() => becomeArtist()}>{!isArtist && text['becomeArtist']}</Button>
             }
           </div>
         </div>
@@ -148,19 +148,19 @@ export default function PageDetails(): JSX.Element {
           <div>
             {}
             <div className={clsx(classes.artistInfoWrapper, classes.centerAvatar)}>
-              <Avatar size={140} image={avatar} alt='Jack Jackson' status='premium' />
+              <Avatar size={50} image={avatar} alt='Jack Jackson' status='premium' />
               <div className={classes.actions}>
-                <IconButton className={classes.actionsButton} onClick={handleToggleActions}>
+                {/* <IconButton className={classes.actionsButton} onClick={handleToggleActions}>
                   <ThreeDotsIcon />
-                </IconButton>
-
+                </IconButton> */}
+{/* 
                 {isOpenActions && (
                   <div className={classes.actionsList}>
                     <Button onClick={() => addToFavourite()}>Add to favorite</Button>
                     <Button onClick={() => sendMessage()}>Send message</Button>
                     <Button onClick={() => addToFriends()}>Add to friends</Button>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
             <div className={classes.artistInfoList}>

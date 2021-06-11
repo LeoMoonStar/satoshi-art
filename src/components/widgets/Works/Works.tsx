@@ -10,7 +10,7 @@ import Loader from '../Loader';
 import { Link } from 'react-router-dom';
 import TextGradient from '../TextGradient';
 import artistAvatar from 'components/images/artist/avatar.jpg';
-
+import Pagination from 'components/widgets/Pagination';
 import TokenPreview from '../TokenPreview';
 import { Collectible } from '../../../apis/collectibles';
 import useStyles from './Works.style';
@@ -24,6 +24,10 @@ type WorksListProps = {
   isLoading?: boolean;
   collectibles?: Collectible[];
   isArtistPage?: boolean;
+  currentPage: number,
+  pageSize:number
+itemsCount: number
+  onPageChange: any
 };
 
 export default function WorksList({
@@ -32,6 +36,10 @@ export default function WorksList({
   isLoading,
   collectibles = [],
   isArtistPage = false,
+  currentPage,
+          pageSize,
+          itemsCount,
+          onPageChange,
 }: WorksListProps): JSX.Element {
   const { explorer } = useCurrentNetwork();
   const classes = useStyles();
@@ -105,6 +113,12 @@ export default function WorksList({
           </div>
         ))}
       </div>
+      <Pagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          itemsCount={itemsCount}
+          onPageChange={onPageChange}
+        />
     </div>
   );
 }

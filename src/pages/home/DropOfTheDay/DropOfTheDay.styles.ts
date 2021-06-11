@@ -40,11 +40,12 @@ const useStyles = makeStyles(() => {
       '& h3': {
         position: 'absolute',
         left: 50,
-        zIndex: 0,
+        zIndex: 9999,
         width: 185,
         fontSize: 80,
         fontWeight: 800,
         color: '#fff',
+        top:130
       },
       '& img': {
         position: 'relative',
