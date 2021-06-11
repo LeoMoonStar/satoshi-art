@@ -42,10 +42,10 @@ const useStyles = makeStyles(() => {
         left: 50,
         zIndex: 9999,
         width: 185,
-        fontSize: 80,
+        fontSize: 50,
         fontWeight: 800,
         color: '#fff',
-        top:130
+        top:100
       },
       '& img': {
         position: 'relative',

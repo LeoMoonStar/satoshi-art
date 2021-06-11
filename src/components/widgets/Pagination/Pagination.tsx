@@ -24,7 +24,7 @@ export default function Pagination({
 }: PaginationProps): JSX.Element {
   const classes = useStyles();
   let pagesCount = Math.ceil(itemsCount / pageSize);
-  if (pagesCount === 1) return null as any;
+  // if (pagesCount === 1) return null as any;
   const pages = _.range(1, pagesCount + 1);
   console.log('pagination',pagesCount)
 
@@ -32,7 +32,7 @@ export default function Pagination({
     <ul className={cx(classes.container, className)} style={{maxWidth:'250px', alignItems:'right'}}>
       <li className={classes.first}>
         <button type='button' title={text['first']}>
-          <DoubleArrowLeft onClick={() => { pagesCount!=0 ? onPageChange(pagesCount-1):null}}/>
+          <DoubleArrowLeft onClick={() => { pagesCount!=0 && pagesCount>0? onPageChange(pagesCount-1):null}}/>
         </button>
       </li>
 

@@ -37,7 +37,7 @@ export default function DropOfTheDay(): JSX.Element {
         <h2 className={classes.mainTitle}>{text['dropOfTheDay']}</h2>
         <div className={classes.card}>
           <Link to={`/drop-of-the-day/${profile.celebrityId}`}>
-            <div className={classes.leftCol} style={{marginRight:'200px'}}>
+            <div className={classes.leftCol} >
               <h3>{profile.name}</h3>
               <img src={profile.avatarUrl} />
             </div>
