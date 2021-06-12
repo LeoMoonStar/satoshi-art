@@ -55,10 +55,11 @@ const useStyles = makeStyles(() => {
     rightCol: {
       position: 'relative',
       zIndex: 1,
-      marginLeft: -70,
+      marginLeft: "2%",
+      // marginLeft: -70,
       padding: '0 50px',
       boxSizing: 'border-box',
-      width: 'calc(100% - 510px)',
+      width: '60%',
       '& .slick-arrow:hover': {
         '& circle': {
           fill: '#fff',

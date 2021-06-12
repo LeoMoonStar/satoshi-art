@@ -12,6 +12,7 @@ const useStyles = makeStyles(() => ({
     margin: '60px 0 30px',
     display: 'flex',
     alignItems: 'center',
+    marginLeft: "20%"
   },
   navigation: {
     marginLeft: 'auto',

@@ -11,9 +11,9 @@ const useStyles = makeStyles(() => {
       width: 'calc(100% - 510px)',
     },
     slider: {
-      width: 573,
+      width: '70%',
       boxSizing: 'border-box',
-      marginLeft: 'auto',
+      marginLeft: '25%',
       marginBottom: 60,
 
       '& .slick-dots': {
@@ -65,7 +65,7 @@ const useStyles = makeStyles(() => {
       justifyContent: 'center',
     },
     header: {
-      width: '100%',
+      width: '90%',
       display: 'flex',
       alignItems: 'center',
       marginBottom: 8,
@@ -143,6 +143,7 @@ const useStyles = makeStyles(() => {
       height: 245,
       objectFit: 'cover',
       borderRadius: 20,
+      overflow: 'hidden'
     },
     info: {
       width: 292,
@@ -155,6 +156,7 @@ const useStyles = makeStyles(() => {
       display: 'flex',
       justifyContent: 'center',
       flexWrap: 'wrap',
+      overflow: 'hidden'
     },
     seeAll: {
       marginTop: 20,
