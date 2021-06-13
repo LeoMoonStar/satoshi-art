@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => {
     innerContainer: {
       position: 'relative',
       width: '100%',
+      zIndex: 1
     },
     card: {
       position: 'relative',
