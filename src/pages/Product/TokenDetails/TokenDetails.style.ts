@@ -102,6 +102,8 @@ const useStyles = makeStyles(theme => {
     },
     buttonsContainer: {
       marginTop: 10,
+      display: 'flex',
+      alignContent: 'center'
     },
     buyButton: {
       width: 157,

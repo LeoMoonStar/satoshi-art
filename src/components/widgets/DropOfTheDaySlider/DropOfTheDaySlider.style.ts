@@ -11,9 +11,9 @@ const useStyles = makeStyles(() => {
       width: 'calc(100% - 510px)',
     },
     slider: {
-      width: '70%',
+      width: '90%',
       boxSizing: 'border-box',
-      marginLeft: '25%',
+      marginLeft: '15%',
       marginBottom: 60,
 
       '& .slick-dots': {

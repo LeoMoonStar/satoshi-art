@@ -55,7 +55,7 @@ const useStyles = makeStyles(() => {
     rightCol: {
       position: 'relative',
       zIndex: 1,
-      marginLeft: "2%",
+      // marginLeft: "2%",
       // marginLeft: -70,
       padding: '0 50px',
       boxSizing: 'border-box',
