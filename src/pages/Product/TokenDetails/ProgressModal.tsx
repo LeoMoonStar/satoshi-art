@@ -61,6 +61,7 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
   //check for if productId is dropOsTheDay
   const checkDropOfTheDay = async () => {
     const { data: response } = await getDropOfTheDay();
+    console.log("checkDropOfTheDay");
     console.log(response);
     const filtered = response.filter((collectibleId: any) => collectibleId.id == id);
     console.log(filtered.length);
@@ -78,6 +79,7 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
     console.log(metamaskId.ownerMetamaskId);
     if (metamaskId.ownerMetamaskId != '') {
       const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, data.tokenId as number);
+      console.log("User balance: ", balance)
       if (balance > 0) {
         // setApprove(true);
         // openSucessBox();
@@ -104,7 +106,6 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
         metamaskId.ownerMetamaskId,
         metamaskId.price.toString()
       ).then((res: any) => {
-        setSigned(false);
         setClickedSigned(false);
         setActiveStep(2);
         setShowTxHash(res.transactionHash);
@@ -112,6 +113,7 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
           .then((res) => {
             console.log("onclose #1")
             openSucessBox();
+            setSigned(true);
 
             onClose()
           })
@@ -132,30 +134,45 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
         metamaskId.tokenId,
         metamaskId.ownerMetamaskId,
         metamaskId.price.toString()
-      );
-
-      setClickedSigned(true);
-      setSigned(true);
-      console.log(result);
-
-      result.wait().then((res: any) => {
-
-        setSigned(false);
+      ).then((res: any) => {
+        
         setClickedSigned(false);
         setActiveStep(2);
         setShowTxHash(res.transactionHash);
-
         buyCollectible(id, price)
           .then((res) => {
             console.log("onclose #2")
             openSucessBox();
-            
+            setSigned(true);
             onClose()
           })
           .catch((error) => {
             openFailedBox()
           })
-      }).catch((err: any) => alert(err.message))
+      }).catch((err: any) => alert(err.message));
+
+      // setClickedSigned(true);
+      // setSigned(true);
+      // console.log(result);
+
+      // result.wait().then((res: any) => {
+
+      //   setSigned(false);
+      //   setClickedSigned(false);
+      //   setActiveStep(2);
+      //   setShowTxHash(res.transactionHash);
+
+      //   buyCollectible(id, price)
+      //     .then((res) => {
+      //       console.log("onclose #2")
+      //       openSucessBox();
+            
+      //       onClose()
+      //     })
+      //     .catch((error) => {
+      //       openFailedBox()
+      //     })
+      // }).catch((err: any) => alert(err.message))
     }
 
 
