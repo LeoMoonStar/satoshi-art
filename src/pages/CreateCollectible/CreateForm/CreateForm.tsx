@@ -83,10 +83,11 @@ const schema = yup.object().shape({
     .typeError('You need to enter number')
     .required('Royalties must be less than or equal to 10'),
   copiesCount: yup.number().typeError('You need to enter number'),
-  properties: yup.object().shape({
-    name: yup.string().required('You need to enter the size'),
-    value: yup.string().required('You need to enter the value'),
-  }),
+  // properties: yup.object().shape({
+  //   name: yup.string().required('You need to enter the size'),
+  //   value: yup.string().required('You need to enter the value'),
+  // }),
+
 });
 
 type PreviewType = { file: string; cover?: string; type: string; base64: string; imagetype: string };
@@ -116,7 +117,7 @@ interface ICollectibleForm {
   name: string;
   description: string;
   royalties: number;
-  properties: { name: string; value: string };
+  // properties: { name: string; value: string };
 }
 
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
@@ -152,10 +153,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       description: 'description',
       royalties: 10,
       copiesCount: 1,
-      properties: {
-        name: '5',
-        value: 'M',
-      },
+      // properties: {
+      //   name: '5',
+      //   value: 'M',
+      // },
     },
   });
 
@@ -264,7 +265,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     checkCelebrity()
   }, []);
   const onSubmit = async (data: ICollectibleForm) => {
-    const { properties, copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
+    const {  copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
       data;
     console.log(data);
     console.log(preview)
@@ -803,28 +804,28 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               <label htmlFor='size' className={classes.label}>
                 {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
               </label>
-              {/* <div className={classes.sizes}>
+              <div >
                 <div>
-                  <Input
+                  {/* <Input
                     id='size'
                     placeholder='e. g. Size'
                     disableUnderline
                     inputRef={register}
                     name='properties.name'
-                  />
-                  {errors.properties && (
+                  /> */}
+                  {/* {errors.properties && (
                     <p className={classes.textError}>{errors.properties.name ? errors.properties.name.message : ''}</p>
-                  )}
+                  )} */}
                 </div>
                 <div>
-                  <Input placeholder='e. g. M' disableUnderline inputRef={register} name='properties.value' />
-                  {errors.properties && (
+                  {/* <Input placeholder='e. g. M' disableUnderline inputRef={register} name='properties.value' /> */}
+                  {/* {errors.properties && (
                     <p className={classes.textError}>
                       {errors.properties.value ? errors.properties.value.message : ''}
                     </p>
-                  )}
+                  )} */}
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
           <div className={classes.footer}>
