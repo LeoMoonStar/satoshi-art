@@ -21,7 +21,7 @@ const RenderCardContent = ({ token }: any) => {
   return (
     <>
       <div className={classes.head}>
-        <h3 className={classes.tokenName}>{token.name}</h3>
+        <h3 className={classes.tokenName}>{token.name.slice(0,35)+'...'}</h3>
         <IconButton className={classes.showMoreButton} buttonRef={anchorElRef}
           onClick={e => {
             setOpen(!isOpen);
@@ -99,9 +99,10 @@ export default function Collections(): JSX.Element {
                       //     author: { image: creatorInfo.data.thumbnailUrl, name: creatorInfo.data.name, price: info.price }
                       // })
                   })
-                  Promise.all(getCollectibleUserInfo).then((result) => {
+                  Promise.all(getCollectibleUserInfo).then((result:any) => {
                     console.log(result);
-                    setCollections(list)
+                   
+                    setCollections(result)
                   })
 
               })
@@ -110,7 +111,7 @@ export default function Collections(): JSX.Element {
   // text['collections']
   return (
     <TokensSlider title='Collectibles' count={collections.length}>
-      {collections.map((token: any) => {
+      {collections.map(({data:token}: any) => {
         console.log(token)
         return (
       <TokenCard key={token.id} token={token} renderContent={RenderCardContent} />

@@ -75,6 +75,7 @@ export const getFollowings = (Id: string) => {
 export const userBecomeArtist = () => {
   return axios.post(
     `${process.env.REACT_APP_API}/api/auth/user/request`,
+    {},
     { headers: {
       id: readCookie("id"), 
       token: readCookie('token'), 

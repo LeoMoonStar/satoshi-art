@@ -87,7 +87,7 @@ const useStyles = makeStyles(() => {
     },
     tokenName: {
       margin: 0,
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: 600,
       color: '#000',
       letterSpacing: '-0.04em',
