@@ -40,11 +40,12 @@ export const Info = ({ info, collection }: any): JSX.Element => {
         )*/}
       </div>
       <div className={classes.divider} />
-      
+      {console.log("info.tsx: ", info)}
       {info.map((data: any, index: number) => (
         <div key={index} className={classes.collectionContainer}>
           <Avatar size={48} alt='Profile photo' image={data.avatarUrl}/>
           <div className={classes.artistInfo}>
+            {console.log(data)}
             <Typography variant='subtitle1' className={classes.artistRole}>{data.header}</Typography>
             <Typography variant='h3'>{data.name}</Typography>
           </div>

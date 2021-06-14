@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { IconButton } from '@material-ui/core';
 import text from '../../../constants/content';
-
+import { getUserInfo } from 'apis/users';
+import { getToken } from 'apis/token';
 import { useCurrentNetwork } from 'hooks/useCurrentNetwork';
 import Button from '../../button';
 import { SaveIcon, ViewsIcon } from '../../icons';
@@ -52,14 +53,16 @@ export default function WorksList({
       return '/collectible-image.jpeg';
     }
   };
-
+  // const ownerinfo = await getUserInfo(collectibles.)
   if (isLoading) return <Loader />;
-
   return (
     <div>
       <div className={classes.grid}>
-        {collectibles.map(({ id, status, name, price, creatorId, file, thumbnailUrl }) => (
+        {console.log("at the work collectibles: ", collectibles)}
+        {collectibles.map(({ id, status, name, price, file, thumbnailUrl }) => (
+          
           <div className={classes.work} key={id}>
+            {}
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
                 <TokenPreview
@@ -88,8 +91,10 @@ export default function WorksList({
                 </a>*/}
                 {price && <Price.WeiToEth value={price} />}
               </div>
-
+         
               <div className={classes.workInfo}>
+                
+                {/* {console.log("Works.tsx, token info: ", await getToken(id))} */}
                 <span className={classes.count}>1 of 1</span>
                 {/* {console.log(name,status)} */}
 

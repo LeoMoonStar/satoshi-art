@@ -156,11 +156,11 @@ const TokenDetails = (): JSX.Element => {
     });
 
     getHistory(id).then(({ data }) => {
-      console.log(data, id)
+      // console.log("History:", data, id)
       data.forEach(async function (info: any) {
         const buyerInfo = await getUserInfo(info.buyerUserId);
         const sellerInfo = await getUserInfo(info.sellerUserId);
-
+        console.log("!!!!!!!!!!!!!!!!sellerInfo", sellerInfo.data)
         info['buyerAvatarUrl'] = buyerInfo.data.avatarUrl;
         info['sellerAvatarUrl'] = sellerInfo.data.avatarUrl;
       });
@@ -316,7 +316,10 @@ const TokenDetails = (): JSX.Element => {
             />
           ))}
         </Tabs>
+        {console.log("TokenDetails: ", info)}
         {tab === TabVariants.INFO && <Info info={info} collection={collection} />}
+        {/* {info.map((data: any) => (console.log("artist name: ", info.data.name)))} */}
+        {console.log("artist name: ", collection)}
         {/*tab === TabVariants.OWNERS && <div />*/}
         {tab === TabVariants.HISTORY && <History list={history} name={collectible.name} collectibleId={id}/>}
         {tab === TabVariants.BIDS && <div />}
