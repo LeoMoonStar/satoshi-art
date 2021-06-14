@@ -6,5 +6,5 @@ export const getHistory = () => {
 }
 
 export const getCelebrityList = () =>{
-	return axios.get(`${process.env.REACT_APP_API}/api/public/home/dropOfTheDay/homepage-celebrity`)
+	return axios.get(`${process.env.REACT_APP_API}/api/public/home/dropOfTheDay/homepage-celebrity?pageSize=8&page=1`)
 }

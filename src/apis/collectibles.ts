@@ -151,6 +151,7 @@ export const putCollectibleOnSale = async(Id: string, data: any) => {
 export const removeCollectibleFromSale = async(Id: string) => {
   return axios.put(
     `${process.env.REACT_APP_API}/api/auth/${Id}/remove-on-sale`,
+    {},
     {
       headers: {
         id: readCookie('id'),

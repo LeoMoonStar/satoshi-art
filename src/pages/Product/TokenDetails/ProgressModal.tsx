@@ -78,7 +78,7 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
     console.log(metamaskId.ownerMetamaskId);
     if (metamaskId.ownerMetamaskId != '') {
       const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, data.tokenId as number);
-      if (balance > 0) {
+      if (parseInt(balance) > 0) {
         // setApprove(true);
         // openSucessBox();
         setActiveStep(1);

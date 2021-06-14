@@ -329,6 +329,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
         //check if item is on sale or not
         if (onSale) {
+          const batchPutOnSale:any = [];
+//           for(let i=0; i<tokenId.length;i++){
+//             batchPutOnSale.push(web3Contract.marketplacePutOnSaleCollectible(tokenId[i], price.toString()))
+//           }
+//           Promise.all(batchPutOnSale).then(resolve=>{
+// console.log(resolve)
+//           }).catch(error=>console.log(error.message))
           const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
           setOnSale(true);
           setItemCreated(false);
@@ -830,8 +837,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           </div>
           <div className={classes.footer}>
             <Button disabled={isErrors()} type='submit'>
-              {console.log("!!!!!!!!!!!!!!!!!!!")}
-              {console.log(Object.keys(errors))}
+              
               {text['createItem']}
             </Button>
             {itemCreated ? <span>Creating item in progress....</span> : ''}

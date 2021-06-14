@@ -18,7 +18,7 @@ export default function TokenCard({ token, renderContent: RenderContent }: Token
   return (
     <Link to={`/edit-collectible/${token.id}`} className={classes.card} key={token.id}>
       <div className={classes.topWrapper}>
-        <TokenPreview className={classes.tokenPreview} src={token.preview} alt="" />
+        <TokenPreview className={classes.tokenPreview} src={token.thumbnailUrl} alt="" />
       </div>
       <Avatar className={classes.avatar} image={preview} size={60} />
       <RenderContent token={token} />
