@@ -31,13 +31,16 @@ function Wallets(): JSX.Element {
   const openTerms = () => setOpen(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setFields({ ...fields, [event.target.name]: event.target.checked });
   const onSubmit = async () => {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!",account)
     if (account) {
       // await addUser(account)
+      console.log("user wallet is true")
       dispatch(changePermittedToUseWallet(true));
 
       history.push('/');
     }
   };
+  console.log(history)
   const handleGoBack = () => history.goBack();
   
   const { age, terms } = fields;

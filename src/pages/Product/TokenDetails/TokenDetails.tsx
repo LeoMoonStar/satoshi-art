@@ -411,9 +411,12 @@ const TokenDetails = (): JSX.Element => {
           name={collectible.name}
           price={collectible.price}
           onClose={() => {
-            setShowPopup(true);
+            console.log("onclose #5")
+            
+            // setShowPopup(true);
             setIsProgressModal(false);
           }}
+          openSucessBox={()=> setShowPopup(true)}
           openFailedBox={() => setShowFailedPopup(true)}
         />
       )}

@@ -25,8 +25,8 @@ type WorksListProps = {
   collectibles?: Collectible[];
   isArtistPage?: boolean;
   currentPage: number,
-  pageSize:number
-itemsCount: number
+  pageSize: number
+  itemsCount: number
   onPageChange: any
 };
 
@@ -37,9 +37,9 @@ export default function WorksList({
   collectibles = [],
   isArtistPage = false,
   currentPage,
-          pageSize,
-          itemsCount,
-          onPageChange,
+  pageSize,
+  itemsCount,
+  onPageChange,
 }: WorksListProps): JSX.Element {
   const { explorer } = useCurrentNetwork();
   const classes = useStyles();
@@ -88,10 +88,12 @@ export default function WorksList({
                 </a>*/}
                 {price && <Price.WeiToEth value={price} />}
               </div>
+
               <div className={classes.workInfo}>
                 <span className={classes.count}>1 of 1</span>
+                {/* {console.log(name,status)} */}
 
-                {status == "onSale" && (
+                {status === "onSale" && (
                   <Button className={classes.bidButton}>
                     <div onClick={() => location.replace(`/product/${id}`)}>
                       <TextGradient colors='#FF0099, #6A2FE7'>{text['buyNow']}</TextGradient>
@@ -102,11 +104,12 @@ export default function WorksList({
                 {isCollectibleOwned(id, collectibles) || isArtistPage ? (
                   <span style={{ marginLeft: '5px' }}>You are the Owner</span>
                 ) : (
-                  <Button className={classes.bidButton}>
+                  status === "onHold" && (<Button className={classes.bidButton}>
                     <div>
                       <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
                     </div>
-                  </Button>
+                  </Button>)
+
                 )}
               </div>
             </div>
@@ -114,17 +117,17 @@ export default function WorksList({
         ))}
       </div>
       {
-        itemsCount!=0?
-        (
-<Pagination
-          currentPage={currentPage}
-          pageSize={pageSize}
-          itemsCount={itemsCount}
-          onPageChange={onPageChange}
-        />
-        ):''
+        itemsCount != 0 ?
+          (
+            <Pagination
+              currentPage={currentPage}
+              pageSize={pageSize}
+              itemsCount={itemsCount}
+              onPageChange={onPageChange}
+            />
+          ) : ''
       }
-      
+
     </div>
   );
 }

@@ -39,6 +39,7 @@ export default createReducer(initialState, app => {
       state.isWhitelisted = action.payload;
     })
     .addCase(changePermittedToUseWallet, (state, action) => {
+      console.log("user wallet is",action.payload)
       state.isPermittedToUseWallet = action.payload;
     })
     .addCase(updateTransactionInMintingProcess, (state, action) => {

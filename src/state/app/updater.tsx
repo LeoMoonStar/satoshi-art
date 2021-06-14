@@ -39,7 +39,7 @@ export const useUserWhiteListChecking = (): void => {
       return;
     }
 
-    //checkUserWhitelisted(account).then((res) => dispatch(changeWhitelistedStatus(res.isWhitelisted)))
+    // checkUserWhitelisted(account).then((res) => dispatch(changeWhitelistedStatus(res.isWhitelisted)))
   }, [dispatch, account]);
 };
 

@@ -38,6 +38,7 @@ getUserInfo(userId).then(({ data }) => {
 });
 
 const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
+  
   const classes = useStyles();
   const anchorElRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -67,6 +68,9 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
 
     if (Id) {
       getUserInfo(Id).then(({ data }) => {
+        // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!")
+        // console.log(data)
+        
         setIsArtist(data.isArtist);
         setUserAvatar(data.avatarUrl);
         setCelebrity(data.isCelebrity)
@@ -78,15 +82,15 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
     // checkCeleb()
   }, [account, library, isWalletPermitted]);
 
-
   // const checkCeleb = () =>{
    
   // }
-  
+  console.log("user account",account)
   const userAddress = useMemo(() => {
     if (!!account) return shortAddress(account, 10);
   }, [account]);
-
+  // console.log("in userMenu", avatarUrl)
+  // console.log("seleceted address", window.ethereum.selectedAddress, "walletpermitted",useSelector<AppState, boolean>(permittedToUseWalletSelector))
   if (!window.ethereum.selectedAddress || !isWalletPermitted) return null;
 
   return (
@@ -102,6 +106,8 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
     > 
 
       <div ref={anchorElRef}>
+     
+        {/* {console.log(avatarUrl)} */}
         <Link to='/dashboard/user'>
           <Avatar size={40} image={avatarUrl ? avatarUrl : avatar} />
         </Link>
@@ -110,7 +116,7 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <div>
           <div className={classes.nickName}>
-            {userAddress}
+            {text.defaultName}
             <IconButton onClick={() => navigator.clipboard.writeText(account)}><CopyIcon /></IconButton>
           </div>
           <ul className={classes.balances}>

@@ -277,7 +277,8 @@ const text: { [key: string]: string } = {
   putOnSaleServiceFee: 'Service fee: <b>{{fee}}%</b>',
   putOnSaleReceiveAmount: 'You will receive <b>{{ count }} {{ currency }}</b> $ {{ amount }}',
   nextStep: 'Next step',
-  requestToBecomeArtist:'Request To Become Artist'
+  requestToBecomeArtist:'Request To Become Artist',
+  defaultName: 'satoshi.art user_123'
 };
 
 export default text;

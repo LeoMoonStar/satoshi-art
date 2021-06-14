@@ -56,7 +56,7 @@ ILayoutProps): JSX.Element => {
 
           if (isInLoginAsMode()) {
             console.log('user sign in');
-
+            
             console.log("id", readCookie("id"))
             console.log("token", readCookie("token"))
             console.log("metamask_address", readCookie("metamask_address"))

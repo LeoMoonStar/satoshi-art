@@ -26,7 +26,7 @@ export default function Pagination({
   let pagesCount = Math.ceil(itemsCount / pageSize);
   // if (pagesCount === 1) return null as any;
   const pages = _.range(1, pagesCount + 1);
-  console.log('pagination',pagesCount)
+  // console.log('pagination',pagesCount)
 
   return (
     <ul className={cx(classes.container, className)} style={{maxWidth:'250px', alignItems:'right'}}>

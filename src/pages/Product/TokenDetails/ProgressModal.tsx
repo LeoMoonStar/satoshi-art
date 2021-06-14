@@ -35,10 +35,11 @@ type ProgressModalProps = {
   name: string;
   price: number;
   onClose: () => void;
+  openSucessBox: () => void;
   openFailedBox: () => void;
 };
 
-export default function ProgressModal({ name, price, onClose, openFailedBox }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ name, price, onClose, openSucessBox, openFailedBox }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -78,11 +79,13 @@ export default function ProgressModal({ name, price, onClose, openFailedBox }: P
     if (metamaskId.ownerMetamaskId != '') {
       const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, data.tokenId as number);
       if (balance > 0) {
-        setApprove(true);
+        // setApprove(true);
+        // openSucessBox();
         setActiveStep(1);
       } else {
         alert('Insufficient Tokens');
-        onClose();
+        // onClose();
+        openFailedBox();
       }
     } else {
       alert('Please connect to metamask first');
@@ -93,63 +96,68 @@ export default function ProgressModal({ name, price, onClose, openFailedBox }: P
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
-console.log(metamaskId);
+    console.log("!!!!!!!!!!!!! Start Signature !!!!!!!!!!!")
+    console.log(metamaskId);
     if (dropOfTheDay) {
       const dropResult = await web3Contract.dropOfTheDayBuy(
         metamaskId.tokenId,
         metamaskId.ownerMetamaskId,
         metamaskId.price.toString()
-      );
-      setClickedSigned(true);
-      setSigned(true);
-      dropResult.wait().then((res: any) => {
+      ).then((res: any) => {
         setSigned(false);
         setClickedSigned(false);
         setActiveStep(2);
         setShowTxHash(res.transactionHash);
+        buyCollectible(id, price)
+          .then((res) => {
+            console.log("onclose #1")
+            openSucessBox();
 
-
-   
-
-      buyCollectible(id, price)
-        .then((res) => {
-          onClose()
-        })
+            onClose()
+          })
+          .catch((error) => {
+            openFailedBox()
+          })
+      })
         .catch((error) => {
           openFailedBox()
-        })
-      
-    });
-       
+        });
+
+      // dropResult.wait();
+
     }
-    else{
+    else {
       //regular collectible
       const result = await web3Contract.marketplaceBuyCollectible(
         metamaskId.tokenId,
         metamaskId.ownerMetamaskId,
         metamaskId.price.toString()
       );
-  
+
       setClickedSigned(true);
       setSigned(true);
       console.log(result);
-  
+
       result.wait().then((res: any) => {
+
         setSigned(false);
         setClickedSigned(false);
         setActiveStep(2);
         setShowTxHash(res.transactionHash);
-  
+
         buyCollectible(id, price)
-        .then((res) => {
-          onClose()
-        })
-        .catch((error) => {
-          openFailedBox()
-        })
-      }).catch((err:any)=>alert(err.message))
+          .then((res) => {
+            console.log("onclose #2")
+            openSucessBox();
+            
+            onClose()
+          })
+          .catch((error) => {
+            openFailedBox()
+          })
+      }).catch((err: any) => alert(err.message))
     }
-    
+
 
   };
   return (

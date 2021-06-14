@@ -829,6 +829,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           </div>
           <div className={classes.footer}>
             <Button disabled={isErrors()} type='submit'>
+              {console.log("!!!!!!!!!!!!!!!!!!!")}
+              {console.log(Object.keys(errors))}
               {text['createItem']}
             </Button>
             {itemCreated ? <span>Creating item in progress....</span> : ''}
