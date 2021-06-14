@@ -119,7 +119,7 @@ export default function ArtistWorks({ collectibles }: ArtistWorksProps): JSX.Ele
       <Works 
       currentPage={currentPage}
       pageSize={pageSize}
-      itemsCount={0}
+      itemsCount={collections.length}
       onPageChange={handlePageChange}
       collectibles={collections} isLoading={false} isArtistPage={account == id} />
       <Modal open={open} onClose={closeModal}><Followers active={active} /></Modal>

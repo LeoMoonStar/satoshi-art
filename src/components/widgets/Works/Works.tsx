@@ -116,18 +116,14 @@ export default function WorksList({
           </div>
         ))}
       </div>
-      {
-        itemsCount != 0 ?
-          (
+     
             <Pagination
               currentPage={currentPage}
               pageSize={pageSize}
               itemsCount={itemsCount}
               onPageChange={onPageChange}
             />
-          ) : ''
-      }
-
+         
     </div>
   );
 }
