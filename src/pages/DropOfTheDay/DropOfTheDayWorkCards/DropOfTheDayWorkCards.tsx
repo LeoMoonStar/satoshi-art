@@ -8,20 +8,24 @@ import card3 from 'components/images/dropOfTheDay/card3.png';
 import card4 from 'components/images/dropOfTheDay/card4.png';
 import useStyles from './DropOfTheDayWorkCards.style';
 import { getDropOfTheDay } from 'apis/users';
+// import console from 'console';
 
 export default function OrderListFilters(): JSX.Element {
   const classes = useStyles();
   const [collectibles, setCollectibles] = useState([]);
 
   useEffect(() => {
-    getDropOfTheDay().then(({ data }) => setCollectibles(data));
+    getDropOfTheDay().then(({ data }) => 
+
+    setCollectibles(data));
   }, []);
 
   return (
     <section className={classes.container}>
       
-
+      {/* {console.log(collectibles[1,4])} */}
       {collectibles.length > 0 ? 
+          
           collectibles.map(({ id, status, thumbnailUrl, name }) => (
         <div key={id} className={classes.card}>
           {/* <img 

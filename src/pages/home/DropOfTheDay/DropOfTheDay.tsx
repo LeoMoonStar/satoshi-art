@@ -47,6 +47,7 @@ export default function DropOfTheDay(): JSX.Element {
           </Link>
           <div className={classes.rightCol}>
             <DropOfTheDaySlider name={profile.text} imagePreview={profile.paintImage}/>
+           
           </div>
         </div>
       </div>
