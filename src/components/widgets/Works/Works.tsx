@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { IconButton } from '@material-ui/core';
 import text from '../../../constants/content';
 import { getUserInfo } from 'apis/users';
@@ -59,10 +59,10 @@ export default function WorksList({
     <div>
       <div className={classes.grid}>
         {console.log("at the work collectibles: ", collectibles)}
-        {collectibles.map(({ id, status, name, price, file, thumbnailUrl }) => (
-          
+        {collectibles.map(({ id, status, name, price, file, thumbnailUrl, creatorName }) => (
+
           <div className={classes.work} key={id}>
-            {}
+            { }
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
                 <TokenPreview
@@ -78,22 +78,19 @@ export default function WorksList({
               </div>
               <div className={classes.infoHead}>
                 <h2 className={classes.name}>{name}</h2>
-                {/*<div className={classes.actionButtons}>
-                  <IconButton className={classes.actionButton}>
-                    <SaveIcon onClick={() => followingCollection(id)} />
-                  </IconButton>
-                </div>*/}
               </div>
               <div className={classes.authorInfo}>
-                {/* ignore
-                <a target='_blank' rel='noreferrer' href={`${explorer}/address/${creatorId}`}>
-                  {shortAddress(creatorId)}
-                </a>*/}
-                {price && <Price.WeiToEth value={price} />}
+                <span className={classes.creatorName}>@{creatorName}</span>
+                <span> </span>
+                <span>
+                  {price && <Price.WeiToEth value={price} />}
+                </span>
+
               </div>
-         
+
+
               <div className={classes.workInfo}>
-                
+
                 {/* {console.log("Works.tsx, token info: ", await getToken(id))} */}
                 <span className={classes.count}>1 of 1</span>
                 {/* {console.log(name,status)} */}
@@ -121,14 +118,14 @@ export default function WorksList({
           </div>
         ))}
       </div>
-     
-            <Pagination
-              currentPage={currentPage}
-              pageSize={pageSize}
-              itemsCount={itemsCount}
-              onPageChange={onPageChange}
-            />
-         
+
+      <Pagination
+        currentPage={currentPage}
+        pageSize={pageSize}
+        itemsCount={itemsCount}
+        onPageChange={onPageChange}
+      />
+
     </div>
   );
 }

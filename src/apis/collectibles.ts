@@ -28,7 +28,7 @@ export type Collectible = {
   thumbnailUrl?: string;
 
   properties: [];
-
+  creatorName: string;
   // unadded
   walletHash: string;
 };

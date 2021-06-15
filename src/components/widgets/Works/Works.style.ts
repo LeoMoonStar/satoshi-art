@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { Block } from '@material-ui/icons';
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -27,6 +28,11 @@ const useStyles = makeStyles(() => ({
         textDecoration: 'none',
       },
     },
+  },
+  creatorName:{
+    fontSize: 10,
+    color: '#9749eb',
+    fontWeight: 'bold'
   },
   workInfo: {
     width: '100%',
