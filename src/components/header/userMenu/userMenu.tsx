@@ -52,6 +52,7 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
   const Id = window.ethereum.selectedAddress ? readCookie('id') : null;
   const [celebrity, setCelebrity] = useState(false);
+  const randUsername = "satoshi.art" + " user_" + Math.floor(Math.random() * (300 - 100 + 1)) + 100;
   useEffect(() => {
     async function getBalance() {
       if (window.ethereum.selectedAddress) {
@@ -116,7 +117,9 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <div>
           <div className={classes.nickName}>
-            {text.defaultName}
+       
+            {randUsername}
+        
             <IconButton onClick={() => navigator.clipboard.writeText(account)}><CopyIcon /></IconButton>
           </div>
           <ul className={classes.balances}>
