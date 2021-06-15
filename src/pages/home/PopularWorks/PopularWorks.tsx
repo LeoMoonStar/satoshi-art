@@ -26,10 +26,11 @@ export default function PopularWorks(): JSX.Element {
 
   useEffect(() => {
 
-    getCollectibles(name, currentPage).then(({ data }) => {
-
-      setCollectibles(data);
-      console.log(data.metadata)
+    getCollectibles(name, currentPage).then((response) => {
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      console.log("respose:", response)
+      setCollectibles(response.data);
+      
       // console.log(data.metadata.page)
       // setCurrentPage(data.metadata.page)
       // setPageSize(data.metadata.pageSize)
