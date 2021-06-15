@@ -21,12 +21,13 @@ export default function PopularWorks(): JSX.Element {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [isExistNewTokens, setExistNewTokens] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(4);
+  const [pageSize, setPageSize] = React.useState(8);
   const name = undefined;
 
   useEffect(() => {
 
     getCollectibles(name, currentPage).then(({ data }) => {
+
       setCollectibles(data);
       console.log(data.metadata)
       // console.log(data.metadata.page)
@@ -60,8 +61,8 @@ const handlePageChange = (page:any)=>{
         </div>
       </Modal>
       <Works currentPage={currentPage}
-          pageSize={pageSize}
-          itemsCount={collectibles.length}
+          pageSize={pageSize} // number of collectibles in one page
+          itemsCount={collectibles.length} // should be total collectibles across all pages
           onPageChange={handlePageChange}
       collectibles={collectibles} borderWidth={0} isLoading={isLoading} variant='rounded' />
       

@@ -62,7 +62,7 @@ export default function WorksList({
         {collectibles.map(({ id, status, name, price, file, thumbnailUrl, creatorName }) => (
 
           <div className={classes.work} key={id}>
-            { }
+            {console.log("pagesize",pageSize)}
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
                 <TokenPreview

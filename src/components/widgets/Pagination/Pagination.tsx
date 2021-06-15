@@ -6,6 +6,7 @@ import { DoubleArrowLeft } from 'components/icons';
 
 import useStyles from './Pagination.style';
 import { useEffect } from 'react';
+import { setGridPageSizeActionCreator } from '@material-ui/data-grid';
 
 type PaginationProps = {
   className?: string;
@@ -15,6 +16,7 @@ type PaginationProps = {
   onPageChange: any;
 };
 
+
 export default function Pagination({
   className,
   itemsCount,
@@ -23,46 +25,31 @@ export default function Pagination({
   onPageChange,
 }: PaginationProps): JSX.Element {
   const classes = useStyles();
-  let pagesCount = Math.ceil(itemsCount / pageSize);
+  console.log("In Pagination: ", itemsCount, pageSize)
+  const pagesCount = Math.ceil(itemsCount / pageSize);
   // if (pagesCount === 1) return null as any;
-  const pages = _.range(1, pagesCount + 1);
-  // console.log('pagination',pagesCount)
-
+  // const pages = _.range(1, pagesCount + 1);
+  const generatePageButton = (pages: number) => {
+    const content = [];
+    for (let i = 1; i <= pages; i++) {
+      content.push(<li>
+        <button type='button' onClick={() => onPageChange(currentPage = i)}>{i}</button>
+      </li>
+      );
+    }
+    return content;
+  };
   return (
-    <ul className={cx(classes.container, className)} style={{maxWidth:'250px', alignItems:'right'}}>
+    <ul className={cx(classes.container, className)} style={{ maxWidth: '250px', alignItems: 'right' }}>
       <li className={classes.first}>
         <button type='button' title={text['first']}>
-          <DoubleArrowLeft onClick={() => { pagesCount!=0 && pagesCount>0? onPageChange(pagesCount-1):null}}/>
+          <DoubleArrowLeft onClick={() => { pagesCount != 0 && currentPage > 0 ? onPageChange(currentPage - 1) : null }} />
         </button>
       </li>
-
-      {/* {pages.map(page => (
-      
-        <li key={page} className={page === currentPage ? 'page-item active' : 'page-item'}>
-          <a className='page-link' onClick={() => onPageChange(page)}>
-          <button type='button'>{page}</button>
-          </a>
-        </li>
-      ))} */}
-      
-      <li>
-        <button type='button'onClick={() => onPageChange(pagesCount=1)}>1</button>
-      </li>
-
-      <li>
-        <button type='button' onClick={() => onPageChange(pagesCount=2)}>2</button>
-      </li>
-
-      <li >
-        <button type='button' onClick={() => onPageChange(pagesCount=3)}>3</button>
-      </li>
-
-      <li>
-        <button type='button'onClick={() => onPageChange(pagesCount=4)}>4</button>
-      </li>
+      {generatePageButton(pagesCount)}
       <li className={classes.last}>
         <button type='button' title={text['last']} >
-          <DoubleArrowLeft onClick={() => onPageChange(pagesCount+1)}/>
+          <DoubleArrowLeft onClick={() => onPageChange(currentPage + 1)} />
         </button>
       </li>
     </ul>
