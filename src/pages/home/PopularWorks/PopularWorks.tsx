@@ -6,12 +6,8 @@ import Modal from 'components/widgets/Modal';
 import Works from 'components/widgets/Works';
 import Button from 'components/button';
 import { FilterIcon } from 'components/icons';
-
-
 import useStyles from './PopularWorks.style';
 import { current } from '@reduxjs/toolkit';
-
-
 const categories = ['creator', 'collectible', 'collection'];
 
 export default function PopularWorks(): JSX.Element {
@@ -42,9 +38,6 @@ const handlePageChange = (page:any)=>{
       <h2 className={classes.subTitle}>{text['youWillBeAbleToBuyItSoon']}</h2>
       <div className={classes.filters}>
         <nav className={classes.navigation}>
-          {/* {categories.map(category => (
-            // <Button key={category}>{text['category']}</Button>
-          ))} */}
         </nav>
       </div>
       <Modal open={isExistNewTokens} onClose={() => setExistNewTokens(false)}>

@@ -21,7 +21,8 @@ import text from 'constants/content';
 import useStyles from './userMenu.style';
 import { readCookie } from '../../../apis/cookie';
 declare let window: any;
-
+// const [userName, setUserName] = useState('');
+let userName:string;
 const userLinks = [{ title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> }];
 
 // TEMPORARY
@@ -31,7 +32,9 @@ if (process.env.REACT_APP_SPECIAL_MODE !== 'production') {
 
 const userId: any = readCookie('id')
 getUserInfo(userId).then(({ data }) => {
-  console.log(userId)
+  console.log("!!!!!!!!!!!!!!!")
+  console.log(data)
+  userName = (data.name)
   if(data.isCelebrity){
     userLinks.push({ title: 'editCelebrityProfile', href: `/edit-celebrity-profile/${userId}`, icon: <ProfileIcon /> });
   }
@@ -48,6 +51,7 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
   const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
+
   const handleDisconnect = useDisconnect();
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
   const Id = window.ethereum.selectedAddress ? readCookie('id') : null;
@@ -118,7 +122,7 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
         <div>
           <div className={classes.nickName}>
        
-            {randUsername}
+            {userName}
         
             <IconButton onClick={() => navigator.clipboard.writeText(account)}><CopyIcon /></IconButton>
           </div>
