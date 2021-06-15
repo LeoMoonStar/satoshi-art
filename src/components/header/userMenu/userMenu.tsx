@@ -108,9 +108,9 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
       <div ref={anchorElRef}>
      
         {/* {console.log(avatarUrl)} */}
-        {/* <Link to='/dashboard/user'> */}
+        <Link to='/dashboard/user'>
           <Avatar size={40} image={avatarUrl ? avatarUrl : avatar} />
-        {/* </Link> */}
+        </Link>
       </div>
 
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>

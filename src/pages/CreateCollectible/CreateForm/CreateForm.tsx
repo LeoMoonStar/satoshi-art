@@ -275,9 +275,6 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
     //check if it celebrity or not
     
-
-
-
     if (approval) {
       
       if(celebrity){

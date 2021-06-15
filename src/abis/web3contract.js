@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import satoshiMarketplaceABI from './newSmartContracts/SatoshiART1155Marketplace.json';
 import tokenContractABI from './newSmartContracts/SatoshiART1155.json';
 import { ethers } from 'ethers';
+import { getToken } from 'apis/token';
 const web3 = new Web3(new Web3.providers.HttpProvider(`${process.env.RPC_URL}`));
 
 const getWeb3Instance = () => {
@@ -22,13 +23,23 @@ const requestMetamaskAccess = async () => {
   }
 };
 
+const userBalance = async addr => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const balance = await provider.getBalance(addr);
+  const inether = ethers.utils.formatEther(balance);
+  return inether;
+};
 const getMarketplaceContract = () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const networkId = Object.keys(satoshiMarketplaceABI.networks)[0];
   const deployedNetwork = satoshiMarketplaceABI.networks[networkId];
   console.log('contractAddr', deployedNetwork.address);
-  const contractInstance = new ethers.Contract(deployedNetwork.address, satoshiMarketplaceABI.abi, provider);
+  const contractInstance = new ethers.Contract(
+    process.env.marketplaceContractAddress || deployedNetwork.address,
+    satoshiMarketplaceABI.abi,
+    provider
+  );
   const contractWithSigner = contractInstance.connect(signer);
   return { contractWithSigner, contractInstance };
 };
@@ -39,7 +50,11 @@ const getTokenContract = () => {
   const networkId = Object.keys(tokenContractABI.networks)[0];
   const deployedNetwork = tokenContractABI.networks[networkId];
   console.log('contractAddr', deployedNetwork.address);
-  const contractInstance = new ethers.Contract(deployedNetwork.address, tokenContractABI.abi, provider);
+  const contractInstance = new ethers.Contract(
+    process.env.tokenContractAddress || deployedNetwork.address,
+    tokenContractABI.abi,
+    provider
+  );
   const contractWithSigner = contractInstance.connect(signer);
   return { contractWithSigner, contractInstance };
 };
@@ -66,12 +81,12 @@ const txConfirmations = async receipt => {
 const marketplaceBuyCollectible = async (tokenId, sellerAddress, price) => {
   const { contractWithSigner, contractInstance } = getMarketplaceContract();
   console.log(contractWithSigner);
-  const balance = await contractInstance.outstandingPayment(sellerAddress);
+  // const balance = await contractInstance.outstandingPayment(sellerAddress);
 
-  console.log(ethers.utils.formatEther(balance));
+  // console.log(ethers.utils.formatEther(balance));
   console.log(tokenId, sellerAddress);
-  const priceToWei = ethers.utils.parseEther(price);
-  console.log(priceToWei);
+  const priceToWei = web3.utils.toWei(price);
+  console.log('inwei', priceToWei);
   const receipt = await contractWithSigner.buy(tokenId, sellerAsddress, { value: priceToWei });
 
   return receipt;
@@ -134,7 +149,7 @@ const dropOfTheDayBuy = async (tokenId, sellerAddress, price) => {
   const { contractWithSigner } = getMarketplaceContract();
   const priceToWei = ethers.utils.parseEther(price);
 
-  const response = contractWithSigner.dropOfTheDayBuy(tokenId, sellerAddress, { value: priceToWei });
+  const response = contractWithSigner.buy(tokenId, sellerAddress, { value: priceToWei });
   return response;
 };
 /** tokenContract */
@@ -142,22 +157,25 @@ const dropOfTheDayBuy = async (tokenId, sellerAddress, price) => {
 //check how many copies user/artist owns of a collectible
 const checkTokenBalance = async (artistAddress, tokenId) => {
   const { contractInstance } = getTokenContract();
+  console.log(artistAddress, tokenId);
   const tokenBalance = await contractInstance.balanceOf(artistAddress, tokenId);
   console.log(`${artistAddress} owns ${tokenBalance} copies of tokenId - ${tokenId}`);
 
   const id = web3.utils.hexToNumberString(String(tokenBalance._hex));
 
-  return id;
+  return tokenBalance;
 };
 
 //check if user is artist or not
 const isApprovedArtist = async artistAddress => {
   const { contractInstance } = getTokenContract();
-
+  console.log(contractInstance);
+  console.log(artistAddress);
   const creatorRoleByte = await contractInstance.CREATOR_ROLE();
+  console.log(creatorRoleByte);
   const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress);
 
-  console.log(`The creator approval status of address(${artistAddress}) is ${approval}.`);
+  console.log(`The creator approval status of artist(${artistAddress}) is ${approval}.`);
   return approval;
 };
 //assign the artist role only by admin addr
@@ -341,4 +359,5 @@ export default {
   auctionEnd,
   transferCollectible,
   putOnHold,
+  userBalance,
 };

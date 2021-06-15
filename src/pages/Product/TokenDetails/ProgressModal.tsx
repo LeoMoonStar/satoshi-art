@@ -34,12 +34,14 @@ export function MyStepCircle(props: StepIconProps): JSX.Element {
 type ProgressModalProps = {
   name: string;
   price: number;
+  status: string;
+  currentBidValue: number
   onClose: () => void;
   openSucessBox: () => void;
   openFailedBox: () => void;
 };
 
-export default function ProgressModal({ name, price, onClose, openSucessBox, openFailedBox }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({ name, price, status, currentBidValue, onClose, openSucessBox, openFailedBox }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -49,22 +51,23 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
   const [tokenId, setTokenId] = useState<number>(0);
   const [clickedSigned, setClickedSigned] = useState(false);
   const [showTxHash, setShowTxHash] = useState('');
-
+const [ownerAddress, setOwnerAddress] = useState('');
   const [dropOfTheDay, setDropOfTheDay] = useState(false);
 
 
   useEffect(() => {
+    console.log('progress modal status',status)
     checkDropOfTheDay();
-    checkBalance();
+    //checkBalance();
   }, []);
 
   //check for if productId is dropOsTheDay
   const checkDropOfTheDay = async () => {
     const { data: response } = await getDropOfTheDay();
     console.log("checkDropOfTheDay");
-    console.log(response);
+    
     const filtered = response.filter((collectibleId: any) => collectibleId.id == id);
-    console.log(filtered.length);
+    
     if (filtered.length > 0) {
       console.log('this is drop of the day');
       setDropOfTheDay(true);
@@ -75,10 +78,11 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
     setTokenId(parseInt(data.tokenId));
-
-    console.log(metamaskId.ownerMetamaskId);
+    setOwnerAddress(metamaskId.ownerMetamaskId);
+    console.log(metamaskId.ownerMetamaskId, data.tokenId);
     if (metamaskId.ownerMetamaskId != '') {
-      const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, data.tokenId as number);
+      const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, 18);
+      console.log('!!!!!!',balance)
       if (parseInt(balance) > 0) {
         // setApprove(true);
         // openSucessBox();
@@ -93,6 +97,15 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
     }
   };
 
+  const startBidSignature= async()=>{
+    console.log("!!!!!!!!!!!!! Start Bidding !!!!!!!!!!!")
+    const { data } = await getCollectible(id);
+    const metamaskId: any = data;
+    console.log(tokenId, data.ownerMetamaskId, price.toString());
+    const response  = await web3Contract.bid(tokenId, data.ownerMetamaskId, currentBidValue)
+    console.log(response)
+
+  }
   const startSignature = async () => {
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
@@ -242,16 +255,25 @@ export default function ProgressModal({ name, price, onClose, openSucessBox, ope
             </div>
             {signed ? (
               <>
-                <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
+                <Button style={{ backgroundColor: '#FF0099' }}>
                   In Progress...
                 </Button>
                 {/* <span>Do not close this window</span> */}
               </>
             ) : (
-              <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
+              <>
+              {status =='bid' ?(
+                <Button style={{ backgroundColor: '#FF0099' }} onClick={startBidSignature}>
                 {activeStep == 2 ? 'Done' : 'Start'}
               </Button>
-            )}
+              ):(
+                <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
+                {activeStep == 2 ? 'Done' : 'Start'}
+              </Button>
+              )}
+              </>
+            )
+            }
             {/* <div className={classes.stepTitle} style={{ overflow: 'scroll' }}>
               <span>{showTxHash}</span>
             </div> */}
