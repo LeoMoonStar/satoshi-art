@@ -24,6 +24,7 @@ export default function PopularWorks(): JSX.Element {
 
   useEffect(() => {
     getCollectibles(name, currentPage).then((result:any) => {
+      // console.log("hhhhhhhh!!!!!!!!!",result)
       setCollectibles(result.data);
       setTotalItems(result.metadata.total)
       setLoading(false);

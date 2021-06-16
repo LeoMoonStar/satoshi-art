@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => {
     },
     subTitle: {
       width: '100%',
-marginTop:'10px',
+      marginTop: '10px',
       fontWeight: 600,
       fontSize: 20,
       letterSpacing: '-0.04em',
@@ -61,6 +61,20 @@ marginTop:'10px',
       margin: '24px auto 0',
       display: 'block',
     },
+    content: {
+      fontWeight: 400,
+      fontSize: 16,
+      color: '#7E7E7E',
+      '& ul': {
+        margin: '20px 0',
+        paddingLeft: 25,
+        listStyleImage: `url(${arrowOfListImage})`,
+        '& li': {
+          marginBottom: '.4em',
+        },
+      },
+    },
+
   };
 });
 export default useStyles;

@@ -21,6 +21,7 @@ export default function LaunchTime({ image, title, year, content, contentList, a
 
   return (
     <section className={classes.container}>
+      {/* {console.log("addcontent", contentList)} */}
       <div className={classes.specialEditionCard}>
         <img className={classes.image} src={image} alt='' />
         <div className={classes.infoWrapper}>

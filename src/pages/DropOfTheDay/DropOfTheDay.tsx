@@ -70,6 +70,7 @@ export default function DropOfTheDay(): JSX.Element {
     if (id) {
       getCelebrityInfo(id)
         .then(({ data }) => {
+          console.log("!!!!!!!!!!!!!",data)
           const specialEdition = data.specialEdition
           const newSpecialEdition = {
             image: specialEdition.imageUrl,
@@ -103,7 +104,9 @@ export default function DropOfTheDay(): JSX.Element {
           year={specialEdition.year} content={specialEdition.content} contentList={specialEdition.items} 
           addContent={specialEdition.addContent} productId=""
       />
-      <DropOfTheDayWorkCards/>
+      <DropOfTheDayWorkCards
+        contentList={specialEdition.items}
+      />
       <DropOfTheDayInDetails />
     </Layout>
   );

@@ -31,10 +31,12 @@ type WorksListProps = {
   pageSize: number;
   itemsCount: number;
   onPageChange: any;
+  needPagination? : boolean;
   // collectabliesCounts: any
 };
 
 export default function WorksList({
+  needPagination = true,
   borderWidth = 1,
   variant = 'none',
   isLoading,
@@ -124,8 +126,10 @@ export default function WorksList({
           </div>
         ))}
       </div>
-
-      <Pagination currentPage={currentPage} pageSize={pageSize} itemsCount={itemsCount} onPageChange={onPageChange} />
+      {
+        needPagination&&<Pagination currentPage={currentPage} pageSize={pageSize} itemsCount={itemsCount} onPageChange={onPageChange} />
+      }
+      
     </div>
   );
 }
