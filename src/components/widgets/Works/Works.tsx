@@ -13,11 +13,13 @@ import TextGradient from '../TextGradient';
 import artistAvatar from 'components/images/artist/avatar.jpg';
 import Pagination from 'components/widgets/Pagination';
 import TokenPreview from '../TokenPreview';
-import { Collectible } from '../../../apis/collectibles';
+import { Collectible, getCollectible } from '../../../apis/collectibles';
 import useStyles from './Works.style';
 import { shortAddress } from 'utils/helpers';
 import Price from '../Price';
 import { isCollectibleOwned } from 'utils/common';
+
+let allCopyies:any;
 
 type WorksListProps = {
   borderWidth?: number;
@@ -25,10 +27,11 @@ type WorksListProps = {
   isLoading?: boolean;
   collectibles?: Collectible[];
   isArtistPage?: boolean;
-  currentPage: number,
-  pageSize: number
-  itemsCount: number
-  onPageChange: any
+  currentPage: number;
+  pageSize: number;
+  itemsCount: number;
+  onPageChange: any;
+  // collectabliesCounts: any
 };
 
 export default function WorksList({
@@ -53,16 +56,23 @@ export default function WorksList({
       return '/collectible-image.jpeg';
     }
   };
+
+  // const collectabliesCount = new Map<string, number>();
+  // collectibles.forEach(element => {
+  //   getCollectible(element.id).then(({ data }) => {
+  //     collectabliesCount.set(data.name, data.totalCopies);
+  //   });
+  // });
+  // console.log("!!!!!!!!!!!!!!")
+  
   // const ownerinfo = await getUserInfo(collectibles.)
   if (isLoading) return <Loader />;
   return (
     <div>
       <div className={classes.grid}>
-        {console.log("at the work collectibles: ", collectibles)}
+        {console.log('at the work collectibles: ', collectibles)}
         {collectibles.map(({ id, status, name, price, file, thumbnailUrl, creatorName }) => (
-
           <div className={classes.work} key={id}>
-            {console.log("pagesize",pageSize)}
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
                 <TokenPreview
@@ -73,6 +83,7 @@ export default function WorksList({
             </div>
 
             <div className={classes.info} style={{ borderWidth }}>
+              
               <div className={classes.authorAvatar}>
                 <Avatar size={60} image={artistAvatar} alt='User name' status='premium' />
               </div>
@@ -82,20 +93,15 @@ export default function WorksList({
               <div className={classes.authorInfo}>
                 <span className={classes.creatorName}>@{creatorName}</span>
                 <span> </span>
-                <span>
-                  {price && <Price.WeiToEth value={price} />}
-                </span>
-
+                <span>{price && <Price.WeiToEth value={price} />}</span>
               </div>
 
-
               <div className={classes.workInfo}>
-
                 {/* {console.log("Works.tsx, token info: ", await getToken(id))} */}
                 <span className={classes.count}>1 of 1</span>
                 {/* {console.log(name,status)} */}
-
-                {status === "onSale" && (
+                {/* {console.log('in loop', collectabliesCount.get(name))} */}
+                {status === 'onSale' && (
                   <Button className={classes.bidButton}>
                     <div onClick={() => location.replace(`/product/${id}`)}>
                       <TextGradient colors='#FF0099, #6A2FE7'>{text['buyNow']}</TextGradient>
@@ -106,12 +112,13 @@ export default function WorksList({
                 {isCollectibleOwned(id, collectibles) || isArtistPage ? (
                   <span style={{ marginLeft: '5px' }}>You are the Owner</span>
                 ) : (
-                  status === "onHold" && (<Button className={classes.bidButton}>
-                    <div>
-                      <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
-                    </div>
-                  </Button>)
-
+                  status === 'onHold' && (
+                    <Button className={classes.bidButton}>
+                      <div>
+                        <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
+                      </div>
+                    </Button>
+                  )
                 )}
               </div>
             </div>
@@ -119,13 +126,7 @@ export default function WorksList({
         ))}
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        pageSize={pageSize}
-        itemsCount={itemsCount}
-        onPageChange={onPageChange}
-      />
-
+      <Pagination currentPage={currentPage} pageSize={pageSize} itemsCount={itemsCount} onPageChange={onPageChange} />
     </div>
   );
 }

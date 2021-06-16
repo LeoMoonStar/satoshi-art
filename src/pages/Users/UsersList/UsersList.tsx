@@ -14,7 +14,7 @@ const UserItem = ({ name, item }: any): JSX.Element => {
     <div className={classes.item}>
       <div className={classes.itemIntro} style={{ backgroundImage: `url(${item.coverUrl})` }} />
       <div className={classes.itemInfo}>
-        <Avatar size={60} image={item.avatarUrl} className={classes.itemAvatar} />
+        <Avatar size={60} image={item.avatarUrl} className={classes.itemAvatar} onClick={()=>{item.isArtist ? location.href =`/artists/${item.id}` : location.href =`/users/${item.id}`}} />
         {/*<h3 className={classes.itemTitle}>Fresh Meat #F</h3>*/}
         <div className={classes.itemAdditionalInfo}>
           <Link to={item.isArtist ? `/artists/${item.id}` : `/users/${item.id}` }>@{name} </Link>
