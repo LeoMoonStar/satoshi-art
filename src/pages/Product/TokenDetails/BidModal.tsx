@@ -1,49 +1,74 @@
 import React, { useState, useEffect } from 'react';
 import text from '../../../constants/content';
 import { FormControl, InputLabel, Input } from '@material-ui/core';
-
+import { useParams } from 'react-router-dom';
 import Button from 'components/button';
 import Modal from 'components/widgets/Modal';
+import { getCollectible } from 'apis/collectibles';
+import web3Contract from 'abis/web3contract';
+
 import useStyles from './Modals.style';
 
 type BidModalProps = {
+
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (bid:any) => any;
 };
 
 export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Element {
   const classes = useStyles();
-
+  const { id } = useParams<{ id: string }>();
   const [numCopies, setNumCopies] = useState('1')
-  const [userBalance, setUserBalance] = useState(22.237)
+  const [userBalance, setUserBalance] = useState('')
   const [serviceFee, setServiceFee] = useState(0.005)
   const [totalBidAmount, setTotalBidAmount] = useState(0.305)
+  const[bid, setBid] = useState(0);
 
   const [error, setError] = useState<string | null>(null);
   const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'bid') {
-      setError(Number(value) > userBalance ? 'Not enough funds' : null)
+
+      setError(Number(value) > parseInt(userBalance) ? 'Not enough funds' : null)
+      setBid(Number(value));
     }
   };
 
   const [info, setInfo] = useState({
-      name: 'Invisible Doge | #0038 Weensy  Card Collection',
-      creator: 'Weensy',
-      copiesCount: 50
+      name: '',
+      creator: '',
+      copiesCount: 0,
+      numberOfCopy:0
   })
 
   useEffect(() => {
-      // get user's balance
+    //
+    const init = async () => {
 
-      // get collectible info
-  })
+    //get user balance
+    const metamaskAddr = await web3Contract.requestMetamaskAccess();
+    const balance = await web3Contract.userBalance(metamaskAddr[0])
+    setUserBalance(balance)
+      const { data } = await getCollectible(id);
+      const metamaskId: any = data;
+      console.log('bid modal', metamaskId);
+      setInfo({
+        name: metamaskId.name,
+        creator: metamaskId.creatorUserId,
+        copiesCount: metamaskId.totalCopies,
+        numberOfCopy:metamaskId.numberOfCopy
+      });
+
+    };
+    init();
+    // get collectible info
+  }, []);
 
   return (
     <Modal open className={classes.modal} onClose={onClose}>
       <form className={classes.container}>
         <h2 className={classes.title}>{text['placeABid']}</h2>
         <div className={classes.intro}>
-          <b>{text['youAreAboutToPlaceABidFor'] + 'Invisible Doge | #0038 Weensy  Card Collection'}</b>
+          <b>{text['youAreAboutToPlaceABidFor'] + ' ' + info.name}</b>
         </div>
         <FormControl className={classes.fieldGroup}>
           <InputLabel shrink htmlFor='bid'>
@@ -57,7 +82,7 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
         <FormControl className={classes.fieldGroup}>
           <InputLabel shrink htmlFor='quantity'>
             {text['enterQuantity']}
-            <small>({text['countAvailable'] + 24})</small>
+            <small>({ info.numberOfCopy + ' ' +text['countAvailable'] +' of ' + info.copiesCount} )</small>
           </InputLabel>
           <Input id='quantity' placeholder='1' onChange={(e) => setNumCopies(e.target.value)}/>
         </FormControl>
@@ -67,7 +92,7 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
           <li>{text['totalBidAmount']}<b>0.205 ETH</b></li>
         </ul>
         <div className={classes.buttons}>
-          <Button onClick={onSubmit} variantCustom='action' className={classes.buttonFilled} disabled={!!error}>{text['placeABid']}</Button>
+          <Button onClick={() => onSubmit(bid)} variantCustom='action' className={classes.buttonFilled} disabled={!!error}>{text['placeABid']}</Button>
           <Button variantCustom='outlined' className={classes.buttonOutlined} onClick={onClose}>{text['cancel']}</Button>
         </div>
 
