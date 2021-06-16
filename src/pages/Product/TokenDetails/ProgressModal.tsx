@@ -58,7 +58,7 @@ const [ownerAddress, setOwnerAddress] = useState('');
   useEffect(() => {
     console.log('progress modal status',status)
     checkDropOfTheDay();
-    //checkBalance();
+    checkBalance();
   }, []);
 
   //check for if productId is dropOsTheDay

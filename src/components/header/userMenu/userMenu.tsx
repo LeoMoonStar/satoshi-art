@@ -37,7 +37,7 @@ getUserInfo(userId).then(({ data }) => {
   }
 });
 
-const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
+const UserMenu = ({ avatarUrl, accounts }: { avatarUrl: string, accounts:any }): JSX.Element | null => {
   
   const classes = useStyles();
   const anchorElRef = useRef<HTMLDivElement>(null);
@@ -50,15 +50,15 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
   const [userAvatar, setUserAvatar] = useState('');
   const handleDisconnect = useDisconnect();
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
-  const Id = window.ethereum.selectedAddress ? readCookie('id') : null;
+  const Id = accounts.length>0 ? readCookie('id') : null;
   const [celebrity, setCelebrity] = useState(false);
   useEffect(() => {
     async function getBalance() {
-      if (window.ethereum.selectedAddress) {
+      if (accounts.length>0) {
         const web3 = new Web3(window.ethereum);
         const Accounts = await web3.eth.getAccounts();
         setAccount(Accounts[0]);
-        const userEthBalance = await web3.eth.getBalance(window.ethereum.selectedAddress);
+        const userEthBalance = await web3.eth.getBalance(accounts[0]);
         console.log('Balance', userEthBalance);
         setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
       }

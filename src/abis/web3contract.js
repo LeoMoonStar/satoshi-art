@@ -45,7 +45,7 @@ const getMarketplaceContract = () => {
 };
 
 const getTokenContract = () => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const provider = new ethers.providers.Web3Provider(`${process.env.RPC_URL}`);
   const signer = provider.getSigner();
   const networkId = Object.keys(tokenContractABI.networks)[0];
   const deployedNetwork = tokenContractABI.networks[networkId];
@@ -163,7 +163,7 @@ const checkTokenBalance = async (artistAddress, tokenId) => {
 
   const id = web3.utils.hexToNumberString(String(tokenBalance._hex));
 
-  return tokenBalance;
+  return id;
 };
 
 //check if user is artist or not
@@ -176,6 +176,15 @@ const isApprovedArtist = async artistAddress => {
   const approval = await contractInstance.hasRole(creatorRoleByte, artistAddress);
 
   console.log(`The creator approval status of artist(${artistAddress}) is ${approval}.`);
+  return approval;
+};
+const isApprovedDropOfTheDayCreator = async dropOfTheDayCreatorAddress => {
+  const { contractInstance } = getMarketplaceContract();
+  const dropOfTheDayCreatorRoleByte = await contractInstance.DROP_OF_THE_DAY_CREATOR_ROLE();
+
+  const approval = await contractInstance.hasRole(dropOfTheDayCreatorRoleByte, dropOfTheDayCreatorAddress);
+
+  console.log(`The dropOfTheDayCreator approval status of address(${dropOfTheDayCreatorAddress}) is ${approval}.`);
   return approval;
 };
 //assign the artist role only by admin addr
@@ -239,7 +248,7 @@ const etherFunctionCreateItem = async (collectibleCount, royalty) => {
 };
 
 /**auction contract */
-const setAsAuction = async (tokenId, price, startTime, endTime, dropOfTheDayCommission) => {
+const setAsAuction = async (tokenId, price, startTime, endTime) => {
   const { contractWithSigner } = getMarketplaceContract();
   const receipt = await contractWithSigner.setListing(
     tokenId,
@@ -247,7 +256,7 @@ const setAsAuction = async (tokenId, price, startTime, endTime, dropOfTheDayComm
     web3.utils.toWei(String(price), 'ether'),
     startTime,
     endTime,
-    dropOfTheDayCommission, //dropOfTheDayCommission
+    0, //dropOfTheDayCommission
     false //isDropOfTheDay
   );
   const response = await receipt.wait();

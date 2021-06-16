@@ -14,6 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { VAlID_IMAGES_TYPES, VALID_FILE_TYPES, ALL_SUPPORTED_TYPES } from '../../../constants/supportedFileTypes';
 import * as yup from 'yup';
 import Popup from 'components/widgets/Popup';
+import moment from 'moment';
 
 import { useAPIError } from '../../../hooks/useApiError';
 // import { Satoshi721ABI, useSmartContractNetworkData } from 'utils/erc721';
@@ -34,8 +35,8 @@ import { ethToUsdRateSelector } from 'state/app/selectors';
 import { updateTransactionInMintingProcess } from 'state/app/actions';
 
 import web3Contract from 'abis/web3contract';
-import { createCollection, createCollectible } from 'apis/collectibles';
-import {getUserInfo} from 'apis/users';
+import { createCollection, createCollectible, putOnAuction } from 'apis/collectibles';
+import { getUserInfo } from 'apis/users';
 import { readCookie } from '../../../apis/cookie';
 import classNames from 'classnames';
 import web3contract from 'abis/web3contract';
@@ -83,11 +84,10 @@ const schema = yup.object().shape({
     .typeError('You need to enter number')
     .required('Royalties must be less than or equal to 10'),
   copiesCount: yup.number().typeError('You need to enter number'),
-  // properties: yup.object().shape({
-  //   name: yup.string().required('You need to enter the size'),
-  //   value: yup.string().required('You need to enter the value'),
-  // }),
-
+  properties: yup.object().shape({
+    name: yup.string().required('You need to enter the start date'),
+    value: yup.string().required('You need to enter the end date'),
+  }),
 });
 
 type PreviewType = { file: string; cover?: string; type: string; base64: string; imagetype: string };
@@ -108,6 +108,7 @@ interface ICollectibleForm {
   file: string;
   cover: string;
   onSale: boolean;
+  onAuction: boolean;
   instantPrice: boolean;
   price: number;
   unlock: boolean;
@@ -117,7 +118,7 @@ interface ICollectibleForm {
   name: string;
   description: string;
   royalties: number;
-  // properties: { name: string; value: string };
+  properties: { name: string; value: string };
 }
 
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
@@ -144,6 +145,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     resolver: yupResolver(schema),
     defaultValues: {
       onSale: true,
+      onAuction: false,
       instantPrice: true,
       unlock: true,
       unlockContent: 'content',
@@ -153,10 +155,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       description: 'description',
       royalties: 10,
       copiesCount: 1,
-      // properties: {
-      //   name: '5',
-      //   value: 'M',
-      // },
+      properties: {
+        name: '',
+        value: '',
+      },
     },
   });
 
@@ -249,90 +251,101 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       setAccountAddress(managerAddress[0]);
     };
 
-    const checkCelebrity = async() =>{
+    const checkCelebrity = async () => {
       const userId: any = readCookie('id');
-      const {data: userInfo} = await getUserInfo(userId);
-      if(userInfo.isCelebrity){
-
+      const { data: userInfo } = await getUserInfo(userId);
+      if (userInfo.isCelebrity) {
         setCelebrity(true);
-      }
-      else{
+      } else {
         setCelebrity(false);
       }
-    }
-    
+    };
+
     init();
-    checkCelebrity()
+    checkCelebrity();
   }, []);
   const onSubmit = async (data: ICollectibleForm) => {
-    const {  copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale } =
-      data;
+    const {
+      properties,
+      copiesCount,
+      royalties,
+      name,
+      instantPrice,
+      price,
+      unlock,
+      collection,
+      description,
+      onSale,
+      onAuction,
+    } = data;
     console.log(data);
-    console.log(preview)
+    console.log(preview);
     const metamaskAddr = readCookie('metamask_address');
     const approval = await web3Contract.isApprovedArtist(metamaskAddr);
     console.log('isAPprovedArtist', approval);
 
     //check if it celebrity or not
-    
+
     if (approval) {
-      
-      if(celebrity){
-        console.log(celebrity)
+      if (celebrity) {
+        console.log(celebrity);
         setItemCreated(true);
         const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-        if(tokenId != undefined){
-
-          createCollection(collection).then((response) => {
-            console.log(response)
-            const collectible = { 
-                status: 'onHold', 
+        if (tokenId != undefined) {
+          console.log('11111 create', tokenId);
+          createCollection(collection)
+            .then(response => {
+              console.log(response);
+              const collectible = {
+                status: 'onHold',
                 copies: copiesCount,
-                name: name, 
-                tokenIds: tokenId, 
-                royalties: royalties, 
-                collectionId: response.data.id, 
+                name: name,
+                tokenIds: tokenId,
+                royalties: royalties,
+                collectionId: response.data.id,
                 price: price,
-                file: { 
-                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                    mediaType: preview.imagetype, 
-                    content: preview.base64
+                file: {
+                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                  mediaType: preview.imagetype,
+                  content: preview.base64,
                 },
                 thumbnail: {
-                    fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                    mediaType: preview.imagetype, 
-                    content: preview.base64
-                }
-            }
+                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                  mediaType: preview.imagetype,
+                  content: preview.base64,
+                },
+              };
 
-
-            createCollectible(collectible)
-                .then((res) => {
-                  setShowPopup(true)
+              createCollectible(collectible)
+                .then(res => {
+                  setShowPopup(true);
                 })
-                .catch((error) => {
-                   setShowFailedPopup(true)
-                    console.log(error)
-                })
-        }).catch(err=>{console.log(err.message)})
-
+                .catch(error => {
+                  setShowFailedPopup(true);
+                  console.log(error);
+                });
+            })
+            .catch(err => {
+              console.log(err.message);
+            });
         }
-
-      }
-      else{
-        setItemCreated(true);
+      } else {
+        // const startTimeInSec = new Date.parse(properties.name);
+        //   const endTimeInSec = new Date(properties.value);
+        const startTimeInSec = moment(properties.name).format('x');
+          console.log(startTimeInSec)
         const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-        console.log('createForm-259',tokenId);
+        console.log('createForm-259', tokenId);
 
         //check if item is on sale or not
         if (onSale) {
-          const batchPutOnSale:any = [];
-//           for(let i=0; i<tokenId.length;i++){
-//             batchPutOnSale.push(web3Contract.marketplacePutOnSaleCollectible(tokenId[i], price.toString()))
-//           }
-//           Promise.all(batchPutOnSale).then(resolve=>{
-// console.log(resolve)
-//           }).catch(error=>console.log(error.message))
+          const batchPutOnSale: any = [];
+          //           for(let i=0; i<tokenId.length;i++){
+          //             batchPutOnSale.push(web3Contract.marketplacePutOnSaleCollectible(tokenId[i], price.toString()))
+          //           }
+          //           Promise.all(batchPutOnSale).then(resolve=>{
+          // console.log(resolve)
+          //           }).catch(error=>console.log(error.message))
           const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
           setOnSale(true);
           setItemCreated(false);
@@ -341,91 +354,129 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             .then((res: any) => {
               setOnSale(false);
               setConfirmOnSale(true);
-  
+
               // create a collection token and add the collectible to database
               createCollection(collection)
-              .then((response) => {
-                  const collectible = { 
-                      status: 'onSale', 
-                      copies: copiesCount,
-                      name: name, 
-                      tokenIds: tokenId, 
-                      royalties: royalties, 
-                      collectionId: response.data.id, 
-                      price: price,
-                      file: { 
-                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                          mediaType: preview.imagetype, 
-                          content: preview.base64
-                      },
-                      thumbnail: {
-                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                          mediaType: preview.imagetype, 
-                          content: preview.base64
-                      }
-                  }
-  
-                  createCollectible(collectible)
-                      .then((res) => {
-                          setShowPopup(true)
-                      })
-                      .catch((error) => {
-                          console.log(error)
-                      })
-              })
-              .catch((error: any) => {
-                  console.log(error)
-              })
+                .then(response => {
+                  const collectible = {
+                    status: 'onSale',
+                    copies: copiesCount,
+                    name: name,
+                    tokenIds: tokenId,
+                    royalties: royalties,
+                    collectionId: response.data.id,
+                    price: price,
+                    file: {
+                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                      mediaType: preview.imagetype,
+                      content: preview.base64,
+                    },
+                    thumbnail: {
+                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                      mediaType: preview.imagetype,
+                      content: preview.base64,
+                    },
+                  };
 
+                  createCollectible(collectible)
+                    .then(res => {
+                      setShowPopup(true);
+                    })
+                    .catch(error => {
+                      console.log(error);
+                    });
+                })
+                .catch((error: any) => {
+                  console.log(error);
+                });
             })
             .catch((err: { message: any }) => {
               setOnSale(false);
               alert(err.message);
               console.log(err.message);
             });
-        }
-        else{
-          //not on sale it should insert into DB
-          createCollection(collection)
-              .then((response) => {
-                  const collectible = { 
-                      status: 'onHold', 
-                      copies: copiesCount,
-                      name: name, 
-                      tokenIds: tokenId, 
-                      royalties: royalties, 
-                      collectionId: response.data.id, 
-                      price: price,
-                      file: { 
-                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                          mediaType: preview.imagetype, 
-                          content: preview.base64
-                      },
-                      thumbnail: {
-                          fileName: 'image.' + preview.imagetype.replace('image/', ''), 
-                          mediaType: preview.imagetype, 
-                          content: preview.base64
-                      }
-                  }
-  
-                  createCollectible(collectible)
-                      .then((res) => {
-                          setShowPopup(true)
-                      })
-                      .catch((error) => {
-                          console.log(error)
-                      })
+        } else if (onAuction) {
+          const startTimeInSec = moment(properties.name).format('x');
+          const endTimeInSec = moment(properties.value).format('X');
+          console.log(startTimeInSec, endTimeInSec);
+          const response = await web3Contract.setAsAuction(tokenId[0], price, startTimeInSec, endTimeInSec);
+          //putOnAuction()
+          if (response.transactionHash) {
+            createCollection(collection)
+              .then(response => {
+                const collectible = {
+                  status: 'onSale',
+                  copies: copiesCount,
+                  name: name,
+                  tokenIds: tokenId,
+                  royalties: royalties,
+                  collectionId: response.data.id,
+                  price: price,
+                  file: {
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                    mediaType: preview.imagetype,
+                    content: preview.base64,
+                  },
+                  thumbnail: {
+                    fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                    mediaType: preview.imagetype,
+                    content: preview.base64,
+                  },
+                };
+
+                createCollectible(collectible)
+                  .then(res => {
+                    // putOnAuction(price, startTimeInSec, endTimeInSec).then(res => {
+                    //   setShowPopup(true);
+                    // });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
               })
               .catch((error: any) => {
-                  console.log(error)
-              })
+                console.log(error);
+              });
+          }
+        } else {
+          //not on sale it should insert into DB
+          createCollection(collection)
+            .then(response => {
+              const collectible = {
+                status: 'onHold',
+                copies: copiesCount,
+                name: name,
+                tokenIds: tokenId,
+                royalties: royalties,
+                collectionId: response.data.id,
+                price: price,
+                file: {
+                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                  mediaType: preview.imagetype,
+                  content: preview.base64,
+                },
+                thumbnail: {
+                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                  mediaType: preview.imagetype,
+                  content: preview.base64,
+                },
+              };
+
+              createCollectible(collectible)
+                .then(res => {
+                  setShowPopup(true);
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            })
+            .catch((error: any) => {
+              console.log(error);
+            });
         }
       }
-      
 
       // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
-      
-    
     } else {
       alert('You are not approved to create collectibles');
     }
@@ -486,8 +537,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       });
     };
   };
-  const [showPopup, setShowPopup] = useState(false)
-  const [showFailedPopup, setShowFailedPopup] = useState(false)
+  const [showPopup, setShowPopup] = useState(false);
+  const [showFailedPopup, setShowFailedPopup] = useState(false);
   const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.name, e.target.value.split(/\D/).join(''));
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -615,63 +666,81 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           {errors.cover && <p className={classes.textError}>{errors.cover.message}</p>}
           {!celebrity && (
             <FormControl className={classes.controls}>
-            <Controller
-              name='onSale'
-              control={control}
-              render={props => (
-                <FormControlLabel
-                  control={
-                    <Switch
-                      inputRef={register}
-                      onChange={e => props.onChange(e.target.checked)}
-                      checked={props.value}
-                    />
-                  }
-                  classes={{ root: classes.switchLabel }}
-                  labelPlacement='start'
-                  label={
-                    <span>
-                      <span className={classes.onSale}>{text['putOnSale']}</span>
-                      <span>{text['youWillReceiveBids']}</span>
-                    </span>
-                  }
-                />
-              )}
-            />
-            
-            {watch('onSale') && (
-              <div>
-            
-
-                <FormControlLabel
-                  control={<Switch inputRef={register} name='unlock' />}
-                  classes={{ root: classes.switchLabel }}
-                  labelPlacement='start'
-                  label={
-                    <span>
-                      <span className={classes.unlock}>{text['unlockOncePurchased']}</span>
-                      <span>{text['unlockOncePurchasedContent']}</span>
-                    </span>
-                  }
-                />
-
-                {watch('unlock') && (
-                  <div className={classes.input}>
-                    <Input
-                      placeholder='Digital key, code to redeem or link to a file...'
-                      inputRef={register}
-                      name='unlockContent'
-                      disableUnderline
-                    />
-                    <span>markDownIsSupported {text['markdownIsSupported']}</span>
-                  </div>
+              <Controller
+                name='onSale'
+                control={control}
+                render={props => (
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        inputRef={register}
+                        onChange={e => props.onChange(e.target.checked)}
+                        checked={props.value}
+                      />
+                    }
+                    classes={{ root: classes.switchLabel }}
+                    labelPlacement='start'
+                    label={
+                      <span>
+                        <span className={classes.onSale}>{text['putOnSale']}</span>
+                      </span>
+                    }
+                  />
                 )}
-              </div>
-            )}
-            </FormControl>
-        
-          )}
+              />
+              <Controller
+                name='onAuction'
+                control={control}
+                render={props => (
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        inputRef={register}
+                        onChange={e => props.onChange(e.target.checked)}
+                        checked={props.value}
+                      />
+                    }
+                    classes={{ root: classes.switchLabel }}
+                    labelPlacement='start'
+                    label={
+                      <span>
+                        <span className={classes.onSale}>{text['putOnAuction']}</span>
+                        <span>{text['youWillReceiveBids']}</span>
+                      </span>
+                    }
+                  />
+                )}
+              />
 
+              {watch('onSale') && (
+                <div>
+                  <FormControlLabel
+                    control={<Switch inputRef={register} name='unlock' />}
+                    classes={{ root: classes.switchLabel }}
+                    labelPlacement='start'
+                    label={
+                      <span>
+                        <span className={classes.unlock}>{text['unlockOncePurchased']}</span>
+                        <span>{text['unlockOncePurchasedContent']}</span>
+                      </span>
+                    }
+                  />
+
+                  {watch('unlock') && (
+                    <div className={classes.input}>
+                      <Input
+                        placeholder='Digital key, code to redeem or link to a file...'
+                        inputRef={register}
+                        name='unlockContent'
+                        disableUnderline
+                      />
+                      <span>markDownIsSupported {text['markdownIsSupported']}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </FormControl>
+          )}
 
           <FormControlLabel
             control={<Switch inputRef={register} name='instantPrice' />}
@@ -685,7 +754,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             }
           />
 
-        {watch('instantPrice') && (
+          {watch('instantPrice') && (
             <div className={classes.input}>
               <Input
                 placeholder='Enter price for one piece'
@@ -702,9 +771,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               {errors.price && <p className={classes.textError}>{errors.price.message}</p>}
             </div>
           )}
-          
-        
-            
+
           {/*<div className={classes.collectionType}>
                         <div className={classes.subtitle}>{t('chooseCollection')}</div>
                         <div className={classes.cards}>
@@ -804,37 +871,46 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 </div>
               )}
             </div>
-            <div className={classes.input}>
-              <label htmlFor='size' className={classes.label}>
-                {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
-              </label>
-              <div >
+            {watch('onAuction') && (
+              <div className={classes.input}>
+                <label htmlFor='size' className={classes.label}>
+                  {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
+                  Start and End Date
+                </label>
                 <div>
-                  {/* <Input
-                    id='size'
-                    placeholder='e. g. Size'
-                    disableUnderline
-                    inputRef={register}
-                    name='properties.name'
-                  /> */}
-                  {/* {errors.properties && (
-                    <p className={classes.textError}>{errors.properties.name ? errors.properties.name.message : ''}</p>
-                  )} */}
-                </div>
-                <div>
-                  {/* <Input placeholder='e. g. M' disableUnderline inputRef={register} name='properties.value' /> */}
-                  {/* {errors.properties && (
-                    <p className={classes.textError}>
-                      {errors.properties.value ? errors.properties.value.message : ''}
-                    </p>
-                  )} */}
+                  <div>
+                    <Input
+                      id='size'
+                      placeholder='YYYY-MM-DD HH:MM'
+                      disableUnderline
+                      inputRef={register}
+                      name='properties.name'
+                    />
+                    {errors.properties && (
+                      <p className={classes.textError}>
+                        {errors.properties.name ? errors.properties.name.message : ''}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <Input
+                      placeholder='YYYY-MM-DD HH:MM'
+                      disableUnderline
+                      inputRef={register}
+                      name='properties.value'
+                    />
+                    {errors.properties && (
+                      <p className={classes.textError}>
+                        {errors.properties.value ? errors.properties.value.message : ''}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
           <div className={classes.footer}>
             <Button disabled={isErrors()} type='submit'>
-              
               {text['createItem']}
             </Button>
             {itemCreated ? <span>Creating item in progress....</span> : ''}
@@ -868,11 +944,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         open={OpenSubmitModal}
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
-      <Popup open={showPopup} textheader="Created collectible;;You successfully created a collectible, please check the dashboard" onClose={() => {
-        setShowPopup(false)
-        location.replace('/')
-      }}></Popup>
-      <Popup open={showFailedPopup} textheader="Create collectible;;You failed to create a collectible. Please try again" onClose={() => setShowFailedPopup(false)}></Popup>
+      <Popup
+        open={showPopup}
+        textheader='Created collectible;;You successfully created a collectible, please check the dashboard'
+        onClose={() => {
+          setShowPopup(false);
+          location.replace('/');
+        }}
+      ></Popup>
+      <Popup
+        open={showFailedPopup}
+        textheader='Create collectible;;You failed to create a collectible. Please try again'
+        onClose={() => setShowFailedPopup(false)}
+      ></Popup>
     </div>
   );
 };
