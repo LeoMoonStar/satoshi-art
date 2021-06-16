@@ -40,7 +40,7 @@ getUserInfo(userId).then(({ data }) => {
   }
 });
 
-const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
+const UserMenu = ({ avatarUrl, accounts }: { avatarUrl: string, accounts:any }): JSX.Element | null => {
   
   const classes = useStyles();
   const anchorElRef = useRef<HTMLDivElement>(null);
@@ -54,16 +54,16 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
 
   const handleDisconnect = useDisconnect();
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
-  const Id = window.ethereum.selectedAddress ? readCookie('id') : null;
+  const Id = accounts.length>0 ? readCookie('id') : null;
   const [celebrity, setCelebrity] = useState(false);
   const randUsername = "satoshi.art" + " user_" + Math.floor(Math.random() * (300 - 100 + 1)) + 100;
   useEffect(() => {
     async function getBalance() {
-      if (window.ethereum.selectedAddress) {
+      if (accounts.length>0) {
         const web3 = new Web3(window.ethereum);
         const Accounts = await web3.eth.getAccounts();
         setAccount(Accounts[0]);
-        const userEthBalance = await web3.eth.getBalance(window.ethereum.selectedAddress);
+        const userEthBalance = await web3.eth.getBalance(accounts[0]);
         console.log('Balance', userEthBalance);
         setBalance(ethers.utils.formatEther(userEthBalance).substring(0, 5));
       }
@@ -113,9 +113,9 @@ const UserMenu = ({ avatarUrl }: { avatarUrl: string }): JSX.Element | null => {
       <div ref={anchorElRef}>
      
         {/* {console.log(avatarUrl)} */}
-        {/* <Link to='/dashboard/user'> */}
+        <Link to='/dashboard/user'>
           <Avatar size={40} image={avatarUrl ? avatarUrl : avatar} />
-        {/* </Link> */}
+        </Link>
       </div>
 
       <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>

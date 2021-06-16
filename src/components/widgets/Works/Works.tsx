@@ -112,13 +112,12 @@ export default function WorksList({
                 {isCollectibleOwned(id, collectibles) || isArtistPage ? (
                   <span style={{ marginLeft: '5px' }}>You are the Owner</span>
                 ) : (
-                  status === 'onHold' && (
-                    <Button className={classes.bidButton}>
-                      <div>
-                        <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
-                      </div>
-                    </Button>
-                  )
+                  status === "onHold" && (<Button className={classes.bidButton} onClick={() => location.replace(`/product/${id}`)}>
+                    <div>
+                      <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
+                    </div>
+                  </Button>)
+
                 )}
               </div>
             </div>

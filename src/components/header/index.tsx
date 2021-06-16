@@ -55,6 +55,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   const [showNotif, setShowNotif] = useState(false);
   const [isArtist, setIsArtist] = useState<boolean>(false);
   const [userAvatar, setUserAvatar] = useState('');
+  const [accounts, setAccounts] = useState([]);
   // let { account } = useWeb3React();
   // const connected = useConnect();
   // const isWalletPermitted = useSelector<AppState, boolean>(permittedToUseWalletSelector);
@@ -69,6 +70,10 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
     }
   };
   useEffect(() => {
+   
+    // if(window.ethereum == undefined){
+    //   alert('line 75 Please install metamask first!')
+    // }
     if (userId) {
       console.log('Start to get user info');
       getUserInfo(userId).then(({ data }) => {
@@ -76,10 +81,25 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
         setUserAvatar(data.avatarUrl);
       });
     }
-  }, [window.ethereum.selectedAddress]);
+    if(window.ethereum != undefined){
+      
+      window.ethereum.on("accountsChanged", (accounts: any) => {
+        setAccounts(accounts);
+      });
+    }
+   
+  }, []);
 
+  const isReady = () => {
+    return (
+       window.ethereum != undefined
+    );
+  };
   return (
-    <div className={classes.container}>
+    <>
+    {/* {isReady()?( */}
+      
+      <div className={classes.container}>
       <div className={classes.topRow}>
         <Link to='/' className={classes.logo}>
           {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
@@ -124,10 +144,11 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
               </div>
             </div>
           )}
-          {!window.ethereum.selectedAddress ? (
+          {window.ethereum == undefined? (
+            <>{console.log('!!!!',window.ethereum)}
             <Link to={'/connect'} className={classes.connectLink}>
               <Button variantCustom='action' label={'Connect Wallet'} />
-            </Link>
+            </Link></>
           ) : (
             <div className={classes.profileBar}>
               <div className={classes.notificationBox}>
@@ -146,7 +167,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                   <Button variantCustom='linkButton' label={'create'} />
                 </Link>
               )}
-              <UserMenu avatarUrl={userAvatar} />
+              <UserMenu avatarUrl={userAvatar} accounts={accounts}/>
             </div>
           )}
         </div>
@@ -158,5 +179,10 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
         </div>
       )}
     </div>
+      
+    {/* ):(
+      <p>Loading...!</p>
+    )} */}
+    </>
   );
 }

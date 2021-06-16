@@ -44,7 +44,7 @@ import { TokenType } from 'state/transactions/actions';
 import { SERVICE_FEE } from 'constants/common';
 import { useIsCollectibleOwned } from 'utils/common';
 import { getEthPrice } from 'apis/ethPrice';
-
+import web3Contract from "abis/web3contract";
 const IconWrapper = styled(Grid)(({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
   width: dots ? 82 : 40,
   height: 40,
@@ -91,12 +91,14 @@ const TokenDetails = (): JSX.Element => {
   const [isFSModal, setFSModal] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [collectible, setCollectible] = useState<CollectibleInfo>();
-  const [isProgressModal, setIsProgressModal] = useState<boolean>(false);
+  const [isBuyProgressModal, setIsBuyProgressModal] = useState<boolean>(false);
+  const [isBidProgressModal, setIsBidProgressModal] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
   const userId = readCookie('id');
   const classes = useStyles();
   const [userCollectibles, setUserCollectibles] = useState([]);
   const [info, setInfo] = useState([]);
+  const[bidValue, setBidValue] = useState(0);
   const [collection, setCollection] = useState({
     name: '',
     avatarUrl: '',
@@ -346,14 +348,17 @@ const TokenDetails = (): JSX.Element => {
               </div>
             ) : (
               <div className={classes.buttonsContainer}>
-                {typeShow != 'Bids' && collectible.status == 'onSale' && (
+                {collectible.status == 'onSale' ? (
                   <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />
-                )}
-                <Button
+                ) : (
+                  
+                  <Button
                   onClick={() => setIsBidModal(true)}
                   label={text['placeABid']}
                   className={classes.placeBidButton}
-                />
+                />                )
+                }
+               
               </div>
             )}
             <div className={classes.serviceFeeInfoContainer}>
@@ -376,8 +381,11 @@ const TokenDetails = (): JSX.Element => {
       </div>
       {isBidModal && (
         <BidModal
-          onSubmit={() => {
-            setIsProgressModal(true);
+
+          onSubmit={(bid: any) => {
+            console.log('385 line!!',bid)
+            setBidValue(bid);
+            setIsBidProgressModal(true);
             setIsBidModal(false);
           }}
           onClose={() => setIsBidModal(false)}
@@ -388,7 +396,8 @@ const TokenDetails = (): JSX.Element => {
           setCopies={setNumCopies}
           numCopies={numCopies}
           onSubmit={() => {
-            setIsProgressModal(true);
+            // console.log('385 line!!',bid)
+            setIsBuyProgressModal(true);
             setIsBuyModal(false);
           }}
           onClose={() => setIsBuyModal(false)}
@@ -409,15 +418,33 @@ const TokenDetails = (): JSX.Element => {
         onClose={() => setShowFailedPopup(false)}
       ></Popup>
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
-      {isProgressModal && (
+      {isBuyProgressModal && (
         <ProgressModal
           name={collectible.name}
           price={collectible.price}
+          currentBidValue={bidValue}
+          status='buy'
           onClose={() => {
             console.log("onclose #5")
             
             // setShowPopup(true);
-            setIsProgressModal(false);
+            setIsBuyProgressModal(false);
+          }}
+          openSucessBox={()=> setShowPopup(true)}
+          openFailedBox={() => setShowFailedPopup(true)}
+        />
+      )}
+      {isBidProgressModal && (
+        <ProgressModal
+          name={collectible.name}
+          price={collectible.price}
+          currentBidValue={bidValue}
+          status='bid'
+          onClose={() => {
+            console.log("onclose #5")
+            
+            // setShowPopup(true);
+            setIsBidProgressModal(false);
           }}
           openSucessBox={()=> setShowPopup(true)}
           openFailedBox={() => setShowFailedPopup(true)}
