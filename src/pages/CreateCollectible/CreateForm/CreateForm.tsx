@@ -457,7 +457,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           
                           for (let i = 0; i < collectibleIds.length; i++) {
                            
-                            const startTime = Math.floor((new Date().getTime() + 300) / 1000); //currentime
+                            const startTime = Math.floor((new Date().getTime() + 3000) / 1000); //currentime
                             const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
                             
                             setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
