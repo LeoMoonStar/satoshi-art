@@ -2,6 +2,10 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => {
 	return {
+        auctionTimer:{
+            justifyContent: 'space-between',
+            textAlign:'center'
+        },
 		headers: {
 			marginLeft: 100
 		},
@@ -140,7 +144,8 @@ const useStyles = makeStyles((theme) => {
         	},
 
             width: 350
-        }
+        },
+       
 	}
 })
 

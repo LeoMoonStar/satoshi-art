@@ -45,7 +45,7 @@ const getMarketplaceContract = () => {
 };
 
 const getTokenContract = () => {
-  const provider = new ethers.providers.Web3Provider(`${process.env.RPC_URL}`);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const networkId = Object.keys(tokenContractABI.networks)[0];
   const deployedNetwork = tokenContractABI.networks[networkId];
@@ -349,6 +349,17 @@ const transferCollectible = async (tokenId, receiverAddress) => {
   console.log(`Token ${tokenId} is transferred to ${receiverAddress}`);
   return response;
 };
+/**
+ * collectible status
+ *
+ */
+const checkCollectibleStatus = async (ownerAddress, tokenId) => {
+  const { contractWithSigner } = getMarketplaceContract();
+  const listing = await contractWithSigner.listingOf(ownerAddress, tokenId);
+
+  console.log(`The status of collectible ${tokenId} is ${listing[0]}. Is it for drop of the day? ${listing[5]}`);
+  return listing;
+};
 export default {
   getWeb3Instance,
   requestMetamaskAccess,
@@ -369,4 +380,5 @@ export default {
   transferCollectible,
   putOnHold,
   userBalance,
+  checkCollectibleStatus,
 };

@@ -33,24 +33,25 @@ const RenderCardContent = () => {
         <span>124.56x3 ETH</span>
       </div>
       <div className={classes.controls}>
-        <button type='button' className={cx(classes.controlButton, classes.viewButton)}>
+        {/* <button type='button' className={cx(classes.controlButton, classes.viewButton)}>
           <div>
             <ViewsIcon />
           </div>
           <span>{text['viewBid']}</span>
-        </button>
+        </button> */}
+        
         <button type='button' className={cx(classes.controlButton, classes.editButton)}>
           <div>
             <EditIcon />
           </div>
-          <span>{text['editBid']}</span>
+          <span>{text['addBid']}</span>
         </button>
-        <button type='button' className={cx(classes.controlButton, classes.cancelBid)}>
+        {/* <button type='button' className={cx(classes.controlButton, classes.cancelBid)}>
           <div>
             <TrashIcon />
           </div>
           <span>{text['cancelBid']}</span>
-        </button>
+        </button> */}
       </div>
     </>
   );
