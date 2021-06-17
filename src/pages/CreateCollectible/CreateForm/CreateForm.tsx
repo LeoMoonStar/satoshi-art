@@ -455,10 +455,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           const collectibleIds = result.map((item: any) => item.id);
 
                           for (let i = 0; i < collectibleIds.length; i++) {
-                            setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, (startTime*1000), (endTime*1000)));
+                            setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
                             const auctionData = {
                               price: price,
-                              startTime: startTime,
+                              startTime: startTime*1000,
+                              endTime:endTime*1000
                             };
                             setAsAuctionPromise.push(putOnAuction(collectibleIds[i], auctionData));
                           }

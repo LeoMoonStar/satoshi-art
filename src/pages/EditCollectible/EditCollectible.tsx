@@ -145,7 +145,7 @@ export default function EditCollectible() {
           const startTime = Math.floor(new Date().getTime() / 1000); //currentime
           const endTime = Math.floor((new Date().getTime() + 86400000) / 1000);
 
-          const receipt = await web3Contract.setAsAuction(tokenId, price, startTime * 1000, endTime * 1000);
+          const receipt = await web3Contract.setAsAuction(tokenId, price, startTime, endTime);
           receipt.wait().then((res: any) => {
             console.log(res);
             //put on auction api
@@ -154,8 +154,8 @@ export default function EditCollectible() {
 
             const auctionData = {
               price: info.price,
-              startTime: startTime,
-              endTime: endTime,
+              startTime: startTime*1000,
+              endTime: endTime*1000,
             };
             putOnAuction(info.collectibleId, auctionData)
               .then(res => {
