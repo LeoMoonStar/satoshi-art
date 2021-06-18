@@ -498,14 +498,14 @@ const TokenDetails = (): JSX.Element => {
                 }
 
               </div>
-
-              <>
-                <!--<div className={classes.buttonsContainer}>
-             //     {collectible.status == 'onSale' ? (
+            )}
+              
+                {/* <div className={classes.buttonsContainer}>
+                  {collectible.status == 'onSale' ? (
                     <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />
                   ) : (
                     <>
-               //       {timeleft.difference == 0 ? (
+                     {timeleft.difference == 0 ? (
                         <Button
                          //onClick={() => setIsBidModal(true)}
                           label='Transfer'
@@ -515,15 +515,15 @@ const TokenDetails = (): JSX.Element => {
                         <Button
                           onClick={() => setIsBidModal(true)}
                           label={text['placeABid']}
-                        //  className={classes.placeBidButton}
-                      //  />
-                    //  )}
-                  //  </>
-                  //)}
-                </div> --->
-              </>
+                          className={classes.placeBidButton}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>  */}
+              
 
-            )}
+            
             <div className={classes.serviceFeeInfoContainer}>
               {/* <Typography variant='h6'>Service fee 2.5%</Typography> */}
               {/* <Typography

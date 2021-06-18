@@ -163,17 +163,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       description: '',
       // royalties: 10,
       // copiesCount: 1,
-<!--       properties: {
-        name: '',
-        value: '',
-      }, -->
-<!--       unlockContent: 'content',
-      price: 10,
-      collection: 'collection name',
-      name: 'name',
-      description: 'description',
-      royalties: 10,
-      copiesCount: 1,
+      // properties: {
+      //   name: '',
+      //   value: '',
+      // },
+      
       // properties: {
       //   name: '',
       //   value: '',

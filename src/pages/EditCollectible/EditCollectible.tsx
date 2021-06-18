@@ -321,9 +321,9 @@ export default function EditCollectible() {
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setChecked(event.target.checked);
+  // };
 
   const [showSucceedPopup, setShowSucceedPopup] = useState(false);
   const [newBidAmount, setNewBidAmount] = useState("");
@@ -344,6 +344,7 @@ export default function EditCollectible() {
   }
 
   const [showAccountFailedPopup, setShowAccountFailedPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [timeleft, setimeleft]: any = useState({
     days: 0,
     hours: 0,
@@ -419,17 +420,17 @@ export default function EditCollectible() {
                 id='newBidAmount'
                 placeholder='Increase your amount...'
                 name='newBidAmount'
-                type="number"
+                type="number"/>
 
         <div className={classes.leftCol}>
-          <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div>
+          {/* <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div> */}
         </div>
         <div className={classes.rightCol}>
           <div className={classes.rightColContainer}>
             <div className={classes.rightColHeader}>
-              <Typography variant='h6' className={classes.artLabel}>
+              {/* <Typography variant='h6' className={classes.artLabel}>
                 ART
-              </Typography>
+              </Typography> */}
               <Typography variant='h1'>{info.name}</Typography>
             </div>
 
@@ -465,10 +466,18 @@ export default function EditCollectible() {
                 </FormControl>
               ) : null}
 
+              {/* <div style={{ width: "400px" }}>
+              <TextField
+                
+                id='newBidAmount'
+                placeholder='Increase your amount...'
+                name='newBidAmount'
+                type="number"
 
                 onChange={handleChange}
 
               />
+            </div> */}
             </div>
 
           </div>
@@ -479,7 +488,7 @@ export default function EditCollectible() {
             </Button>
           </div>
 
-
+        
             {/* <div>
 			<LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
@@ -608,6 +617,8 @@ export default function EditCollectible() {
         </div>
 
       </div>
+      </div>
+      </div>
       <MUIModal open={showSucceedPopup} onClose={() => location.replace('/dashboard/user')}>
         <div className={classes.popupcontainer}>
           <div className={classes.wrapper}>
@@ -645,8 +656,13 @@ export default function EditCollectible() {
         onClose={() => setShowFailedPopup(false)}
 
       ></Popup> 
+      <Popup
+        open={showPopup}
+        textheader={'Successfully done'}
+        onClose={() => setShowPopup(false)}
 
-      ></Popup>
+      ></Popup> 
+  
       <Popup
         open={showAccountFailedPopup}
         textheader={
