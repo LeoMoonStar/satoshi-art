@@ -37,7 +37,6 @@ export default function BidModal({ onClose, onSubmit, collectiblePrice }: BidMod
       } else if (Number(value) > Number(listingBid.bid)) {
         setError('Bid Should be higher than highest bid amount');
       } else if (Number(value) < Number(listingBid.price)) {
-        alert('price');
         setError('Bid Should be higher than starting price');
       } else {
         setError(null);
