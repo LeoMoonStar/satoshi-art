@@ -97,7 +97,7 @@ const TokenDetails = (): JSX.Element => {
   const [isFSModal, setFSModal] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [collectible, setCollectible] = useState<CollectibleInfo>();
-  const [bidStartTime, setSidStartTime] = useState("");
+  const [bidStartTime, setBidStartTime] = useState("");
   const [bidEndTime, setBidEndTime] = useState("");
   const [isBuyProgressModal, setIsBuyProgressModal] = useState<boolean>(false);
   const [isBidProgressModal, setIsBidProgressModal] = useState<boolean>(false);
@@ -132,8 +132,11 @@ const TokenDetails = (): JSX.Element => {
       const newInfo: any = [];
       console.log("jjjjjjjjj", data)
       setCollectible(data);
-      setSidStartTime(toHumanDate(data.startTime));
-      setBidEndTime(toHumanDate(data.endTime))
+      console.log("!!!!!!!!!!!!!!!!!! current time: ", new Date().getTime())
+      console.log("bid finish time: ", data.endTime )
+      console.log("staus",new Date().getTime() - data.endTime )
+      setBidStartTime((data.startTime));
+      setBidEndTime((data.endTime))
       if (data.ownerUserId) {
         const ownerInfo = await getUserInfo(data.ownerUserId);
         const avatar = ownerInfo.data.avatarUrl ? ownerInfo.data.avatarUrl : '/favicon.ico';
@@ -363,15 +366,15 @@ const TokenDetails = (): JSX.Element => {
                 {collectible.status == 'onSale' ? (
                   <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />
                 ) : (
-                  collectible.status != 'end' ? (
+                  new Date().getTime() - parseInt(bidEndTime) < 0 ? (
                     <div>
                       <div className={classes.serviceFeeInfoContainer}>
 
-                        <Typography variant='h6'>Bid start Time: {bidStartTime}</Typography>
+                        <Typography variant='h6'>Bid start Time: {toHumanDate(bidStartTime)}</Typography>
 
                       </div>
                       <div className={classes.serviceFeeInfoContainer}>
-                        <Typography variant='h6'>Bid end Time: {bidEndTime}</Typography>
+                        <Typography variant='h6'>Bid end Time: {toHumanDate(bidEndTime)}</Typography>
 
                       </div>
                       <Button
@@ -379,10 +382,11 @@ const TokenDetails = (): JSX.Element => {
                         label={text['placeABid']}
                         className={classes.placeBidButton}
                       />
+                      <Typography variant='h6'>Service fee 2.5%</Typography>
                     </div>
-
+                    
                   ) : (
-                    <Typography variant='h6'>Bid end</Typography>
+                    <Typography variant='h2'>Bid end</Typography>
                   )
                 )
                 }
@@ -390,7 +394,7 @@ const TokenDetails = (): JSX.Element => {
               </div>
             )}
             <div className={classes.serviceFeeInfoContainer}>
-              <Typography variant='h6'>Service fee 2.5%</Typography>
+              {/* <Typography variant='h6'>Service fee 2.5%</Typography> */}
               {/* <Typography
                   variant="h6"
                   className={classes.serviceCryptoFee}
