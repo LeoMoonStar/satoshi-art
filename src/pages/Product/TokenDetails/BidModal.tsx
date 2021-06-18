@@ -34,7 +34,7 @@ export default function BidModal({ onClose, onSubmit, collectiblePrice }: BidMod
       
       if (Number(value) > Number(userBalance)) {
         setError('Not enough funds');
-      } else if (Number(value) > Number(listingBid.bid)) {
+      } else if (Number(value) < Number(listingBid.bid)) {
         setError('Bid Should be higher than highest bid amount');
       } else if (Number(value) < Number(listingBid.price)) {
         setError('Bid Should be higher than starting price');
