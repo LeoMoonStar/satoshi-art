@@ -94,7 +94,7 @@ export default function Tops(): JSX.Element {
         </div>
         <div className={classes.col}>
           <small className={classes.subTitle}>{text['artworksOwned']}</small>
-          <h2 className={classes.title}>{text['largestCollections']}</h2>
+          <h2 className={classes.title} style={{marginTop:'3px'}}>{text['largestCollections']}</h2>
           <img src={top3} alt='' className={classes.prevImage} />
           <div className={classes.users}>
             {largestCollections.map(({ isArtist, id, name }) => {

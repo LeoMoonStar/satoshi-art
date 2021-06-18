@@ -386,7 +386,7 @@ const TokenDetails = (): JSX.Element => {
                     </div>
                     
                   ) : (
-                    <Typography variant='h2'>Bid end</Typography>
+                    <Typography variant='h2'>Bid end at {toHumanDate(bidEndTime)}</Typography>
                   )
                 )
                 }
