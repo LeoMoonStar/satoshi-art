@@ -40,7 +40,8 @@ type ProgressModalProps = {
   openSucessBox: () => void;
   openFailedBox: () => void;
   openOwnerFailedBox: () => void;
-  openBidPopup: any
+  openBidPopup: any;
+  openFailedBid: any;
 };
 
 export default function ProgressModal({
@@ -52,7 +53,8 @@ export default function ProgressModal({
   openSucessBox,
   openFailedBox,
   openOwnerFailedBox,
-  openBidPopup
+  openBidPopup,
+  openFailedBid
 }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
@@ -132,7 +134,7 @@ export default function ProgressModal({
       openBidPopup();
     } catch (error) {
       console.log(error.message);
-      openFailedBox();
+      openFailedBid();
     }
   };
   const startSignature = async () => {

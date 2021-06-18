@@ -313,6 +313,7 @@ const TokenDetails = (): JSX.Element => {
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [showOwnerFailedPopup, setShowOwnerFailedPopup] = useState(false);
   const [showBidPopup, setShowBidPopup] = useState(false);
+  const [showFailedBid,setShowFailedBid] = useState(false);
   const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => selectTab(newValue);
   const isOwner = useIsCollectibleOwned(id, userCollectibles);
   const renderSwitch = (url: string) => {
@@ -534,6 +535,11 @@ const TokenDetails = (): JSX.Element => {
         textheader={'Purchase collectible directly;;The Item was successfully bid'}
         onClose={() => setShowBidPopup(false)}
       ></Popup>
+      <Popup
+        open={showBidPopup}
+        textheader={'You failed to bid'}
+        onClose={() => setShowFailedBid(false)}
+      ></Popup>
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
       {isBuyProgressModal && (
         <ProgressModal
@@ -551,6 +557,7 @@ const TokenDetails = (): JSX.Element => {
           openFailedBox={() => setShowFailedPopup(true)}
           openOwnerFailedBox={() => setShowOwnerFailedPopup(true)}
           openBidPopup={() => setShowBidPopup(true)}
+          openFailedBid={() => setShowFailedBid(true)}
           
         />
       )}
@@ -570,6 +577,7 @@ const TokenDetails = (): JSX.Element => {
           openFailedBox={() => setShowFailedPopup(true)}
           openOwnerFailedBox={() => setShowOwnerFailedPopup(true)}
           openBidPopup={() => setShowBidPopup(true)}
+          openFailedBid={() => setShowFailedBid(true)}
           
         />
       )}
