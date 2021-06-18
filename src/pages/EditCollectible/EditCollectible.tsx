@@ -11,7 +11,7 @@ import {
   IconButton,
   Typography,
   Theme,
-  
+
 } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 // import {AdapterDateFns} from '@material-ui/lab/';
@@ -19,6 +19,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 // import DateTimePicker from '@material-ui/lab/DateTimePicker';
 
 import text from 'constants/content';
+import { Modal as MUIModal } from '@material-ui/core';
+
 import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon, LeftArrowIcon } from 'components/icons';
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes';
 import { getCollectible, putCollectibleOnSale, removeCollectibleFromSale } from 'apis/collectibles';
@@ -48,6 +50,8 @@ const COLLECTION_OPTIONS = ['onSale'];
 export default function EditCollectible() {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
+  console.log("before useeffect:", id)
+
   const [info, setInfo] = useState({
     status: '',
     thumbnailUrl: '',
@@ -75,7 +79,6 @@ export default function EditCollectible() {
     }
   };
   const [accountAddress, setAccountAddress] = useState('');
-
   useEffect(() => {
     if (id) {
       getCollectible(id).then(({ data }) => {
@@ -133,251 +136,163 @@ export default function EditCollectible() {
     }
   };
   //on sale
-  const putOnSale = async () => {
-    const { price, tokenId } = info;
-    const data = { price: price, status: 'onSale' };
+  // const putOnSale = async () => {
+  //   const { price, tokenId } = info;
+  //   const data = { price: price, status: 'onSale' };
 
     // console.log(info.status, tokenId, accountAddress);
 
-    if (!price) {
-      setPriceError(true);
-    }
-    if (accountAddress != '') {
-      const balance = await web3Contract.checkTokenBalance(accountAddress, parseInt(tokenId));
-      console.log(balance);
-      if (parseInt(balance) > 0) {
-        const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
-        receipt.wait().then((res: any) => {
-          console.log(res);
-          putCollectibleOnSale(id, data)
-            .then(() => {
-              setShowPopup(true);
-            })
-            .catch(() => {
-              setShowFailedPopup(true);
-            });
-        });
-      } else {
-        setShowErrorPopup(true);
-      }
-    } else {
-      setShowConnectionPopup(true);
-    }
-  };
+  //   if (!price) {
+  //     setPriceError(true);
+  //   }
+  //   if (accountAddress != '') {
+  //     const balance = await web3Contract.checkTokenBalance(accountAddress, parseInt(tokenId));
+  //     console.log(balance);
+  //     if (parseInt(balance) > 0) {
+  //       const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
+  //       receipt.wait().then((res: any) => {
+  //         console.log(res);
+  //         putCollectibleOnSale(id, data)
+  //           .then(() => {
+  //             setShowPopup(true);
+  //           })
+  //           .catch(() => {
+  //             setShowFailedPopup(true);
+  //           });
+  //       });
+  //     } else {
+  //       setShowErrorPopup(true);
+  //     }
+  //   } else {
+  //     setShowConnectionPopup(true);
+  //   }
+  // };
 
-  const removeItem = async (status: any) => {
-    console.log(status);
-    if (status == 'onSale') {
-      console.log(info.tokenId);
-      const response = await web3Contract.putOnHold(info.tokenId);
-      response
-        .wait()
-        .then((res: any) => {
-          removeCollectibleFromSale(id).then(() => {
-            setShowPopup(true);
-            location.replace('/dashboard/user');
-          });
-        })
-        .catch((err: any) => console.log(err.message));
-    } else {
-      const response = await web3Contract.putOnHold(info.tokenId);
-      response
-        .wait()
-        .then((res: any) => {
-          removeCollectibleFromSale(id).then(() => {
-            setShowPopup(true);
-            location.replace('/dashboard/user');
-          });
-        })
-        .catch((err: any) => console.log(err.message));
-    }
-  };
+  // const removeItem = async (status: any) => {
+  //   console.log(status);
+  //   if (status == 'onSale') {
+  //     console.log(info.tokenId);
+  //     const response = await web3Contract.putOnHold(info.tokenId);
+  //     response
+  //       .wait()
+  //       .then((res: any) => {
+  //         removeCollectibleFromSale(id).then(() => {
+  //           setShowPopup(true);
+  //           location.replace('/dashboard/user');
+  //         });
+  //       })
+  //       .catch((err: any) => console.log(err.message));
+  //   } else {
+  //     const response = await web3Contract.putOnHold(info.tokenId);
+  //     response
+  //       .wait()
+  //       .then((res: any) => {
+  //         removeCollectibleFromSale(id).then(() => {
+  //           setShowPopup(true);
+  //           location.replace('/dashboard/user');
+  //         });
+  //       })
+  //       .catch((err: any) => console.log(err.message));
+  //   }
+  // };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+
   /*const removeFromSale = () => {
-    	removeCollectibleFromSale(id)
-    		.then(() => {
-    			location.replace('/dashboard/user')
-    		})
+      removeCollectibleFromSale(id)
+        .then(() => {
+          location.replace('/dashboard/user')
+        })
     }*/
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showSucceedPopup, setShowSucceedPopup] = useState(false);
+  const [newBidAmount, setNewBidAmount] = useState("");
+
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewBidAmount((event.target.value))
+  };
 
+  const processNewBid = () => {
+    // If sucessed
+    // setShowSucceedPopup(true);
+    // if failed;
+    setShowFailedPopup(true);
+  }
   return (
     <Layout>
       <div className={classes.headers}>
-        <Link className={classes.goBack} to='/'>
-          <LeftArrowIcon /> {text['backToHomePage']}
+        <Link className={classes.goBack} to='/dashboard/user'>
+          <LeftArrowIcon /> Back
         </Link>
-        <Typography variant='h2'>Collectible editing</Typography>
+        <Typography variant='h2'>Increasw Your Bid Now!</Typography>
+        {console.log("in Edit collectible:", info)}
       </div>
       <div className={classes.container}>
-        <div className={classes.leftCol}>
-          <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div>
-        </div>
-        <div className={classes.rightCol}>
-          <div className={classes.rightColContainer}>
-            <div className={classes.rightColHeader}>
-              <Typography variant='h6' className={classes.artLabel}>
-                ART
-              </Typography>
-              <Typography variant='h1'>{info.name}</Typography>
-            </div>
+        <div className={classes.col}>
+          <div className={classes.buttonRow}>
+            <Button variantCustom='linkButton' style={{ borderRadius: '8px', width: "400px" }}>
+              The Current Highest Bid: ETH
+            </Button>
+          </div>
+          <div className={classes.buttonRow}>
+            <Button  variantCustom='linkButton' style={{ borderRadius: '8px', width: "400px" }}>
+              Your Current Bid: ETH
+            </Button>
+          </div>
+          <div className={classes.buttonRow}>
+            <div style={{ width: "400px" }}>
+              <TextField
+                
+                id='newBidAmount'
+                placeholder='Increase your amount...'
+                name='newBidAmount'
+                type="number"
 
-            {/*<div className={classes.ownerContainer}>
-		                    <div className={classes.imageWrapper}>
-		                        <Avatar size={48} alt="Profile photo" status="premium" image="https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240"/>
-		                    </div>
-		                    <div className={classes.artistInfo}>
-		                        <Typography variant="subtitle1" className={classes.artistRole}>{text['owner']}</Typography>
-		                        <a target="_blank" rel="noreferrer" href={`https://ropsten.etherscan.io/address/djfkdsfjldskjfds`}>
-		                            <Typography variant="h3">dsjfkdlsjfldksjf</Typography>
-		                        </a>
-		                    </div>
-		                </div>*/}
-            {/* <label htmlFor='type'>**Your item is on </label> */}
-            <div className={classes.form}>
-              <FormControl className={classes.fieldGroup}>
-                <label htmlFor='type'>Collectible current price</label>
-                <Input
-                  id='type'
-                  name='type'
-                  onChange={e => {
-                    const newInfo = { ...info, price: Number(e.target.value) };
+                onChange={handleChange}
 
-                    setInfo(newInfo);
-                  }}
-                  value={info.price}
-                />
-                {priceError && <small className={classes.inputError}>{text['fieldIsRequired']}</small>}
-
-                {/* <Button variantCustom="action" type="submit" style={{ backgroundColor: '#5113D5' }}>Change price</Button> */}
-              </FormControl>
-
-              {/* <FormControl className={classes.fieldGroup}>
-                  <label htmlFor='issue'>Collection</label>
-                  <Select id='issue' name='issue'>
-                    {COLLECTION_OPTIONS.map((issue: string, index: number) => (
-                      <MenuItem
-                        value={index}
-                        key={index}
-                        onClick={() => {
-                          const newInfo = { ...info, status: issue };
-
-                          setInfo(newInfo);
-                        }}
-                      >
-                        {text[issue]}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <Button
-                    variantCustom='action'
-                    type='submit'
-                    style={{ backgroundColor: '#5113D5' }}
-                    onClick={() => {
-                      setInfo({ ...info, status: 'remove' });
-                    }}
-                  >
-                    Remove From Sale
-                  </Button>
-                </FormControl> */}
-            </div>
-            {/* <div>
-			<LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DateTimePicker
-                  renderInput={(props:any) => <TextField {...props} />}
-                  label='DateTimePicker'
-                  value={value}
-                  onChange={(newValue: any) => {
-                    setValue(newValue);
-                  }}
-                />
-              </LocalizationProvider>
-			</div> */}
-            {info.status == 'onHold' ? (
-              <div style={{marginLeft:'120px'}}>
-                <Checkbox checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
-                <span>Put on Auction</span>
-              </div>
-            ) : null}
-
-
-            {checked?(
-              <>
-              <div style={{marginLeft:'120px'}}>
-                    <Input
-                      id='size'
-                      placeholder='YYYY-MM-DD HH:MM'
-                      name={startDate}
-                      //onChange={handleStart}
-                    />
-                    {/* {errors.properties && (
-                      <p className={classes.textError}>
-                        {errors.properties.name ? errors.properties.name.message : ''}
-                      </p>
-                    )} */}
-                  </div>
-                  <div>
-                    <Input
-                      placeholder='YYYY-MM-DD HH:MM'
-                      //onChange={handleEnd}
-                      name={endDate}
-                    />
-                    {/* {errors.properties && (
-                      <p className={classes.textError}>
-                        {errors.properties.value ? errors.properties.value.message : ''}
-                      </p>
-                    )} */}
-                  </div>
-                  </>
-            ):null}
-            <div className={classes.submits}>
-              {info.status == 'onHold' ? (
-                <>
-                  <Button variantCustom='action' style={{ backgroundColor: '#ff0099' }} onClick={() => putOnSale()}>
-                    Put on Sale
-                  </Button>
-                  <Button
-                    variantCustom='action'
-                    style={{ backgroundColor: '#ff0099' }}
-                    type='submit'
-                    onClick={() => putOnAuction()}
-                  >
-                    Put on Auction
-                  </Button>
-                </>
-              ) : null}
-
-              {info.status == 'onSale' || info.status == 'onAuction' ? (
-                <Button
-                  variantCustom='action'
-                  style={{ backgroundColor: '#ff0099' }}
-                  onClick={() => removeItem(info.status)}
-                >
-                  Remove from {info.status}
-                </Button>
-              ) : null}
+              />
             </div>
           </div>
+
+          <div className={classes.buttonRow}>
+            <Button  variantCustom='action' style={{ width: "400px" }} onClick={() => { processNewBid() }}>
+              Confirm Your Bid
+            </Button>
+          </div>
+
+
         </div>
+
       </div>
-      <Popup
-        open={showPopup}
-        textheader={'Owned collectible status change;;Your collectible status has been changed!'}
-        onClose={() => location.replace('/dashboard/user')}
-      ></Popup>
-      <Popup
-        open={showErrorPopup}
-        textheader={'Insufficient copies to put onSale/onAuction!!'}
-        onClose={() => setShowErrorPopup(false)}
-      ></Popup>
-      <Popup
+      <MUIModal open={showSucceedPopup} onClose={() => location.replace('/dashboard/user')}>
+        <div className={classes.popupcontainer}>
+          <div className={classes.wrapper}>
+            <div className={classes.close} onClick={() => location.replace('/dashboard/user')}>x</div>
+            <div className={classes.header}>{"Your bid increased! Your current bid price is"}</div>
+            <div className={classes.divider} />
+            <div className={classes.bottomheader}>{newBidAmount} ETH</div>
+            <div className={classes.divider} />
+            <Button  variantCustom='action' style={{ marginLeft: "35%", marginTop:"3px"}} onClick={() => { location.replace('/dashboard/user') }}>
+              Ok
+            </Button>
+          </div>
+        </div>
+      </MUIModal>
+      <MUIModal open={showFailedPopup} onClose={() => {setShowFailedPopup(false)}}>
+        <div className={classes.popupcontainer}>
+          <div className={classes.wrapper}>
+            <div className={classes.close} onClick={() => {setShowFailedPopup(false)}}>x</div>
+            <div className={classes.header}>{"You fail to increase you bid, please try again."}</div>
+            <div className={classes.divider} />
+            <Button  variantCustom='action' style={{ marginLeft: "35%", marginTop:"3px"}} onClick={() => {setShowFailedPopup(false)}}>
+              Ok
+            </Button>
+          </div>
+        </div>
+      </MUIModal>
+      {/* <Popup
         open={showConnectionPopup}
         textheader={'Please connect to metamask'}
         onClose={() => setShowConnectionPopup(false)}
@@ -386,7 +301,7 @@ export default function EditCollectible() {
         open={showFailedPopup}
         textheader={'Collectible status;;You failed to update your collectible status, Please try again'}
         onClose={() => setShowFailedPopup(false)}
-      ></Popup>
+      ></Popup> */}
     </Layout>
   );
 }
