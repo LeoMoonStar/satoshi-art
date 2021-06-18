@@ -26,7 +26,7 @@ export type Collectible = {
     thumbnailUrl: string;
   };
   thumbnailUrl?: string;
-
+  totalCopies?: number;
   properties: [];
   creatorName: string;
   // unadded

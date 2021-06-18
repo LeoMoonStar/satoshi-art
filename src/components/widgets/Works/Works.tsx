@@ -32,6 +32,7 @@ type WorksListProps = {
   itemsCount: number;
   onPageChange: any;
   needPagination? : boolean;
+  // totalCopies?: number;
   // collectabliesCounts: any
 };
 
@@ -46,6 +47,7 @@ export default function WorksList({
   pageSize,
   itemsCount,
   onPageChange,
+  // totalCopies
 }: WorksListProps): JSX.Element {
   const { explorer } = useCurrentNetwork();
   const classes = useStyles();
@@ -65,7 +67,7 @@ export default function WorksList({
   //     collectabliesCount.set(data.name, data.totalCopies);
   //   });
   // });
-  // console.log("!!!!!!!!!!!!!!")
+  console.log("!!!!!!!!!!!!!!", collectibles)
   
   // const ownerinfo = await getUserInfo(collectibles.)
   if (isLoading) return <Loader />;
@@ -73,7 +75,7 @@ export default function WorksList({
     <div>
       <div className={classes.grid}>
         {console.log('at the work collectibles: ', collectibles)}
-        {collectibles.map(({ id, status, name, price, file, thumbnailUrl, creatorName }) => (
+        {collectibles.map(({ id, status, name, price, file, thumbnailUrl, creatorName, totalCopies }) => (
           <div className={classes.work} key={id}>
             <div className={classes.imagePresentation}>
               <Link to={`/product/${id}`}>
@@ -100,7 +102,7 @@ export default function WorksList({
 
               <div className={classes.workInfo}>
                 {/* {console.log("Works.tsx, token info: ", await getToken(id))} */}
-                <span className={classes.count}>1 of 1</span>
+                <span className={classes.count}>1 of {totalCopies}</span>
                 {/* {console.log(name,status)} */}
                 {/* {console.log('in loop', collectabliesCount.get(name))} */}
                 {status === 'onSale' && (
@@ -114,7 +116,7 @@ export default function WorksList({
                 {isCollectibleOwned(id, collectibles) || isArtistPage ? (
                   <span style={{ marginLeft: '5px' }}>You are the Owner</span>
                 ) : (
-                  status === "onHold" && (<Button className={classes.bidButton} onClick={() => location.replace(`/product/${id}`)}>
+                  status === "onAuction" && (<Button className={classes.bidButton} onClick={() => location.replace(`/product/${id}`)}>
                     <div>
                       <TextGradient colors='#FF0099, #6A2FE7'>{text['placeABid']}</TextGradient>
                     </div>
