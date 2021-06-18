@@ -391,6 +391,7 @@ export default function EditCollectible() {
     }
   };
 
+
   return (
     <Layout>
       <div className={classes.headers}>
