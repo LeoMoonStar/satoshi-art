@@ -12,7 +12,7 @@ import web3Contract from 'abis/web3contract';
 import { CheckIcon } from 'components/icons';
 import useStyles from './ProgressModal.style';
 
-import { getCollectible, buyCollectible } from 'apis/collectibles';
+import { getCollectible, buyCollectible, bidCollectible } from 'apis/collectibles';
 import { getDropOfTheDay } from 'apis/users';
 
 import { Receipt } from '@material-ui/icons';
@@ -35,13 +35,27 @@ type ProgressModalProps = {
   name: string;
   price: number;
   status: string;
-  currentBidValue: number
+  currentBidValue: number;
   onClose: () => void;
   openSucessBox: () => void;
   openFailedBox: () => void;
+  openOwnerFailedBox: () => void;
+  openBidPopup: any;
+  openFailedBid: any;
 };
 
-export default function ProgressModal({ name, price, status, currentBidValue, onClose, openSucessBox, openFailedBox }: ProgressModalProps): JSX.Element {
+export default function ProgressModal({
+  name,
+  price,
+  status,
+  currentBidValue,
+  onClose,
+  openSucessBox,
+  openFailedBox,
+  openOwnerFailedBox,
+  openBidPopup,
+  openFailedBid
+}: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -51,12 +65,11 @@ export default function ProgressModal({ name, price, status, currentBidValue, on
   const [tokenId, setTokenId] = useState<number>(0);
   const [clickedSigned, setClickedSigned] = useState(false);
   const [showTxHash, setShowTxHash] = useState('');
-const [ownerAddress, setOwnerAddress] = useState('');
+  const [ownerAddress, setOwnerAddress] = useState('');
   const [dropOfTheDay, setDropOfTheDay] = useState(false);
 
-
   useEffect(() => {
-    console.log('progress modal status',status)
+    console.log('progress modal status', status);
     checkDropOfTheDay();
     checkBalance();
   }, []);
@@ -64,10 +77,10 @@ const [ownerAddress, setOwnerAddress] = useState('');
   //check for if productId is dropOsTheDay
   const checkDropOfTheDay = async () => {
     const { data: response } = await getDropOfTheDay();
-    console.log("checkDropOfTheDay");
-    
+    console.log('checkDropOfTheDay');
+
     const filtered = response.filter((collectibleId: any) => collectibleId.id == id);
-    
+
     if (filtered.length > 0) {
       console.log('this is drop of the day');
       setDropOfTheDay(true);
@@ -81,87 +94,102 @@ const [ownerAddress, setOwnerAddress] = useState('');
     setOwnerAddress(metamaskId.ownerMetamaskId);
     console.log(metamaskId.ownerMetamaskId, data.tokenId);
     if (metamaskId.ownerMetamaskId != '') {
-      const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, 18);
-      console.log('!!!!!!',balance)
-      if (parseInt(balance) > 0) {
-        // setApprove(true);
-        // openSucessBox();
-        setActiveStep(1);
+      if (data.ownerMetamaskId != metamaskAddr) {
+        const balance = await web3Contract.checkTokenBalance(metamaskId.ownerMetamaskId, data.tokenId);
+        console.log('!!!!!!', balance);
+        if (parseInt(balance) > 0) {
+          setApprove(true);
+          // openSucessBox();
+          setActiveStep(1);
+        } else {
+          alert('Number of copies available is 0');
+          onClose();
+          openFailedBox();
+        }
       } else {
-        alert('Insufficient Tokens');
-        // onClose();
-        openFailedBox();
+        onClose();
+        openOwnerFailedBox();
       }
     } else {
       alert('Please connect to metamask first');
     }
   };
-
-  const startBidSignature= async()=>{
-    console.log("!!!!!!!!!!!!! Start Bidding !!!!!!!!!!!")
+//const [initialPrice, setInitialPrice] = useState(0);
+  const startBidSignature = async () => {
+    console.log('!!!!!!!!!!!!! Start Bidding !!!!!!!!!!!');
+    const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
-    console.log(tokenId, data.ownerMetamaskId, price.toString());
-    const response  = await web3Contract.bid(tokenId, data.ownerMetamaskId, currentBidValue)
-    console.log(response)
-
-  }
+   
+    console.log(tokenId, data.ownerMetamaskId, price, currentBidValue);
+    //owner cannot bid
+    try {
+      setSigned(true);
+      const response = await web3Contract.bid(tokenId, data.ownerMetamaskId, currentBidValue);
+      console.log(response);
+      setClickedSigned(false);
+      setActiveStep(2);
+      setSigned(true);
+      await bidCollectible(data.id, Number(currentBidValue));
+      onClose();
+      openBidPopup();
+    } catch (error) {
+      onClose();
+      setSigned(false);
+      console.log(error.message);
+      openFailedBid();
+    }
+  };
   const startSignature = async () => {
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
-    console.log("!!!!!!!!!!!!! Start Signature !!!!!!!!!!!")
+    console.log('!!!!!!!!!!!!! Start Signature !!!!!!!!!!!');
     console.log(metamaskId);
     if (dropOfTheDay) {
-      const dropResult = await web3Contract.dropOfTheDayBuy(
-        metamaskId.tokenId,
-        metamaskId.ownerMetamaskId,
-        metamaskId.price.toString()
-      ).then((res: any) => {
-        setClickedSigned(false);
-        setActiveStep(2);
-        setShowTxHash(res.transactionHash);
-        buyCollectible(id, price)
-          .then((res) => {
-            console.log("onclose #1")
-            openSucessBox();
-            setSigned(true);
+      const dropResult = await web3Contract
+        .dropOfTheDayBuy(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
+        .then((res: any) => {
+          setClickedSigned(false);
+          setActiveStep(2);
+          setShowTxHash(res.transactionHash);
+          buyCollectible(id, price)
+            .then(res => {
+              console.log('onclose #1');
+              openSucessBox();
+              setSigned(true);
 
-            onClose()
-          })
-          .catch((error) => {
-            openFailedBox()
-          })
-      })
-        .catch((error) => {
-          openFailedBox()
+              onClose();
+            })
+            .catch(error => {
+              openFailedBox();
+            });
+        })
+        .catch(error => {
+          openFailedBox();
         });
 
       // dropResult.wait();
-
-    }
-    else {
+    } else {
       //regular collectible
-      const result = await web3Contract.marketplaceBuyCollectible(
-        metamaskId.tokenId,
-        metamaskId.ownerMetamaskId,
-        metamaskId.price.toString()
-      ).then((res: any) => {
-        
-        setClickedSigned(false);
-        setActiveStep(2);
-        setShowTxHash(res.transactionHash);
-        buyCollectible(id, price)
-          .then((res) => {
-            console.log("onclose #2")
-            openSucessBox();
-            setSigned(true);
-            onClose()
-          })
-          .catch((error) => {
-            openFailedBox()
-          })
-      }).catch((err: any) => alert(err.message));
+      const result = await web3Contract
+        .marketplaceBuyCollectible(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
+        .then((res: any) => {
+          setClickedSigned(false);
+          setActiveStep(2);
+          setShowTxHash(res.transactionHash);
+          buyCollectible(id, price)
+            .then(res => {
+              console.log('onclose #2');
+              openSucessBox();
+              setSigned(true);
+              onClose();
+            })
+            .catch(error => {
+              openFailedBox();
+            });
+        })
+        .catch((err: any) => alert(err.message));
 
       // setClickedSigned(true);
       // setSigned(true);
@@ -178,7 +206,7 @@ const [ownerAddress, setOwnerAddress] = useState('');
       //     .then((res) => {
       //       console.log("onclose #2")
       //       openSucessBox();
-            
+
       //       onClose()
       //     })
       //     .catch((error) => {
@@ -186,8 +214,6 @@ const [ownerAddress, setOwnerAddress] = useState('');
       //     })
       // }).catch((err: any) => alert(err.message))
     }
-
-
   };
   return (
     <Modal open onClose={onClose}>
@@ -255,25 +281,22 @@ const [ownerAddress, setOwnerAddress] = useState('');
             </div>
             {signed ? (
               <>
-                <Button style={{ backgroundColor: '#FF0099' }}>
-                  In Progress...
-                </Button>
+                <Button disabled={signed} style={{ backgroundColor: '#FF0099' }}>In Progress...</Button>
                 {/* <span>Do not close this window</span> */}
               </>
             ) : (
               <>
-              {status =='bid' ?(
-                <Button style={{ backgroundColor: '#FF0099' }} onClick={startBidSignature}>
-                {activeStep == 2 ? 'Done' : 'Start'}
-              </Button>
-              ):(
-                <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
-                {activeStep == 2 ? 'Done' : 'Start'}
-              </Button>
-              )}
+                {status == 'bid' ? (
+                  <Button style={{ backgroundColor: '#FF0099' }}  onClick={startBidSignature}>
+                    {activeStep == 2 ? 'Done' : 'Start'}
+                  </Button>
+                ) : (
+                  <Button style={{ backgroundColor: '#FF0099' }} onClick={startSignature}>
+                    {activeStep == 2 ? 'Done' : 'Start'}
+                  </Button>
+                )}
               </>
-            )
-            }
+            )}
             {/* <div className={classes.stepTitle} style={{ overflow: 'scroll' }}>
               <span>{showTxHash}</span>
             </div> */}

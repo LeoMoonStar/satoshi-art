@@ -255,7 +255,7 @@ const text: { [key: string]: string } = {
   bidsLost: 'Bids Lost',
   daysCountInBrackets: '({{count}} days)',
   viewBid: 'View Bid',
-  editBid: 'Edit Bid',
+  addBid: 'Add Your Bid',
   cancelBid: 'Cancel Bid',
   yourLatestBids: 'Your Latest Bids',
   onSale: 'On Sale',

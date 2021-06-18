@@ -45,7 +45,7 @@ const getMarketplaceContract = () => {
 };
 
 const getTokenContract = () => {
-  const provider = new ethers.providers.Web3Provider(`${process.env.RPC_URL}`);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const networkId = Object.keys(tokenContractABI.networks)[0];
   const deployedNetwork = tokenContractABI.networks[networkId];
@@ -290,6 +290,7 @@ const setAsDropOfTheDayAuction = async (tokenId, price, startTime, endTime, comm
  **/
 const bid = async (tokenId, sellerAddress, payment) => {
   const { contractWithSigner } = getMarketplaceContract();
+  console.log('web3 contract bid ', tokenId, sellerAddress, payment);
   const receipt = await contractWithSigner.bid(tokenId, sellerAddress, {
     value: web3.utils.toWei(String(payment), 'ether'),
   });
@@ -349,6 +350,29 @@ const transferCollectible = async (tokenId, receiverAddress) => {
   console.log(`Token ${tokenId} is transferred to ${receiverAddress}`);
   return response;
 };
+/**
+ * collectible status
+ *
+ * Check the listing status of the collectible.
+ * 0: status: status,
+ *  1: price: price,
+   2: startTime: startTime,
+   3: endTime: endTime,
+   4: commission: _defaultCommission,
+   5: isDropOfTheDay: false,
+   6: highestBidder: address(0),
+   7: highestBid: 0,
+ *
+ * Anyone can call this method
+ */
+
+const checkCollectibleStatus = async (ownerAddress, tokenId) => {
+  const { contractWithSigner } = getMarketplaceContract();
+  const listing = await contractWithSigner.listingOf(ownerAddress, tokenId);
+
+  console.log(`The status of collectible ${tokenId} is ${listing[0]}. Is it for drop of the day? ${listing[5]}`);
+  return listing;
+};
 export default {
   getWeb3Instance,
   requestMetamaskAccess,
@@ -369,4 +393,5 @@ export default {
   transferCollectible,
   putOnHold,
   userBalance,
+  checkCollectibleStatus,
 };

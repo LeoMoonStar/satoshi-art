@@ -22,7 +22,7 @@ const month: any = {
 };
 
 export const History = ({ list, name, collectibleId }: any): JSX.Element => {
-  console.log(list);
+  console.log('*********',list.auctionUserId);
 
   const [userName, setUserName] = useState();
   const [collectibleName, setCollectibleName] = useState();
@@ -55,10 +55,24 @@ export const History = ({ list, name, collectibleId }: any): JSX.Element => {
 
   return (
     <div className={classes.container}>
-      <div>
+      <div style={{height:'200px', overflow:'scroll'}}>
+
+      
         {list.length > 0 ? (
+
           list.map((info: any, index: number) => (
             <>
+              {info.auctionUserId != undefined  && (
+                <div className={classes.collectionContainer}>
+                <Avatar size={48} alt='Profile photo' image={info.buyerAvatarUrl} />
+                <div className={classes.artistInfo}>
+                  <Typography variant='h3'>{info.name}</Typography>
+                  <div>
+                    bid ${info.price} on {displayTime(parseInt(info.createDate))}
+                  </div>
+                </div>
+              </div>
+              )}
               {info.buyerUserId && (
                 <div className={classes.collectionContainer}>
                   <Avatar size={48} alt='Profile photo' image={info.buyerAvatarUrl} />
@@ -90,18 +104,19 @@ export const History = ({ list, name, collectibleId }: any): JSX.Element => {
           <div>No trading history yet!</div>
         )}
 
+        
         {creator || firsthistory ? (
           <div className={classes.collectionContainer} style={{ marginTop: 50 }}>
             <div className={classes.artistInfo}>
               <div>
                 <strong>{name} </strong>
-                was created on the ethereum blockchain
-                {firsthistory
+                was created on the ethereum blockchain on {displayTime(parseInt(creator.createDate))}
+                {/* {firsthistory
                   ? firsthistory.buyerUserId
                     ? ' and bought by ' + firsthistory.buyerUserName + ' '
                     : ' and sold by ' + firsthistory.sellerUserName + ' '
-                  : ' '}
-                on {displayTime(parseInt(creator.createDate))}
+                  : ' '} */}
+                
               </div>
             </div>
           </div>
