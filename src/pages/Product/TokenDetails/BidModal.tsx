@@ -28,20 +28,17 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
   const [error, setError] = useState<string | null>(null);
   const handleChange = async ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'bid') {
-      
-      
-      try {
-       
-          setError((Number(value) > Number(userBalance) )? 'Not enough funds' : null)
-          //setError((Number(value) > Number(listingBid) )? 'Bid Should be higher than highest bid amount' : null)
-          setBid(Number(value));
-        }
-         
-        
-       catch (error) {
-        console.log(error.message)
+
+      if( (Number(value) > Number(userBalance))){
+        setError('Not enough funds')
       }
-      
+      else if((Number(value) > Number(listingBid))){
+        setError( 'Bid Should be higher than highest bid amount')
+      }
+      else{
+        setError(null)
+        setBid(Number(value));
+      }
     }
   };
 
@@ -74,9 +71,9 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
         ownerMetamaskId:metamaskAddr.ownerMetamaskId
       });
 
-      // web3Contract.checkCollectibleStatus(info.ownerMetamaskId, info.tokenId).then(res=>{
-      //   setListingBid(res[7])
-      // })
+      web3Contract.checkCollectibleStatus(info.ownerMetamaskId, info.tokenId).then(res=>{
+         setListingBid(res[7])
+       }).catch(error=>console.log(error.message))
 
     };
     init();
@@ -107,9 +104,9 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
           <Input id='quantity' placeholder='1' value={numCopies}onChange={(e) => setNumCopies(e.target.value)}/>
         </FormControl>
         <ul className={classes.additionalInfo}>
-          <li>{text['yourBalance']} <b>{userBalance} ETH</b></li>
-          <li>{text['serviceFee']} <b>{(Number(userBalance) *25)/1000} ETH</b></li> 
-          <li>{text['totalBidAmount']}<b>0.205 ETH</b></li>
+          <li>{text['yourBalance']} <b>{(Number(userBalance)).toFixed(5)} ETH</b></li>
+          <li>{text['serviceFee']} <b>{((Number(bid) *25)/1000).toFixed(5)} ETH</b></li> 
+          <li>{text['totalBidAmount']}<b>{(bid + ((Number(bid) *25)/1000)).toFixed(5)} ETH</b></li>
         </ul>
         <div className={classes.buttons}>
           <Button onClick={() => onSubmit(bid)} variantCustom='action' className={classes.buttonFilled} disabled={!!error}>{text['placeABid']}</Button>

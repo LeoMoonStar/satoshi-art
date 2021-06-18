@@ -290,3 +290,7 @@ export const bidCollectible = async (collectibleId: any, price: any) => {
     }
   );
 };
+
+export const getAuctionHistory = async (collectibleId: any) => {
+  return await axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/auction/${collectibleId}/history`);
+};
