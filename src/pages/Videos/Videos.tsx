@@ -160,6 +160,8 @@ export default function Videos() {
 				break
 			default:
 		}
+
+		setPlay(true)
 	}
 
 	return (
@@ -178,9 +180,11 @@ export default function Videos() {
 							<h3>Highlights</h3>
 							<div className={classes.mainVideo}>
 								{play ? 
-									<CardMedia
-										style={{ height: 400, width: '100%' }}
-									/>
+									<video autoPlay={true} width="100%" height="400" controls>
+										<source 
+											src="/video-page-placeholders/test-video.mp4"
+										/>
+									</video>
 									:
 									<div className={classes.mainVideoContainer} style={{ backgroundImage: "url('" + mainVideoInfo.thumbnail.photo + "')" }}>
 										<div className={classes.videoPlay} onClick={() => setPlay(true)}>
