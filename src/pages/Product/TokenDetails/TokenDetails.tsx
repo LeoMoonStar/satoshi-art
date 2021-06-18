@@ -47,7 +47,10 @@ import { SERVICE_FEE } from 'constants/common';
 import { useIsCollectibleOwned } from 'utils/common';
 import { getEthPrice } from 'apis/ethPrice';
 import web3Contract from "abis/web3contract";
-import moment from 'moment';
+
+const toHumanDate = (numberDate : string) => {
+  return new Date(new Date(parseInt(numberDate))).toLocaleString()
+}
 const IconWrapper = styled(Grid)(({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
   width: dots ? 82 : 40,
   height: 40,
@@ -94,8 +97,8 @@ const TokenDetails = (): JSX.Element => {
   const [isFSModal, setFSModal] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [collectible, setCollectible] = useState<CollectibleInfo>();
-  const [bidStartTime, setSidStartTime] = useState(0);
-  const [bidEndTime, setBidEndTime] = useState(0);
+  const [bidStartTime, setSidStartTime] = useState("");
+  const [bidEndTime, setBidEndTime] = useState("");
   const [isBuyProgressModal, setIsBuyProgressModal] = useState<boolean>(false);
   const [isBidProgressModal, setIsBidProgressModal] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
@@ -129,17 +132,8 @@ const TokenDetails = (): JSX.Element => {
       const newInfo: any = [];
       console.log("jjjjjjjjj", data)
       setCollectible(data);
-      setSidStartTime(data.startTime);
-      setBidEndTime(data.endTime)
-      const date = new Date(bidStartTime / 1000);
-      // console.log()
-  
-      // moment.unix(st).format("MM/DD/YYYY");
-
-      console.log("!!!!!!!!!!!!!", date.toUTCString())
-      // const st = new Date(data.startTime*1000)
-      // console.log("!!!!!!!!!!!!!!!!!start: ", (st.getTime()-st.getMilliseconds())/1000,"end: ")
-
+      setSidStartTime(toHumanDate(data.startTime));
+      setBidEndTime(toHumanDate(data.endTime))
       if (data.ownerUserId) {
         const ownerInfo = await getUserInfo(data.ownerUserId);
         const avatar = ownerInfo.data.avatarUrl ? ownerInfo.data.avatarUrl : '/favicon.ico';
@@ -373,11 +367,11 @@ const TokenDetails = (): JSX.Element => {
                     <div>
                       <div className={classes.serviceFeeInfoContainer}>
 
-                        <Typography variant='h6'>Bid start Time: {new Date(bidStartTime/1000).toString()}</Typography>
+                        <Typography variant='h6'>Bid start Time: {bidStartTime}</Typography>
 
                       </div>
                       <div className={classes.serviceFeeInfoContainer}>
-                        <Typography variant='h6'>Bid end Time: {new Date(bidEndTime/1000).toString()}</Typography>
+                        <Typography variant='h6'>Bid end Time: {bidEndTime}</Typography>
 
                       </div>
                       <Button

@@ -148,13 +148,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       onAuction: false,
       instantPrice: true,
       unlock: true,
-      unlockContent: 'content',
-      price: 10,
-      collection: 'collection name',
-      name: 'name',
-      description: 'description',
-      royalties: 10,
-      copiesCount: 1,
+      unlockContent: '',
+      // price: 10,
+      collection: '',
+      name: '',
+      description: '',
+      // royalties: 10,
+      // copiesCount: 1,
       properties: {
         name: '',
         value: '',
@@ -845,7 +845,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 </label>
                 <Input
                   id='royalties'
-                  defaultValue='10'
+                  // defaultValue='10'
                   onChange={handleNumberInput}
                   inputRef={register}
                   disableUnderline
