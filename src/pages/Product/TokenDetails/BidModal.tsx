@@ -25,11 +25,20 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
   const[bid, setBid] = useState(0);
 
   const [error, setError] = useState<string | null>(null);
-  const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
     if (name === 'bid') {
-
-      setError(Number(value) > parseInt(userBalance) ? 'Not enough funds' : null)
-      setBid(Number(value));
+      
+      
+      try {
+        const listing = await web3Contract.checkCollectibleStatus(info.ownerMetamaskId, info.tokenId)
+          setError((Number(value) > Number(userBalance) )? 'Not enough funds' : null)
+          setError((Number(value) > Number(listing[7]) )? 'Bid Should be higher than highest bid amount' : null)
+          setBid(Number(value));
+        
+      } catch (error) {
+        console.log(error.message)
+      }
+      
     }
   };
 
@@ -37,7 +46,9 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
       name: '',
       creator: '',
       copiesCount: 0,
-      numberOfCopy:0
+      numberOfCopy:0,
+      tokenId:'',
+      ownerMetamaskId:''
   })
 
   useEffect(() => {
@@ -55,7 +66,9 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
         name: metamaskId.name,
         creator: metamaskId.creatorUserId,
         copiesCount: metamaskId.totalCopies,
-        numberOfCopy:metamaskId.numberOfCopy
+        numberOfCopy:metamaskId.numberOfCopy,
+        tokenId: metamaskAddr.tokenId,
+        ownerMetamaskId:metamaskAddr.ownerMetamaskId
       });
 
     };
@@ -82,13 +95,13 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
         <FormControl className={classes.fieldGroup}>
           <InputLabel shrink htmlFor='quantity'>
             {text['enterQuantity']}
-            <small>({ info.numberOfCopy + ' ' +text['countAvailable'] +' of ' + info.copiesCount} )</small>
+            <small>({ info.numberOfCopy+1 + ' ' +text['countAvailable'] +' of ' + info.copiesCount} )</small>
           </InputLabel>
-          <Input id='quantity' placeholder='1' onChange={(e) => setNumCopies(e.target.value)}/>
+          <Input id='quantity' placeholder='1' value={numCopies}onChange={(e) => setNumCopies(e.target.value)}/>
         </FormControl>
         <ul className={classes.additionalInfo}>
           <li>{text['yourBalance']} <b>{userBalance} ETH</b></li>
-          <li>{text['serviceFee']} <b>0.005 ETH</b></li>
+          <li>{text['serviceFee']} <b>{(Number(userBalance) *25)/1000} ETH</b></li> 
           <li>{text['totalBidAmount']}<b>0.205 ETH</b></li>
         </ul>
         <div className={classes.buttons}>

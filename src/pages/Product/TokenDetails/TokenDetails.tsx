@@ -188,8 +188,33 @@ const TokenDetails = (): JSX.Element => {
     });
 
     setLoading(false);
+
+    
   }, [id]);
 
+  const [ highestBidder,setHighestBidder] = useState({
+    addr:'',amount:''
+  });
+  useEffect(()=>{
+      //check highest bidding address and amount
+      const init = async()=>{
+        
+        const { data } = await getCollectible(id);
+        try {
+          const listing = await  web3Contract.checkCollectibleStatus(data.ownerMetamaskId,data.tokenId)
+          if(listing[6]!='0x0000000000000000000000000000000000000000'){
+            setHighestBidder({addr:listing[6], amount:listing[7]})
+          }else{
+            //setHighestBidder()
+          }
+
+        } catch (error) {
+          console.log(error.message)
+        }
+        
+      }
+      init();
+  },[])
   const converEthPrice = async () => {
     console.log('start price function', process.env);
     // const {data} = await axios.get(`${process.env.ETHER_PRICE_API}`)
@@ -229,7 +254,8 @@ const TokenDetails = (): JSX.Element => {
   };
   const [showPopup, setShowPopup] = useState(false);
   const [showFailedPopup, setShowFailedPopup] = useState(false);
-
+  const [showOwnerFailedPopup, setShowOwnerFailedPopup] = useState(false)
+  const [showBidPopup,setShowBidPopup] = useState(false)
   const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => selectTab(newValue);
   const isOwner = useIsCollectibleOwned(id, userCollectibles);
   const renderSwitch = (url: string) => {
@@ -331,13 +357,13 @@ const TokenDetails = (): JSX.Element => {
               <div className={classes.highestBidContainer}>
                 <Typography variant='h6'>{text['highestBidBy']}</Typography>
                 <Typography variant='h6' className={classes.walletAddress}>
-                  0xcabb22cb1...ba05
+                  {highestBidder.addr==''?'No bids avalaible':highestBidder.addr}
                 </Typography>
               </div>
               <div className={classes.highestBidContainer}>
                 {/*<Typography variant='h2'>2,000 DAI</Typography>*/}
                 <Typography variant='h3' className={classes.bidDollarAmount}>
-                  $2,000
+                  {/* $2,000 */}{highestBidder.amount!='0'?highestBidder.amount:'No Bids available'}
                 </Typography>
               </div>
             </div>
@@ -417,6 +443,20 @@ const TokenDetails = (): JSX.Element => {
         }
         onClose={() => setShowFailedPopup(false)}
       ></Popup>
+      <Popup
+        open={showOwnerFailedPopup}
+        textheader={
+          'Purchase collectible directly;;Owner cannot place bid'
+        }
+        onClose={() => setShowOwnerFailedPopup(false)}
+      ></Popup>
+      <Popup
+        open={showBidPopup}
+        textheader={
+          'Purchase collectible directly;;The Item was successfully bid'
+        }
+        onClose={() => setShowBidPopup(false)}
+      ></Popup>
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
       {isBuyProgressModal && (
         <ProgressModal
@@ -432,6 +472,8 @@ const TokenDetails = (): JSX.Element => {
           }}
           openSucessBox={()=> setShowPopup(true)}
           openFailedBox={() => setShowFailedPopup(true)}
+          openOwnerFailedBox={()=>setShowOwnerFailedPopup(true)}
+          openBidPopup = {()=>setShowBidPopup(true)}
         />
       )}
       {isBidProgressModal && (
@@ -448,6 +490,8 @@ const TokenDetails = (): JSX.Element => {
           }}
           openSucessBox={()=> setShowPopup(true)}
           openFailedBox={() => setShowFailedPopup(true)}
+          openOwnerFailedBox={()=>setShowOwnerFailedPopup(true)}
+          openBidPopup = {()=>setShowBidPopup(true)}
         />
       )}
     </div>

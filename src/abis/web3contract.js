@@ -352,7 +352,19 @@ const transferCollectible = async (tokenId, receiverAddress) => {
 /**
  * collectible status
  *
+ * Check the listing status of the collectible.
+ * 0: status: status,
+ *  1: price: price,
+   2: startTime: startTime,
+   3: endTime: endTime,
+   4: commission: _defaultCommission,
+   5: isDropOfTheDay: false,
+   6: highestBidder: address(0),
+   7: highestBid: 0,
+ *
+ * Anyone can call this method
  */
+
 const checkCollectibleStatus = async (ownerAddress, tokenId) => {
   const { contractWithSigner } = getMarketplaceContract();
   const listing = await contractWithSigner.listingOf(ownerAddress, tokenId);
