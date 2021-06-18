@@ -444,7 +444,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     .then(async res => {
                       const collectibleIdsPromise: any = [];
                       const setAsAuctionPromise: any = [];
-
+                      let collectibleIds:any = [];
                       for (let i = 0; i < tokenId.length; i++) {
                         collectibleIdsPromise.push(getCollectibleByTokenId(tokenId[i]));
                       }
@@ -452,28 +452,32 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                       Promise.all(collectibleIdsPromise)
                         .then(result => {
                           console.log('promise result', result);
-                          const collectibleIds = result.map((item: any) => item.id);
+                          collectibleIds = result.map((item: any) => item.id);
 
-                          
+                          alert(collectibleIds);
                           for (let i = 0; i < collectibleIds.length; i++) {
                            
                             const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
                             const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
                             
                             setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
-                            const auctionData = {
-                              price: price,
-                              startTime: startTime*1000,
-                              endTime:endTime*1000
-                            };
-                            setAsAuctionPromise.push(putOnAuction(collectibleIds[i], auctionData));
+                            
                           }
                         })
                         .catch(err => console.log(err.message));
 
                       Promise.all(setAsAuctionPromise)
-                        .then(result => {
+                        .then(async(result) => {
                           console.log('!!!auction promise', result);
+                          const auctionData = {
+                            price: price,
+                            startTime: startTime*1000,
+                            endTime:endTime*1000
+                          };
+                          for (let i = 0; i < collectibleIds.length; i++) {
+                            await putOnAuction(collectibleIds[i], auctionData);
+                          }
+                         
                         })
                         .catch(err => console.log(err.message));
                       //console.log('!!!!!collectible by id ', data);
