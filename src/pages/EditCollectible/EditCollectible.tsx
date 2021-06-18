@@ -207,7 +207,7 @@ export default function EditCollectible() {
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
-
+  
   return (
     <Layout>
       <div className={classes.headers}>
