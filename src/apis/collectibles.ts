@@ -259,3 +259,38 @@ export const createCollectible = async (data: any) => {
     },
   });
 };
+
+export const getCollectibleByTokenId = async (tokenId: any) => {
+  return await axios.get(`${process.env.REACT_APP_API}/api/public/tokens/${tokenId}`);
+};
+
+export const transferCollectibles = async (collectibleId: any, toMetamask: any) => {
+  await axios.post(
+    `${process.env.REACT_APP_API}/api/auth/celebirity/${collectibleId}/transfer-owner`,
+    { toMetamask: toMetamask },
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  );
+};
+export const bidCollectible = async (collectibleId: any, price: any) => {
+  await axios.post(
+    `${process.env.REACT_APP_API}/api/auth/bid/${collectibleId}`,
+    { price: price },
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  );
+};
+
+export const getAuctionHistory = async (collectibleId: any) => {
+  return await axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/auction/${collectibleId}/history`);
+};

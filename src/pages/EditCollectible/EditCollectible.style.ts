@@ -1,11 +1,21 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => {
+
     return {
-        headers: {
-            marginLeft: 100
+       
+      
+
+	
+        auctionTimer:{
+            justifyContent: 'space-between',
+            textAlign:'center'
         },
-        goBack: {
+		headers: {
+			marginLeft: 100
+		},
+		goBack: {
+
             margin: '44px 0 18px',
             display: 'flex',
             alignItems: 'center',
@@ -141,6 +151,7 @@ const useStyles = makeStyles((theme) => {
 
             width: 350
         },
+
         buttonRow: {
             width: '100%',
             textAlign: 'center',
@@ -204,6 +215,9 @@ const useStyles = makeStyles((theme) => {
             width: '100%'
           },
     }
+
+	}
+
 })
 
 export default useStyles
