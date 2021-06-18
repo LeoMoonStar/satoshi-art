@@ -488,6 +488,7 @@ const TokenDetails = (): JSX.Element => {
       </div>
       {isBidModal && (
         <BidModal
+        collectiblePrice={collectible.price}
           onSubmit={(bid: any) => {
             console.log('385 line!!', bid);
             setBidValue(bid);
@@ -550,6 +551,7 @@ const TokenDetails = (): JSX.Element => {
           openFailedBox={() => setShowFailedPopup(true)}
           openOwnerFailedBox={() => setShowOwnerFailedPopup(true)}
           openBidPopup={() => setShowBidPopup(true)}
+          
         />
       )}
       {isBidProgressModal && (
@@ -568,6 +570,7 @@ const TokenDetails = (): JSX.Element => {
           openFailedBox={() => setShowFailedPopup(true)}
           openOwnerFailedBox={() => setShowOwnerFailedPopup(true)}
           openBidPopup={() => setShowBidPopup(true)}
+          
         />
       )}
     </div>

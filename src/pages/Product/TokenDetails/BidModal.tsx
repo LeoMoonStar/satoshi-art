@@ -13,9 +13,10 @@ type BidModalProps = {
 
   onClose: () => void;
   onSubmit: (bid:any) => any;
+  collectiblePrice:any;
 };
 
-export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Element {
+export default function BidModal({ onClose, onSubmit, collectiblePrice}: BidModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [numCopies, setNumCopies] = useState('1')
@@ -35,6 +36,9 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
       else if((Number(value) > Number(listingBid))){
         setError( 'Bid Should be higher than highest bid amount')
       }
+     else if((Number(value) > Number(collectiblePrice))){
+      setError( 'Bid Should be higher than starting price')
+     }
       else{
         setError(null)
         setBid(Number(value));

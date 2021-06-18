@@ -112,12 +112,13 @@ export default function ProgressModal({
       alert('Please connect to metamask first');
     }
   };
-
+//const [initialPrice, setInitialPrice] = useState(0);
   const startBidSignature = async () => {
     console.log('!!!!!!!!!!!!! Start Bidding !!!!!!!!!!!');
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
+   
     console.log(tokenId, data.ownerMetamaskId, price, currentBidValue);
     //owner cannot bid
     try {
