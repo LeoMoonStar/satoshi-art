@@ -14,109 +14,153 @@ export default function Videos() {
 	const [videos, setVideos] = useState([
 		{ 
 			key: "0", 
-			thumbnail: { photo: '', width: 0, height: 0 }, 
-			header: "jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-			miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
-			duration: "2:34",
-			time: "3 days ago"
+			id: "1-c99d-ddic9div999v-0",
+			thumbnail: { photo: '/video-page-placeholders/video.png', width: 0, height: 0 }, 
+			header: "this is the header for regular video 0", 
+			miniHeader: "this is the mini header for regular video 0",
+			duration: "2:00",
+			time: "1 days ago"
 		},
 		{ 
 			key: "1", 
-			thumbnail: { photo: '', width: 0, height: 0 }, 
-			header: "jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-			miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
-			duration: "2:34",
-			time: "3 days ago"
+			id: "1-c99d-ddic9div999v-1",
+			thumbnail: { photo: '/video-page-placeholders/video.png', width: 0, height: 0 }, 
+			header: "this is the header for regular video 1", 
+			miniHeader: "this is the mini header for regular video 1",
+			duration: "3:00",
+			time: "2 days ago"
 		},
 		{ 
 			key: "2", 
-			thumbnail: { photo: '', width: 0, height: 0 }, 
-			header: "jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-			miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
-			duration: "2:34",
+			id: "1-c99d-ddic9div999v-2",
+			thumbnail: { photo: '/video-page-placeholders/video.png', width: 0, height: 0 }, 
+			header: "this is the header for regular video 2", 
+			miniHeader: "this is the mini header for regular video 2",
+			duration: "4:00",
 			time: "3 days ago"
 		},
 		{ 
 			key: "3", 
-			thumbnail: { photo: '', width: 0, height: 0 }, 
-			header: "jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-			miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
-			duration: "2:34",
-			time: "3 days ago"
+			id: "1-c99d-ddic9div999v-3",
+			thumbnail: { photo: '/video-page-placeholders/video.png', width: 0, height: 0 }, 
+			header: "this is the header for regular video 3", 
+			miniHeader: "this is the mini header for regular video 3",
+			duration: "5:00",
+			time: "4 days ago"
 		}
 	])
 	const [mostViewedVideos, setMostViewedVideos] = useState([
 		{ key: "row-0", row: [
 			{ 
-				key: "0", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "1 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "0",
+				id: "1-xfds9f9ds8fsdisod-0", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 0", 
+				miniHeader: "this is the mini header for most viewed video 0",
 				duration: "2:34",
 				time: "3 days ago"
 			},
 			{ 
-				key: "1", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "2 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "1",
+				id: "1-xfds9f9ds8fsdisod-1", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 1", 
+				miniHeader: "this is the mini header for most viewed video 1",
 				duration: "2:34",
 				time: "3 days ago"
 			},
 			{ 
-				key: "2", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "3 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "2",
+				id: "1-xfds9f9ds8fsdisod-2", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 2", 
+				miniHeader: "this is the mini header for most viewed video 2",
 				duration: "2:34",
 				time: "3 days ago"
 			},
 			{ 
-				key: "3", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "4 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "3",
+				id: "1-xfds9f9ds8fsdisod-3", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 3", 
+				miniHeader: "this is the mini header for most viewed video 3",
 				duration: "2:34",
 				time: "3 days ago"
 			}
 		]},
 		{ key: "row-1", row: [
 			{ 
-				key: "4", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "1 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "4",
+				id: "1-xfds9f9ds8fsdisod-4", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 4", 
+				miniHeader: "this is the mini header for most viewed video 4",
 				duration: "2:34",
 				time: "3 days ago"
 			},
 			{ 
-				key: "5", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "2 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "5",
+				id: "1-xfds9f9ds8fsdisod-5", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 5", 
+				miniHeader: "this is the mini header for most viewed video 5",
 				duration: "2:34",
 				time: "3 days ago"
 			},
 			{ 
-				key: "6", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "3 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "6",
+				id: "1-xfds9f9ds8fsdisod-6", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 6", 
+				miniHeader: "this is the mini header for most viewed video 6",
 				duration: "2:34",
 				time: "3 days ago"
 			},
 			{ 
-				key: "7", 
-				thumbnail: { photo: '', width: 0, height: 0 }, 
-				header: "4 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
-				miniHeader: "afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj",
+				key: "7",
+				id: "1-xfds9f9ds8fsdisod-7", 
+				thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+				header: "this is the header for most viewed video 7", 
+				miniHeader: "this is the mini header for most viewed video 7",
 				duration: "2:34",
 				time: "3 days ago"
 			}
 		]}
 	])
 	const [toggleSeeMore, setToggleSeeMore] = useState(true)
-	const [playVideo, setPlayvideo] = useState(false)
+	const [play, setPlay] = useState(false)
+	const [mainVideoInfo, setMainvideoinfo] = useState({
+		id: "1-xfds9f9ds8fsdisod-0", 
+		thumbnail: { photo: '/video-page-placeholders/main-video.png', width: 0, height: 0 }, 
+		header: "1 jsd sdfjls jflajf lajf slfjaslf jlsafjf", 
+		miniHeader: "this is the mini header for most viewed video 0",
+		duration: "2:34",
+		time: "3 days ago"
+	})
+
+	const playVideo = (type: string, videoid: string) => {
+		switch (type) {
+			case "regular":
+				videos.forEach(function (video) {
+					if (video.id == videoid) {
+						setMainvideoinfo(video)
+					}
+				})
+
+				break
+			case "mostviewed":
+				mostViewedVideos.forEach(function (info) {
+					info.row.forEach(function (video) {
+						if (video.id == videoid) {
+							setMainvideoinfo(video)
+						}
+					})
+				})
+
+				break
+			default:
+		}
+	}
 
 	return (
 		<Layout>
@@ -133,13 +177,13 @@ export default function Videos() {
 							<h1>Videos</h1>
 							<h3>Highlights</h3>
 							<div className={classes.mainVideo}>
-								{playVideo ? 
+								{play ? 
 									<CardMedia
 										style={{ height: 400, width: '100%' }}
 									/>
 									:
-									<div className={classes.mainVideoContainer} style={{ backgroundImage: `url("/video-page-placeholders/main-video.png")` }}>
-										<div className={classes.videoPlay} onClick={() => setPlayvideo(true)}>
+									<div className={classes.mainVideoContainer} style={{ backgroundImage: "url('" + mainVideoInfo.thumbnail.photo + "')" }}>
+										<div className={classes.videoPlay} onClick={() => setPlay(true)}>
 											<img src="/video-page-placeholders/play-main-video.png"/>
 										</div>
 										<div className={classes.mainDuration}>2:34</div>
@@ -147,16 +191,16 @@ export default function Videos() {
 								}
 							</div>
 							<div className={classes.mainInfo}>
-								<div className={classes.mainHeader}>jsd sdfjls jflajf lajf slfjaslf jlsafjf</div>
-								<div className={classes.mainMiniHeader}>afjalsfj slfj lfjalfjlsafj asfj sfjsa;f dsfj</div>
-								<div className={classes.mainTime}>3 days ago</div>
+								<div className={classes.mainHeader}>{mainVideoInfo.header}</div>
+								<div className={classes.mainMiniHeader}>{mainVideoInfo.miniHeader}</div>
+								<div className={classes.mainTime}>{mainVideoInfo.time}</div>
 							</div>
 						</div>
 						<div className={classes.rightCol}>
 							{videos.map(video => (
-								<div key={video.key} className={classes.video}>
+								<div key={video.key} className={classes.video} onClick={() => playVideo("regular", video.id)}>
 									<div>
-										<img src="/video-page-placeholders/video.png"/>
+										<img src={video.thumbnail.photo}/>
 										<div className={classes.videoDuration}>{video.duration}</div>
 									</div>
 									<div className={classes.videoInfo}>
@@ -187,11 +231,11 @@ export default function Videos() {
 								{mostViewedVideos.map(item => (
 									<div key={item.key} className={classes.mostViewedVideos}>
 										{item.row.map(video => (
-											<div key={video.key} className={classes.mostViewedVideo}>
-												<div>
-													<img src="/video-page-placeholders/main-video.png"/>
-													<div className={classes.mostViewedVideoDuration}>{video.duration}</div>
+											<div key={video.key} className={classes.mostViewedVideo} onClick={() => playVideo("mostviewed", video.id)}>
+												<div className={classes.mostViewedVideoThumbnail}>
+													<img src={video.thumbnail.photo}/>
 												</div>
+												<div className={classes.mostViewedVideoDuration}>{video.duration}</div>
 												<div className={classes.mostViewedVideoInfo}>
 													<div className={classes.mostViewedVideoHeader}>{video.header}</div>
 													<div className={classes.mostViewedVideoHoriz}/>
