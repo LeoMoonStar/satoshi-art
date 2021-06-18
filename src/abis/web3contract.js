@@ -290,6 +290,7 @@ const setAsDropOfTheDayAuction = async (tokenId, price, startTime, endTime, comm
  **/
 const bid = async (tokenId, sellerAddress, payment) => {
   const { contractWithSigner } = getMarketplaceContract();
+  console.log('web3 contract bid ', tokenId, sellerAddress, payment);
   const receipt = await contractWithSigner.bid(tokenId, sellerAddress, {
     value: web3.utils.toWei(String(payment), 'ether'),
   });

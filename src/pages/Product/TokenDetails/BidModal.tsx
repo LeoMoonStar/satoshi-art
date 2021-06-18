@@ -23,6 +23,7 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
   const [serviceFee, setServiceFee] = useState(0.005)
   const [totalBidAmount, setTotalBidAmount] = useState(0.305)
   const[bid, setBid] = useState(0);
+  const[listingBid, setListingBid] = useState('');
 
   const [error, setError] = useState<string | null>(null);
   const handleChange = async ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,12 +31,14 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
       
       
       try {
-        const listing = await web3Contract.checkCollectibleStatus(info.ownerMetamaskId, info.tokenId)
+       
           setError((Number(value) > Number(userBalance) )? 'Not enough funds' : null)
-          setError((Number(value) > Number(listing[7]) )? 'Bid Should be higher than highest bid amount' : null)
+          //setError((Number(value) > Number(listingBid) )? 'Bid Should be higher than highest bid amount' : null)
           setBid(Number(value));
+        }
+         
         
-      } catch (error) {
+       catch (error) {
         console.log(error.message)
       }
       
@@ -70,6 +73,10 @@ export default function BidModal({ onClose, onSubmit }: BidModalProps): JSX.Elem
         tokenId: metamaskAddr.tokenId,
         ownerMetamaskId:metamaskAddr.ownerMetamaskId
       });
+
+      // web3Contract.checkCollectibleStatus(info.ownerMetamaskId, info.tokenId).then(res=>{
+      //   setListingBid(res[7])
+      // })
 
     };
     init();
