@@ -25,32 +25,7 @@ const Preview = ({ isSingle, fileSrc, fields, handleTransferToken, celebrity }: 
         <div className={classes.previewArea}>
           {fileSrc || isFieldsNotEmpty ? (
             <div className={classes.content}>
-              {/*<div className={classes.references}>
-                                <Avatar size={26} image={avatar} alt="John" />
-                                <Avatar size={26} image={avatar} alt="John" />
-                                <Avatar size={26} image={avatar} alt="John" />
-                            </div>
-                            <div className={classes.previewImgWrapper}>
-                                {fileSrc && <img src={fileSrc} alt="preview-image" />}
-                            </div>
-                            <div className={classes.previewDscr}>
-                                <div>{fields.name}</div>
-                                <div>
-                                    {fields.price
-                                        ? fields.price
-                                        : 'Not for sale'}{' '}
-                                    {isSingle ? (
-                                        <span>1 of 1</span>
-                                    ) : (
-                                        <span>
-                                            {fields.copiesCount
-                                                ? `${fields.copiesCount} of ${fields.copiesCount}`
-                                                : '0 in stock'}
-                                        </span>
-                                    )}
-                                </div>
-                                <div> {t('noBidsYet')}</div>
-                            </div>*/}
+               <img src={fileSrc} />
               <div className={classes.contentHeader}>Preview of your new collectible</div>
             </div>
           ) : (

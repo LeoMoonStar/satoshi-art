@@ -1,7 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => {
-	return {
+
+    return {
+       
+      
+
+	
         auctionTimer:{
             justifyContent: 'space-between',
             textAlign:'center'
@@ -10,6 +15,7 @@ const useStyles = makeStyles((theme) => {
 			marginLeft: 100
 		},
 		goBack: {
+
             margin: '44px 0 18px',
             display: 'flex',
             alignItems: 'center',
@@ -60,7 +66,7 @@ const useStyles = makeStyles((theme) => {
             color: theme.custom.common.darkerGrayColor,
         },
         fileWrapper: {
-        	backgroundColor: 'grey',
+            backgroundColor: 'grey',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-around',
@@ -129,24 +135,89 @@ const useStyles = makeStyles((theme) => {
             width: '100%',
             marginBottom: 40,
             '& Button': {
-            	marginTop: 10
+                marginTop: 10
             }
         },
         submits: {
-        	display: 'flex',
-        	flexDirection: 'row',
-        	justifyContent: 'space-between',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             margin: '10px auto',
 
-        	'& Button': {
-        		backgroundColor: '#5113D5',
+            '& Button': {
+                backgroundColor: '#5113D5',
                 margin: '10px'
-        	},
+            },
 
             width: 350
         },
-       
+
+        buttonRow: {
+            width: '100%',
+            textAlign: 'center',
+            marginBottom: '8px',
+            '& button': {
+                height: 53,
+            },
+        },
+        col: {
+            width: 390,
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            marginLeft: '38%',
+            marginTop: '47px'
+        },
+        wrapper: {
+            backgroundColor: 'white',
+            borderRadius: 10,
+            margin: '0 auto',
+            padding: '50px 0',
+            width: 500
+        },
+        close: {
+            fontSize: 20,
+            marginLeft: 480,
+            marginTop: -50,
+            width: 12,
+        
+            '&:hover': {
+              cursor: 'pointer'
+            }
+          },
+          header: {
+            fontSize: 30,
+            fontWeight: 'bold',
+            margin: '0 50px',
+            textAlign: 'center'
+          },
+          divider: {
+            height: 1,
+            width: '80%',
+            background: `${theme.custom.common.blackColor}16`,
+            margin: '10px auto'
+          },
+          middleheader: {
+            fontWeight: 'bold',
+            padding: '0 20px',
+            textAlign: 'center'
+          },
+          bottomheader: {
+            fontSize: 20,
+            padding: '0 20px',
+            textAlign: 'center'
+          },
+          popupcontainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            justifyContent: 'space-around',
+            width: '100%'
+          },
+    }
+
 	}
+
 })
 
 export default useStyles

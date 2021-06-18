@@ -51,9 +51,9 @@ export default function Tops(): JSX.Element {
       <div className={classes.container}>
         <div className={classes.col}>
           <small className={classes.subTitle}>{text['recentlyCollected']}</small>
-          <h2 className={classes.title} style={{marginTop: '12px'}} >{text['topCollectors']}</h2>
+          <h2 className={classes.title}  >{text['topCollectors']}</h2>
 
-          <img src={top1} alt='' className={classes.prevImage} style={{marginTop: '27px'}}/>
+          <img src={top1} alt='' className={classes.prevImage} />
           <div className={classes.users}>
             {topCollectors.map(({ isArtist, id, name }) => {
               return (
@@ -94,7 +94,7 @@ export default function Tops(): JSX.Element {
         </div>
         <div className={classes.col}>
           <small className={classes.subTitle}>{text['artworksOwned']}</small>
-          <h2 className={classes.title}>{text['largestCollections']}</h2>
+          <h2 className={classes.title} style={{marginTop:'3px'}}>{text['largestCollections']}</h2>
           <img src={top3} alt='' className={classes.prevImage} />
           <div className={classes.users}>
             {largestCollections.map(({ isArtist, id, name }) => {

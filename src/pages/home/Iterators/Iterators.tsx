@@ -34,7 +34,7 @@ export default function Iterators(): JSX.Element {
         <h2 className={classes.mainTitle}>{text['previousWeeklyIterations']}</h2>
 
         {profile.map((item: any, index: string | number) => {
-          console.log(item.name);
+          console.log("!!!!!!!??????????//////",item);
           return (
             <Link to={`/drop-of-the-day-history`} key={item.celebrityId} style={{ textDecoration: 'none' }}>
               <div key={item.celebrityId} className={classes.card}>

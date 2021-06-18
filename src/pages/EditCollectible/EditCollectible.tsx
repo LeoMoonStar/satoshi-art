@@ -12,6 +12,7 @@ import {
   IconButton,
   Typography,
   Theme,
+
 } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 // import {AdapterDateFns} from '@material-ui/lab/';
@@ -19,6 +20,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 // import DateTimePicker from '@material-ui/lab/DateTimePicker';
 
 import text from 'constants/content';
+import { Modal as MUIModal } from '@material-ui/core';
+
 import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon, LeftArrowIcon } from 'components/icons';
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes';
 import { getCollectible, putCollectibleOnSale, removeCollectibleFromSale, putOnAuction } from 'apis/collectibles';
@@ -50,6 +53,8 @@ const COLLECTION_OPTIONS = ['onSale'];
 export default function EditCollectible() {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
+  console.log("before useeffect:", id)
+
   const [info, setInfo] = useState({
     status: '',
     thumbnailUrl: '',
@@ -87,12 +92,14 @@ export default function EditCollectible() {
     }
   };
   const [accountAddress, setAccountAddress] = useState('');
+
   const [listingStatus, setLisitingStatus] = useState({
     status: '',
     highestBidderAddres: '',
     startTime: '',
     endTime: '',
   });
+
   useEffect(() => {
     if (id) {
       getCollectible(id).then(({ data }) => {
@@ -177,7 +184,62 @@ export default function EditCollectible() {
     const { price, tokenId } = info;
     const data = { price: price, status: 'onSale' };
 
-    // console.log(info.status, tokenId, accountAddress);
+    console.log(info.status, tokenId, accountAddress);
+
+
+  //   if (!price) {
+  //     setPriceError(true);
+  //   }
+  //   if (accountAddress != '') {
+  //     const balance = await web3Contract.checkTokenBalance(accountAddress, parseInt(tokenId));
+  //     console.log(balance);
+  //     if (parseInt(balance) > 0) {
+  //       const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
+  //       receipt.wait().then((res: any) => {
+  //         console.log(res);
+  //         putCollectibleOnSale(id, data)
+  //           .then(() => {
+  //             setShowPopup(true);
+  //           })
+  //           .catch(() => {
+  //             setShowFailedPopup(true);
+  //           });
+  //       });
+  //     } else {
+  //       setShowErrorPopup(true);
+  //     }
+  //   } else {
+  //     setShowConnectionPopup(true);
+  //   }
+  // };
+
+  // const removeItem = async (status: any) => {
+  //   console.log(status);
+  //   if (status == 'onSale') {
+  //     console.log(info.tokenId);
+  //     const response = await web3Contract.putOnHold(info.tokenId);
+  //     response
+  //       .wait()
+  //       .then((res: any) => {
+  //         removeCollectibleFromSale(id).then(() => {
+  //           setShowPopup(true);
+  //           location.replace('/dashboard/user');
+  //         });
+  //       })
+  //       .catch((err: any) => console.log(err.message));
+  //   } else {
+  //     const response = await web3Contract.putOnHold(info.tokenId);
+  //     response
+  //       .wait()
+  //       .then((res: any) => {
+  //         removeCollectibleFromSale(id).then(() => {
+  //           setShowPopup(true);
+  //           location.replace('/dashboard/user');
+  //         });
+  //       })
+  //       .catch((err: any) => console.log(err.message));
+  //   }
+  // };
 
     if (!price) {
       setPriceError(true);
@@ -263,10 +325,24 @@ export default function EditCollectible() {
     setChecked(event.target.checked);
   };
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showSucceedPopup, setShowSucceedPopup] = useState(false);
+  const [newBidAmount, setNewBidAmount] = useState("");
+
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewBidAmount((event.target.value))
+  };
+
+  const processNewBid = () => {
+    // If sucessed
+    // setShowSucceedPopup(true);
+    // if failed;
+    setShowFailedPopup(true);
+  }
+
   const [showAccountFailedPopup, setShowAccountFailedPopup] = useState(false);
   const [timeleft, setimeleft]: any = useState({
     days: 0,
@@ -313,15 +389,38 @@ export default function EditCollectible() {
       setShowPopup(true);
     }
   };
+
   return (
     <Layout>
       <div className={classes.headers}>
-        <Link className={classes.goBack} to='/'>
-          <LeftArrowIcon /> {text['backToHomePage']}
+        <Link className={classes.goBack} to='/dashboard/user'>
+          <LeftArrowIcon /> Back
         </Link>
-        <Typography variant='h2'>Collectible editing</Typography>
+        <Typography variant='h2'>Increasw Your Bid Now!</Typography>
+        {console.log("in Edit collectible:", info)}
       </div>
       <div className={classes.container}>
+
+        <div className={classes.col}>
+          <div className={classes.buttonRow}>
+            <Button variantCustom='linkButton' style={{ borderRadius: '8px', width: "400px" }}>
+              The Current Highest Bid: ETH
+            </Button>
+          </div>
+          <div className={classes.buttonRow}>
+            <Button  variantCustom='linkButton' style={{ borderRadius: '8px', width: "400px" }}>
+              Your Current Bid: ETH
+            </Button>
+          </div>
+          <div className={classes.buttonRow}>
+            <div style={{ width: "400px" }}>
+              <TextField
+                
+                id='newBidAmount'
+                placeholder='Increase your amount...'
+                name='newBidAmount'
+                type="number"
+
         <div className={classes.leftCol}>
           <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div>
         </div>
@@ -366,35 +465,21 @@ export default function EditCollectible() {
                 </FormControl>
               ) : null}
 
-              {/* <FormControl className={classes.fieldGroup}>
-                  <label htmlFor='issue'>Collection</label>
-                  <Select id='issue' name='issue'>
-                    {COLLECTION_OPTIONS.map((issue: string, index: number) => (
-                      <MenuItem
-                        value={index}
-                        key={index}
-                        onClick={() => {
-                          const newInfo = { ...info, status: issue };
 
-                          setInfo(newInfo);
-                        }}
-                      >
-                        {text[issue]}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <Button
-                    variantCustom='action'
-                    type='submit'
-                    style={{ backgroundColor: '#5113D5' }}
-                    onClick={() => {
-                      setInfo({ ...info, status: 'remove' });
-                    }}
-                  >
-                    Remove From Sale
-                  </Button>
-                </FormControl> */}
+                onChange={handleChange}
+
+              />
             </div>
+
+          </div>
+
+          <div className={classes.buttonRow}>
+            <Button  variantCustom='action' style={{ width: "400px" }} onClick={() => { processNewBid() }}>
+              Confirm Your Bid
+            </Button>
+          </div>
+
+
             {/* <div>
 			<LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
@@ -519,18 +604,36 @@ export default function EditCollectible() {
               </p> */}
             </div>
           </div>
+
         </div>
+
       </div>
-      <Popup
-        open={showPopup}
-        textheader={'Owned collectible status change;;Your collectible status has been changed!'}
-        onClose={() => location.replace('/dashboard/user')}
-      ></Popup>
-      <Popup
-        open={showErrorPopup}
-        textheader={'Insufficient copies to put onSale/onAuction!!'}
-        onClose={() => setShowErrorPopup(false)}
-      ></Popup>
+      <MUIModal open={showSucceedPopup} onClose={() => location.replace('/dashboard/user')}>
+        <div className={classes.popupcontainer}>
+          <div className={classes.wrapper}>
+            <div className={classes.close} onClick={() => location.replace('/dashboard/user')}>x</div>
+            <div className={classes.header}>{"Your bid increased! Your current bid price is"}</div>
+            <div className={classes.divider} />
+            <div className={classes.bottomheader}>{newBidAmount} ETH</div>
+            <div className={classes.divider} />
+            <Button  variantCustom='action' style={{ marginLeft: "35%", marginTop:"3px"}} onClick={() => { location.replace('/dashboard/user') }}>
+              Ok
+            </Button>
+          </div>
+        </div>
+      </MUIModal>
+      <MUIModal open={showFailedPopup} onClose={() => {setShowFailedPopup(false)}}>
+        <div className={classes.popupcontainer}>
+          <div className={classes.wrapper}>
+            <div className={classes.close} onClick={() => {setShowFailedPopup(false)}}>x</div>
+            <div className={classes.header}>{"You fail to increase you bid, please try again."}</div>
+            <div className={classes.divider} />
+            <Button  variantCustom='action' style={{ marginLeft: "35%", marginTop:"3px"}} onClick={() => {setShowFailedPopup(false)}}>
+              Ok
+            </Button>
+          </div>
+        </div>
+      </MUIModal>
       <Popup
         open={showConnectionPopup}
         textheader={'Please connect to metamask'}
@@ -540,6 +643,9 @@ export default function EditCollectible() {
         open={showFailedPopup}
         textheader={'Collectible status;;You failed to update your collectible status, Please try again'}
         onClose={() => setShowFailedPopup(false)}
+
+      ></Popup> 
+
       ></Popup>
       <Popup
         open={showAccountFailedPopup}
@@ -558,6 +664,7 @@ export default function EditCollectible() {
         textheader={'Collectible status;;You failed to remove from Sale'}
         onClose={() => setShowSaleError(false)}
       ></Popup>
+
     </Layout>
   );
 }

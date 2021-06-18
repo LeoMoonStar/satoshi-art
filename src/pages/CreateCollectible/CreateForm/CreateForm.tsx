@@ -155,7 +155,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       onAuction: false,
       instantPrice: true,
       unlock: true,
-      unlockContent: 'content',
+
+      unlockContent: '',
+      // price: 10,
+      collection: '',
+      name: '',
+      description: '',
+      // royalties: 10,
+      // copiesCount: 1,
+<!--       properties: {
+        name: '',
+        value: '',
+      }, -->
+<!--       unlockContent: 'content',
       price: 10,
       collection: 'collection name',
       name: 'name',
@@ -165,7 +177,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       // properties: {
       //   name: '',
       //   value: '',
-      // },
+      // }, -->
+
     },
   });
 
@@ -835,8 +848,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               )}
             </FormControl>
           )}
-
-          <FormControlLabel
+          <div className={classes.subtitle}>Put your Price</div>
+     
+          {/* <FormControlLabel
             control={<Switch inputRef={register} name='instantPrice' />}
             classes={{ root: classes.switchLabel }}
             labelPlacement='start'
@@ -846,7 +860,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 <span>{text['enterThePriceForInstantlySold']}</span>
               </span>
             }
-          />
+          /> */}
 
           {watch('instantPrice') && (
             <div className={classes.input}>
@@ -858,7 +872,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 disableUnderline
               />
               <div className={classes.priceInfo}>
-                <span>{text['serviceFeeProgress'] + '2.5'}</span>
+                <span>{'%2.5'}</span>
                 {/* <span>{t('youWillReceiveCnt', { count: ethAmount, currency: 'ETH', amount: usdAmount })}</span> */}
               </div>
 
@@ -938,14 +952,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 </label>
                 <Input
                   id='royalties'
-                  defaultValue='10'
+                  // defaultValue='10'
                   onChange={handleNumberInput}
                   inputRef={register}
                   disableUnderline
                   name='royalties'
                   endAdornment={<span>%</span>}
                 />
-                <span>{text['suggestedPercentages']}, 20%, 30%</span>
+                <span>Suggested: 20%, 30%</span>
                 {errors.royalties && <p className={classes.textError}>{errors.royalties.message}</p>}
               </div>
               {!isSingle && (
