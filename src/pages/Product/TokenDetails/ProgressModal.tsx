@@ -126,7 +126,7 @@ export default function ProgressModal({
       setClickedSigned(false);
       setActiveStep(2);
       setSigned(true);
-      await bidCollectible(data.id, price.toString());
+      await bidCollectible(data.id, Number(currentBidValue));
       openBidPopup();
     } catch (error) {
       console.log(error.message);

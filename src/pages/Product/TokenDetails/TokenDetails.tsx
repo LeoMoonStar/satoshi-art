@@ -203,7 +203,7 @@ const TokenDetails = (): JSX.Element => {
         try {
           const listing = await  web3Contract.checkCollectibleStatus(data.ownerMetamaskId,data.tokenId)
           if(listing[6]!='0x0000000000000000000000000000000000000000'){
-            setHighestBidder({addr:listing[6], amount:listing[7]})
+            setHighestBidder({addr:listing[6], amount:'0'})
           }else{
             //setHighestBidder()
           }
