@@ -532,11 +532,11 @@ const TokenDetails = (): JSX.Element => {
       ></Popup>
       <Popup
         open={showBidPopup}
-        textheader={'Purchase collectible directly;;The Item was successfully bid'}
+        textheader={'Bid status;;The Item was successfully bid'}
         onClose={() => setShowBidPopup(false)}
       ></Popup>
       <Popup
-        open={showBidPopup}
+        open={showFailedBid}
         textheader={'You failed to bid'}
         onClose={() => setShowFailedBid(false)}
       ></Popup>

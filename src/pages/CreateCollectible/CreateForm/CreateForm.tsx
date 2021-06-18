@@ -242,10 +242,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [itemCreated, setItemCreated] = useState(false);
   const [onSale, setOnSale] = useState(false);
   const [confirmOnSale, setConfirmOnSale] = useState(false);
+  const [confirmOnAuction, setConfirmOnAuction] = useState(false);
   const [celebrity, setCelebrity] = useState(false);
   const [showOptionFailedPopup, setShowOptionFailedPopup] = useState(false);
   const [showNotApproved, setShowNotApproved] = useState(false);
   const [contractTokenIds, setContractTokenIds]: any = useState([]);
+  const [onAuction, setOnAuction] = useState(false);
   const tryUploadFiles = async (files: Array<Promise<any>>) => {
     try {
       return await Promise.all(files);
@@ -453,8 +455,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                         .then(result => {
                           console.log('promise result', result);
                           collectibleIds = result.map((item: any) => item.id);
-
-                          alert(collectibleIds);
+                          setOnAuction(true)
                           for (let i = 0; i < collectibleIds.length; i++) {
                            
                             const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
@@ -468,6 +469,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
                       Promise.all(setAsAuctionPromise)
                         .then(async(result) => {
+                          
                           console.log('!!!auction promise', result);
                           const auctionData = {
                             price: price,
@@ -477,9 +479,10 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           for (let i = 0; i < collectibleIds.length; i++) {
                             await putOnAuction(collectibleIds[i], auctionData);
                           }
-                         
+                          setOnAuction(false)
+                          setConfirmOnAuction(false)
                         })
-                        .catch(err => console.log(err.message));
+                        .catch(err => {setOnAuction(false);console.log(err.message)});
                       //console.log('!!!!!collectible by id ', data);
 
                       //const response = await web3Contract.setAsAuction(tokenId[0], price, startTime, endTime);
@@ -631,8 +634,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     const promise: any = [];
     const collectibleIds: any = [];
     console.log(contractTokenIds);
-
-    if(addr!=''){
+  const lowerAddr = addr.toLowerCase();
+    if(lowerAddr!=''){
       for (let i = 0; i < contractTokenIds.length; i++) {
         collectibleIds.push(getCollectibleByTokenId(contractTokenIds[i]));
       }
@@ -641,14 +644,20 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           console.log(result);
           const ids = result.map((item: any) => item.id);
           for (let i = 0; i < ids.length; i++) {
-            promise.push(web3Contract.transferCollectible(ids[i], addr));
+            promise.push(web3Contract.transferCollectible(ids[i], lowerAddr));
           }
         })
         .catch(err => console.log(err.message));
   
       Promise.all(promise)
-        .then(result => {
+        .then(async(result) => {
           console.log(result);
+          //api
+          const allIds = collectibleIds.map((item:any) => item.id)
+          for(let i=0; i<allIds.length;i++){
+
+            await transferCollectibles(allIds[i], lowerAddr);
+          }
         })
         .catch(err => console.log(err.message));
     }
@@ -999,14 +1008,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               {text['createItem']}
             </Button>
             {itemCreated ? <span>Creating item in progress....</span> : ''}
-            {onSale ? (
+            {onSale && (
               <>
                 <span>Item created successfully!</span>
                 <span>Putting item on sale in progress...</span>
               </>
-            ) : (
-              ''
             )}
+            {onAuction && (
+              <>
+              <span>Item created successfully!</span>
+              <span>Putting item on auction in progress...</span>
+            </>
+            )}
+            {confirmOnAuction ? <span>Item is on auction now!</span> : ''}
             {confirmOnSale ? <span>Item is on sale now!</span> : ''}
           </div>
 

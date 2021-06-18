@@ -124,6 +124,7 @@ export default function ProgressModal({
     console.log(tokenId, data.ownerMetamaskId, price, currentBidValue);
     //owner cannot bid
     try {
+      setSigned(true);
       const response = await web3Contract.bid(tokenId, data.ownerMetamaskId, currentBidValue);
       console.log(response);
       setClickedSigned(false);
@@ -133,6 +134,8 @@ export default function ProgressModal({
       onClose();
       openBidPopup();
     } catch (error) {
+      onClose();
+      setSigned(false);
       console.log(error.message);
       openFailedBid();
     }
@@ -278,13 +281,13 @@ export default function ProgressModal({
             </div>
             {signed ? (
               <>
-                <Button style={{ backgroundColor: '#FF0099' }}>In Progress...</Button>
+                <Button disabled={signed} style={{ backgroundColor: '#FF0099' }}>In Progress...</Button>
                 {/* <span>Do not close this window</span> */}
               </>
             ) : (
               <>
                 {status == 'bid' ? (
-                  <Button style={{ backgroundColor: '#FF0099' }} onClick={startBidSignature}>
+                  <Button style={{ backgroundColor: '#FF0099' }}  onClick={startBidSignature}>
                     {activeStep == 2 ? 'Done' : 'Start'}
                   </Button>
                 ) : (
