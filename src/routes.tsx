@@ -8,6 +8,7 @@ import UserDashboard from 'pages/UserDashboard';
 import Artist from 'pages/Artist';
 import Users from 'pages/Users';
 import User from 'pages/User';
+import Videos from 'pages/Videos'
 import Collection from 'pages/Collection';
 import Search from 'pages/Search';
 import DropOfTheDay from 'pages/DropOfTheDay';
@@ -41,6 +42,7 @@ function AppRouter(): JSX.Element {
         <DevelopRoute path='/artists/:id'><Artist /></DevelopRoute>
         <DevelopRoute path='/users/:type'><Users /></DevelopRoute>
         <DevelopRoute path='/user/:id'><User /></DevelopRoute>
+        <DevelopRoute path='/videos'><Videos /></DevelopRoute>
         <DevelopRoute path='/collections/:id'><Collection /></DevelopRoute>
         <DevelopRoute path='/search/:artist'><Search /></DevelopRoute>
         <DevelopRoute path='/drop-of-the-day'><DropOfTheDay /></DevelopRoute>
