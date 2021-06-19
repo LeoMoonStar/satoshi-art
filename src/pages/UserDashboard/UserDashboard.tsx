@@ -15,13 +15,21 @@ export default function UserDashboard(): JSX.Element {
   // todo: move all sliders in separate component with state outOfDatesSliders. It allow us avoid useless
   //  rerender for charts
   const [outOfDatesSliders, setOutOfDatesSliders] = useState<Record<string, any>>({ onSale: true, created: true });
+  const [searchStart, setSearchStart] = useState("")
+  const [searchEnd, setsearchEnd] = useState("")
+  const setSearchPeriod = (startdate:any, enddate:any) => {
+    setSearchStart(startdate)
+    setsearchEnd(enddate)
+
+  }
+  console.log("called in set search date,",searchStart,searchEnd)
 
   return (
     <DashboardLayout>
       <div className={classes.container}>
-        <Intro />
+        <Intro setSearchPeriod={setSearchPeriod}/>
         <CardsStatistics />
-        <Charts />
+        <Charts searchStart={parseInt(searchStart)} searchEnd={parseInt(searchEnd)}/>
         <YourLatestBids />
         <OnSale isOutOfDate={outOfDatesSliders.onSale} />
         <Collections />
