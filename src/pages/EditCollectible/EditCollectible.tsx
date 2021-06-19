@@ -340,6 +340,7 @@ export default function EditCollectible() {
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
 
+
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setNewBidAmount((event.target.value))
   // };
@@ -463,6 +464,7 @@ return null
     }
     // setUserBalance(balance);
   }
+
   return (
     <Layout>
       <div className={classes.headers}>
