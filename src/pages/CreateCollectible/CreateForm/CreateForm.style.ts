@@ -2,6 +2,38 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => {
   return {
+    transferContainer:{
+      borderRadius: 15,
+      marginTop: '20px',
+      padding:'10px',
+      border: '1px solid #E5E5E5',
+    },
+    transferContainerInputBox:{
+      // border: '1px solid #E5E5E5',
+      // borderRadius: 10,
+      width:'100%',
+      padding:'5px'
+    },
+    transferContainerButton:{
+      backgroundColor: '#FF0099',
+      marginTop:'10px',
+      borderRadius:10,
+      width:'100%',
+      color:'#ffffff',
+      "&:hover": {
+        //backgroundColor: "#0E47EF",
+        color: "#FF0099",
+        backgroundColor: '#ffffff',
+        border: '1px solid #FF0099',
+
+        
+      },
+    },
+    // transferContainer:{
+      
+    //   marginTop:'550px',
+    //   marginRight:'300px'
+    // },
     form: {
       display: 'flex',
     },

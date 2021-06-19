@@ -35,7 +35,13 @@ import { ethToUsdRateSelector } from 'state/app/selectors';
 import { updateTransactionInMintingProcess } from 'state/app/actions';
 
 import web3Contract from 'abis/web3contract';
-import { createCollection, createCollectible, putOnAuction } from 'apis/collectibles';
+import {
+  createCollection,
+  createCollectible,
+  putOnAuction,
+  getCollectibleByTokenId,
+  transferCollectibles,
+} from 'apis/collectibles';
 import { getUserInfo } from 'apis/users';
 import { readCookie } from '../../../apis/cookie';
 import classNames from 'classnames';
@@ -84,10 +90,11 @@ const schema = yup.object().shape({
     .typeError('You need to enter number')
     .required('Royalties must be less than or equal to 10'),
   copiesCount: yup.number().typeError('You need to enter number'),
-  properties: yup.object().shape({
-    name: yup.string().required('You need to enter the start date'),
-    value: yup.string().required('You need to enter the end date'),
-  }),
+  transferAddr: yup.mixed()
+  // properties: yup.object().shape({
+  //   name: yup.string().required('You need to enter the start date'),
+  //   value: yup.string().required('You need to enter the end date'),
+  // }),
 });
 
 type PreviewType = { file: string; cover?: string; type: string; base64: string; imagetype: string };
@@ -118,7 +125,8 @@ interface ICollectibleForm {
   name: string;
   description: string;
   royalties: number;
-  properties: { name: string; value: string };
+  transferAddr: string;
+  // properties: { name: string; value: string };
 }
 
 const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
@@ -134,6 +142,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [createTokenError, setCreateTokenError] = useState<string>('');
   const currency = useSelector<AppState, number>(ethToUsdRateSelector);
   const [tempToken, setTempToken] = useState<TempTokenData | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -148,6 +157,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       onAuction: false,
       instantPrice: true,
       unlock: true,
+
       unlockContent: '',
       // price: 10,
       collection: '',
@@ -155,10 +165,15 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
       description: '',
       // royalties: 10,
       // copiesCount: 1,
-      properties: {
-        name: '',
-        value: '',
-      },
+      // properties: {
+      //   name: '',
+      //   value: '',
+      // },
+
+      // properties: {
+      //   name: '',
+      //   value: '',
+      // }, -->
     },
   });
 
@@ -235,7 +250,14 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [itemCreated, setItemCreated] = useState(false);
   const [onSale, setOnSale] = useState(false);
   const [confirmOnSale, setConfirmOnSale] = useState(false);
+  const [confirmOnAuction, setConfirmOnAuction] = useState(false);
   const [celebrity, setCelebrity] = useState(false);
+  const [showOptionFailedPopup, setShowOptionFailedPopup] = useState(false);
+  const [showNotApproved, setShowNotApproved] = useState(false);
+  const [contractTokenIds, setContractTokenIds]: any = useState([]);
+  const [onAuction, setOnAuction] = useState(false);
+  const [transferAddr, setTransferAddr] = React.useState('');
+
   const tryUploadFiles = async (files: Array<Promise<any>>) => {
     try {
       return await Promise.all(files);
@@ -264,20 +286,11 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     init();
     checkCelebrity();
   }, []);
+
+  const [incorrectMetamaskAddr, setIncorrectMetamaskAddr] = useState(false);
   const onSubmit = async (data: ICollectibleForm) => {
-    const {
-      properties,
-      copiesCount,
-      royalties,
-      name,
-      instantPrice,
-      price,
-      unlock,
-      collection,
-      description,
-      onSale,
-      onAuction,
-    } = data;
+    const { transferAddr,copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale, onAuction } =
+      data;
     console.log(data);
     console.log(preview);
     const metamaskAddr = readCookie('metamask_address');
@@ -285,81 +298,150 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     console.log('isAPprovedArtist', approval);
 
     //check if it celebrity or not
+    if (onSale && onAuction) {
+      setShowOptionFailedPopup(true);
+    } else {
+      if (approval) {
+        if (celebrity) {
+          if(transferAddr != '' && transferAddr.length == 42){
+            console.log(celebrity);
+            setItemCreated(true);
+            const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+            setContractTokenIds([...contractTokenIds, tokenId]);
+            setItemCreated(false);
 
-    if (approval) {
-      if (celebrity) {
-        console.log(celebrity);
-        setItemCreated(true);
-        const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-        if (tokenId != undefined) {
-          console.log('11111 create', tokenId);
-          createCollection(collection)
-            .then(response => {
-              console.log(response);
-              const collectible = {
-                status: 'onHold',
-                copies: copiesCount,
-                name: name,
-                tokenIds: tokenId,
-                royalties: royalties,
-                collectionId: response.data.id,
-                price: price,
-                file: {
-                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                  mediaType: preview.imagetype,
-                  content: preview.base64,
-                },
-                thumbnail: {
-                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                  mediaType: preview.imagetype,
-                  content: preview.base64,
-                },
-              };
-
-              createCollectible(collectible)
-                .then(res => {
-                  setShowPopup(true);
+            if (tokenId != undefined) {
+              console.log('11111 create', tokenId);
+              createCollection(collection)
+                .then(response => {
+                  console.log(response);
+                  const collectible = {
+                    status: 'onHold',
+                    copies: copiesCount,
+                    name: name,
+                    tokenIds: tokenId,
+                    royalties: royalties,
+                    collectionId: response.data.id,
+                    price: price,
+                    file: {
+                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                      mediaType: preview.imagetype,
+                      content: preview.base64,
+                    },
+                    thumbnail: {
+                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                      mediaType: preview.imagetype,
+                      content: preview.base64,
+                    },
+                  };
+  
+                  createCollectible(collectible)
+                    .then(async (res) => {
+                      await handleTransferToken(transferAddr)
+                      setShowPopup(true);
+                    })
+                    .catch(error => {
+                      setShowFailedPopup(true);
+                      console.log(error);
+                    });
                 })
-                .catch(error => {
-                  setShowFailedPopup(true);
-                  console.log(error);
+                .catch(err => {
+                  console.log(err.message);
                 });
-            })
-            .catch(err => {
-              console.log(err.message);
-            });
-        }
-      } else {
-        // const startTimeInSec = new Date.parse(properties.name);
-        //   const endTimeInSec = new Date(properties.value);
-        const startTimeInSec = moment(properties.name).format('x');
-          console.log(startTimeInSec)
-        const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-        console.log('createForm-259', tokenId);
-
-        //check if item is on sale or not
-        if (onSale) {
-          const batchPutOnSale: any = [];
-          //           for(let i=0; i<tokenId.length;i++){
-          //             batchPutOnSale.push(web3Contract.marketplacePutOnSaleCollectible(tokenId[i], price.toString()))
-          //           }
-          //           Promise.all(batchPutOnSale).then(resolve=>{
-          // console.log(resolve)
-          //           }).catch(error=>console.log(error.message))
-          const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
-          setOnSale(true);
+            }
+          }else{ setIncorrectMetamaskAddr(true)}
+          
+          
+        } else {
+          //creating on chain
+          setItemCreated(true);
+          const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+          console.log('createForm-259', tokenId);
+          setContractTokenIds([...contractTokenIds, tokenId]);
           setItemCreated(false);
-          buyResult
-            .wait()
-            .then((res: any) => {
-              setOnSale(false);
-              setConfirmOnSale(true);
+          //check if item is on sale or not
+          if (onSale) {
+            const batchPutOnSale: any = [];
+            setOnSale(true);
+            setItemCreated(false);
+            for (let i = 0; i < tokenId.length; i++) {
+              batchPutOnSale.push(web3Contract.marketplacePutOnSaleCollectible(tokenId[i], price.toString()));
+            }
 
-              // create a collection token and add the collectible to database
+            Promise.all(batchPutOnSale)
+              .then(resolve => {
+                console.log(resolve);
+                setOnSale(false);
+                setConfirmOnSale(true);
+
+                createCollection(collection)
+                  .then(response => {
+                    const collectible = {
+                      status: 'onSale',
+                      copies: copiesCount,
+                      name: name,
+                      tokenIds: tokenId,
+                      royalties: royalties,
+                      collectionId: response.data.id,
+                      price: price,
+                      file: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                        mediaType: preview.imagetype,
+                        content: preview.base64,
+                      },
+                      thumbnail: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                        mediaType: preview.imagetype,
+                        content: preview.base64,
+                      },
+                    };
+
+                    createCollectible(collectible)
+                      .then(res => {
+                        setShowPopup(true);
+                      })
+                      .catch(error => {
+                        console.log(error);
+                      });
+                  })
+                  .catch((error: any) => {
+                    console.log(error);
+                  });
+              })
+              .catch(error => {
+                setOnSale(false);
+                console.log(error.message);
+              });
+
+            // const buyResult = await web3Contract.marketplacePutOnSaleCollectible(tokenId[0], price.toString());
+            // setOnSale(true);
+            // setItemCreated(false);
+            // buyResult
+            //   .wait()
+            //   .then((res: any) => {
+            //     setOnSale(false);
+            //     setConfirmOnSale(true);
+
+            //     // create a collection token and add the collectible to database
+            //   })
+            //   .catch((err: { message: any }) => {
+            //     setOnSale(false);
+            //     alert(err.message);
+            //     console.log(err.message);
+            //   });
+          } else if (onAuction) {
+            // const startTimeInSec = moment(properties.name).format('x');
+            // const endTimeInSec = moment(properties.value).format('X');
+            const startTime = Math.floor(new Date().getTime() / 1000); //currentime
+            const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
+            console.log(startTime, endTime);
+
+            //putOnAuction()
+            if (tokenId.length > 0) {
               createCollection(collection)
                 .then(response => {
                   const collectible = {
-                    status: 'onSale',
+                    status: 'onAuction',
                     copies: copiesCount,
                     name: name,
                     tokenIds: tokenId,
@@ -379,8 +461,50 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   };
 
                   createCollectible(collectible)
-                    .then(res => {
-                      setShowPopup(true);
+                    .then(async res => {
+                      const collectibleIdsPromise: any = [];
+                      const setAsAuctionPromise: any = [];
+                      let collectibleIds: any = [];
+                      for (let i = 0; i < tokenId.length; i++) {
+                        collectibleIdsPromise.push(getCollectibleByTokenId(tokenId[i]));
+                      }
+
+                      Promise.all(collectibleIdsPromise)
+                        .then(result => {
+                          console.log('promise result', result);
+                          collectibleIds = result.map((item: any) => item.id);
+                          setOnAuction(true);
+                          for (let i = 0; i < collectibleIds.length; i++) {
+                            const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
+                            const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
+
+                            setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
+                          }
+                        })
+                        .catch(err => console.log(err.message));
+
+                      Promise.all(setAsAuctionPromise)
+                        .then(async result => {
+                          console.log('!!!auction promise', result);
+                          const auctionData = {
+                            price: price,
+                            startTime: startTime * 1000,
+                            endTime: endTime * 1000,
+                          };
+                          for (let i = 0; i < collectibleIds.length; i++) {
+                            await putOnAuction(collectibleIds[i], auctionData);
+                          }
+                          setOnAuction(false);
+                          setConfirmOnAuction(false);
+                        })
+                        .catch(err => {
+                          setOnAuction(false);
+                          console.log(err.message);
+                        });
+                      //console.log('!!!!!collectible by id ', data);
+
+                      //const response = await web3Contract.setAsAuction(tokenId[0], price, startTime, endTime);
+                      //
                     })
                     .catch(error => {
                       console.log(error);
@@ -389,23 +513,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 .catch((error: any) => {
                   console.log(error);
                 });
-            })
-            .catch((err: { message: any }) => {
-              setOnSale(false);
-              alert(err.message);
-              console.log(err.message);
-            });
-        } else if (onAuction) {
-          const startTimeInSec = moment(properties.name).format('x');
-          const endTimeInSec = moment(properties.value).format('X');
-          console.log(startTimeInSec, endTimeInSec);
-          const response = await web3Contract.setAsAuction(tokenId[0], price, startTimeInSec, endTimeInSec);
-          //putOnAuction()
-          if (response.transactionHash) {
+            }
+          } else {
+            //not on sale it should insert into DB
             createCollection(collection)
               .then(response => {
                 const collectible = {
-                  status: 'onSale',
+                  status: 'onHold',
                   copies: copiesCount,
                   name: name,
                   tokenIds: tokenId,
@@ -426,9 +540,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
                 createCollectible(collectible)
                   .then(res => {
-                    // putOnAuction(price, startTimeInSec, endTimeInSec).then(res => {
-                    //   setShowPopup(true);
-                    // });
+                    setShowPopup(true);
                   })
                   .catch(error => {
                     console.log(error);
@@ -438,47 +550,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 console.log(error);
               });
           }
-        } else {
-          //not on sale it should insert into DB
-          createCollection(collection)
-            .then(response => {
-              const collectible = {
-                status: 'onHold',
-                copies: copiesCount,
-                name: name,
-                tokenIds: tokenId,
-                royalties: royalties,
-                collectionId: response.data.id,
-                price: price,
-                file: {
-                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                  mediaType: preview.imagetype,
-                  content: preview.base64,
-                },
-                thumbnail: {
-                  fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                  mediaType: preview.imagetype,
-                  content: preview.base64,
-                },
-              };
-
-              createCollectible(collectible)
-                .then(res => {
-                  setShowPopup(true);
-                })
-                .catch(error => {
-                  console.log(error);
-                });
-            })
-            .catch((error: any) => {
-              console.log(error);
-            });
         }
-      }
 
-      // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
-    } else {
-      alert('You are not approved to create collectibles');
+        // await createCollectible({name:name, royalties:royalties, price:price, tokenIds:tokenId, name:collection, file:{fileName: file[0].name, mediaType: type}});
+      } else {
+        setShowNotApproved(true);
+      }
     }
 
     /*if (!chainId) return
@@ -569,6 +646,49 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const { price } = previewFields;
   const ethAmount = price ? price - price * 0.025 : 0;
   const usdAmount = price ? convertEthToUsd(price, currency) : '0.00';
+
+const [showTranferFailed,setShowTranferFailed] = useState(false);
+
+  const handleTransferToken = async (addr: any) => {
+    console.log(addr);
+    const promise: any = [];
+    const collectibleIds: any = [];
+    console.log(contractTokenIds);
+    const lowerAddr = addr.toLowerCase();
+    if (lowerAddr != '') {
+      for (let i = 0; i < contractTokenIds.length; i++) {
+        collectibleIds.push(getCollectibleByTokenId(contractTokenIds[i]));
+      }
+      try {
+        Promise.all(promise)
+        .then(result => {
+          console.log(result);
+          const ids = result.map((item: any) => item.id);
+          for (let i = 0; i < ids.length; i++) {
+            promise.push(web3Contract.transferCollectible(ids[i], lowerAddr));
+          }
+        })
+
+        Promise.all(promise)
+        .then(async result => {
+          console.log(result);
+          //api
+          const allIds = collectibleIds.map((item: any) => item.id);
+          for (let i = 0; i < allIds.length; i++) {
+            await transferCollectibles(allIds[i], lowerAddr);
+          }
+        })
+  
+        .catch(err => console.log(err.message));
+      } catch (error) {
+        setShowTranferFailed(true)
+        console.log(error.message)
+      }
+      
+
+      
+    }
+  };
 
   return (
     <div className={classes.form}>
@@ -742,7 +862,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             </FormControl>
           )}
           <div className={classes.subtitle}>Put your Price</div>
-     
+
           {/* <FormControlLabel
             control={<Switch inputRef={register} name='instantPrice' />}
             classes={{ root: classes.switchLabel }}
@@ -872,10 +992,45 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                 </div>
               )}
             </div>
-            {watch('onAuction') && (
+            {celebrity&&(
+              <div className={classes.input}>
+                  <label htmlFor='copiesCount' className={classes.label}>
+                    Enter drop of the day creator metamask address
+                  </label>
+                  <Input
+                    id='transfer'
+                    placeholder='Enter address 0x...'
+                    inputRef={register}
+                    required
+                    //onChange={e => setTransferAddr(e.target.value)}
+                    disableUnderline
+                    name='transferAddr'
+                  />
+                  {errors.transferAddr && <p className={classes.textError}>{errors.transferAddr.message}</p>}
+                </div>
+            )}
+            
+            {/* <Input
+              id='transfer'
+              placeholder='Enter address 0x...'
+              // disableUnderline
+              inputRef={register}
+              // className={classes.transferContainerInputBox}
+              onChange={e => setTransferAddr(e.target.value)}
+              value={transferAddr}
+              name='transferAddr'
+            /> */}
+            {/* <Button
+              type='submit'
+              onClick={() => handleTransferToken(transferAddr)}
+              className={classes.transferContainerButton}
+            >
+              Transfer Your Items
+            </Button> */}
+            {/* {watch('onAuction') && (
               <div className={classes.input}>
                 <label htmlFor='size' className={classes.label}>
-                  {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> */}
+                  {/* <Trans i18nKey='propertiesOptional' components={{ 1: <span /> }} /> }
                   Start and End Date
                 </label>
                 <div>
@@ -908,21 +1063,26 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
           <div className={classes.footer}>
             <Button disabled={isErrors()} type='submit'>
               {text['createItem']}
             </Button>
             {itemCreated ? <span>Creating item in progress....</span> : ''}
-            {onSale ? (
+            {onSale && (
               <>
                 <span>Item created successfully!</span>
                 <span>Putting item on sale in progress...</span>
               </>
-            ) : (
-              ''
             )}
+            {onAuction && (
+              <>
+                <span>Item created successfully!</span>
+                <span>Putting item on auction in progress...</span>
+              </>
+            )}
+            {confirmOnAuction ? <span>Item is on auction now!</span> : ''}
             {confirmOnSale ? <span>Item is on sale now!</span> : ''}
           </div>
 
@@ -934,23 +1094,27 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           )}
         </div>
       </form>
+
       <Preview
         fileSrc={preview.type === 'image' ? preview.file : preview.cover}
         fields={previewFields}
         isSingle={isSingle}
+        handleTransferToken={handleTransferToken}
+        celebrity={celebrity}
       />
+
       <ProgressModal
         createTokenError={createTokenError}
         onTryAgain={handleTryAgain}
         open={OpenSubmitModal}
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
+
       <Popup
         open={showPopup}
         textheader='Created collectible;;You successfully created a collectible, please check the dashboard'
         onClose={() => {
           setShowPopup(false);
-          location.replace('/');
         }}
       ></Popup>
       <Popup
@@ -958,6 +1122,27 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         textheader='Create collectible;;You failed to create a collectible. Please try again'
         onClose={() => setShowFailedPopup(false)}
       ></Popup>
+      <Popup
+        open={showOptionFailedPopup}
+        textheader='Please select one option. Either Put onSale or Put onAuction'
+        onClose={() => setShowOptionFailedPopup(false)}
+      ></Popup>
+      <Popup
+        open={showNotApproved}
+        textheader='Sorry, you are not approved artist!'
+        onClose={() => setShowNotApproved(false)}
+      ></Popup>
+      <Popup
+        open={incorrectMetamaskAddr}
+        textheader='Metamask address is incorrect!'
+        onClose={() => setIncorrectMetamaskAddr(false)}
+      ></Popup>
+      <Popup
+        open={showTranferFailed}
+        textheader="Sorry, transfer failed"
+        onClose={() => setShowTranferFailed(false)}
+      ></Popup>
+      
     </div>
   );
 };

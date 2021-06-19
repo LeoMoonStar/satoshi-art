@@ -181,13 +181,17 @@ const useStyles = makeStyles(() => {
 	    },
 	    mostViewedVideos: {
 	    	display: 'flex',
-	    	flexDirection: 'row'
+
+	    	flexDirection: 'row',
+	    	margin: '50px 0'
 	    },
 	    mostViewedVideo: {
 	    	margin: '0 20px',
+	    	width: 250,
 
 	    	'& img': {
-	    		height: 150
+	    		width: 270
+
 	    	},
 
 	    	'&:hover': {
@@ -195,6 +199,12 @@ const useStyles = makeStyles(() => {
 	    		opacity: 0.5
 	    	}
 	    },
+
+	    mostViewedVideoThumbnail: {
+	    	margin: '0 auto',
+	    	width: 270
+	    },
+
 	    mostViewedVideoDuration: {
 	    	backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	    	borderRadius: 3,
@@ -206,7 +216,9 @@ const useStyles = makeStyles(() => {
 	    mostViewedVideoInfo: {
 	    	color: 'white',
 	    	height: 150,
-	    	margin: '0px 0 0 0'
+
+	    	margin: '0px auto 0 auto'
+
 	    },
 	    mostViewedVideoHeader: {
 	    	fontWeight: 'bold'
@@ -215,7 +227,9 @@ const useStyles = makeStyles(() => {
 	    	backgroundColor: 'rgba(127, 127, 127, 0.5)',
 			height: 2,
 			margin: '10px 0',
-			width: 220
+
+			width: 270
+
 	    },
 	    mostViewedVideoMiniHeader: {
 	    	marginBottom: 20
