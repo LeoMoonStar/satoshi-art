@@ -14,7 +14,7 @@ type TokensSliderProps = {
 
 export default function TokenCard({ token, renderContent: RenderContent }: TokensSliderProps): JSX.Element {
   const classes = useStyles();
-  console.log("in the token card",token)
+  // console.log("in the token card",token)
   return (
     <Link to={`/edit-collectible/${token.id}`} className={classes.card} key={token.id}>
       <div className={classes.topWrapper}>

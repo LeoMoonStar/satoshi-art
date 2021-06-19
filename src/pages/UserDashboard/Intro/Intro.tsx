@@ -19,7 +19,7 @@ const convertDateToSting = (date: Date): string => {
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 };
 
-export default function CardsStatistics(): JSX.Element {
+export default function CardsStatistics({setSearchPeriod}:{setSearchPeriod:any}): JSX.Element {
   const classes = useStyles();
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
@@ -32,11 +32,17 @@ export default function CardsStatistics(): JSX.Element {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+
+    // console.log("in canlander:",startDate.getTime(), endDate.getTime())
   };
 
   const handleDone = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
     setOpenFilter(false);
+    setSearchPeriod(startDate.getTime(),endDate.getTime());
+
+    console.log("in canlander:",startDate.getTime(), endDate.getTime())
+
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLButtonElement>): void => {

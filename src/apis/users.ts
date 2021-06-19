@@ -20,6 +20,35 @@ export type UserProfile = {
 export const getDropOfTheDay = () => {
   return axios.get(`${process.env.REACT_APP_API}/api/public/home/dropOfTheDay`);
 };
+export const getBidStatistics = async() => {
+  console.log("pulling data")
+  // return axios.get(`${process.env.REACT_APP_API}/api/auth/user/bid-statistics`);
+  return axios.get(
+    `${process.env.REACT_APP_API}/api/auth/user/bid-statistics`,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  );
+};
+export const getBidHistory = async(searchStart:number, searchEnd:number) => {
+  console.log("pulling data:", searchStart, searchEnd)
+  // return axios.get(`${process.env.REACT_APP_API}/api/auth/user/bid-statistics`);
+  return axios.get(
+    `${process.env.REACT_APP_API}/api/auth/user/bid-price-history?startDate=${searchStart}&endDate=${searchEnd=162402465651211}`,
+    {
+      headers: {
+        id: readCookie('id'),
+        token: readCookie('token'),
+        metamask_address: readCookie('metamask_address'),
+      },
+    }
+  );
+};
+
 
 export const followUser = async (otherMetamaskId: string) => {
   console.log(otherMetamaskId)
