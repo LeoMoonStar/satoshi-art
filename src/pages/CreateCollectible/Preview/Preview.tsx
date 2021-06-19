@@ -39,7 +39,7 @@ const Preview = ({ isSingle, fileSrc, fields, handleTransferToken, celebrity }: 
           <span>{fields.unlockContent}</span>
         </div>
       )}
-      {celebrity && (
+      {/* {celebrity && (
         <div className={classes.transferContainer}>
           <Input
             id='transfer'
@@ -58,7 +58,7 @@ const Preview = ({ isSingle, fileSrc, fields, handleTransferToken, celebrity }: 
             Transfer Your Items
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

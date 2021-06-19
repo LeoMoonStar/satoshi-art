@@ -3,6 +3,13 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles((theme) => {
 
     return {
+        errorMessage: {
+            margin: '16px 0 4px',
+            width: '100%',
+            textAlign: 'center',
+            color: 'red',
+            fontWeight: 600,
+          },
         auctionTimer:{
             justifyContent: 'space-between',
             textAlign:'center'

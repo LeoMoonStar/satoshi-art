@@ -24,7 +24,7 @@ import { Modal as MUIModal } from '@material-ui/core';
 
 import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon, LeftArrowIcon } from 'components/icons';
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes';
-import { getCollectible, putCollectibleOnSale, removeCollectibleFromSale, putOnAuction } from 'apis/collectibles';
+import { getCollectible, putCollectibleOnSale, removeCollectibleFromSale, putOnAuction, bidCollectible } from 'apis/collectibles';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Layout from 'components/layout';
@@ -114,25 +114,33 @@ export default function EditCollectible() {
         newInfo.metamaskId = data.ownerMetamaskId;
         setInfo(newInfo);
 
-        web3Contract
-          .checkCollectibleStatus(data.ownerMetamaskId, data.tokenId)
-          .then(res => {
-            const newListing = { ...listingStatus };
-            newListing.status = res[0];
-            newListing.highestBidderAddres = res[6];
-            newListing.startTime = res[2];
-            newListing.endTime = res[3];
-            setLisitingStatus(newListing);
-          })
-          .catch(err => console.log(err.message));
+        // web3Contract
+        //   .checkCollectibleStatus(data.ownerMetamaskId, data.tokenId)
+        //   .then(res => {
+        //     const newListing = { ...listingStatus };
+        //     newListing.status = res[0];
+        //     newListing.highestBidderAddres = res[6];
+        //     newListing.startTime = res[2];
+        //     newListing.endTime = res[3];
+        //     setLisitingStatus(newListing);
+        //   })
+        //   .catch(err => console.log(err.message));
+
+      
+      
       });
     }
     init();
   }, []);
 
   const init = async () => {
-    const managerAddress = await web3Contract.requestMetamaskAccess();
+    try {
+      const managerAddress = await web3Contract.requestMetamaskAccess();
     setAccountAddress(managerAddress[0]);
+    } catch (error) {
+      console.log(error.message)
+    }
+    
   };
   //auction
   const setOnAuction = async () => {
@@ -332,16 +340,18 @@ export default function EditCollectible() {
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewBidAmount((event.target.value))
-  };
+  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setNewBidAmount((event.target.value))
+  // };
 
-  const processNewBid = () => {
-    // If sucessed
-    // setShowSucceedPopup(true);
-    // if failed;
-    setShowFailedPopup(true);
-  }
+  // const processNewBid = () => {
+  //   // If sucessed
+  //   // setShowSucceedPopup(true);
+  //   // if failed;
+  //   console.log(newBidAmount)
+  //   setShowFailedPopup(true);
+
+  // }
 
   const [showAccountFailedPopup, setShowAccountFailedPopup] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -391,27 +401,88 @@ export default function EditCollectible() {
     }
   };
 
+const [bidPrice, setBidPrice] = useState('');
+const [currentBid, setCurrentBid] = useState('');
+const [bidAmount, setBidAmount]:any = useState('');
+const [bidProccessing, setBidProcessing] = useState(false)
+const [bidShowPopup, setBidShowPopup] = useState(false)
+const [bidFailedPopup, setBidFailedPopup] = useState(false)
+const [ownerFailedPopup,setOwnerFailedPopup] = useState(false)
+const [error, setError] = useState<string | null>(null);
 
+  const highestBidPrice = async()=>{
+    try {
+      const highestBidPrice = await web3Contract.checkCollectibleStatus(info.metamaskId, info.tokenId)  
+      console.log(highestBidPrice[7])
+      setBidPrice(web3.utils.fromWei(highestBidPrice[7].toString(),'ether'));
+      console.log(web3.utils.fromWei(highestBidPrice[7],'ether'))
+    } catch (error) {
+      console.log(error.message)
+    }
+    
+  }
+  const handleCurrentBid = async()=>{
+return null
+  }
+  const handlePutYourBid = async()=>{
+    const bidValue = Number(bidAmount);
+    console.log(accountAddress)
+    if (accountAddress == ''){setShowConnectionPopup(true)}
+    else{
+
+      const userBalance = await web3Contract.userBalance(accountAddress);
+      if (Number(bidValue) > Number(userBalance)) {
+        setError('Not enough funds');
+      } else if (Number(bidValue) <= Number(bidPrice)) {
+        setError('Bid Should be higher than highest bid amount');
+      } else if (Number(bidValue) < Number(info.price)) {
+        setError('Bid Should be higher than starting price');
+      } else if(accountAddress == info.metamaskId){
+          setOwnerFailedPopup(true)
+      }else {
+        setError(null);
+        console.log('bidded')
+  
+        try {
+          setBidProcessing(true)
+          const response = await web3Contract.bid(info.tokenId, info.metamaskId, bidValue);
+          console.log(response);
+          if(response){
+            await bidCollectible(info.collectibleId, Number(bidValue));
+            setBidProcessing(false)
+            setBidShowPopup(true)
+          }
+          
+        } catch (error) {
+          setBidProcessing(false)
+          setBidFailedPopup(true)
+          console.log(error.message);
+          
+        }
+      }
+    }
+    // setUserBalance(balance);
+  }
   return (
     <Layout>
       <div className={classes.headers}>
         <Link className={classes.goBack} to='/dashboard/user'>
           <LeftArrowIcon /> Back
         </Link>
-        <Typography variant='h2'>Increasw Your Bid Now!</Typography>
+        <Typography variant='h2'>Increase Your Bid Now!</Typography>
         {console.log("in Edit collectible:", info)}
       </div>
       <div className={classes.container}>
 
         <div className={classes.col}>
           <div className={classes.buttonRow}>
-            <Button variantCustom='linkButton' style={{ borderRadius: '8px', width: "400px" }}>
-              The Current Highest Bid: ETH
+            <Button variantCustom='linkButton' onClick={highestBidPrice}style={{ borderRadius: '8px', width: "400px" }}>
+              The Current Highest Bid: {bidPrice} ETH
             </Button>
           </div>
           <div className={classes.buttonRow}>
-            <Button  variantCustom='linkButton' style={{ borderRadius: '8px', width: "400px" }}>
-              Your Current Bid: ETH
+            <Button  variantCustom='linkButton' onClick={handleCurrentBid}style={{ borderRadius: '8px', width: "400px" }}>
+              Your Current Bid: {currentBid} ETH
             </Button>
           </div>
           <div className={classes.buttonRow}>
@@ -421,8 +492,10 @@ export default function EditCollectible() {
                 id='newBidAmount'
                 placeholder='Increase your amount...'
                 name='newBidAmount'
+                onChange={(e)=>setBidAmount(e.target.value)}
                 type="number"/>
 
+            {error && <div className={classes.errorMessage}>{error}</div>}
         <div className={classes.leftCol}>
           {/* <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div> */}
         </div>
@@ -432,7 +505,7 @@ export default function EditCollectible() {
               {/* <Typography variant='h6' className={classes.artLabel}>
                 ART
               </Typography> */}
-              <Typography variant='h1'>{info.name}</Typography>
+              {/* <Typography variant='h1'>{info.name}</Typography> */}
             </div>
 
             {/*<div className={classes.ownerContainer}>
@@ -448,7 +521,7 @@ export default function EditCollectible() {
 		                </div>*/}
             {/* <label htmlFor='type'>**Your item is on </label> */}
             <div className={classes.form}>
-              {info.status == 'onAuction' ? (
+              {/**info.status == 'onAuction' ? (
                 <FormControl className={classes.fieldGroup}>
                   <label htmlFor='type'>Collectible current price</label>
                   <Input
@@ -463,9 +536,9 @@ export default function EditCollectible() {
                   />
                   {priceError && <small className={classes.inputError}>{text['fieldIsRequired']}</small>}
 
-                  {/* <Button variantCustom="action" type="submit" style={{ backgroundColor: '#5113D5' }}>Change price</Button> */}
+                  {/* <Button variantCustom="action" type="submit" style={{ backgroundColor: '#5113D5' }}>Change price</Button> }
                 </FormControl>
-              ) : null}
+              ) : null **/}
 
               {/* <div style={{ width: "400px" }}>
               <TextField
@@ -482,9 +555,9 @@ export default function EditCollectible() {
             </div>
 
           </div>
-
+          {bidProccessing&&<div className={classes.errorMessage}>In Processing...</div>}
           <div className={classes.buttonRow}>
-            <Button  variantCustom='action' style={{ width: "400px" }} onClick={() => { processNewBid() }}>
+            <Button  variantCustom='action' disabled={bidProccessing} style={{ width: "400px" }} onClick={handlePutYourBid}>
               Confirm Your Bid
             </Button>
           </div>
@@ -502,12 +575,12 @@ export default function EditCollectible() {
                 />
               </LocalizationProvider>
 			</div> */}
-            {info.status == 'onHold' ? (
+            {/* {info.status == 'onHold' ? (
               <div style={{ marginLeft: '120px' }}>
                 <Checkbox checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
                 <span>Put on Auction</span>
               </div>
-            ) : null}
+            ) : null} */}
 
             {/* {checked ? (
               <>
@@ -652,6 +725,11 @@ export default function EditCollectible() {
         onClose={() => setShowConnectionPopup(false)}
       ></Popup>
       <Popup
+        open={ownerFailedPopup}
+        textheader={'Bid Failed;;Owner cannot place bid'}
+        onClose={() => setOwnerFailedPopup(false)}
+      ></Popup>
+      <Popup
         open={showFailedPopup}
         textheader={'Collectible status;;You failed to update your collectible status, Please try again'}
         onClose={() => setShowFailedPopup(false)}
@@ -663,11 +741,20 @@ export default function EditCollectible() {
         onClose={() => setShowPopup(false)}
 
       ></Popup> 
-  
+      <Popup
+        open={bidShowPopup}
+        textheader={'Bid status;;The Item was successfully bid'}
+        onClose={() => setBidShowPopup(false)}
+      ></Popup>
+      <Popup
+        open={bidFailedPopup}
+        textheader={'Bid status;;Bid Failed'}
+        onClose={() => setBidFailedPopup(false)}
+      ></Popup>
       <Popup
         open={showAccountFailedPopup}
         textheader={
-          'Collectible status;;You failed to update your collectible status, You are not the owner of this collectible'
+          'Bid Failed;;You failed to update your collectible status, You are not the owner of this collectible'
         }
         onClose={() => setShowAccountFailedPopup(false)}
       ></Popup>
