@@ -41,18 +41,15 @@ ILayoutProps): JSX.Element => {
   let { account } = useWeb3React();
   // const connected = useConnect();
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
-  
+
   const sign = async () => {
-    
     const web3 = new Web3(window.ethereum);
-    console.log()
+    console.log();
     if (typeof web3 == undefined) {
-      alert(web3)
+      alert(web3);
       setShowConnectionPopup(true);
-    }
-    else{
-      
-      if (window.ethereum!=undefined) {
+    } else {
+      if (window.ethereum != undefined) {
         // resolve temporary problem
         const accounts = await web3.eth.getAccounts();
         if (window.ethereum) {
@@ -62,10 +59,10 @@ ILayoutProps): JSX.Element => {
             await window.ethereum.request({
               method: 'eth_requestAccounts',
             });
-  
+
             if (isInLoginAsMode()) {
               console.log('user sign in');
-  
+
               console.log('id', readCookie('id'));
               console.log('token', readCookie('token'));
               console.log('metamask_address', readCookie('metamask_address'));
@@ -73,7 +70,7 @@ ILayoutProps): JSX.Element => {
               console.log(`Account before get challenge ${account}`);
               const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
               const challenge = res.data;
-  
+
               (web3 as any).currentProvider.send(
                 {
                   method: 'eth_signTypedData',
@@ -81,32 +78,38 @@ ILayoutProps): JSX.Element => {
                   from: account,
                 },
                 (error: any, res: any) => {
-                  eraseLoginAsCookies();
-                  axios
-                    .get(
-                      `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
-                    )
-                    .then(sigRes => {
-                      if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
-                        console.log('Signature verified');
-                        createLoginAsCookies({
-                          id: sigRes.data.id,
-                          metamask_address: sigRes.data.metamaskId,
-                          token: sigRes.data.token,
-                        });
-  
-                        console.log('id', sigRes.data.id);
-                        console.log('token', sigRes.data.token);
-                        console.log('metamask_address', sigRes.data.metamaskId);
-  
-                        setShowPopup(true);
-                        setShowConnectionPopup(false)
-                      } else {
-                        setShowFailedPopup(true);
-                        console.log('Signature not verified');
-                      }
-                    })
-                    .catch(err => console.log(err));
+                  if (error) {
+                    eraseLoginAsCookies();
+                    // change redux value of connection
+                  }
+                  if (res) {
+                    eraseLoginAsCookies();
+                    axios
+                      .get(
+                        `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
+                      )
+                      .then(sigRes => {
+                        if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
+                          console.log('Signature verified');
+                          createLoginAsCookies({
+                            id: sigRes.data.id,
+                            metamask_address: sigRes.data.metamaskId,
+                            token: sigRes.data.token,
+                          });
+
+                          console.log('id', sigRes.data.id);
+                          console.log('token', sigRes.data.token);
+                          console.log('metamask_address', sigRes.data.metamaskId);
+
+                          setShowPopup(true);
+                          setShowConnectionPopup(false);
+                        } else {
+                          setShowFailedPopup(true);
+                          console.log('Signature not verified');
+                        }
+                      })
+                      .catch(err => console.log(err));
+                  }
                 }
               );
             }
@@ -115,18 +118,16 @@ ILayoutProps): JSX.Element => {
           }
         }
       } else {
-        setShowConnectionPopup(true)
+        setShowConnectionPopup(true);
         console.log('No account detected');
         eraseLoginAsCookies();
       }
     }
-    
   };
   const [showPopup, setShowPopup] = useState(false);
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [accounts, setAccounts] = useState([]);
   useEffect(() => {
-   
     sign();
     // window.ethereum.on("accountsChanged", (accounts: any) => {
     //   setAccounts(accounts);
