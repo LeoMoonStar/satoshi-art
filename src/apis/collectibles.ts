@@ -309,7 +309,7 @@ export const getCurrentBidByCollectibleId = async(collectibleId:any)=>{
   return await axios.get(`${process.env.REACT_APP_API}/api/auth/user/collecbibles/${collectibleId}/current-bids`)
 }
 
-export const tradeCollectible = async(collectibleId:any, tradeType:any, price:any)=>{
+export const tradeCollectible = async(collectibleId:any, price:any,tradeType:any,)=>{
   return axios.post(`${process.env.REACT_APP_API}/api/auth/trade/${collectibleId}`,
   {
     price: price,
