@@ -365,10 +365,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           for (let i = 0; i < tokenId.length; i++) {
                             console.log(tokenId[i]);
                             collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
-                          }
-                        });
+                          };
 
-                        Promise.all(collectibleIds)
+                          Promise.all(collectibleIds)
                           .then(async result => {
                             console.log(result);
                             //api
@@ -376,17 +375,22 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             console.log(ids);
                             for (let i = 0; i < ids.length; i++) {
                               transferApi.push(transferCollectibles(ids[i], transferAddr.toLowerCase()));
-                            }
+                            };
+
+                            Promise.all(transferApi)
+                            .then(res => {
+                              console.log('Success!!!');
+                            })
+                            .catch(err => console.log(err.message));
                           })
                           .catch(err => console.log(err.message));
+                        });
 
-                        Promise.all(transferApi)
-                          .then(res => {
-                            console.log('Success!!!');
-                          })
-                          .catch(err => console.log(err.message));
+                        
 
-                          
+                       
+
+
                       } catch (error) {
                         setShowTranferFailed(true);
                         console.log(error.message);
