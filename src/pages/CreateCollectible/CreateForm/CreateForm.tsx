@@ -317,10 +317,15 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           if (transferAddr != '' && transferAddr.length == 42) {
             console.log(celebrity);
             setItemCreated(true);
-            const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+
+            const dotdCreator = await web3contract.isApprovedDropOfTheDayCreator(transferAddr);
+            console.log(dotdCreator)
+            if(dotdCreator){
+              const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
             setContractTokenIds(tokenId);
             setItemCreated(false);
-
+            
+            
             if (tokenId != undefined) {
               console.log('11111 create', tokenId);
               createCollection(collection)
@@ -405,6 +410,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   console.log(err.message);
                 });
             }
+          }
           } else {
             setIncorrectMetamaskAddr(true);
           }

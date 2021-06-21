@@ -394,4 +394,5 @@ export default {
   putOnHold,
   userBalance,
   checkCollectibleStatus,
+  isApprovedDropOfTheDayCreator,
 };

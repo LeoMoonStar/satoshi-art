@@ -326,15 +326,16 @@ const TokenDetails = (): JSX.Element => {
         
       // const onHold = await web3Contract.putOnHold(collectibleTokenId);
       // console.log(onHold);
-      const response = await web3Contract.auctionEnd(collectibleTokenId, collectibleOwner);
-      console.log(response);
+      web3Contract.auctionEnd(collectibleTokenId, collectibleOwner).then(res=>{
+        const tradeType='onAuction';
+         tradeCollectible(id, highestBidder.amount, tradeType).then(res=>{
+          setTransfered(true);
+         }).catch(err=>console.log(err.message))
+       
+      }).catch(err=>console.log(err.message))
+      
       //setTransfered(false)
-      if (response) {
-        //await transferCollectibles(id, receiverAddress);
-        const tradeType='onAuction'
-        await tradeCollectible(id, highestBidder.amount, tradeType)
-        setTransfered(true);
-      }
+     
     } catch (error) {
       setTransfered(false);
 
