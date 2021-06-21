@@ -617,7 +617,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const [showPopup, setShowPopup] = useState(false);
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const handleNumberInput = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(e.target.name, e.target.value.split(/\D/).join(''));
+    // setValue(e.target.name, e.target.value.split(/\D/).join(''));
+    setValue(e.target.name, e.target.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'));
+    
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     let index = 0;
     setValue(

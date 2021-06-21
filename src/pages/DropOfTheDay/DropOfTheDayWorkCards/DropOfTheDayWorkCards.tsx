@@ -9,7 +9,7 @@ import card4 from 'components/images/dropOfTheDay/card4.png';
 import useStyles from './DropOfTheDayWorkCards.style';
 import { getDropOfTheDay } from 'apis/users';
 import Works from 'components/widgets/Works';
-
+import cx from 'clsx';
 // import console from 'console';
 
 type DropOfTheDayWorkCardsProp = {
@@ -31,10 +31,14 @@ export default function OrderListFilters({contentList}: DropOfTheDayWorkCardsPro
 
         collectibles.map(({ id, status, thumbnailUrl, name }) => (
           <div key={id} className={classes.card}>
-            <img
+            <img src={thumbnailUrl} alt={''} />
+            {/* <div className={cx(classes.container)}>
+              <img src={thumbnailUrl} alt={''} />
+            </div> */}
+            {/* <img
               src={thumbnailUrl}
               alt=''
-            />
+            /> */}
             {console.log("in drop of the day work card", contentList)}
             <div className={classes.subTitle}>{name}</div>
               <div className={classes.content}>
