@@ -365,7 +365,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           for (let i = 0; i < tokenId.length; i++) {
                             console.log(tokenId[i]);
                             collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
-                          };
+                          }
 
                           Promise.all(collectibleIds)
                           .then(async result => {
@@ -375,7 +375,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             console.log(ids);
                             for (let i = 0; i < ids.length; i++) {
                               transferApi.push(transferCollectibles(ids[i], transferAddr.toLowerCase()));
-                            };
+                            }
 
                             Promise.all(transferApi)
                             .then(res => {
