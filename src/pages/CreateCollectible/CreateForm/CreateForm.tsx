@@ -342,28 +342,33 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                       const promise: any = [];
                       const collectibleIds: any = [];
                       
-                      for (let i = 0; i < tokenId.length; i++) {
-                        console.log(tokenId[i]);
-                        collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
-                      }
+                     
                       try {
-                        Promise.all(collectibleIds)
+                        for (let i = 0; i < tokenId.length; i++) {
+                          promise.push(web3Contract.transferCollectible(tokenId[i], transferAddr.toLowerCase()));
+                        }
+
+                        
+
+                        Promise.all(promise)
                         .then(result => {
                           console.log(result);
-                          //const ids = result.map((item: any) => item.id);
+                          
                           for (let i = 0; i < tokenId.length; i++) {
-                            promise.push(web3Contract.transferCollectible(tokenId[i], transferAddr.toLowerCase()));
+                            console.log(tokenId[i]);
+                            collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
                           }
+                          
                         })
                 
-                        Promise.all(promise)
+                        Promise.all(collectibleIds)
                         .then(async result => {
                           console.log(result);
                           //api
-                          const allIds = collectibleIds.map((item: any) => item.id);
-                          console.log(allIds)
-                          for (let i = 0; i < allIds.length; i++) {
-                            await transferCollectibles(allIds[i], transferAddr.toLowerCase());
+                          const ids = result.map((item: any) => item.id);
+                          console.log(ids)
+                          for (let i = 0; i < ids.length; i++) {
+                            await transferCollectibles(ids[i], transferAddr.toLowerCase());
                           }
                         })
                   
