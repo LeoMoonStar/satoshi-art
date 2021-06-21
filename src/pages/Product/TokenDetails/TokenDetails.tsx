@@ -35,7 +35,7 @@ import {
   getCollectibleLikes,
   getAuctionHistory,
   transferCollectibles,
-  tradeCollectible
+  tradeCollectible,
 } from 'apis/collectibles';
 import { getUserInfo } from 'apis/users';
 import { readCookie } from 'apis/cookie';
@@ -256,9 +256,9 @@ const TokenDetails = (): JSX.Element => {
     //check highest bidding address and amount
     const init = async () => {
       const { data } = await getCollectible(id);
-      console.log('!!!******!!*!*!*!*',data.tokenId)
+      console.log('!!!******!!*!*!*!*', data.tokenId);
       setCollectibleTokeId(data.tokenId);
-      setCollectibleOwner(data.ownerMetamaskId)
+      setCollectibleOwner(data.ownerMetamaskId);
 
       try {
         const listing = await web3Contract.checkCollectibleStatus(data.ownerMetamaskId, data.tokenId);
@@ -320,22 +320,23 @@ const TokenDetails = (): JSX.Element => {
 
   const [transfered, setTransfered] = useState(false);
   const transferItem = async (receiverAddress: any) => {
-    console.log('transfer item tokenId:',collectibleTokenId, receiverAddress);
+    console.log('transfer item tokenId:', collectibleTokenId, receiverAddress);
     try {
-      
-        
       // const onHold = await web3Contract.putOnHold(collectibleTokenId);
       // console.log(onHold);
-      web3Contract.auctionEnd(collectibleTokenId, collectibleOwner).then(res=>{
-        const tradeType='onAuction';
-         tradeCollectible(id, highestBidder.amount, tradeType).then(res=>{
-          setTransfered(true);
-         }).catch(err=>console.log(err.message))
-       
-      }).catch(err=>console.log(err.message))
-      
+      web3Contract
+        .auctionEnd(collectibleTokenId, collectibleOwner)
+        .then(res => {
+          const tradeType = 'onAuction';
+          tradeCollectible(id, highestBidder.amount, tradeType)
+            .then(res => {
+              setTransfered(true);
+            })
+            .catch(err => console.log(err.message));
+        })
+        .catch(err => console.log(err.message));
+
       //setTransfered(false)
-     
     } catch (error) {
       setTransfered(false);
 
@@ -552,7 +553,7 @@ const TokenDetails = (): JSX.Element => {
               <>
                 {highestBidder.status === ONAUCTION ? (
                   <>
-                    {parseInt(timeleft.diff) <= 0  ? (
+                    {parseInt(timeleft.diff) <= 0 ? (
                       <h1 className={classes.artLabel}>Auction Ended</h1>
                     ) : (
                       <>
@@ -595,24 +596,27 @@ const TokenDetails = (): JSX.Element => {
                           Receive Collectible
                         </Button>
                       ) : null}
-                      {collectible.status == 'onAuction' && parseInt(timeleft.diff) != 0 ?(
+                      {collectible.status == 'onAuction' && parseInt(timeleft.diff) != 0 ? (
                         <Button
-                        onClick={() => setIsBidModal(true)}
-                        label={text['placeABid']}
-                        className={classes.placeBidButton}
-                      />
-                      ):(
-                        <>
-                        {console.log("________ transfer",parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner)}
-                        {parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner ? (
-                        <Button
-                          variantCustom='action'
+                          onClick={() => setIsBidModal(true)}
+                          label={text['placeABid']}
                           className={classes.placeBidButton}
-                          onClick={() => transferItem(highestBidder.addr)}
-                        >
-                          Transfer Collectible
-                        </Button>
-                      ) : null}
+                        />
+                      ) : (
+                        <>
+                          {console.log(
+                            '________ transfer',
+                            parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner
+                          )}
+                          {parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner ? (
+                            <Button
+                              variantCustom='action'
+                              className={classes.placeBidButton}
+                              onClick={() => transferItem(highestBidder.addr)}
+                            >
+                              Transfer Collectible
+                            </Button>
+                          ) : null}
                         </>
                       )}
                     </>
@@ -689,7 +693,7 @@ const TokenDetails = (): JSX.Element => {
       <Popup open={showFailedBid} textheader={'You failed to bid'} onClose={() => setShowFailedBid(false)}></Popup>
       <Popup
         open={transfered}
-        textheader={`You're collectible has transfered to ${auctionBuyer.slice(0,4)+'...'+auctionBuyer.slice(-4)}`}
+        textheader={`You're collectible has transfered to ${auctionBuyer.slice(0, 4) + '...' + auctionBuyer.slice(-4)}`}
         onClose={() => setTransfered(false)}
       ></Popup>
 
