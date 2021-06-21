@@ -343,15 +343,16 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                       const collectibleIds: any = [];
                       
                       for (let i = 0; i < tokenId.length; i++) {
-                        collectibleIds.push(getCollectibleByTokenId(contractTokenIds[i]));
+                        console.log(tokenId[i]);
+                        collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
                       }
                       try {
-                        Promise.all(promise)
+                        Promise.all(collectibleIds)
                         .then(result => {
                           console.log(result);
-                          const ids = result.map((item: any) => item.id);
-                          for (let i = 0; i < ids.length; i++) {
-                            promise.push(web3Contract.transferCollectible(ids[i], transferAddr.toLowerCase()));
+                          //const ids = result.map((item: any) => item.id);
+                          for (let i = 0; i < tokenId.length; i++) {
+                            promise.push(web3Contract.transferCollectible(tokenId[i], transferAddr.toLowerCase()));
                           }
                         })
                 
