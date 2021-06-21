@@ -494,9 +494,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           } else if (onAuction) {
             // const startTimeInSec = moment(properties.name).format('x');
             // const endTimeInSec = moment(properties.value).format('X');
-            const startTime = Math.floor(new Date().getTime() / 1000); //currentime
-            const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
-            console.log(startTime, endTime);
+            // const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
+            // const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
+            //console.log(startTime, endTime);
 
             //putOnAuction()
             if (tokenId.length > 0) {
@@ -537,38 +537,43 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           console.log('promise result', result);
                           collectibleIds = result.map((item: any) => item.id);
                           setOnAuction(true);
+                          const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
+                          const endTime = Math.floor((new Date().getTime() + 600000) / 1000); //1 day after/following day
                           for (let i = 0; i < collectibleIds.length; i++) {
-                            const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
-                            const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
-
                             setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
                           }
+
+
+                          Promise.all(setAsAuctionPromise)
+                          .then(async result => {
+                            console.log('!!!auction promise', result);
+                            const auctionData = {
+                              price: price,
+                              startTime: startTime * 1000,
+                              endTime: endTime * 1000,
+                            };
+                            for (let i = 0; i < collectibleIds.length; i++) {
+                              putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
+                            }
+                          })
+                          .catch(err => {
+                            setOnAuction(false);
+                            console.log(err.message);
+                          });
+
+                          Promise.all(putOnAuctionAPI)
+                          .then(res => {
+                            setOnAuction(false);
+                            setConfirmOnAuction(true);
+                          })
+                          .catch(err => console.log(err.message));
+
                         })
                         .catch(err => console.log(err.message));
 
-                      Promise.all(setAsAuctionPromise)
-                        .then(async result => {
-                          console.log('!!!auction promise', result);
-                          const auctionData = {
-                            price: price,
-                            startTime: startTime * 1000,
-                            endTime: endTime * 1000,
-                          };
-                          for (let i = 0; i < collectibleIds.length; i++) {
-                            putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
-                          }
-                        })
-                        .catch(err => {
-                          setOnAuction(false);
-                          console.log(err.message);
-                        });
+                      
 
-                      Promise.all(putOnAuctionAPI)
-                        .then(res => {
-                          setOnAuction(false);
-                          setConfirmOnAuction(true);
-                        })
-                        .catch(err => console.log(err.message));
+                     
                       //console.log('!!!!!collectible by id ', data);
 
                       //const response = await web3Contract.setAsAuction(tokenId[0], price, startTime, endTime);

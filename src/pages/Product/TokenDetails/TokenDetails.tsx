@@ -588,22 +588,42 @@ const TokenDetails = (): JSX.Element => {
                         parseInt(timeleft.diff) == 0 && highestBidder.addr.toLowerCase() == auctionBuyer
                       )}
                       {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == auctionBuyer ? (
-                        <Button
+                       <>
+                       <Button
                           variantCustom='action'
                           className={classes.placeBidButton}
                           onClick={() => transferItem(highestBidder.addr)}
                         >
                           Receive Collectible
                         </Button>
+                       </>
+                       
+
+
                       ) : null}
+
+                      {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == ADDRESS0 ? (
+                         <Button
+                         variantCustom='action'
+                         className={classes.placeBidButton}
+                         onClick={() => transferItem(highestBidder.addr)}
+                       >
+                         Receive Collectible
+                       </Button>
+                      ):null}
+
                       {collectible.status == 'onAuction' && parseInt(timeleft.diff) != 0 ? (
                         <Button
                           onClick={() => setIsBidModal(true)}
                           label={text['placeABid']}
                           className={classes.placeBidButton}
                         />
-                      ) : (
-                        <>
+                      ) : null}
+                    </>
+                  )}
+
+(
+                        {/* <>
                           {console.log(
                             '________ transfer',
                             parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner
@@ -618,9 +638,7 @@ const TokenDetails = (): JSX.Element => {
                             </Button>
                           ) : null}
                         </>
-                      )}
-                    </>
-                  )}
+                      ) */}
                 </div>
               </>
             )}
