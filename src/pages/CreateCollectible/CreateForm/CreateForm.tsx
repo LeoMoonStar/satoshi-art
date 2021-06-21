@@ -319,98 +319,91 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             setItemCreated(true);
 
             const dotdCreator = await web3contract.isApprovedDropOfTheDayCreator(transferAddr);
-            console.log(dotdCreator)
-            if(dotdCreator){
+            console.log(dotdCreator);
+            if (dotdCreator) {
               const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-            setContractTokenIds(tokenId);
-            setItemCreated(false);
-            
-            
-            if (tokenId != undefined) {
-              console.log('11111 create', tokenId);
-              createCollection(collection)
-                .then(response => {
-                  console.log(response);
-                  const collectible = {
-                    status: 'onHold',
-                    copies: copiesCount,
-                    name: name,
-                    tokenIds: tokenId,
-                    royalties: royalties,
-                    collectionId: response.data.id,
-                    price: price,
-                    file: {
-                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                      mediaType: preview.imagetype,
-                      content: preview.base64,
-                    },
-                    thumbnail: {
-                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                      mediaType: preview.imagetype,
-                      content: preview.base64,
-                    },
-                  };
+              setContractTokenIds(tokenId);
+              setItemCreated(false);
 
-                  createCollectible(collectible)
-                    .then(async res => {
-                      console.log(transferAddr);
-                      console.log(contractTokenIds);
-                      const promise: any = [];
-                      const collectibleIds: any = [];
-                      const transferApi: any = [];
+              if (tokenId != undefined) {
+                console.log('11111 create', tokenId);
+                createCollection(collection)
+                  .then(response => {
+                    console.log(response);
+                    const collectible = {
+                      status: 'onHold',
+                      copies: copiesCount,
+                      name: name,
+                      tokenIds: tokenId,
+                      royalties: royalties,
+                      collectionId: response.data.id,
+                      price: price,
+                      file: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                        mediaType: preview.imagetype,
+                        content: preview.base64,
+                      },
+                      thumbnail: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                        mediaType: preview.imagetype,
+                        content: preview.base64,
+                      },
+                    };
 
-                      try {
-                        for (let i = 0; i < tokenId.length; i++) {
-                          promise.push(web3Contract.transferCollectible(tokenId[i], transferAddr.toLowerCase()));
-                        }
+                    createCollectible(collectible)
+                      .then(async res => {
+                        console.log(transferAddr);
+                        console.log(contractTokenIds);
+                        const promise: any = [];
+                        const collectibleIds: any = [];
+                        const transferApi: any = [];
 
-                        Promise.all(promise).then(result => {
-                          console.log(result);
-
+                        try {
                           for (let i = 0; i < tokenId.length; i++) {
-                            console.log(tokenId[i]);
-                            collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
+                            promise.push(web3Contract.transferCollectible(tokenId[i], transferAddr.toLowerCase()));
                           }
 
-                          Promise.all(collectibleIds)
-                          .then(async result => {
+                          Promise.all(promise).then(result => {
                             console.log(result);
-                            //api
-                            const ids = result.map((item: any) => item.id);
-                            console.log(ids);
-                            for (let i = 0; i < ids.length; i++) {
-                              transferApi.push(transferCollectibles(ids[i], transferAddr.toLowerCase()));
+
+                            for (let i = 0; i < tokenId.length; i++) {
+                              console.log(tokenId[i]);
+                              collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
                             }
 
-                            Promise.all(transferApi)
-                            .then(res => {
-                              console.log('Success!!!');
-                            })
-                            .catch(err => console.log(err.message));
-                          })
-                          .catch(err => console.log(err.message));
-                        });
+                            Promise.all(collectibleIds)
+                              .then(async result => {
+                                console.log(result);
+                                //api
+                                const ids = result.map((item: any) => item.id);
+                                console.log(ids);
+                                for (let i = 0; i < ids.length; i++) {
+                                  transferApi.push(transferCollectibles(ids[i], transferAddr.toLowerCase()));
+                                }
 
-                        
-
-                       
-
-
-                      } catch (error) {
-                        setShowTranferFailed(true);
-                        console.log(error.message);
-                      }
-                    })
-                    .catch(error => {
-                      setShowFailedPopup(true);
-                      console.log(error);
-                    });
-                })
-                .catch(err => {
-                  console.log(err.message);
-                });
+                                Promise.all(transferApi)
+                                  .then(res => {
+                                    console.log('Success!!!');
+                                  })
+                                  .catch(err => console.log(err.message));
+                              })
+                              .catch(err => console.log(err.message));
+                          });
+                        } catch (error) {
+                          setShowTranferFailed(true);
+                          console.log(error.message);
+                        }
+                      })
+                      .catch(error => {
+                        setShowFailedPopup(true);
+                        console.log(error);
+                      });
+                  })
+                  .catch(err => {
+                    console.log(err.message);
+                  });
+              }
             }
-          }
           } else {
             setIncorrectMetamaskAddr(true);
           }
@@ -543,37 +536,32 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
                           }
 
-
                           Promise.all(setAsAuctionPromise)
-                          .then(async result => {
-                            console.log('!!!auction promise', result);
-                            const auctionData = {
-                              price: price,
-                              startTime: startTime * 1000,
-                              endTime: endTime * 1000,
-                            };
-                            for (let i = 0; i < collectibleIds.length; i++) {
-                              putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
-                            }
-                          })
-                          .catch(err => {
-                            setOnAuction(false);
-                            console.log(err.message);
-                          });
+                            .then(async result => {
+                              console.log('!!!auction promise', result);
+                              const auctionData = {
+                                price: price,
+                                startTime: startTime * 1000,
+                                endTime: endTime * 1000,
+                              };
+                              for (let i = 0; i < collectibleIds.length; i++) {
+                                putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
+                              }
 
-                          Promise.all(putOnAuctionAPI)
-                          .then(res => {
-                            setOnAuction(false);
-                            setConfirmOnAuction(true);
-                          })
-                          .catch(err => console.log(err.message));
-
+                              Promise.all(putOnAuctionAPI)
+                                .then(res => {
+                                  setOnAuction(false);
+                                  setConfirmOnAuction(true);
+                                })
+                                .catch(err => console.log(err.message));
+                            })
+                            .catch(err => {
+                              setOnAuction(false);
+                              console.log(err.message);
+                            });
                         })
                         .catch(err => console.log(err.message));
 
-                      
-
-                     
                       //console.log('!!!!!collectible by id ', data);
 
                       //const response = await web3Contract.setAsAuction(tokenId[0], price, startTime, endTime);
