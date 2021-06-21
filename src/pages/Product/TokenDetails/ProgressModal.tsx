@@ -172,8 +172,7 @@ export default function ProgressModal({
       // dropResult.wait();
     } else {
       //regular collectible
-      const result = await web3Contract
-        .marketplaceBuyCollectible(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
+       web3Contract.marketplaceBuyCollectible(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
         .then((res: any) => {
           setClickedSigned(false);
           setActiveStep(2);
@@ -189,7 +188,7 @@ export default function ProgressModal({
               openFailedBox();
             });
         })
-        .catch((err: any) => alert(err.message));
+        // .catch((err: any) => console.log(err.message));
 
       // setClickedSigned(true);
       // setSigned(true);

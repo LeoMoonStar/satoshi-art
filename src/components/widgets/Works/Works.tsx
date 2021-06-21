@@ -96,7 +96,7 @@ export default function WorksList({
               </div>
               <div className={classes.authorInfo}>
                 <span className={classes.creatorName}>@{creatorName}</span>
-                <span> </span>
+                <span>{price} </span>
                 <span>{price && <Price.WeiToEth value={price} />}</span>
               </div>
 

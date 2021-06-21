@@ -307,7 +307,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
             console.log(celebrity);
             setItemCreated(true);
             const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-            setContractTokenIds([...contractTokenIds, tokenId]);
+            setContractTokenIds(tokenId);
             setItemCreated(false);
 
             if (tokenId != undefined) {
@@ -337,8 +337,12 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   
                   createCollectible(collectible)
                     .then(async (res) => {
-                      await handleTransferToken(transferAddr)
-                      setShowPopup(true);
+                      console.log(transferAddr)
+                      console.log(contractTokenIds)
+                      handleTransferToken(transferAddr).then(res=>{
+
+                        setShowPopup(true);
+                      })
                     })
                     .catch(error => {
                       setShowFailedPopup(true);
@@ -464,6 +468,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     .then(async res => {
                       const collectibleIdsPromise: any = [];
                       const setAsAuctionPromise: any = [];
+                      const putOnAuctionAPI:any=[];
                       let collectibleIds: any = [];
                       for (let i = 0; i < tokenId.length; i++) {
                         collectibleIdsPromise.push(getCollectibleByTokenId(tokenId[i]));
@@ -492,15 +497,20 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                             endTime: endTime * 1000,
                           };
                           for (let i = 0; i < collectibleIds.length; i++) {
-                            await putOnAuction(collectibleIds[i], auctionData);
+                            putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
                           }
-                          setOnAuction(false);
-                          setConfirmOnAuction(false);
+                          
                         })
                         .catch(err => {
                           setOnAuction(false);
                           console.log(err.message);
                         });
+
+                      Promise.all(putOnAuctionAPI).then(res =>{
+                        
+                        setOnAuction(false);
+                        setConfirmOnAuction(true);
+                      }).catch(err=>console.log(err.message))
                       //console.log('!!!!!collectible by id ', data);
 
                       //const response = await web3Contract.setAsAuction(tokenId[0], price, startTime, endTime);

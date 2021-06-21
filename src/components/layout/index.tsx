@@ -55,6 +55,7 @@ ILayoutProps): JSX.Element => {
         if (window.ethereum) {
           console.log('Accounts', accounts);
           account = accounts[0];
+          console.log('accounts',account)
           try {
             await window.ethereum.request({
               method: 'eth_requestAccounts',

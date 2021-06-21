@@ -17,7 +17,7 @@ import {
   DotsIcon,
 } from 'components/icons';
 import Button from 'components/button';
-import {convertStringToNumber} from 'utils/helpers';
+import { convertStringToNumber } from 'utils/helpers';
 import Loader from 'components/widgets/Loader';
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes';
 import Popup from 'components/widgets/Popup';
@@ -34,6 +34,8 @@ import {
   getCollectibleThumbs,
   getCollectibleLikes,
   getAuctionHistory,
+  transferCollectibles,
+  tradeCollectible
 } from 'apis/collectibles';
 import { getUserInfo } from 'apis/users';
 import { readCookie } from 'apis/cookie';
@@ -50,11 +52,11 @@ import { SERVICE_FEE } from 'constants/common';
 import { useIsCollectibleOwned } from 'utils/common';
 import { getEthPrice } from 'apis/ethPrice';
 
-import web3Contract from "abis/web3contract";
+import web3Contract from 'abis/web3contract';
 
-const toHumanDate = (numberDate : string) => {
-  return new Date(new Date(parseInt(numberDate))).toLocaleString()
-}
+const toHumanDate = (numberDate: string) => {
+  return new Date(new Date(parseInt(numberDate))).toLocaleString();
+};
 import web3 from 'web3';
 
 const IconWrapper = styled(Grid)(({ dots, theme }: { dots?: boolean; theme: Theme }) => ({
@@ -103,8 +105,8 @@ const TokenDetails = (): JSX.Element => {
   const [isFSModal, setFSModal] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [collectible, setCollectible] = useState<CollectibleInfo>();
-  const [bidStartTime, setBidStartTime] = useState("");
-  const [bidEndTime, setBidEndTime] = useState("");
+  const [bidStartTime, setBidStartTime] = useState('0');
+  const [bidEndTime, setBidEndTime] = useState('0');
   const [isBuyProgressModal, setIsBuyProgressModal] = useState<boolean>(false);
   const [isBidProgressModal, setIsBidProgressModal] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
@@ -128,26 +130,35 @@ const TokenDetails = (): JSX.Element => {
   const [liked, setLiked] = useState(false);
   const [thumbedUp, setThumbedUp] = useState(false);
   const [ethInUSD, SetEthInUSD] = useState(0);
+  const [auctionBuyer, setAuctionBuyer]: any = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
     converEthPrice();
     console.log('ether price api', process.env.ETHER_PRICE_API);
     getCollectibles().then(({ data }) => {
-      setUserCollectibles(data)
+      setUserCollectibles(data);
     });
 
+    //see if buyer/highest bidder is logged in
+    const buyer = readCookie('metamask_address');
+    //alert(buyer)
+    setAuctionBuyer(buyer);
     getCollectible(id).then(async ({ data }) => {
       const newInfo: any = [];
-      console.log("jjjjjjjjj", data)
+      console.log('jjjjjjjjj', data);
       setCollectible(data);
-      console.log("!!!!!!!!!!!!!!!!!! current time: ", new Date().getTime())
-      console.log("bid finish time: ", data.endTime )
-      console.log("staus",new Date().getTime() - data.endTime )
-      setBidStartTime((data.startTime));
-      setBidEndTime((data.endTime))
+      console.log('!!!!!!!!!!!!!!!!!! current time: ', new Date().getTime());
+      console.log('bid finish time: ', data.endTime);
+      console.log('staus', new Date().getTime() - data.endTime);
+      setBidStartTime(data.startTime);
+      setBidEndTime(data.endTime);
+      //alert(JSON.parse(data));
+      //console.log('***userInfo*****', data)
       if (data.ownerUserId) {
         const ownerInfo = await getUserInfo(data.ownerUserId);
+
+        console.log('***userInfo*****', ownerInfo.data);
         const avatar = ownerInfo.data.avatarUrl ? ownerInfo.data.avatarUrl : '/favicon.ico';
 
         newInfo.push({
@@ -239,24 +250,31 @@ const TokenDetails = (): JSX.Element => {
     seconds: 0,
     diff: 0,
   });
+  const [collectibleTokenId, setCollectibleTokeId]: any = useState('');
+  const [collectibleOwner, setCollectibleOwner]: any = useState('');
   useEffect(() => {
     //check highest bidding address and amount
     const init = async () => {
       const { data } = await getCollectible(id);
+      console.log('!!!******!!*!*!*!*',data.tokenId)
+      setCollectibleTokeId(data.tokenId);
+      setCollectibleOwner(data.ownerMetamaskId)
+
       try {
         const listing = await web3Contract.checkCollectibleStatus(data.ownerMetamaskId, data.tokenId);
-        //alert(web3.utils.fromWei(listing[7].toString(), 'ether'))
-        if (listing[6] != '0x0000000000000000000000000000000000000000') {
-          setHighestBidder({
-            addr: listing[6],
-            amount: web3.utils.fromWei(listing[7].toString(), 'ether'),
-            startTime: listing[2],
-            endTime: listing[3],
-            status: listing[0],
-          });
-        } else {
-          //setHighestBidder()
-        }
+        //alert(web3.utils.fromWei(listing[7].toString(), 'ether'));
+        console.log('****line 249', listing);
+        //if (listing[6] != '0x0000000000000000000000000000000000000000') {
+        setHighestBidder({
+          addr: listing[6],
+          amount: web3.utils.fromWei(listing[7].toString(), 'ether'),
+          startTime: listing[2].toNumber(),
+          endTime: listing[3].toNumber(),
+          status: listing[0],
+        });
+        // } else {
+        //   //setHighestBidder()
+        // }
       } catch (error) {
         console.log(error.message);
       }
@@ -265,12 +283,20 @@ const TokenDetails = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
+    console.log('****line 268***', highestBidder);
+    let timeOut: any;
     if (highestBidder.status == '0x02') {
-      if (parseInt(highestBidder.endTime) > 0) {
-        setTimeout(() => {
+      console.log('use effect highest bidder', highestBidder);
+      if (parseInt(timeleft.diff) > 0) {
+        timeOut = setTimeout(() => {
           const timerObj = calculateTimeLeft();
           setimeleft(timerObj);
         }, 1000);
+      }
+      if (parseInt(timeleft.diff) <= 0) {
+        console.log(timeleft.diff);
+        console.log(highestBidder.endTime);
+        clearTimeout(timeOut);
       }
     }
   });
@@ -288,8 +314,32 @@ const TokenDetails = (): JSX.Element => {
       seconds: Math.floor(difference % 60),
       diff: difference,
     };
-
+    setimeleft(timeLeft);
     return timeLeft;
+  };
+
+  const [transfered, setTransfered] = useState(false);
+  const transferItem = async (receiverAddress: any) => {
+    console.log('transfer item tokenId:',collectibleTokenId, receiverAddress);
+    try {
+      
+        
+      // const onHold = await web3Contract.putOnHold(collectibleTokenId);
+      // console.log(onHold);
+      const response = await web3Contract.auctionEnd(collectibleTokenId, collectibleOwner);
+      console.log(response);
+      //setTransfered(false)
+      if (response) {
+        //await transferCollectibles(id, receiverAddress);
+        const tradeType='onAuction'
+        await tradeCollectible(id, highestBidder.amount, tradeType)
+        setTransfered(true);
+      }
+    } catch (error) {
+      setTransfered(false);
+
+      console.log(error.message);
+    }
   };
   const converEthPrice = async () => {
     //console.log('start price function', process.env);
@@ -332,7 +382,7 @@ const TokenDetails = (): JSX.Element => {
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [showOwnerFailedPopup, setShowOwnerFailedPopup] = useState(false);
   const [showBidPopup, setShowBidPopup] = useState(false);
-  const [showFailedBid,setShowFailedBid] = useState(false);
+  const [showFailedBid, setShowFailedBid] = useState(false);
 
   const handleTab = (_: React.ChangeEvent<unknown>, newValue: number) => selectTab(newValue);
   const isOwner = useIsCollectibleOwned(id, userCollectibles);
@@ -359,7 +409,8 @@ const TokenDetails = (): JSX.Element => {
   if (!collectible) return <h1 style={{ textAlign: 'center' }}>Collectible does not exist</h1>;
 
   const thumbnailUrl = collectible.thumbnailUrl ? collectible.thumbnailUrl : '/collectible-image.jpeg';
-
+  const ONAUCTION = '0x02';
+  const ADDRESS0 = '0x0000000000000000000000000000000000000000';
   return (
     <div className={classes.container}>
       <div>
@@ -435,7 +486,7 @@ const TokenDetails = (): JSX.Element => {
           <Grid>
             <div className={classes.highestBidInfoContainer}>
               <div className={classes.highestBidContainer}>
-                {highestBidder.addr == '' ? (
+                {highestBidder.addr == ADDRESS0 ? (
                   'No bids avalaible'
                 ) : (
                   <>
@@ -461,69 +512,114 @@ const TokenDetails = (): JSX.Element => {
                 </Typography>
               </div>
             </div>
-            {console.log("for this collectable user ower status is:", isOwner)}
+            {console.log('for this collectable user ower status is:', isOwner)}
             {isOwner ? (
               <div className={classes.buttonsContainer}>
                 <h1>You are the owner</h1>
               </div>
             ) : (
+              // <div className={classes.buttonsContainer}>
+              //   {collectible.status == 'onSale' ? (
+              //     <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />
+              //   ) : (
+              //     new Date().getTime() - parseInt(bidEndTime) < 0 ? (
+              //       <div>
+              //         <div className={classes.serviceFeeInfoContainer}>
 
-              <div className={classes.buttonsContainer}>
-                {collectible.status == 'onSale' ? (
-                  <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />
-                ) : (
-                  new Date().getTime() - parseInt(bidEndTime) < 0 ? (
-                    <div>
-                      <div className={classes.serviceFeeInfoContainer}>
+              //           <Typography variant='h6'>Bid start Time: {toHumanDate(bidStartTime)}</Typography>
 
-                        <Typography variant='h6'>Bid start Time: {toHumanDate(bidStartTime)}</Typography>
+              //         </div>
+              //         <div className={classes.serviceFeeInfoContainer}>
+              //           <Typography variant='h6'>Bid end Time: {toHumanDate(bidEndTime)}</Typography>
 
-                      </div>
-                      <div className={classes.serviceFeeInfoContainer}>
-                        <Typography variant='h6'>Bid end Time: {toHumanDate(bidEndTime)}</Typography>
+              //         </div>
+              //         <Button
+              //           onClick={() => setIsBidModal(true)}
+              //           label={text['placeABid']}
+              //           className={classes.placeBidButton}
+              //         />
+              //         <Typography variant='h6'>Service fee 2.5%</Typography>
+              //       </div>
 
-                      </div>
-                      <Button
-                        onClick={() => setIsBidModal(true)}
-                        label={text['placeABid']}
-                        className={classes.placeBidButton}
-                      />
-                      <Typography variant='h6'>Service fee 2.5%</Typography>
-                    </div>
-                    
-                  ) : (
-                    <Typography variant='h2'>Bid end at {toHumanDate(bidEndTime)}</Typography>
-                  )
-                )
-                }
+              //     ) : (null
+              //       // <Typography variant='h2'>Bid end at {toHumanDate(bidEndTime)}</Typography>
+              //     )
+              //   )
+              //   }
 
-              </div>
-            )}
-              
-                {/* <div className={classes.buttonsContainer}>
+              // </div>
+              <>
+                {highestBidder.status === ONAUCTION ? (
+                  <>
+                    {parseInt(timeleft.diff) <= 0  ? (
+                      <h1 className={classes.artLabel}>Auction Ended</h1>
+                    ) : (
+                      <>
+                        <h1 className={classes.artLabel}>Auction Ends In:</h1>
+                        <p style={{ fontSize: '15px' }}>
+                          {/* <span>
+                      <strong>Days: </strong> {timeleft.days}
+                    </span> */}
+                          <span>
+                            <strong>Hours: </strong> {timeleft.hours}
+                          </span>
+                          &nbsp;
+                          <span>
+                            <strong>Minutes:</strong> {timeleft.minutes}
+                          </span>
+                          &nbsp;
+                          <span>
+                            <strong>Seconds:</strong> {timeleft.seconds}
+                          </span>
+                        </p>
+                      </>
+                    )}
+                  </>
+                ) : null}
+                <div className={classes.buttonsContainer}>
                   {collectible.status == 'onSale' ? (
                     <Button onClick={() => setIsBuyModal(true)} label={text['buyNow']} className={classes.buyButton} />
                   ) : (
                     <>
-                     {timeleft.difference == 0 ? (
+                      {console.log(
+                        '_____bid',
+                        parseInt(timeleft.diff) == 0 && highestBidder.addr.toLowerCase() == auctionBuyer
+                      )}
+                      {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == auctionBuyer ? (
                         <Button
-                         //onClick={() => setIsBidModal(true)}
-                          label='Transfer'
+                          variantCustom='action'
                           className={classes.placeBidButton}
-                        />
-                      ) : (
+                          onClick={() => transferItem(highestBidder.addr)}
+                        >
+                          Receive Collectible
+                        </Button>
+                      ) : null}
+                      {collectible.status == 'onAuction' && parseInt(timeleft.diff) != 0 ?(
                         <Button
-                          onClick={() => setIsBidModal(true)}
-                          label={text['placeABid']}
+                        onClick={() => setIsBidModal(true)}
+                        label={text['placeABid']}
+                        className={classes.placeBidButton}
+                      />
+                      ):(
+                        <>
+                        {console.log("________ transfer",parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner)}
+                        {parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner ? (
+                        <Button
+                          variantCustom='action'
                           className={classes.placeBidButton}
-                        />
+                          onClick={() => transferItem(highestBidder.addr)}
+                        >
+                          Transfer Collectible
+                        </Button>
+                      ) : null}
+                        </>
                       )}
                     </>
                   )}
-                </div>  */}
-              
+                </div>
+              </>
+            )}
 
-            
             <div className={classes.serviceFeeInfoContainer}>
               {/* <Typography variant='h6'>Service fee 2.5%</Typography> */}
               {/* <Typography
@@ -539,16 +635,13 @@ const TokenDetails = (): JSX.Element => {
                   $19,333.52
               </Typography> */}
             </div>
-
-
           </Grid>
         )}
       </div>
       {isBidModal && (
         <BidModal
-        collectiblePrice={collectible.price}
+          collectiblePrice={collectible.price}
           onSubmit={(bid: any) => {
-
             setBidValue(bid);
             setIsBidProgressModal(true);
             setIsBidModal(false);
@@ -592,11 +685,13 @@ const TokenDetails = (): JSX.Element => {
         textheader={'Bid status;;The Item was successfully bid'}
         onClose={() => setShowBidPopup(false)}
       ></Popup>
+      <Popup open={showFailedBid} textheader={'You failed to bid'} onClose={() => setShowFailedBid(false)}></Popup>
       <Popup
-        open={showFailedBid}
-        textheader={'You failed to bid'}
-        onClose={() => setShowFailedBid(false)}
+        open={transfered}
+        textheader={`You're collectible has transfered to ${auctionBuyer.slice(0,4)+'...'+auctionBuyer.slice(-4)}`}
+        onClose={() => setTransfered(false)}
       ></Popup>
+
       {isFSModal && collectible && <FSModal src={collectible.thumbnailUrl} onClose={() => setFSModal(false)} />}
       {isBuyProgressModal && (
         <ProgressModal
@@ -605,10 +700,8 @@ const TokenDetails = (): JSX.Element => {
           currentBidValue={bidValue}
           status='buy'
           onClose={() => {
-
-            console.log("onclose #5")
             console.log('onclose #5');
-
+            console.log('onclose #5');
 
             // setShowPopup(true);
             setIsBuyProgressModal(false);
@@ -618,7 +711,6 @@ const TokenDetails = (): JSX.Element => {
           openOwnerFailedBox={() => setShowOwnerFailedPopup(true)}
           openBidPopup={() => setShowBidPopup(true)}
           openFailedBid={() => setShowFailedBid(true)}
-          
         />
       )}
       {isBidProgressModal && (
@@ -628,8 +720,6 @@ const TokenDetails = (): JSX.Element => {
           currentBidValue={bidValue}
           status='bid'
           onClose={() => {
-
-
             // setShowPopup(true);
             setIsBidProgressModal(false);
           }}
@@ -638,7 +728,6 @@ const TokenDetails = (): JSX.Element => {
           openOwnerFailedBox={() => setShowOwnerFailedPopup(true)}
           openBidPopup={() => setShowBidPopup(true)}
           openFailedBid={() => setShowFailedBid(true)}
-          
         />
       )}
     </div>
