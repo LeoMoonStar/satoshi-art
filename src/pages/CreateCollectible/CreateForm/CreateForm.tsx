@@ -339,10 +339,38 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     .then(async (res) => {
                       console.log(transferAddr)
                       console.log(contractTokenIds)
-                      handleTransferToken(transferAddr).then(res=>{
-
-                        setShowPopup(true);
-                      })
+                      const promise: any = [];
+                      const collectibleIds: any = [];
+                      
+                      for (let i = 0; i < tokenId.length; i++) {
+                        collectibleIds.push(getCollectibleByTokenId(contractTokenIds[i]));
+                      }
+                      try {
+                        Promise.all(promise)
+                        .then(result => {
+                          console.log(result);
+                          const ids = result.map((item: any) => item.id);
+                          for (let i = 0; i < ids.length; i++) {
+                            promise.push(web3Contract.transferCollectible(ids[i], transferAddr.toLowerCase()));
+                          }
+                        })
+                
+                        Promise.all(promise)
+                        .then(async result => {
+                          console.log(result);
+                          //api
+                          const allIds = collectibleIds.map((item: any) => item.id);
+                          console.log(allIds)
+                          for (let i = 0; i < allIds.length; i++) {
+                            await transferCollectibles(allIds[i], transferAddr.toLowerCase());
+                          }
+                        })
+                  
+                        .catch(err => console.log(err.message));
+                      } catch (error) {
+                        setShowTranferFailed(true)
+                        console.log(error.message)
+                      }
                     })
                     .catch(error => {
                       setShowFailedPopup(true);
