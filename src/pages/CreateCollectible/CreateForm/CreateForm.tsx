@@ -544,6 +544,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 startTime: startTime * 1000,
                                 endTime: endTime * 1000,
                               };
+                              console.log(auctionData);
                               for (let i = 0; i < collectibleIds.length; i++) {
                                 putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
                               }

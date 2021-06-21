@@ -287,25 +287,30 @@ const TokenDetails = (): JSX.Element => {
     let timeOut: any;
     if (highestBidder.status == '0x02') {
       console.log('use effect highest bidder', highestBidder);
-      if (parseInt(timeleft.diff) > 0) {
-        timeOut = setTimeout(() => {
-          const timerObj = calculateTimeLeft();
-          setimeleft(timerObj);
-        }, 1000);
-      }
-      if (parseInt(timeleft.diff) <= 0) {
-        console.log(timeleft.diff);
-        console.log(highestBidder.endTime);
-        clearTimeout(timeOut);
-      }
+      console.log('line 290', timeleft.diff)
+      timeOut = setTimeout(() => {
+        const timerObj = calculateTimeLeft();
+        setimeleft(timerObj);
+      }, 1000);
+
+      console.log('.line 296',timeOut)
+      // if (parseInt(timeleft.diff) > 0) {
+        
+      // }
+      // if (parseInt(timeleft.diff) <= 0) {
+      //   console.log(timeleft.diff);
+      //   console.log(highestBidder.endTime);
+      //   clearTimeout(timeOut);
+      // }
     }
   });
   const calculateTimeLeft = () => {
     const currentTime = Math.floor(new Date().getTime() / 1000);
     const endTime = parseInt(highestBidder.endTime);
     //	1624161600
+
     const difference = moment(endTime).diff(moment(currentTime));
-    console.log(difference);
+    console.log("time difference line 308",difference);
     let timeLeft = {};
     timeLeft = {
       days: Math.floor(difference / (60 * 60 * 24)),
@@ -560,8 +565,8 @@ const TokenDetails = (): JSX.Element => {
                         <h1 className={classes.artLabel}>Auction Ends In:</h1>
                         <p style={{ fontSize: '15px' }}>
                           {/* <span>
-                      <strong>Days: </strong> {timeleft.days}
-                    </span> */}
+                            <strong>Days: </strong> {timeleft.days}
+                            </span> */}
                           <span>
                             <strong>Hours: </strong> {timeleft.hours}
                           </span>
@@ -622,7 +627,7 @@ const TokenDetails = (): JSX.Element => {
                     </>
                   )}
 
-(
+
                         {/* <>
                           {console.log(
                             '________ transfer',
