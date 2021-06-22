@@ -16,6 +16,8 @@ import { getCollectible, buyCollectible, bidCollectible } from 'apis/collectible
 import { getDropOfTheDay } from 'apis/users';
 
 import { Receipt } from '@material-ui/icons';
+
+import web3 from 'web3';
 const CONNECTION_STEPS = ['Approval', 'Signture', 'Complete'];
 
 export function MyStepCircle(props: StepIconProps): JSX.Element {
@@ -54,14 +56,14 @@ export default function ProgressModal({
   openFailedBox,
   openOwnerFailedBox,
   openBidPopup,
-  openFailedBid
+  openFailedBid,
 }: ProgressModalProps): JSX.Element {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const [activeStep, setActiveStep] = useState<number>(0);
   const [approve, setApprove] = useState(false);
   const [signed, setSigned] = useState(false);
-  const [web3, setWeb3] = useState(undefined);
+  // const [web3, setWeb3] = useState(undefined);
   const [tokenId, setTokenId] = useState<number>(0);
   const [clickedSigned, setClickedSigned] = useState(false);
   const [showTxHash, setShowTxHash] = useState('');
@@ -114,29 +116,39 @@ export default function ProgressModal({
       alert('Please connect to metamask first');
     }
   };
-//const [initialPrice, setInitialPrice] = useState(0);
+  //const [initialPrice, setInitialPrice] = useState(0);
   const startBidSignature = async () => {
     console.log('!!!!!!!!!!!!! Start Bidding !!!!!!!!!!!');
     const metamaskAddr = readCookie('metamask_address');
     const { data } = await getCollectible(id);
     const metamaskId: any = data;
-   
+
     console.log(tokenId, data.ownerMetamaskId, price, currentBidValue);
     //owner cannot bid
     try {
       setSigned(true);
-      const response = await web3Contract.bid(tokenId, data.ownerMetamaskId, currentBidValue);
-      console.log(response);
-      setClickedSigned(false);
-      setActiveStep(2);
-      setSigned(true);
-      await bidCollectible(data.id, Number(currentBidValue));
-      onClose();
-      openBidPopup();
+      web3Contract
+        .bid(tokenId, data.ownerMetamaskId, currentBidValue)
+        .then(res => {
+          if (res) {
+            setClickedSigned(false);
+            setActiveStep(2);
+            setSigned(true);
+
+            bidCollectible(data.id, Number(currentBidValue))
+              .then(res => {
+                onClose();
+                openBidPopup();
+              })
+              .catch(err => console.log(err.message));
+          }
+        })
+        .catch(err => console.log(err.message));
     } catch (error) {
       onClose();
       setSigned(false);
-      console.log(error.message);
+
+      console.log('bid error', error.message);
       openFailedBid();
     }
   };
@@ -146,74 +158,87 @@ export default function ProgressModal({
     const metamaskId: any = data;
     console.log('!!!!!!!!!!!!! Start Signature !!!!!!!!!!!');
     console.log(metamaskId);
-    if (dropOfTheDay) {
-      const dropResult = await web3Contract
-        .dropOfTheDayBuy(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
-        .then((res: any) => {
-          setClickedSigned(false);
-          setActiveStep(2);
-          setShowTxHash(res.transactionHash);
-          buyCollectible(id, price)
-            .then(res => {
-              console.log('onclose #1');
-              openSucessBox();
-              setSigned(true);
 
-              onClose();
-            })
-            .catch(error => {
-              openFailedBox();
-            });
-        })
-        .catch(error => {
-          openFailedBox();
-        });
-
-      // dropResult.wait();
-    } else {
-      //regular collectible
-      const result = await web3Contract
-        .marketplaceBuyCollectible(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
-        .then((res: any) => {
-          setClickedSigned(false);
-          setActiveStep(2);
-          setShowTxHash(res.transactionHash);
-          buyCollectible(id, price)
-            .then(res => {
-              console.log('onclose #2');
-              openSucessBox();
-              setSigned(true);
-              onClose();
-            })
-            .catch(error => {
-              openFailedBox();
-            });
-        })
-        .catch((err: any) => alert(err.message));
-
-      // setClickedSigned(true);
-      // setSigned(true);
-      // console.log(result);
-
-      // result.wait().then((res: any) => {
-
-      //   setSigned(false);
-      //   setClickedSigned(false);
-      //   setActiveStep(2);
-      //   setShowTxHash(res.transactionHash);
-
-      //   buyCollectible(id, price)
-      //     .then((res) => {
-      //       console.log("onclose #2")
-      //       openSucessBox();
-
-      //       onClose()
-      //     })
-      //     .catch((error) => {
-      //       openFailedBox()
-      //     })
-      // }).catch((err: any) => alert(err.message))
+    const balance = await web3Contract.userBalance(metamaskAddr);
+   
+    if(Number(balance) > metamaskId.price){
+      
+      if (dropOfTheDay) {
+        alert('drop')
+        web3Contract
+          .dropOfTheDayBuy(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
+          .then((res: any) => {
+            setClickedSigned(false);
+            setActiveStep(2);
+            setShowTxHash(res.transactionHash);
+            buyCollectible(id, price)
+              .then(res => {
+                console.log('onclose #1');
+                openSucessBox();
+                setSigned(true);
+  
+                onClose();
+              })
+              .catch(error => {
+                openFailedBox();
+              });
+          })
+          .catch(error => {
+            console.log(error.message)
+            openFailedBox();
+          });
+  
+        // dropResult.wait();
+      } else {
+        //regular collectible
+        alert('yes')
+        web3Contract
+          .marketplaceBuyCollectible(metamaskId.tokenId, metamaskId.ownerMetamaskId, metamaskId.price.toString())
+          .then((res: any) => {
+            setClickedSigned(false);
+            setActiveStep(2);
+            setShowTxHash(res.transactionHash);
+            buyCollectible(id, price)
+              .then(res => {
+                console.log('onclose #2');
+                openSucessBox();
+                setSigned(true);
+                onClose();
+              })
+              .catch(error => {
+                openFailedBox();
+              });
+          });
+        // .catch((err: any) => console.log(err.message));
+  
+        // setClickedSigned(true);
+        // setSigned(true);
+        // console.log(result);
+  
+        // result.wait().then((res: any) => {
+  
+        //   setSigned(false);
+        //   setClickedSigned(false);
+        //   setActiveStep(2);
+        //   setShowTxHash(res.transactionHash);
+  
+        //   buyCollectible(id, price)
+        //     .then((res) => {
+        //       console.log("onclose #2")
+        //       openSucessBox();
+  
+        //       onClose()
+        //     })
+        //     .catch((error) => {
+        //       openFailedBox()
+        //     })
+        // }).catch((err: any) => alert(err.message))
+      }
+    }else{
+      alert('Insufficient Funds!')
     }
+    // alert(web3.utils.fromWei(balance,'ether'));
+    
   };
   return (
     <Modal open onClose={onClose}>
@@ -281,13 +306,15 @@ export default function ProgressModal({
             </div>
             {signed ? (
               <>
-                <Button disabled={signed} style={{ backgroundColor: '#FF0099' }}>In Progress...</Button>
+                <Button disabled={signed} style={{ backgroundColor: '#FF0099' }}>
+                  In Progress...
+                </Button>
                 {/* <span>Do not close this window</span> */}
               </>
             ) : (
               <>
                 {status == 'bid' ? (
-                  <Button style={{ backgroundColor: '#FF0099' }}  onClick={startBidSignature}>
+                  <Button style={{ backgroundColor: '#FF0099' }} onClick={startBidSignature}>
                     {activeStep == 2 ? 'Done' : 'Start'}
                   </Button>
                 ) : (

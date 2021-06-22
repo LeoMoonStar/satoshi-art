@@ -33,8 +33,8 @@ export default function LaunchTime({ image, title, year, content, contentList, a
             <ul>{contentList.map((info: any, index: number) => <li key={index}>{info}</li>)}</ul>
           </div>
           <div className={classes.additionalInfo}>{addContent}</div>
-          <Link to={`/product/1`} className={classes.linkAsButton}>
-            <Button variantCustom='action'>{text['productPage']}</Button>
+          <Link to={`/product/${productId}`} className={classes.linkAsButton}>
+            <Button variantCustom='action'>Place Bid</Button>
           </Link>
         </div>
       </div>

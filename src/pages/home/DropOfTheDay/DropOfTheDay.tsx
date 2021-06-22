@@ -8,7 +8,8 @@ import bradPitPaintImage from 'components/images/home/bradPitPaint.png';
 import DropOfTheDaySlider from 'components/widgets/DropOfTheDaySlider';
 import {getCelebrityList} from 'apis/dropoftheday'
 import useStyles from './DropOfTheDay.styles';
-
+import { DividerClassKey } from '@material-ui/core';
+import { getDropOfTheDay } from 'apis/users';
 export default function DropOfTheDay(): JSX.Element {
   const classes = useStyles();
   const [profile, setProfile] = useState({
@@ -20,6 +21,7 @@ export default function DropOfTheDay(): JSX.Element {
       colorCode:''
   })
 
+  const [collectibles, setCollectibles]:any = useState([])
   useEffect(()=>{
     getCelebrityList().then(({data})=>{
       console.log("color code",data),
@@ -32,6 +34,14 @@ export default function DropOfTheDay(): JSX.Element {
         colorCode:data.activeCelebrity.colorCode
       })
     })
+
+    getDropOfTheDay().then(({ data }) => {
+
+      const filter = data.filter((item:any)=>item.creatorUserId == profile.celebrityId)
+      console.log('filter data,',filter)
+      console.log('name celebrity id',profile.celebrityId)
+      setCollectibles(filter.slice(0,4))
+    });
   },[])
  
   return (
@@ -39,14 +49,14 @@ export default function DropOfTheDay(): JSX.Element {
       <div className={classes.innerContainer}>
         <h2 className={classes.mainTitle}>{text['dropOfTheDay']}</h2>
         <div className={classes.card} style={{backgroundColor:`#${profile.colorCode}`}}>
-          <Link to={`/drop-of-the-day/${profile.celebrityId}`}>
+          <div onClick={()=>location.replace(`/drop-of-the-day/${profile.celebrityId}`)}>
             <div className={classes.leftCol} >
               <h3>{profile.name}</h3>
               <img src={profile.avatarUrl} />
             </div>
-          </Link>
+          </div>
           <div className={classes.rightCol}>
-            <DropOfTheDaySlider name={profile.text} imagePreview={profile.paintImage}/>
+            <DropOfTheDaySlider name={collectibles} imagePreview={profile.paintImage}/>
            
           </div>
         </div>

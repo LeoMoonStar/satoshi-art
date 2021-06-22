@@ -125,6 +125,7 @@ export const History = ({ list, name, collectibleId }: any): JSX.Element => {
             <div className={classes.artistInfo}>
               <div>
                 <strong>{collectibleName} </strong>
+                
                 was created by <strong>{userName}</strong> on {createDate}
               </div>
             </div>

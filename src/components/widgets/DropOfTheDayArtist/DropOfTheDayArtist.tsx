@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
-
+import {getDropOfTheDay} from "apis/users"
 import useStyles from './DropOfTheDayArtist.style';
 import DropOfTheDaySlider from '..//DropOfTheDaySlider';
 
@@ -15,8 +15,18 @@ type HistoryItemProps = {
 
 export default function DropOfTheDayArtist({ color, id, name, artistImage, imagePreview }: HistoryItemProps): JSX.Element {
   const classes = useStyles();
-
+  const [collectibles, setCollectibles]:any = React.useState([])
   
+  React.useEffect(()=>{
+
+    getDropOfTheDay().then(({ data }) => {
+
+      const filter = data.filter((item:any)=>item.creatorUserId == id)
+      console.log('filter data,',filter)
+      console.log('name celebrity id',id)
+      setCollectibles(filter.slice(0,4))
+    });
+  })
   return (
     <div className={classes.container}>
       <div className={classes.card} style={{ backgroundColor: color }}>
@@ -27,7 +37,7 @@ export default function DropOfTheDayArtist({ color, id, name, artistImage, image
           </div>
         </Link>
         <div className={cx(classes.rightCol, { [classes.whiteSliderDots]: color === '#C4C4C4' })}>
-          <DropOfTheDaySlider name={name} imagePreview={imagePreview} />
+          <DropOfTheDaySlider name={collectibles} imagePreview={imagePreview} />
         </div>
       </div>
     </div>

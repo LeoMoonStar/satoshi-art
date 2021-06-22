@@ -1,11 +1,19 @@
+import { AnyAaaaRecord } from 'dns';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import text from '../../../constants/content';
 import useStyles from './LaunchTime.style';
+import web3Contract from 'abis/web3contract';
+import moment from 'moment';
+const getTimeDurationInCharsToTargetTime = (date: any) => {
+  //alert(date)
+  const currentTime = Math.floor(new Date().getTime());
 
-const getTimeDurationInCharsToTargetTime = (date: Date) => {
-  let timeDiff = date.getTime() - new Date().getTime();
+  // console.log('data',date)
+  //console.log('currentTime', currentTime)
 
+  let timeDiff = moment(date).diff(moment(currentTime));
+  //console.log('time left',timeDiff)
   if (timeDiff < 0) {
     return { days: '00', hours: '00', minutes: '00', seconds: '00' };
   }
@@ -32,18 +40,40 @@ const getTimeDurationInCharsToTargetTime = (date: Date) => {
 };
 
 type LaunchTimeProp = {
-    content: string,
-    nextActionDate: string
-}
+  content: string;
+  nextActionDate: string;
+  tokenId: any;
+  ownerMetamaskId: any;
+  endTime:any;
+  startTime:any;
+};
 
-export default function LaunchTime({ content, nextActionDate }: LaunchTimeProp): JSX.Element {
+export default function LaunchTime({ content, nextActionDate, startTime,endTime,tokenId, ownerMetamaskId }: LaunchTimeProp): JSX.Element {
   const classes = useStyles();
-  const targetTime = '2021-04-06';
+  const targetTime = '2021-06-23';
+  console.log(startTime)
+  //const [startTime, setStartTime]: any = useState(0);
+  //const [endTime, setEndTime]: any = useState(0);
 
-  const [time, setTimer] = useState(getTimeDurationInCharsToTargetTime(new Date(targetTime)));
+  // useEffect(() => {
+  //   const init = async () => {
+  //     console.log(ownerMetamaskId);
+  //     web3Contract
+  //       .checkCollectibleStatus(ownerMetamaskId, tokenId)
+  //       .then((res: any) => {
+  //         console.log(res[2].toNumber());
+  //         const time = res[2].toNumber();
+  //         setStartTime(time * 1000);
+  //       })
+  //       .catch(err => console.log(err.message));
+  //   };
+  //   init();
+  // }, []);
+
+  const [time, setTimer] = useState(getTimeDurationInCharsToTargetTime(startTime));
 
   useEffect(() => {
-    setInterval(() => setTimer(getTimeDurationInCharsToTargetTime(new Date(targetTime))), 1000);
+    setInterval(() => setTimer(getTimeDurationInCharsToTargetTime(startTime)), 1000);
   }, []);
 
   return (
@@ -68,10 +98,10 @@ export default function LaunchTime({ content, nextActionDate }: LaunchTimeProp):
           <span>{text['seconds']}</span>
         </div>
       </div>
-      <div className={classes.additionalInfo}>
+      {/* <div className={classes.additionalInfo}>
         {text['theNextActionWillBeAvailableOn']} 
         <Link to='/'>{nextActionDate}</Link>.
-      </div>
+      </div> */}
     </section>
   );
 }
