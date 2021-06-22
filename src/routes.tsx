@@ -45,7 +45,7 @@ function AppRouter(): JSX.Element {
         <DevelopRoute path='/videos'><Videos /></DevelopRoute>
         <DevelopRoute path='/collections/:id'><Collection /></DevelopRoute>
         <DevelopRoute path='/search/:artist'><Search /></DevelopRoute>
-        <DevelopRoute path='/drop-of-the-day'><DropOfTheDay /></DevelopRoute>
+        <DevelopRoute path='/drop-of-the-day/:id'><DropOfTheDay /></DevelopRoute>
         <DevelopRoute path='/drop-of-the-day-history'><DropOfTheDayHistory /></DevelopRoute>
         <DevelopRoute path='/product/:id'><Product /></DevelopRoute>
         <Route path='/dashboard/order-list'><OrderList /></Route>

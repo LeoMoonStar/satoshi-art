@@ -30,7 +30,7 @@ import {
   putOnAuction,
   bidCollectible,
   latestBids,
-  getCurrentBidByCollectibleId
+  getCurrentBidByCollectibleId,
 } from 'apis/collectibles';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -38,6 +38,7 @@ import Layout from 'components/layout';
 import Button from 'components/button';
 import Avatar from 'components/avatar';
 import Popup from 'components/widgets/Popup';
+import BidPopup from './BidPopup';
 import web3 from 'web3';
 import web3Contract from '../../abis/web3contract';
 
@@ -134,7 +135,7 @@ export default function EditCollectible() {
         //   .catch(err => console.log(err.message));
       });
     }
-    
+
     init();
   }, []);
 
@@ -424,10 +425,13 @@ export default function EditCollectible() {
     }
   };
   const handleCurrentBid = async () => {
-    const {data} = await getCurrentBidByCollectibleId(info.collectibleId);
+    const { data } = await getCurrentBidByCollectibleId(info.collectibleId);
     console.log(data.currentBid);
-    setCurrentBid(data.currentBid);  
+    setCurrentBid(data.currentBid);
   };
+
+  const [auctionEndePopup, setAuctionEndePopup] = useState(false);
+
   const handlePutYourBid = async () => {
     const bidValue = Number(bidAmount);
     console.log(accountAddress);
@@ -448,14 +452,23 @@ export default function EditCollectible() {
         console.log('bidded');
 
         try {
-          setBidProcessing(true);
-          const response = await web3Contract.bid(info.tokenId, info.metamaskId, bidValue);
-          console.log(response);
-          if (response) {
-            await bidCollectible(info.collectibleId, Number(bidValue));
-            setBidProcessing(false);
-            setBidShowPopup(true);
-          }
+          web3Contract.checkCollectibleStatus(info.metamaskId, info.tokenId).then(res => {
+            const endTime = res[3].toNumber();
+            const currentTime = Math.floor(new Date().getTime() / 1000);
+            const difference = moment(parseInt(endTime)).diff(moment(currentTime));
+            console.log(difference);
+            if (difference > 0) {
+              setBidProcessing(true);
+              web3Contract.bid(info.tokenId, info.metamaskId, bidValue).then(res => {
+                bidCollectible(info.collectibleId, Number(bidValue)).then(res => {
+                  setBidProcessing(false);
+                  setBidShowPopup(true);
+                });
+              });
+            } else {
+              setAuctionEndePopup(true);
+            }
+          });
         } catch (error) {
           setBidProcessing(false);
           setBidFailedPopup(true);
@@ -772,16 +785,16 @@ export default function EditCollectible() {
         onClose={() => setShowFailedPopup(false)}
       ></Popup>
       <Popup open={showPopup} textheader={'Successfully done'} onClose={() => setShowPopup(false)}></Popup>
-      <Popup
+      {/* <Popup
         open={bidShowPopup}
         textheader={'Bid status;;The Item was successfully bid'}
         onClose={() => setBidShowPopup(false)}
-      ></Popup>
-      <Popup
+      ></Popup> */}
+      {/* <Popup
         open={bidFailedPopup}
         textheader={'Bid status;;Bid Failed'}
         onClose={() => setBidFailedPopup(false)}
-      ></Popup>
+      ></Popup> */}
       <Popup
         open={showAccountFailedPopup}
         textheader={
@@ -799,6 +812,22 @@ export default function EditCollectible() {
         textheader={'Collectible status;;You failed to remove from Sale'}
         onClose={() => setShowSaleError(false)}
       ></Popup>
+
+      <BidPopup
+        open={bidShowPopup}
+        textheader={`Your Bid Increased!Your Current Bid Price is;;${'$' + bidAmount}`}
+        onClose={() => setBidShowPopup(false)}
+      ></BidPopup>
+      <BidPopup
+        open={bidFailedPopup}
+        textheader={'You failed add amount to your bid, please try one more time'}
+        onClose={() => setBidFailedPopup(false)}
+      ></BidPopup>
+      <BidPopup
+        open={auctionEndePopup}
+        textheader={'Sorry, you cannot add amount to your bid as the auction is closed'}
+        onClose={() => setAuctionEndePopup(false)}
+      ></BidPopup>
     </Layout>
   );
 }

@@ -54,7 +54,7 @@ export default function DropOfTheDaySliderItem({ id, name, imagePreview, price }
           <div className={classes.workInfo}>
             {price} ETH
             <span className={classes.count}>1 of 1</span>
-            {isTokenOwned ? null : <Button className={classes.bidButton}>{text['placeABid']}</Button>}
+            {isTokenOwned ? null : <Button className={classes.bidButton}>{text['buyNow']}</Button>}
           </div>
         </div>
       </div>

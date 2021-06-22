@@ -384,6 +384,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                                 Promise.all(transferApi)
                                   .then(res => {
                                     console.log('Success!!!');
+                                    setShowTransferPopup(true)
+                                    location.replace('/')
                                   })
                                   .catch(err => console.log(err.message));
                               })
@@ -710,43 +712,8 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const usdAmount = price ? convertEthToUsd(price, currency) : '0.00';
 
   const [showTranferFailed, setShowTranferFailed] = useState(false);
+  const [showTransferPopup,setShowTransferPopup] = useState(false);
 
-  const handleTransferToken = async (addr: any) => {
-    console.log(addr);
-    const promise: any = [];
-    const collectibleIds: any = [];
-    console.log(contractTokenIds);
-    const lowerAddr = addr.toLowerCase();
-    if (lowerAddr != '') {
-      for (let i = 0; i < contractTokenIds.length; i++) {
-        collectibleIds.push(getCollectibleByTokenId(contractTokenIds[i]));
-      }
-      try {
-        Promise.all(promise).then(result => {
-          console.log(result);
-          const ids = result.map((item: any) => item.id);
-          for (let i = 0; i < ids.length; i++) {
-            promise.push(web3Contract.transferCollectible(ids[i], lowerAddr));
-          }
-        });
-
-        Promise.all(promise)
-          .then(async result => {
-            console.log(result);
-            //api
-            const allIds = collectibleIds.map((item: any) => item.id);
-            for (let i = 0; i < allIds.length; i++) {
-              await transferCollectibles(allIds[i], lowerAddr);
-            }
-          })
-
-          .catch(err => console.log(err.message));
-      } catch (error) {
-        setShowTranferFailed(true);
-        console.log(error.message);
-      }
-    }
-  };
 
   return (
     <div className={classes.form}>
@@ -907,7 +874,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                   {watch('unlock') && (
                     <div className={classes.input}>
                       <Input
-                        placeholder='Digital key, code to redeem or link to a file...'
+                        placeholder='Unlock content'
                         inputRef={register}
                         name='unlockContent'
                         disableUnderline
@@ -983,7 +950,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               </label>
               <Input
                 id='collection'
-                placeholder='e. g. “loren ipsum lormspum loren”'
+                placeholder='collection name'
                 inputRef={register}
                 name='collection'
                 disableUnderline
@@ -995,7 +962,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               </label>
               <Input
                 id='name'
-                placeholder='e. g. “Redeemable T-Shirt with logo”'
+                placeholder='collectible name'
                 name='name'
                 inputRef={register}
                 disableUnderline
@@ -1009,7 +976,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
               </label>
               <Input
                 id='description'
-                placeholder='e. g. “After purchasing you’ll be able to get the real Tee”'
+                placeholder='collectible description'
                 inputRef={register}
                 name='description'
                 disableUnderline
@@ -1157,7 +1124,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         fileSrc={preview.type === 'image' ? preview.file : preview.cover}
         fields={previewFields}
         isSingle={isSingle}
-        handleTransferToken={handleTransferToken}
+        //handleTransferToken={handleTransferToken}
         celebrity={celebrity}
       />
 
@@ -1168,6 +1135,13 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
 
+      <Popup
+        open={showTransferPopup}
+        textheader='Created Status;;You successfully created and transfered your collectible'
+        onClose={() => {
+          setShowTransferPopup(false);
+        }}
+      ></Popup>
       <Popup
         open={showPopup}
         textheader='Created collectible;;You successfully created a collectible, please check the dashboard'

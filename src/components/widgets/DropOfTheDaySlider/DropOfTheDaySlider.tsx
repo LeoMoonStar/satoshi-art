@@ -8,6 +8,7 @@ import { SliderArrow } from 'components/icons';
 import useStyles from './DropOfTheDaySlider.style';
 import DropOfTheDaySliderItem from './DropOfTheDaySliderItem/DropOfTheDaySliderItem';
 import { getDropOfTheDay } from 'apis/users';
+import { getCollectible } from 'apis/collectibles';
 // import {getCollectible} from ""
 const dropsOfTheDay = [
   { id: '6080107c6aeffc0014c8df3d', name: 'Fresh Meat #A', price: '0.25' }, //hardcoded one of my Token.id
@@ -58,10 +59,11 @@ const sliderConfig = {
 
 type DropOfTheDaySliderProps = {
   className?: string,
-  name: string,
-  imagePreview: string
-};
+  name: any,
+  imagePreview: string,
 
+};
+//is profile object
 export default function DropOfTheDaySlider({ name, className, imagePreview }: DropOfTheDaySliderProps): JSX.Element {
   const classes = useStyles();
   const [collectibles, setCollectibles] = useState([])
@@ -69,6 +71,9 @@ export default function DropOfTheDaySlider({ name, className, imagePreview }: Dr
   useEffect(() => {
 
     getDropOfTheDay().then(({ data }) => setCollectibles(data));
+    console.log('_____',name.celebrityId);
+    //getCollectible(name.celebrityId).then(({data})=>setCollectibles(data))
+
   }, [])
 
   return (

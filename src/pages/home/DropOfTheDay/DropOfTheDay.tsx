@@ -8,6 +8,7 @@ import bradPitPaintImage from 'components/images/home/bradPitPaint.png';
 import DropOfTheDaySlider from 'components/widgets/DropOfTheDaySlider';
 import {getCelebrityList} from 'apis/dropoftheday'
 import useStyles from './DropOfTheDay.styles';
+import { DividerClassKey } from '@material-ui/core';
 
 export default function DropOfTheDay(): JSX.Element {
   const classes = useStyles();
@@ -39,14 +40,14 @@ export default function DropOfTheDay(): JSX.Element {
       <div className={classes.innerContainer}>
         <h2 className={classes.mainTitle}>{text['dropOfTheDay']}</h2>
         <div className={classes.card} style={{backgroundColor:`#${profile.colorCode}`}}>
-          <Link to={`/drop-of-the-day/${profile.celebrityId}`}>
+          <div onClick={()=>location.replace(`/drop-of-the-day/${profile.celebrityId}`)}>
             <div className={classes.leftCol} >
               <h3>{profile.name}</h3>
               <img src={profile.avatarUrl} />
             </div>
-          </Link>
+          </div>
           <div className={classes.rightCol}>
-            <DropOfTheDaySlider name={profile.text} imagePreview={profile.paintImage}/>
+            <DropOfTheDaySlider name={profile}  imagePreview={profile.paintImage}/>
            
           </div>
         </div>

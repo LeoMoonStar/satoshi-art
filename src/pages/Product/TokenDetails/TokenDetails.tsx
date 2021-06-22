@@ -282,6 +282,24 @@ const TokenDetails = (): JSX.Element => {
     init();
   }, []);
 
+  const calculateTimeLeft = () => {
+    const currentTime = Math.floor(new Date().getTime() / 1000);
+    const endTime = parseInt(highestBidder.endTime);
+    //	1624161600
+
+    const difference = moment(endTime).diff(moment(currentTime));
+    console.log('time difference line 308', difference);
+    let timeLeft = {};
+    timeLeft = {
+      days: Math.floor(difference / (60 * 60 * 24)),
+      hours: Math.floor((difference / (60 * 60)) % 24),
+      minutes: Math.floor((difference / 60) % 60),
+      seconds: Math.floor(difference % 60),
+      diff: difference,
+    };
+    setimeleft(timeLeft);
+    return timeLeft;
+  };
   useEffect(() => {
     console.log('****line 268***', highestBidder);
     let timeOut: any;
@@ -310,24 +328,48 @@ const TokenDetails = (): JSX.Element => {
   const clear = (timeOut: any) => {
     clearTimeout(timeOut);
   };
-  const calculateTimeLeft = () => {
-    const currentTime = Math.floor(new Date().getTime() / 1000);
-    const endTime = parseInt(highestBidder.endTime);
-    //	1624161600
 
+  const [timeToStart,setTimeToStart]:any = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    diff: 0,
+  })
+  const calculateTimeToStart = () =>{
+    const currentTime = Math.floor(new Date().getTime() / 1000);
+    const endTime = parseInt(highestBidder.startTime);
     const difference = moment(endTime).diff(moment(currentTime));
+    console.log('auction starts in...')
     console.log('time difference line 308', difference);
-    let timeLeft = {};
-    timeLeft = {
-      days: Math.floor(difference / (60 * 60 * 24)),
-      hours: Math.floor((difference / (60 * 60)) % 24),
-      minutes: Math.floor((difference / 60) % 60),
-      seconds: Math.floor(difference % 60),
-      diff: difference,
-    };
-    setimeleft(timeLeft);
-    return timeLeft;
-  };
+    let timeToStart = {};
+    if(difference>0){
+      timeToStart = {
+        days: Math.floor(difference / (60 * 60 * 24)),
+        hours: Math.floor((difference / (60 * 60)) % 24),
+        minutes: Math.floor((difference / 60) % 60),
+        seconds: Math.floor(difference % 60),
+        diff: difference,
+      };
+      setTimeToStart(timeToStart);
+    }
+    
+    return timeToStart;
+  }
+// useEffect(()=>{
+//   console.log(`auction starts in`)
+//   let timeOut:any;
+//   if (highestBidder.status == '0x02') {
+//     console.log('auction havent started yet');
+//     console.log('line 664', timeToStart.diff);
+//     timeOut = setTimeout(() => {
+//       const timerObj = calculateTimeToStart();
+//       setimeleft(timerObj);
+//     }, 2000);
+//   }
+// })
+
+  
 
   const [transfered, setTransfered] = useState(false);
   const [transferingmsg, setTransferingmsg] = useState(false);
@@ -601,35 +643,37 @@ const TokenDetails = (): JSX.Element => {
                         '_____bid',
                         parseInt(timeleft.diff) == 0 && highestBidder.addr.toLowerCase() == auctionBuyer
                       )}
-                      {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == auctionBuyer ? (
+
+                      {collectible.status == 'onAuction' ? (
                         <>
-                          <Button
-                            variantCustom='action'
-                            className={classes.placeBidButton}
-                            onClick={() => transferItem(highestBidder.addr)}
-                          >
-                            {transferingmsg ? 'In process...' : 'Receive Collectible'}
-                          </Button>
+                          {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == ADDRESS0 ? (
+                            <Button
+                              variantCustom='action'
+                              className={classes.placeBidButton}
+                              onClick={() => transferItem(highestBidder.addr)}
+                            >
+                              {transferingmsg ? 'In process...' : 'Receive Collectible'}
+                            </Button>
+                          ) : null}
+
+                          {collectible.status == 'onAuction' && parseInt(timeleft.diff) > 0 ? (
+                            <Button
+                              onClick={() => setIsBidModal(true)}
+                              label={text['placeABid']}
+                              className={classes.placeBidButton}
+                            />
+                          ) : null}
+
+
                         </>
-                      ) : null}
+                      ) : (null
 
-                      {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == ADDRESS0 ? (
-                        <Button
-                          variantCustom='action'
-                          className={classes.placeBidButton}
-                          onClick={() => transferItem(highestBidder.addr)}
-                        >
-                          {transferingmsg ? 'In process...' : 'Receive Collectible'}
-                        </Button>
-                      ) : null}
-
-                      {collectible.status == 'onAuction' && parseInt(timeleft.diff) > 0 ? (
-                        <Button
-                          onClick={() => setIsBidModal(true)}
-                          label={text['placeABid']}
-                          className={classes.placeBidButton}
-                        />
-                      ) : null}
+                        // <div className={classes.buttonsContainer}>
+                        //       <Button onClick={() => setIsBuyModal(true)} label='Put onSale' className={classes.buyButton} />
+                        //       <Button onClick={() => setIsBuyModal(true)} label='Put onAuction' className={classes.buyButton} />
+                        // </div>
+                        
+                      )}
                     </>
                   )}
 
@@ -724,7 +768,7 @@ const TokenDetails = (): JSX.Element => {
       <Popup open={showFailedBid} textheader={'You failed to bid'} onClose={() => setShowFailedBid(false)}></Popup>
       <Popup
         open={transfered}
-        textheader={`You're collectible has transfered to ${auctionBuyer.slice(0, 4) + '...' + auctionBuyer.slice(-4)}`}
+        textheader={`You're collectible transfered successfully`}
         onClose={() => setTransfered(false)}
       ></Popup>
 
