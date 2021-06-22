@@ -248,27 +248,30 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                 <>
                   {console.log('!!!!', window.ethereum)}
                   
-                </>
-              ) : (
-                <div className={classes.profileBar}>
+                  <div className={classes.profileBar}>
                   <div className={classes.notificationBox}>
                     <div>
                       <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
 
                     </div>
                   </div>
-
                   <Link to={'/connect'} className={classes.connectLink}>
                       <Button variantCustom='action' label={'Connect Wallet'} />
                     </Link>
+                  
                 </div>
+                </>
+              ) : (
+                null
               )}
               {!connected ? (
                 <>
                   {/* {console.log('!!!!window ethereum', window.ethereum)}
                 {console.log('accounts length', accounts.length)} */}
                   {console.log('accounts connected', connected)}
-                    
+                  
+
+                  
                 </>
               ) : (
                 <div className={classes.profileBar}>
