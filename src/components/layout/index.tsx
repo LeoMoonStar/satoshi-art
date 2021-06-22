@@ -8,6 +8,8 @@ import axios from 'axios';
 import { useWeb3React } from '@web3-react/core';
 import { useConnect } from 'hooks/useDisconnect';
 import Popup from 'components/widgets/Popup';
+import { removeProfile } from '../../state/auth/actions';
+import { useDispatch } from 'react-redux';
 
 declare let window: any;
 
@@ -41,10 +43,9 @@ ILayoutProps): JSX.Element => {
   let { account } = useWeb3React();
   // const connected = useConnect();
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
-
+  const dispatch = useDispatch();
   const sign = async () => {
     const web3 = new Web3(window.ethereum);
-    console.log();
     if (typeof web3 == undefined) {
       alert(web3);
       setShowConnectionPopup(true);
@@ -53,9 +54,7 @@ ILayoutProps): JSX.Element => {
         // resolve temporary problem
         const accounts = await web3.eth.getAccounts();
         if (window.ethereum) {
-          console.log('Accounts', accounts);
           account = accounts[0];
-          console.log('accounts',account)
           try {
             await window.ethereum.request({
               method: 'eth_requestAccounts',
@@ -63,7 +62,6 @@ ILayoutProps): JSX.Element => {
 
             if (isInLoginAsMode()) {
               console.log('user sign in');
-
               console.log('id', readCookie('id'));
               console.log('token', readCookie('token'));
               console.log('metamask_address', readCookie('metamask_address'));
@@ -121,6 +119,7 @@ ILayoutProps): JSX.Element => {
       } else {
         setShowConnectionPopup(true);
         console.log('No account detected');
+        dispatch(removeProfile());
         eraseLoginAsCookies();
       }
     }
@@ -130,17 +129,7 @@ ILayoutProps): JSX.Element => {
   const [accounts, setAccounts] = useState([]);
   useEffect(() => {
     sign();
-    // window.ethereum.on("accountsChanged", (accounts: any) => {
-    //   setAccounts(accounts);
-    // });
   }, []);
-
-  // useEffect(() => {
-  //   window.ethereum.on('disconnect', () => {
-  //     console.log('detect disconnection');
-  //   });
-  // });
-
   return (
     <div className={classes.container}>
       {showConnectionPopup ? (

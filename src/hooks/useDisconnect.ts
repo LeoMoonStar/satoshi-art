@@ -2,6 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useDispatch } from 'react-redux';
 import { eraseLoginAsCookies } from 'apis/cookie';
 import { disconnectAccount } from 'state/app/actions';
+import { removeProfile } from 'state/auth/actions';
 import Web3 from 'web3';
 declare let window: any;
 
@@ -16,9 +17,9 @@ const useDisconnect = (): (() => void) => {
   return async () => {
     deactivate();
     dispatch(disconnectAccount());
+    dispatch(removeProfile());
     eraseLoginAsCookies();
-
-    location.replace('/')
+    location.replace('/');
   };
 };
 

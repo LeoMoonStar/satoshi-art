@@ -44,7 +44,6 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   const [accounts, setAccounts] = useState([]);
   const profile = useUserProfile();
   const dispatch = useDispatch();
-  //let { account } = useWeb3React();
   const connected = useConnect();
 
   const getSearches = (name: string) => {
