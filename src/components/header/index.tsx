@@ -247,17 +247,20 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
               {window.ethereum == undefined ? (
                 <>
                   {console.log('!!!!', window.ethereum)}
-                  <Link to={'/connect'} className={classes.connectLink}>
-                    <Button variantCustom='action' label={'Connect Wallet'} />
-                  </Link>
+                  
                 </>
               ) : (
                 <div className={classes.profileBar}>
                   <div className={classes.notificationBox}>
                     <div>
                       <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
+
                     </div>
                   </div>
+
+                  <Link to={'/connect'} className={classes.connectLink}>
+                      <Button variantCustom='action' label={'Connect Wallet'} />
+                    </Link>
                 </div>
               )}
               {!connected ? (
@@ -265,15 +268,14 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                   {/* {console.log('!!!!window ethereum', window.ethereum)}
                 {console.log('accounts length', accounts.length)} */}
                   {console.log('accounts connected', connected)}
-                  <Link to={'/connect'} className={classes.connectLink}>
-                    <Button variantCustom='action' label={'Connect Wallet'} />
-                  </Link>
+                    
                 </>
               ) : (
                 <div className={classes.profileBar}>
                   <div className={classes.notificationBox}>
                     <div>
                       <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
+
                     </div>
                   </div>
                   {isArtist && (
@@ -290,6 +292,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                     </>
                   )}
                   <UserMenu avatarUrl={userAvatar} accounts={accounts} />
+
+
                 </div>
               )}
             </>
@@ -312,8 +316,6 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
 {
   /* ):(
-
-      {hasDivider && <div className={classes.divider} />}
 
       {window.location.pathname != '/drop-of-the-day' && (
         <div className={classes.searchWrapper} onMouseLeave={() => setInSearch(false)}>
