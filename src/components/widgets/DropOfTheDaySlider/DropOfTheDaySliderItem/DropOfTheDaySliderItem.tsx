@@ -49,7 +49,7 @@ export default function DropOfTheDaySliderItem({ id, name, imagePreview, price }
         </div>
         <div className={classes.cardContent}>
           <div className={classes.authorInfo}>
-            <a href='/artists/1'>@Fimbim</a> 124.56x3 ETH
+            {/* <a href='/artists/1'></a> 124.56x3 ETH */}
           </div>
           <div className={classes.workInfo}>
             {price} ETH

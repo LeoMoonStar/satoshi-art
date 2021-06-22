@@ -86,6 +86,7 @@ export default function DropOfTheDay(props: any): JSX.Element {
     ownerMetamaskId: '',
     productId: '',
   });
+  const [collectibles, setCollectibles]:any = useState([])
   useEffect(() => {
     if (id) {
       getCelebrityInfo(id)
@@ -126,6 +127,14 @@ export default function DropOfTheDay(props: any): JSX.Element {
           
         })
         .catch(err => console.log(err.message));
+    
+        // getDropOfTheDay().then(({ data }) => {
+    
+        //   const filter = data.filter((item:any)=>item.creatorUserId == id)
+        //   console.log('filter data,',filter)
+        //   console.log('name celebrity id',id)
+        //   setCollectibles(filter)
+        // }).catch(err=>console.log(err.message));
     }
   }, []);
 
@@ -156,7 +165,7 @@ export default function DropOfTheDay(props: any): JSX.Element {
         addContent={specialEdition.addContent}
         productId={specialEd.productId}
       />
-      <DropOfTheDayWorkCards contentList={specialEdition.items} />
+      <DropOfTheDayWorkCards contentList={specialEdition.items} userId={id} />
       <DropOfTheDayInDetails />
     </Layout>
   );
