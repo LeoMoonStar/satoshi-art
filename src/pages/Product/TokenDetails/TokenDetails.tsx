@@ -294,11 +294,11 @@ const TokenDetails = (): JSX.Element => {
       }, 1000);
 
       console.log('.line 296',timeOut)
-      if (parseInt(timeleft.diff) <= 0) {
+      // if (parseInt(timeleft.diff) <= 0) {
 
-        clear(timeOut);
-        console.log('unmounted')
-      }
+      //   clear(timeOut);
+      //   console.log('unmounted')
+      // }
       // if (parseInt(timeleft.diff) <= 0) {
       //   console.log(timeleft.diff);
       //   console.log(highestBidder.endTime);
