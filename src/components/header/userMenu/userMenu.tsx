@@ -12,17 +12,14 @@ import Web3 from 'web3';
 
 import Avatar from 'components/avatar';
 import { CopyIcon, BalanceIcon, ProfileIcon, ItemsIcon, DisconnectIcon } from 'components/icons';
-import { TotalBidsIcon } from 'components/icons/dashboard';
 import avatar from 'components/images/artist/avatar.jpg';
 import { useDisconnect } from 'hooks/useDisconnect';
 import { getUserInfo } from 'apis/users';
-import { getBalance } from 'apis/collectibles'
 import text from 'constants/content';
 import useStyles from './userMenu.style';
 import { readCookie } from '../../../apis/cookie';
 declare let window: any;
-// const [userName, setUserName] = useState('');
-let userName:string;
+let userName: string;
 const userLinks = [{ title: 'myItems', href: '/dashboard/user', icon: <ItemsIcon /> }];
 
 // TEMPORARY
@@ -30,18 +27,15 @@ if (process.env.REACT_APP_SPECIAL_MODE !== 'production') {
   userLinks.push({ title: 'editProfile', href: '/edit-profile', icon: <ProfileIcon /> });
 }
 
-const userId: any = readCookie('id')
+const userId: any = readCookie('id');
 getUserInfo(userId).then(({ data }) => {
-  console.log("!!!!!!!!!!!!!!!")
-  console.log(data)
-  userName = (data.name)
-  if(data.isCelebrity){
+  userName = data.name;
+  if (data.isCelebrity) {
     userLinks.push({ title: 'editCelebrityProfile', href: `/edit-celebrity-profile/${userId}`, icon: <ProfileIcon /> });
   }
 });
 
-const UserMenu = ({ avatarUrl, accounts }: { avatarUrl: string, accounts:any }): JSX.Element | null => {
-  
+const UserMenu = ({ avatarUrl, accounts }: { avatarUrl?: string; accounts: any }): JSX.Element | null => {
   const classes = useStyles();
   const anchorElRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -54,12 +48,12 @@ const UserMenu = ({ avatarUrl, accounts }: { avatarUrl: string, accounts:any }):
 
   const handleDisconnect = useDisconnect();
   const isWhiteListedAndHasPermittedWallet = useSelector<AppState, boolean>(permittedToUseWalletAndWhiteListedSelector);
-  const Id = accounts.length>0 ? readCookie('id') : null;
+  const Id = accounts.length > 0 ? readCookie('id') : null;
   const [celebrity, setCelebrity] = useState(false);
-  const randUsername = "satoshi.art" + " user_" + Math.floor(Math.random() * (300 - 100 + 1)) + 100;
+  const randUsername = 'satoshi.art' + ' user_' + Math.floor(Math.random() * (300 - 100 + 1)) + 100;
   useEffect(() => {
     async function getBalance() {
-      if (accounts.length>0) {
+      if (accounts.length > 0) {
         const web3 = new Web3(window.ethereum);
         const Accounts = await web3.eth.getAccounts();
         setAccount(Accounts[0]);
@@ -69,33 +63,25 @@ const UserMenu = ({ avatarUrl, accounts }: { avatarUrl: string, accounts:any }):
       }
     }
     getBalance();
-   
 
     if (Id) {
       getUserInfo(Id).then(({ data }) => {
-        // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!")
-        // console.log(data)
-        
         setIsArtist(data.isArtist);
         setUserAvatar(data.avatarUrl);
-        setCelebrity(data.isCelebrity)
-
-
+        setCelebrity(data.isCelebrity);
       });
     }
-    
+
     // checkCeleb()
   }, [account, library, isWalletPermitted]);
 
   // const checkCeleb = () =>{
-   
+
   // }
-  console.log("user account",account)
+  console.log('user account', account);
   const userAddress = useMemo(() => {
     if (!!account) return shortAddress(account, 10);
   }, [account]);
-  // console.log("in userMenu", avatarUrl)
-  // console.log("seleceted address", window.ethereum.selectedAddress, "walletpermitted",useSelector<AppState, boolean>(permittedToUseWalletSelector))
   if (!window.ethereum.selectedAddress || !isWalletPermitted) return null;
 
   return (
@@ -108,23 +94,29 @@ const UserMenu = ({ avatarUrl, accounts }: { avatarUrl: string, accounts:any }):
       onMouseLeave={() => {
         setOpen(!isOpen);
       }}
-    > 
-
+    >
       <div ref={anchorElRef}>
-     
         {/* {console.log(avatarUrl)} */}
         <Link to='/dashboard/user'>
           <Avatar size={40} image={avatarUrl ? avatarUrl : avatar} />
         </Link>
       </div>
 
-      <Popover open={isOpen} anchorEl={anchorElRef?.current} onClose={() => setOpen(false)} classes={{ root: classes.popover }} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} transformOrigin={{ vertical: 'top', horizontal: 'center' }}>
+      <Popover
+        open={isOpen}
+        anchorEl={anchorElRef?.current}
+        onClose={() => setOpen(false)}
+        classes={{ root: classes.popover }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
         <div>
           <div className={classes.nickName}>
-       
             {userName}
-        
-            <IconButton onClick={() => navigator.clipboard.writeText(account)}><CopyIcon /></IconButton>
+
+            <IconButton onClick={() => navigator.clipboard.writeText(account)}>
+              <CopyIcon />
+            </IconButton>
           </div>
           <ul className={classes.balances}>
             <li>
