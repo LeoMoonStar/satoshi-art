@@ -207,13 +207,18 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
       </div>
 
       <div className={classes.bottomRow}>
+
         <div className={classes.innerBottomRow}>
+          <>
           {window.ethereum == undefined? (
+
             <>{console.log('!!!!',window.ethereum)}
             <Link to={'/connect'} className={classes.connectLink}>
               <Button variantCustom='action' label={'Connect Wallet'} />
-            </Link></>
+            </Link>
+            </>
           ) : (
+            
             <div className={classes.profileBar}>
               <div className={classes.notificationBox}>
                 <div>
@@ -221,6 +226,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
                 </div>
               </div>
+            
+            </div>
             )}
             {!connected ? (
               <>
@@ -239,6 +246,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                   </div>
                 </div>
                 {isArtist && (
+                  <>
                   <Link
                     to={{
                       pathname: '/create-collectible',
@@ -248,11 +256,15 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                   >
                     <Button variantCustom='linkButton' label={'create'} />
                   </Link>
+                  </>
                 )}
                 <UserMenu avatarUrl={userAvatar} accounts={accounts} />
               </div>
             )}
+
+          </>
           </div>
+      
         </div>
 
         {showNotif && (
@@ -263,7 +275,14 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
       </div>
 
 
-      {/* ):(
+    
+   
+  </>
+  );
+}
+
+
+  {/* ):(
 
       {hasDivider && <div className={classes.divider} />}
 
@@ -316,6 +335,3 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
       <p>Loading...!</p>
     )} */}
-    </>
-  );
-}
