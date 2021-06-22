@@ -15,7 +15,8 @@ const useStyles = makeStyles(() => {
       maxWidth: '25%',
       padding: '0 16px',
       '& img': {
-        width: '100%',
+        width: '18vw',
+        height: '22vw',
         borderRadius: 20,
       },
     },

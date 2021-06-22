@@ -153,7 +153,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
       {/* {isReady()?( */}
 
       <div className={classes.container}>
-        <div className={classes.topRow}>
+
+        {/*<div className={classes.topRow}>
           <Link to='/' className={classes.logo}>
             {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
           </Link>
@@ -193,7 +194,31 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                         <SearchResultCell key={index} name={item[0]} classes={classes} number={item[1]} />
                       ))}
                     </div>
-                  )}
+                  )}*/}
+
+      <div className={classes.topRow}>
+        <Link to='/' className={classes.logo}>
+          {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
+        </Link>
+        <div className={classes.topNav}>
+          <Link to='/videos' style={{ color: 'grey', textDecoration: 'none' }}>How it works</Link>
+        </div>
+        {hasDivider && <div className={classes.divider} />}
+      </div>
+
+      <div className={classes.bottomRow}>
+        <div className={classes.innerBottomRow}>
+          {window.ethereum == undefined? (
+            <>{console.log('!!!!',window.ethereum)}
+            <Link to={'/connect'} className={classes.connectLink}>
+              <Button variantCustom='action' label={'Connect Wallet'} />
+            </Link></>
+          ) : (
+            <div className={classes.profileBar}>
+              <div className={classes.notificationBox}>
+                <div>
+                  <BellIcon height='15' width='15' onClick={() => setShowNotif(!showNotif)} />
+
                 </div>
               </div>
             )}
@@ -237,7 +262,58 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
         )}
       </div>
 
+
       {/* ):(
+
+      {hasDivider && <div className={classes.divider} />}
+
+      {window.location.pathname != '/drop-of-the-day' && (
+        <div className={classes.searchWrapper} onMouseLeave={() => setInSearch(false)}>
+          <div className={classes.searchInputContainer}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <TextField
+              onMouseEnter={() => setInSearch(true)}
+              onKeyUp={e => {
+                if (e.keyCode == 13) location.replace('/search/' + searches);
+              }}
+              InputProps={{
+                disableUnderline: true,
+                type: 'search',
+                placeholder: 'by the collectibles, for the collectibles',
+                classes: {
+                  root: InSearch ? classes.searchInputClicked : classes.searchInputUnclick,
+                },
+              }}
+              onChange={e => {
+                setSearches(e.target.value);
+                getSearches(e.target.value);
+              }}
+            />
+
+            {InSearch && (
+              <div className={classes.nftSearchBox}>
+                {searchResult.map((item: any, index: number) => (
+                  <SearchResultCell key={index} name={item[0]} classes={classes} number={item[1]} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+
+
+      {showNotif && (
+        <div style={{ marginLeft: 'calc(100vw - 500px)' }}>
+          <Notifications />
+        </div>
+      )}
+    </div>
+      
+    {/* ):(
+
       <p>Loading...!</p>
     )} */}
     </>

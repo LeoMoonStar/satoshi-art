@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginLeft: 200,
+      marginLeft: 400,
       padding: '18px 0',
       position: 'absolute',
       width: 300,
@@ -21,10 +21,15 @@ const useStyles = makeStyles(theme => {
       textDecoration: 'none',
       fontWeight: 'bold',
       color: '#C4C4C4',
+      marginLeft: 50,
       textTransform: 'initial',
       '&:hover': {
         transform: 'scale(1.03, 1.03)',
       },
+
+      '& Link': {
+        textDecoration: 'none'
+      }
     },
     topRow: {
       position: 'relative',
@@ -44,6 +49,7 @@ const useStyles = makeStyles(theme => {
     },
     bottomRow: {
       display: 'flex',
+      margin: '25px 0 -30px 0',
       width: '100%',
     },
     logo: {
@@ -61,12 +67,12 @@ const useStyles = makeStyles(theme => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginLeft: 100,
+      marginBottom: -50,
       padding: '20px 0',
       width: '100%',
     },
     searchInputContainer: {
-      marginLeft: 100,
+      marginLeft: 100
     },
     searchIcon: {
       transform: 'translate(0, -50%)',
