@@ -59,69 +59,11 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
 
   useEffect(() => {
     if (userId) {
-      console.log('Getting user profile in header');
       getProfile(userId, profile, dispatch);
     }
-    // if(window.ethereum){
-    //   //alert('undefined');
-
-    // }
     const web3 = new Web3(window.ethereum);
     window.ethereum.on('accountsChanged', async (acc: any) => {
       setAccounts(acc);
-      //const account = acc[0];
-      // try {
-      //   const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
-      // const challenge = res.data;
-      // console.log('res.data!!!',res.data);
-      // (web3 as any).currentProvider.send(
-      //   {
-      //     method: 'eth_signTypedData',
-      //     params: [challenge.challenge, account],
-      //     from: account,
-      //   },
-      //   (error: any, res: any) => {
-      //     if (error) {
-      //       eraseLoginAsCookies();
-      //       // change redux value of connection
-      //     }
-      //     if (res) {
-      //       eraseLoginAsCookies();
-      //       console.log('challenge.challenge[1].value',challenge.challenge[1].value)
-      //       console.log('res.result',res.result)
-      //       console.log('res.account',account)
-      //       console.log('if res', res)
-      //       axios
-      //         .get(
-      //           `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account.toLowerCase()}`
-      //         )
-      //         .then(sigRes => {
-      //           if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
-      //             console.log('Signature verified');
-      //             createLoginAsCookies({
-      //               id: sigRes.data.id,
-      //               metamask_address: sigRes.data.metamaskId,
-      //               token: sigRes.data.token,
-      //             });
-
-      //             console.log('id', sigRes.data.id);
-      //             console.log('token', sigRes.data.token);
-      //             console.log('metamask_address', sigRes.data.metamaskId);
-
-      //             //setShowPopup(true);
-      //             //setShowConnectionPopup(false);
-      //           } else {
-      //             //setShowFailedPopup(true);
-      //             console.log('Signature not verified');
-      //           }
-      //         })
-      //         .catch(err => console.log(err));
-      //     }
-      //   }
-      // );
-      // } catch (error) {
-      //   console.log(error.message)
-      // }
     });
   }, []);
 
@@ -130,49 +72,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
   };
   return (
     <>
-      {/* {isReady()?( */}
-
       <div className={classes.container}>
-        {/*<div className={classes.topRow}>
-          <Link to='/' className={classes.logo}>
-            {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
-          </Link>
-          {hasDivider && <div className={classes.divider} />}
-        </div>
-        <div className={classes.bottomRow}>
-          <div className={classes.innerBottomRow}>
-            {window.location.pathname != '/drop-of-the-day' && (
-              <div className={classes.searchWrapper} onMouseLeave={() => setInSearch(false)}>
-                <div className={classes.searchInputContainer}>
-                  <div className={classes.searchIcon}>
-                    <SearchIcon />
-                  </div>
-                  <TextField
-                    onMouseEnter={() => setInSearch(true)}
-                    onKeyUp={e => {
-                      if (e.keyCode == 13) location.replace('/search/' + searches);
-                    }}
-                    InputProps={{
-                      disableUnderline: true,
-                      type: 'search',
-                      placeholder: 'by the collectibles, for the collectibles',
-                      classes: {
-                        root: InSearch ? classes.searchInputClicked : classes.searchInputUnclick,
-                      },
-                    }}
-                    onChange={e => {
-                      setSearches(e.target.value);
-                      getSearches(e.target.value);
-                    }}
-                  />
-                  {InSearch && (
-                    <div className={classes.nftSearchBox}>
-                      {searchResult.map((item: any, index: number) => (
-                        <SearchResultCell key={index} name={item[0]} classes={classes} number={item[1]} />
-                      ))}
-                    </div>
-                  )}*/}
-
         <div className={classes.topRow}>
           <Link to='/' className={classes.logo}>
             {inverseHeader ? <LogoHeaderWhiteIcon /> : <FullLogo />}
@@ -240,11 +140,7 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
                 </>
               ) : null}
               {!connected ? (
-                <>
-                  {/* {console.log('!!!!window ethereum', window.ethereum)}
-                {console.log('accounts length', accounts.length)} */}
-                  {console.log('accounts connected', connected)}
-                </>
+                <>{console.log('accounts not connected', connected)}</>
               ) : (
                 <div className={classes.profileBar}>
                   <div className={classes.notificationBox}>
@@ -271,9 +167,6 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
             </>
           </div>
         </div>
-
-        {/* {hasDivider && <div className={classes.divider} />} */}
-
         {showNotif && (
           <div style={{ marginLeft: 'calc(100vw - 500px)' }}>
             <Notifications />

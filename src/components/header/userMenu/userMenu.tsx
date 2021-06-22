@@ -82,8 +82,6 @@ const UserMenu = ({ avatarUrl, accounts }: { avatarUrl?: string; accounts: any }
   const userAddress = useMemo(() => {
     if (!!account) return shortAddress(account, 10);
   }, [account]);
-  if (!window.ethereum.selectedAddress || !isWalletPermitted) return null;
-
   return (
     <div
       className={classes.userMenu}
