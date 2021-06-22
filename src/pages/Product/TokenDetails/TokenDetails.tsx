@@ -256,14 +256,14 @@ const TokenDetails = (): JSX.Element => {
     //check highest bidding address and amount
     const init = async () => {
       const { data } = await getCollectible(id);
-      console.log('!!!******!!*!*!*!*', data.tokenId);
+      console.log('!!!******!!*!*!*!*', data.tokenId, data.ownerMetamaskId);
       setCollectibleTokeId(data.tokenId);
       setCollectibleOwner(data.ownerMetamaskId);
 
       try {
         const listing = await web3Contract.checkCollectibleStatus(data.ownerMetamaskId, data.tokenId);
         //alert(web3.utils.fromWei(listing[7].toString(), 'ether'));
-        console.log('****line 249', listing);
+        console.log('****line 249', listing[3].toNumber());
         //if (listing[6] != '0x0000000000000000000000000000000000000000') {
         setHighestBidder({
           addr: listing[6],
@@ -287,13 +287,13 @@ const TokenDetails = (): JSX.Element => {
     let timeOut: any;
     if (highestBidder.status == '0x02') {
       console.log('use effect highest bidder', highestBidder);
-      console.log('line 290', timeleft.diff)
+      console.log('line 290', timeleft.diff);
       timeOut = setTimeout(() => {
         const timerObj = calculateTimeLeft();
         setimeleft(timerObj);
       }, 1000);
 
-      console.log('.line 296',timeOut)
+      console.log('.line 296', timeOut);
       // if (parseInt(timeleft.diff) <= 0) {
 
       //   clear(timeOut);
@@ -307,16 +307,16 @@ const TokenDetails = (): JSX.Element => {
     }
   });
 
-  const clear = (timeOut:any) =>{
+  const clear = (timeOut: any) => {
     clearTimeout(timeOut);
-  }
+  };
   const calculateTimeLeft = () => {
     const currentTime = Math.floor(new Date().getTime() / 1000);
     const endTime = parseInt(highestBidder.endTime);
     //	1624161600
 
     const difference = moment(endTime).diff(moment(currentTime));
-    console.log("time difference line 308",difference);
+    console.log('time difference line 308', difference);
     let timeLeft = {};
     timeLeft = {
       days: Math.floor(difference / (60 * 60 * 24)),
@@ -336,7 +336,7 @@ const TokenDetails = (): JSX.Element => {
     try {
       // const onHold = await web3Contract.putOnHold(collectibleTokenId);
       // console.log(onHold);
-      setTransferingmsg(true)
+      setTransferingmsg(true);
       web3Contract
         .auctionEnd(collectibleTokenId, collectibleOwner)
         .then(res => {
@@ -344,7 +344,7 @@ const TokenDetails = (): JSX.Element => {
           tradeCollectible(id, highestBidder.amount, tradeType)
             .then(res => {
               setTransfered(true);
-              setTransferingmsg(false)
+              setTransferingmsg(false);
             })
             .catch(err => console.log(err.message));
         })
@@ -602,30 +602,26 @@ const TokenDetails = (): JSX.Element => {
                         parseInt(timeleft.diff) == 0 && highestBidder.addr.toLowerCase() == auctionBuyer
                       )}
                       {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == auctionBuyer ? (
-                       <>
-                       <Button
+                        <>
+                          <Button
+                            variantCustom='action'
+                            className={classes.placeBidButton}
+                            onClick={() => transferItem(highestBidder.addr)}
+                          >
+                            {transferingmsg ? 'In process...' : 'Receive Collectible'}
+                          </Button>
+                        </>
+                      ) : null}
+
+                      {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == ADDRESS0 ? (
+                        <Button
                           variantCustom='action'
                           className={classes.placeBidButton}
                           onClick={() => transferItem(highestBidder.addr)}
                         >
-                          
-                          {transferingmsg?'In process...':'Receive Collectible'}
+                          {transferingmsg ? 'In process...' : 'Receive Collectible'}
                         </Button>
-                       </>
-                       
-
-
                       ) : null}
-
-                      {parseInt(timeleft.diff) <= 0 && highestBidder.addr.toLowerCase() == ADDRESS0 ? (
-                         <Button
-                         variantCustom='action'
-                         className={classes.placeBidButton}
-                         onClick={() => transferItem(highestBidder.addr)}
-                       >
-                         {transferingmsg?'In process...':'Receive Collectible'}
-                       </Button>
-                      ):null}
 
                       {collectible.status == 'onAuction' && parseInt(timeleft.diff) > 0 ? (
                         <Button
@@ -637,15 +633,14 @@ const TokenDetails = (): JSX.Element => {
                     </>
                   )}
 
-                  {collectible.status == 'onHold' && auctionBuyer === collectibleOwner &&(
+                  {collectible.status == 'onHold' && auctionBuyer === collectibleOwner && (
                     <>
-                    {/* <Button onClick={() => setIsBuyModal(true)} label='Put onSale' className={classes.buyButton} />
+                      {/* <Button onClick={() => setIsBuyModal(true)} label='Put onSale' className={classes.buyButton} />
                     <Button onClick={() => setIsBuyModal(true)} label='Put onAuction' className={classes.buyButton} /> */}
                     </>
-                    
                   )}
 
-                        {/* <>
+                  {/* <>
                           {console.log(
                             '________ transfer',
                             parseInt(timeleft.diff) <= 0 && auctionBuyer.toLowerCase() == collectibleOwner
@@ -713,9 +708,7 @@ const TokenDetails = (): JSX.Element => {
       ></Popup>
       <Popup
         open={showFailedPopup}
-        textheader={
-          'Purchase collectible Status;;You failed to buy this collectible, Please try again'
-        }
+        textheader={'Purchase collectible Status;;You failed to buy this collectible, Please try again'}
         onClose={() => setShowFailedPopup(false)}
       ></Popup>
       <Popup
