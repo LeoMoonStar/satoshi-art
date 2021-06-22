@@ -12,7 +12,6 @@ import {
   IconButton,
   Typography,
   Theme,
-
 } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 // import {AdapterDateFns} from '@material-ui/lab/';
@@ -24,13 +23,22 @@ import { Modal as MUIModal } from '@material-ui/core';
 
 import { ExpandIcon, GreySaveIcon, ViewsIcon, LikeIcon, SaveIcon, DotsIcon, LeftArrowIcon } from 'components/icons';
 import { VALID_VIDEO_TYPES, VALID_AUDIO_TYPES } from 'constants/supportedFileTypes';
-import { getCollectible, putCollectibleOnSale, removeCollectibleFromSale, putOnAuction, bidCollectible } from 'apis/collectibles';
+import {
+  getCollectible,
+  putCollectibleOnSale,
+  removeCollectibleFromSale,
+  putOnAuction,
+  bidCollectible,
+  latestBids,
+  getCurrentBidByCollectibleId,
+} from 'apis/collectibles';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Layout from 'components/layout';
 import Button from 'components/button';
 import Avatar from 'components/avatar';
 import Popup from 'components/widgets/Popup';
+import BidPopup from './BidPopup';
 import web3 from 'web3';
 import web3Contract from '../../abis/web3contract';
 
@@ -53,7 +61,7 @@ const COLLECTION_OPTIONS = ['onSale'];
 export default function EditCollectible() {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
-  console.log("before useeffect:", id)
+  console.log('before useeffect:', id);
 
   const [info, setInfo] = useState({
     status: '',
@@ -125,22 +133,19 @@ export default function EditCollectible() {
         //     setLisitingStatus(newListing);
         //   })
         //   .catch(err => console.log(err.message));
-
-      
-      
       });
     }
+
     init();
   }, []);
 
   const init = async () => {
     try {
       const managerAddress = await web3Contract.requestMetamaskAccess();
-    setAccountAddress(managerAddress[0]);
+      setAccountAddress(managerAddress[0]);
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-    
   };
   //auction
   const setOnAuction = async () => {
@@ -169,8 +174,8 @@ export default function EditCollectible() {
 
             const auctionData = {
               price: info.price,
-              startTime: startTime*1000,
-              endTime: endTime*1000,
+              startTime: startTime * 1000,
+              endTime: endTime * 1000,
             };
             putOnAuction(info.collectibleId, auctionData)
               .then(res => {
@@ -194,60 +199,59 @@ export default function EditCollectible() {
 
     console.log(info.status, tokenId, accountAddress);
 
+    //   if (!price) {
+    //     setPriceError(true);
+    //   }
+    //   if (accountAddress != '') {
+    //     const balance = await web3Contract.checkTokenBalance(accountAddress, parseInt(tokenId));
+    //     console.log(balance);
+    //     if (parseInt(balance) > 0) {
+    //       const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
+    //       receipt.wait().then((res: any) => {
+    //         console.log(res);
+    //         putCollectibleOnSale(id, data)
+    //           .then(() => {
+    //             setShowPopup(true);
+    //           })
+    //           .catch(() => {
+    //             setShowFailedPopup(true);
+    //           });
+    //       });
+    //     } else {
+    //       setShowErrorPopup(true);
+    //     }
+    //   } else {
+    //     setShowConnectionPopup(true);
+    //   }
+    // };
 
-  //   if (!price) {
-  //     setPriceError(true);
-  //   }
-  //   if (accountAddress != '') {
-  //     const balance = await web3Contract.checkTokenBalance(accountAddress, parseInt(tokenId));
-  //     console.log(balance);
-  //     if (parseInt(balance) > 0) {
-  //       const receipt = await web3Contract.marketplacePutOnSaleCollectible(tokenId, price.toString());
-  //       receipt.wait().then((res: any) => {
-  //         console.log(res);
-  //         putCollectibleOnSale(id, data)
-  //           .then(() => {
-  //             setShowPopup(true);
-  //           })
-  //           .catch(() => {
-  //             setShowFailedPopup(true);
-  //           });
-  //       });
-  //     } else {
-  //       setShowErrorPopup(true);
-  //     }
-  //   } else {
-  //     setShowConnectionPopup(true);
-  //   }
-  // };
-
-  // const removeItem = async (status: any) => {
-  //   console.log(status);
-  //   if (status == 'onSale') {
-  //     console.log(info.tokenId);
-  //     const response = await web3Contract.putOnHold(info.tokenId);
-  //     response
-  //       .wait()
-  //       .then((res: any) => {
-  //         removeCollectibleFromSale(id).then(() => {
-  //           setShowPopup(true);
-  //           location.replace('/dashboard/user');
-  //         });
-  //       })
-  //       .catch((err: any) => console.log(err.message));
-  //   } else {
-  //     const response = await web3Contract.putOnHold(info.tokenId);
-  //     response
-  //       .wait()
-  //       .then((res: any) => {
-  //         removeCollectibleFromSale(id).then(() => {
-  //           setShowPopup(true);
-  //           location.replace('/dashboard/user');
-  //         });
-  //       })
-  //       .catch((err: any) => console.log(err.message));
-  //   }
-  // };
+    // const removeItem = async (status: any) => {
+    //   console.log(status);
+    //   if (status == 'onSale') {
+    //     console.log(info.tokenId);
+    //     const response = await web3Contract.putOnHold(info.tokenId);
+    //     response
+    //       .wait()
+    //       .then((res: any) => {
+    //         removeCollectibleFromSale(id).then(() => {
+    //           setShowPopup(true);
+    //           location.replace('/dashboard/user');
+    //         });
+    //       })
+    //       .catch((err: any) => console.log(err.message));
+    //   } else {
+    //     const response = await web3Contract.putOnHold(info.tokenId);
+    //     response
+    //       .wait()
+    //       .then((res: any) => {
+    //         removeCollectibleFromSale(id).then(() => {
+    //           setShowPopup(true);
+    //           location.replace('/dashboard/user');
+    //         });
+    //       })
+    //       .catch((err: any) => console.log(err.message));
+    //   }
+    // };
 
     if (!price) {
       setPriceError(true);
@@ -334,12 +338,11 @@ export default function EditCollectible() {
   // };
 
   const [showSucceedPopup, setShowSucceedPopup] = useState(false);
-  const [newBidAmount, setNewBidAmount] = useState("");
+  const [newBidAmount, setNewBidAmount] = useState('');
 
   const [showFailedPopup, setShowFailedPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [showConnectionPopup, setShowConnectionPopup] = useState(false);
-
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setNewBidAmount((event.target.value))
@@ -402,35 +405,39 @@ export default function EditCollectible() {
     }
   };
 
-const [bidPrice, setBidPrice] = useState('');
-const [currentBid, setCurrentBid] = useState('');
-const [bidAmount, setBidAmount]:any = useState('');
-const [bidProccessing, setBidProcessing] = useState(false)
-const [bidShowPopup, setBidShowPopup] = useState(false)
-const [bidFailedPopup, setBidFailedPopup] = useState(false)
-const [ownerFailedPopup,setOwnerFailedPopup] = useState(false)
-const [error, setError] = useState<string | null>(null);
+  const [bidPrice, setBidPrice] = useState('');
+  const [currentBid, setCurrentBid] = useState('');
+  const [bidAmount, setBidAmount]: any = useState('');
+  const [bidProccessing, setBidProcessing] = useState(false);
+  const [bidShowPopup, setBidShowPopup] = useState(false);
+  const [bidFailedPopup, setBidFailedPopup] = useState(false);
+  const [ownerFailedPopup, setOwnerFailedPopup] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const highestBidPrice = async()=>{
+  const highestBidPrice = async () => {
     try {
-      const highestBidPrice = await web3Contract.checkCollectibleStatus(info.metamaskId, info.tokenId)  
-      console.log(highestBidPrice[7])
-      setBidPrice(web3.utils.fromWei(highestBidPrice[7].toString(),'ether'));
-      console.log(web3.utils.fromWei(highestBidPrice[7],'ether'))
+      const highestBidPrice = await web3Contract.checkCollectibleStatus(info.metamaskId, info.tokenId);
+      console.log(highestBidPrice[7]);
+      setBidPrice(web3.utils.fromWei(highestBidPrice[7].toString(), 'ether'));
+      console.log(web3.utils.fromWei(highestBidPrice[7], 'ether'));
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-    
-  }
-  const handleCurrentBid = async()=>{
-return null
-  }
-  const handlePutYourBid = async()=>{
-    const bidValue = Number(bidAmount);
-    console.log(accountAddress)
-    if (accountAddress == ''){setShowConnectionPopup(true)}
-    else{
+  };
+  const handleCurrentBid = async () => {
+    const { data } = await getCurrentBidByCollectibleId(info.collectibleId);
+    console.log(data.currentBid);
+    setCurrentBid(data.currentBid);
+  };
 
+  const [auctionEndePopup, setAuctionEndePopup] = useState(false);
+
+  const handlePutYourBid = async () => {
+    const bidValue = Number(bidAmount);
+    console.log(accountAddress);
+    if (accountAddress == '') {
+      setShowConnectionPopup(true);
+    } else {
       const userBalance = await web3Contract.userBalance(accountAddress);
       if (Number(bidValue) > Number(userBalance)) {
         setError('Not enough funds');
@@ -438,32 +445,39 @@ return null
         setError('Bid Should be higher than highest bid amount');
       } else if (Number(bidValue) < Number(info.price)) {
         setError('Bid Should be higher than starting price');
-      } else if(accountAddress == info.metamaskId){
-          setOwnerFailedPopup(true)
-      }else {
+      } else if (accountAddress == info.metamaskId) {
+        setOwnerFailedPopup(true);
+      } else {
         setError(null);
-        console.log('bidded')
-  
+        console.log('bidded');
+
         try {
-          setBidProcessing(true)
-          const response = await web3Contract.bid(info.tokenId, info.metamaskId, bidValue);
-          console.log(response);
-          if(response){
-            await bidCollectible(info.collectibleId, Number(bidValue));
-            setBidProcessing(false)
-            setBidShowPopup(true)
-          }
-          
+          web3Contract.checkCollectibleStatus(info.metamaskId, info.tokenId).then(res => {
+            const endTime = res[3].toNumber();
+            const currentTime = Math.floor(new Date().getTime() / 1000);
+            const difference = moment(parseInt(endTime)).diff(moment(currentTime));
+            console.log(difference);
+            if (difference > 0) {
+              setBidProcessing(true);
+              web3Contract.bid(info.tokenId, info.metamaskId, bidValue).then(res => {
+                bidCollectible(info.collectibleId, Number(bidValue)).then(res => {
+                  setBidProcessing(false);
+                  setBidShowPopup(true);
+                });
+              });
+            } else {
+              setAuctionEndePopup(true);
+            }
+          });
         } catch (error) {
-          setBidProcessing(false)
-          setBidFailedPopup(true)
+          setBidProcessing(false);
+          setBidFailedPopup(true);
           console.log(error.message);
-          
         }
       }
     }
     // setUserBalance(balance);
-  }
+  };
 
   return (
     <Layout>
@@ -472,45 +486,52 @@ return null
           <LeftArrowIcon /> Back
         </Link>
         <Typography variant='h2'>Increase Your Bid Now!</Typography>
-        {console.log("in Edit collectible:", info)}
+        {console.log('in Edit collectible:', info)}
       </div>
       <div className={classes.container}>
-
         <div className={classes.col}>
           <div className={classes.buttonRow}>
-            <Button variantCustom='linkButton' onClick={highestBidPrice}style={{ borderRadius: '8px', width: "400px" }}>
+            <Button
+              variantCustom='linkButton'
+              onClick={highestBidPrice}
+              style={{ borderRadius: '8px', width: '400px' }}
+            >
               The Current Highest Bid: {bidPrice} ETH
             </Button>
           </div>
           <div className={classes.buttonRow}>
-            <Button  variantCustom='linkButton' onClick={handleCurrentBid}style={{ borderRadius: '8px', width: "400px" }}>
+            <Button
+              variantCustom='linkButton'
+              onClick={handleCurrentBid}
+              style={{ borderRadius: '8px', width: '400px' }}
+            >
               Your Current Bid: {currentBid} ETH
             </Button>
           </div>
           <div className={classes.buttonRow}>
-            <div style={{ width: "400px" }}>
+            <div style={{ width: '400px' }}>
               <TextField
-                
                 id='newBidAmount'
                 placeholder='Increase your amount...'
                 name='newBidAmount'
-                onChange={(e)=>setBidAmount(e.target.value)}
-                type="number"/>
+                onChange={e => setBidAmount(e.target.value)}
+                type='number'
+              />
 
-            {error && <div className={classes.errorMessage}>{error}</div>}
-        <div className={classes.leftCol}>
-          {/* <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div> */}
-        </div>
-        <div className={classes.rightCol}>
-          <div className={classes.rightColContainer}>
-            <div className={classes.rightColHeader}>
-              {/* <Typography variant='h6' className={classes.artLabel}>
+              {error && <div className={classes.errorMessage}>{error}</div>}
+              <div className={classes.leftCol}>
+                {/* <div className={classes.fileWrapper}>{renderSwitch(info.thumbnailUrl)}</div> */}
+              </div>
+              <div className={classes.rightCol}>
+                <div className={classes.rightColContainer}>
+                  <div className={classes.rightColHeader}>
+                    {/* <Typography variant='h6' className={classes.artLabel}>
                 ART
               </Typography> */}
-              {/* <Typography variant='h1'>{info.name}</Typography> */}
-            </div>
+                    {/* <Typography variant='h1'>{info.name}</Typography> */}
+                  </div>
 
-            {/*<div className={classes.ownerContainer}>
+                  {/*<div className={classes.ownerContainer}>
 		                    <div className={classes.imageWrapper}>
 		                        <Avatar size={48} alt="Profile photo" status="premium" image="https://images.rarible.com/?fit=outsize&n=-1&url=https%3A%2F%2Fipfs.rarible.com%2Fipfs%2FQmUYRjX7CNrUzPXJ287v5YZGDSKxztc6ddBkiWvG8BBsDe&w=240"/>
 		                    </div>
@@ -521,9 +542,9 @@ return null
 		                        </a>
 		                    </div>
 		                </div>*/}
-            {/* <label htmlFor='type'>**Your item is on </label> */}
-            <div className={classes.form}>
-              {/**info.status == 'onAuction' ? (
+                  {/* <label htmlFor='type'>**Your item is on </label> */}
+                  <div className={classes.form}>
+                    {/**info.status == 'onAuction' ? (
                 <FormControl className={classes.fieldGroup}>
                   <label htmlFor='type'>Collectible current price</label>
                   <Input
@@ -542,7 +563,7 @@ return null
                 </FormControl>
               ) : null **/}
 
-              {/* <div style={{ width: "400px" }}>
+                    {/* <div style={{ width: "400px" }}>
               <TextField
                 
                 id='newBidAmount'
@@ -554,18 +575,21 @@ return null
 
               />
             </div> */}
-            </div>
+                  </div>
+                </div>
+                {bidProccessing && <div className={classes.errorMessage}>In Processing...</div>}
+                <div className={classes.buttonRow}>
+                  <Button
+                    variantCustom='action'
+                    disabled={bidProccessing}
+                    style={{ width: '400px' }}
+                    onClick={handlePutYourBid}
+                  >
+                    Confirm Your Bid
+                  </Button>
+                </div>
 
-          </div>
-          {bidProccessing&&<div className={classes.errorMessage}>In Processing...</div>}
-          <div className={classes.buttonRow}>
-            <Button  variantCustom='action' disabled={bidProccessing} style={{ width: "400px" }} onClick={handlePutYourBid}>
-              Confirm Your Bid
-            </Button>
-          </div>
-
-        
-            {/* <div>
+                {/* <div>
 			<LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DateTimePicker
                   renderInput={(props:any) => <TextField {...props} />}
@@ -577,14 +601,14 @@ return null
                 />
               </LocalizationProvider>
 			</div> */}
-            {/* {info.status == 'onHold' ? (
+                {/* {info.status == 'onHold' ? (
               <div style={{ marginLeft: '120px' }}>
                 <Checkbox checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
                 <span>Put on Auction</span>
               </div>
             ) : null} */}
 
-            {/* {checked ? (
+                {/* {checked ? (
               <>
                 <div style={{ marginLeft: '120px' }}>
                   <Input
@@ -613,66 +637,66 @@ return null
                 </div>
               </>
             ) : null} */}
-            <div className={classes.submits}>
-              {info.status == 'onHold' ? (
-                <>
-                  <Button variantCustom='action' style={{ backgroundColor: '#ff0099' }} onClick={() => putOnSale()}>
-                    Put on Sale
-                  </Button>
-                  <Button
-                    variantCustom='action'
-                    style={{ backgroundColor: '#ff0099' }}
-                    type='submit'
-                    onClick={() => setOnAuction()}
-                    disabled={!checked}
-                  >
-                    Put on Auction
-                  </Button>
-                </>
-              ) : null}
+                <div className={classes.submits}>
+                  {info.status == 'onHold' ? (
+                    <>
+                      <Button variantCustom='action' style={{ backgroundColor: '#ff0099' }} onClick={() => putOnSale()}>
+                        Put on Sale
+                      </Button>
+                      <Button
+                        variantCustom='action'
+                        style={{ backgroundColor: '#ff0099' }}
+                        type='submit'
+                        onClick={() => setOnAuction()}
+                        disabled={!checked}
+                      >
+                        Put on Auction
+                      </Button>
+                    </>
+                  ) : null}
 
-              {info.status == 'onSale' ? (
-                <Button
-                  variantCustom='action'
-                  style={{ backgroundColor: '#ff0099', padding: '10px' }}
-                  onClick={() => removeItem(info.status)}
-                >
-                  Remove from {info.status.slice(2)}
-                </Button>
-              ) : null}
-            </div>
-            <div className={classes.auctionTimer}>
-              {listingStatus.status === ONAUCTION ? (
-                <>
-                  {' '}
-                  <h1 className={classes.artLabel}>Auction Ends In:</h1>
-                  <p style={{ fontSize: '15px', }}>
-                    <span>
-                      <strong>Days: </strong> {timeleft.days}
-                    </span>
-                    <span>
-                      <strong>Hours: </strong> {timeleft.hours}
-                    </span>
-                    <span>
-                      <strong>Minutes:</strong> {timeleft.minutes}
-                    </span>
-                    <span>
-                      <strong>Seconds:</strong> {timeleft.seconds}
-                    </span>
-                  </p>
-                  {parseInt(listingStatus.endTime) == 0 ? (
+                  {info.status == 'onSale' ? (
                     <Button
                       variantCustom='action'
                       style={{ backgroundColor: '#ff0099', padding: '10px' }}
-                      onClick={transferItem}
+                      onClick={() => removeItem(info.status)}
                     >
-                      Transfer
+                      Remove from {info.status.slice(2)}
                     </Button>
                   ) : null}
-                </>
-              ) : null}
+                </div>
+                <div className={classes.auctionTimer}>
+                  {listingStatus.status === ONAUCTION ? (
+                    <>
+                      {' '}
+                      <h1 className={classes.artLabel}>Auction Ends In:</h1>
+                      <p style={{ fontSize: '15px' }}>
+                        <span>
+                          <strong>Days: </strong> {timeleft.days}
+                        </span>
+                        <span>
+                          <strong>Hours: </strong> {timeleft.hours}
+                        </span>
+                        <span>
+                          <strong>Minutes:</strong> {timeleft.minutes}
+                        </span>
+                        <span>
+                          <strong>Seconds:</strong> {timeleft.seconds}
+                        </span>
+                      </p>
+                      {parseInt(listingStatus.endTime) == 0 ? (
+                        <Button
+                          variantCustom='action'
+                          style={{ backgroundColor: '#ff0099', padding: '10px' }}
+                          onClick={transferItem}
+                        >
+                          Transfer
+                        </Button>
+                      ) : null}
+                    </>
+                  ) : null}
 
-              {/* <h1 className={classes.artLabel}>Auction Ends In:</h1>
+                  {/* <h1 className={classes.artLabel}>Auction Ends In:</h1>
               <p style={{ fontSize: '15px' }}>
                 <span>
                   <strong>Days: </strong> {timeleft.days}
@@ -687,35 +711,59 @@ return null
                   <strong>Seconds:</strong> {timeleft.seconds}
                 </span>
               </p> */}
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
-
-      </div>
-      </div>
       </div>
       <MUIModal open={showSucceedPopup} onClose={() => location.replace('/dashboard/user')}>
         <div className={classes.popupcontainer}>
           <div className={classes.wrapper}>
-            <div className={classes.close} onClick={() => location.replace('/dashboard/user')}>x</div>
-            <div className={classes.header}>{"Your bid increased! Your current bid price is"}</div>
+            <div className={classes.close} onClick={() => location.replace('/dashboard/user')}>
+              x
+            </div>
+            <div className={classes.header}>{'Your bid increased! Your current bid price is'}</div>
             <div className={classes.divider} />
             <div className={classes.bottomheader}>{newBidAmount} ETH</div>
             <div className={classes.divider} />
-            <Button  variantCustom='action' style={{ marginLeft: "35%", marginTop:"3px"}} onClick={() => { location.replace('/dashboard/user') }}>
+            <Button
+              variantCustom='action'
+              style={{ marginLeft: '35%', marginTop: '3px' }}
+              onClick={() => {
+                location.replace('/dashboard/user');
+              }}
+            >
               Ok
             </Button>
           </div>
         </div>
       </MUIModal>
-      <MUIModal open={showFailedPopup} onClose={() => {setShowFailedPopup(false)}}>
+      <MUIModal
+        open={showFailedPopup}
+        onClose={() => {
+          setShowFailedPopup(false);
+        }}
+      >
         <div className={classes.popupcontainer}>
           <div className={classes.wrapper}>
-            <div className={classes.close} onClick={() => {setShowFailedPopup(false)}}>x</div>
-            <div className={classes.header}>{"You fail to increase you bid, please try again."}</div>
+            <div
+              className={classes.close}
+              onClick={() => {
+                setShowFailedPopup(false);
+              }}
+            >
+              x
+            </div>
+            <div className={classes.header}>{'You fail to increase you bid, please try again.'}</div>
             <div className={classes.divider} />
-            <Button  variantCustom='action' style={{ marginLeft: "35%", marginTop:"3px"}} onClick={() => {setShowFailedPopup(false)}}>
+            <Button
+              variantCustom='action'
+              style={{ marginLeft: '35%', marginTop: '3px' }}
+              onClick={() => {
+                setShowFailedPopup(false);
+              }}
+            >
               Ok
             </Button>
           </div>
@@ -735,24 +783,18 @@ return null
         open={showFailedPopup}
         textheader={'Collectible status;;You failed to update your collectible status, Please try again'}
         onClose={() => setShowFailedPopup(false)}
-
-      ></Popup> 
-      <Popup
-        open={showPopup}
-        textheader={'Successfully done'}
-        onClose={() => setShowPopup(false)}
-
-      ></Popup> 
-      <Popup
+      ></Popup>
+      <Popup open={showPopup} textheader={'Successfully done'} onClose={() => setShowPopup(false)}></Popup>
+      {/* <Popup
         open={bidShowPopup}
         textheader={'Bid status;;The Item was successfully bid'}
         onClose={() => setBidShowPopup(false)}
-      ></Popup>
-      <Popup
+      ></Popup> */}
+      {/* <Popup
         open={bidFailedPopup}
         textheader={'Bid status;;Bid Failed'}
         onClose={() => setBidFailedPopup(false)}
-      ></Popup>
+      ></Popup> */}
       <Popup
         open={showAccountFailedPopup}
         textheader={
@@ -771,6 +813,21 @@ return null
         onClose={() => setShowSaleError(false)}
       ></Popup>
 
+      <BidPopup
+        open={bidShowPopup}
+        textheader={`Your Bid Increased!Your Current Bid Price is;;${'$' + bidAmount}`}
+        onClose={() => setBidShowPopup(false)}
+      ></BidPopup>
+      <BidPopup
+        open={bidFailedPopup}
+        textheader={'You failed add amount to your bid, please try one more time'}
+        onClose={() => setBidFailedPopup(false)}
+      ></BidPopup>
+      <BidPopup
+        open={auctionEndePopup}
+        textheader={'Sorry, you cannot add amount to your bid as the auction is closed'}
+        onClose={() => setAuctionEndePopup(false)}
+      ></BidPopup>
     </Layout>
   );
 }

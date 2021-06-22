@@ -90,7 +90,7 @@ const schema = yup.object().shape({
     .typeError('You need to enter number')
     .required('Royalties must be less than or equal to 10'),
   copiesCount: yup.number().typeError('You need to enter number'),
-  transferAddr: yup.mixed()
+  transferAddr: yup.mixed(),
   // properties: yup.object().shape({
   //   name: yup.string().required('You need to enter the start date'),
   //   value: yup.string().required('You need to enter the end date'),
@@ -289,8 +289,19 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
 
   const [incorrectMetamaskAddr, setIncorrectMetamaskAddr] = useState(false);
   const onSubmit = async (data: ICollectibleForm) => {
-    const { transferAddr,copiesCount, royalties, name, instantPrice, price, unlock, collection, description, onSale, onAuction } =
-      data;
+    const {
+      transferAddr,
+      copiesCount,
+      royalties,
+      name,
+      instantPrice,
+      price,
+      unlock,
+      collection,
+      description,
+      onSale,
+      onAuction,
+    } = data;
     console.log(data);
     console.log(preview);
     const metamaskAddr = readCookie('metamask_address');
@@ -303,55 +314,101 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
     } else {
       if (approval) {
         if (celebrity) {
-          if(transferAddr != '' && transferAddr.length == 42){
+          if (transferAddr != '' && transferAddr.length == 42) {
             console.log(celebrity);
             setItemCreated(true);
-            const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
-            setContractTokenIds([...contractTokenIds, tokenId]);
-            setItemCreated(false);
 
-            if (tokenId != undefined) {
-              console.log('11111 create', tokenId);
-              createCollection(collection)
-                .then(response => {
-                  console.log(response);
-                  const collectible = {
-                    status: 'onHold',
-                    copies: copiesCount,
-                    name: name,
-                    tokenIds: tokenId,
-                    royalties: royalties,
-                    collectionId: response.data.id,
-                    price: price,
-                    file: {
-                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                      mediaType: preview.imagetype,
-                      content: preview.base64,
-                    },
-                    thumbnail: {
-                      fileName: 'image.' + preview.imagetype.replace('image/', ''),
-                      mediaType: preview.imagetype,
-                      content: preview.base64,
-                    },
-                  };
-  
-                  createCollectible(collectible)
-                    .then(async (res) => {
-                      await handleTransferToken(transferAddr)
-                      setShowPopup(true);
-                    })
-                    .catch(error => {
-                      setShowFailedPopup(true);
-                      console.log(error);
-                    });
-                })
-                .catch(err => {
-                  console.log(err.message);
-                });
+            const dotdCreator = await web3contract.isApprovedDropOfTheDayCreator(transferAddr);
+            console.log(dotdCreator);
+            if (dotdCreator) {
+              const tokenId = await web3contract.etherFunctionCreateItem(copiesCount, royalties);
+              setContractTokenIds(tokenId);
+              setItemCreated(false);
+
+              if (tokenId != undefined) {
+                console.log('11111 create', tokenId);
+                createCollection(collection)
+                  .then(response => {
+                    console.log(response);
+                    const collectible = {
+                      status: 'onHold',
+                      copies: copiesCount,
+                      name: name,
+                      tokenIds: tokenId,
+                      royalties: royalties,
+                      collectionId: response.data.id,
+                      price: price,
+                      file: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                        mediaType: preview.imagetype,
+                        content: preview.base64,
+                      },
+                      thumbnail: {
+                        fileName: 'image.' + preview.imagetype.replace('image/', ''),
+                        mediaType: preview.imagetype,
+                        content: preview.base64,
+                      },
+                    };
+
+                    createCollectible(collectible)
+                      .then(async res => {
+                        console.log(transferAddr);
+                        console.log(contractTokenIds);
+                        const promise: any = [];
+                        const collectibleIds: any = [];
+                        const transferApi: any = [];
+
+                        try {
+                          for (let i = 0; i < tokenId.length; i++) {
+                            promise.push(web3Contract.transferCollectible(tokenId[i], transferAddr.toLowerCase()));
+                          }
+
+                          Promise.all(promise).then(result => {
+                            console.log(result);
+
+                            for (let i = 0; i < tokenId.length; i++) {
+                              console.log(tokenId[i]);
+                              collectibleIds.push(getCollectibleByTokenId(tokenId[i]));
+                            }
+
+                            Promise.all(collectibleIds)
+                              .then(async result => {
+                                console.log(result);
+                                //api
+                                const ids = result.map((item: any) => item.id);
+                                console.log(ids);
+                                for (let i = 0; i < ids.length; i++) {
+                                  transferApi.push(transferCollectibles(ids[i], transferAddr.toLowerCase()));
+                                }
+
+                                Promise.all(transferApi)
+                                  .then(res => {
+                                    console.log('Success!!!');
+                                    setShowTransferPopup(true)
+                                    location.replace('/')
+                                  })
+                                  .catch(err => console.log(err.message));
+                              })
+                              .catch(err => console.log(err.message));
+                          });
+                        } catch (error) {
+                          setShowTranferFailed(true);
+                          console.log(error.message);
+                        }
+                      })
+                      .catch(error => {
+                        setShowFailedPopup(true);
+                        console.log(error);
+                      });
+                  })
+                  .catch(err => {
+                    console.log(err.message);
+                  });
+              }
             }
-          }else{ setIncorrectMetamaskAddr(true)}
-          
-          
+          } else {
+            setIncorrectMetamaskAddr(true);
+          }
         } else {
           //creating on chain
           setItemCreated(true);
@@ -432,9 +489,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
           } else if (onAuction) {
             // const startTimeInSec = moment(properties.name).format('x');
             // const endTimeInSec = moment(properties.value).format('X');
-            const startTime = Math.floor(new Date().getTime() / 1000); //currentime
-            const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
-            console.log(startTime, endTime);
+            // const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
+            // const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
+            //console.log(startTime, endTime);
 
             //putOnAuction()
             if (tokenId.length > 0) {
@@ -464,6 +521,7 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                     .then(async res => {
                       const collectibleIdsPromise: any = [];
                       const setAsAuctionPromise: any = [];
+                      const putOnAuctionAPI: any = [];
                       let collectibleIds: any = [];
                       for (let i = 0; i < tokenId.length; i++) {
                         collectibleIdsPromise.push(getCollectibleByTokenId(tokenId[i]));
@@ -474,33 +532,39 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
                           console.log('promise result', result);
                           collectibleIds = result.map((item: any) => item.id);
                           setOnAuction(true);
+                          const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
+                          const endTime = Math.floor((new Date().getTime() + 600000) / 1000); //1 day after/following day
                           for (let i = 0; i < collectibleIds.length; i++) {
-                            const startTime = Math.floor((new Date().getTime() + 300000) / 1000); //currentime
-                            const endTime = Math.floor((new Date().getTime() + 86400000) / 1000); //1 day after/following day
-
                             setAsAuctionPromise.push(web3Contract.setAsAuction(tokenId[i], price, startTime, endTime));
                           }
+
+                          Promise.all(setAsAuctionPromise)
+                            .then(async result => {
+                              console.log('!!!auction promise', result);
+                              const auctionData = {
+                                price: price,
+                                startTime: startTime * 1000,
+                                endTime: endTime * 1000,
+                              };
+                              console.log(auctionData);
+                              for (let i = 0; i < collectibleIds.length; i++) {
+                                putOnAuctionAPI.push(putOnAuction(collectibleIds[i], auctionData));
+                              }
+
+                              Promise.all(putOnAuctionAPI)
+                                .then(res => {
+                                  setOnAuction(false);
+                                  setConfirmOnAuction(true);
+                                })
+                                .catch(err => console.log(err.message));
+                            })
+                            .catch(err => {
+                              setOnAuction(false);
+                              console.log(err.message);
+                            });
                         })
                         .catch(err => console.log(err.message));
 
-                      Promise.all(setAsAuctionPromise)
-                        .then(async result => {
-                          console.log('!!!auction promise', result);
-                          const auctionData = {
-                            price: price,
-                            startTime: startTime * 1000,
-                            endTime: endTime * 1000,
-                          };
-                          for (let i = 0; i < collectibleIds.length; i++) {
-                            await putOnAuction(collectibleIds[i], auctionData);
-                          }
-                          setOnAuction(false);
-                          setConfirmOnAuction(false);
-                        })
-                        .catch(err => {
-                          setOnAuction(false);
-                          console.log(err.message);
-                        });
                       //console.log('!!!!!collectible by id ', data);
 
                       //const response = await web3Contract.setAsAuction(tokenId[0], price, startTime, endTime);
@@ -649,48 +713,9 @@ const CreateForm = ({ isSingle }: { isSingle: boolean }): JSX.Element => {
   const ethAmount = price ? price - price * 0.025 : 0;
   const usdAmount = price ? convertEthToUsd(price, currency) : '0.00';
 
-const [showTranferFailed,setShowTranferFailed] = useState(false);
+  const [showTranferFailed, setShowTranferFailed] = useState(false);
+  const [showTransferPopup,setShowTransferPopup] = useState(false);
 
-  const handleTransferToken = async (addr: any) => {
-    console.log(addr);
-    const promise: any = [];
-    const collectibleIds: any = [];
-    console.log(contractTokenIds);
-    const lowerAddr = addr.toLowerCase();
-    if (lowerAddr != '') {
-      for (let i = 0; i < contractTokenIds.length; i++) {
-        collectibleIds.push(getCollectibleByTokenId(contractTokenIds[i]));
-      }
-      try {
-        Promise.all(promise)
-        .then(result => {
-          console.log(result);
-          const ids = result.map((item: any) => item.id);
-          for (let i = 0; i < ids.length; i++) {
-            promise.push(web3Contract.transferCollectible(ids[i], lowerAddr));
-          }
-        })
-
-        Promise.all(promise)
-        .then(async result => {
-          console.log(result);
-          //api
-          const allIds = collectibleIds.map((item: any) => item.id);
-          for (let i = 0; i < allIds.length; i++) {
-            await transferCollectibles(allIds[i], lowerAddr);
-          }
-        })
-  
-        .catch(err => console.log(err.message));
-      } catch (error) {
-        setShowTranferFailed(true)
-        console.log(error.message)
-      }
-      
-
-      
-    }
-  };
 
   return (
     <div className={classes.form}>
@@ -851,7 +876,7 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
                   {watch('unlock') && (
                     <div className={classes.input}>
                       <Input
-                        placeholder='Digital key, code to redeem or link to a file...'
+                        placeholder='Unlock content'
                         inputRef={register}
                         name='unlockContent'
                         disableUnderline
@@ -927,7 +952,7 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
               </label>
               <Input
                 id='collection'
-                placeholder='e. g. “loren ipsum lormspum loren”'
+                placeholder='collection name'
                 inputRef={register}
                 name='collection'
                 disableUnderline
@@ -939,7 +964,7 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
               </label>
               <Input
                 id='name'
-                placeholder='e. g. “Redeemable T-Shirt with logo”'
+                placeholder='collectible name'
                 name='name'
                 inputRef={register}
                 disableUnderline
@@ -953,7 +978,7 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
               </label>
               <Input
                 id='description'
-                placeholder='e. g. “After purchasing you’ll be able to get the real Tee”'
+                placeholder='collectible description'
                 inputRef={register}
                 name='description'
                 disableUnderline
@@ -994,24 +1019,24 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
                 </div>
               )}
             </div>
-            {celebrity&&(
+            {celebrity && (
               <div className={classes.input}>
-                  <label htmlFor='copiesCount' className={classes.label}>
-                    Enter drop of the day creator metamask address
-                  </label>
-                  <Input
-                    id='transfer'
-                    placeholder='Enter address 0x...'
-                    inputRef={register}
-                    required
-                    //onChange={e => setTransferAddr(e.target.value)}
-                    disableUnderline
-                    name='transferAddr'
-                  />
-                  {errors.transferAddr && <p className={classes.textError}>{errors.transferAddr.message}</p>}
-                </div>
+                <label htmlFor='copiesCount' className={classes.label}>
+                  Enter drop of the day creator metamask address
+                </label>
+                <Input
+                  id='transfer'
+                  placeholder='Enter address 0x...'
+                  inputRef={register}
+                  required
+                  //onChange={e => setTransferAddr(e.target.value)}
+                  disableUnderline
+                  name='transferAddr'
+                />
+                {errors.transferAddr && <p className={classes.textError}>{errors.transferAddr.message}</p>}
+              </div>
             )}
-            
+
             {/* <Input
               id='transfer'
               placeholder='Enter address 0x...'
@@ -1101,7 +1126,7 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
         fileSrc={preview.type === 'image' ? preview.file : preview.cover}
         fields={previewFields}
         isSingle={isSingle}
-        handleTransferToken={handleTransferToken}
+        //handleTransferToken={handleTransferToken}
         celebrity={celebrity}
       />
 
@@ -1112,6 +1137,13 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
         onClose={() => setOpenSubmitModal(!OpenSubmitModal)}
       />
 
+      <Popup
+        open={showTransferPopup}
+        textheader='Created Status;;You successfully created and transfered your collectible'
+        onClose={() => {
+          setShowTransferPopup(false);
+        }}
+      ></Popup>
       <Popup
         open={showPopup}
         textheader='Created collectible;;You successfully created a collectible, please check the dashboard'
@@ -1141,10 +1173,9 @@ const [showTranferFailed,setShowTranferFailed] = useState(false);
       ></Popup>
       <Popup
         open={showTranferFailed}
-        textheader="Sorry, transfer failed"
+        textheader='Sorry, transfer failed'
         onClose={() => setShowTranferFailed(false)}
       ></Popup>
-      
     </div>
   );
 };

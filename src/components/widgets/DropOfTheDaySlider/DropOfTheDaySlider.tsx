@@ -8,6 +8,7 @@ import { SliderArrow } from 'components/icons';
 import useStyles from './DropOfTheDaySlider.style';
 import DropOfTheDaySliderItem from './DropOfTheDaySliderItem/DropOfTheDaySliderItem';
 import { getDropOfTheDay } from 'apis/users';
+import { getCollectible } from 'apis/collectibles';
 // import {getCollectible} from ""
 const dropsOfTheDay = [
   { id: '6080107c6aeffc0014c8df3d', name: 'Fresh Meat #A', price: '0.25' }, //hardcoded one of my Token.id
@@ -58,22 +59,35 @@ const sliderConfig = {
 
 type DropOfTheDaySliderProps = {
   className?: string,
-  name: string,
-  imagePreview: string
-};
+  name: any,
+  imagePreview: string,
 
+
+};
+//is profile object
 export default function DropOfTheDaySlider({ name, className, imagePreview }: DropOfTheDaySliderProps): JSX.Element {
   const classes = useStyles();
-  const [collectibles, setCollectibles] = useState([])
+  //const [collectibles, setCollectibles] = useState([])
 
   useEffect(() => {
 
-    getDropOfTheDay().then(({ data }) => setCollectibles(data));
+    // getDropOfTheDay().then(({ data }) => {
+
+    //   const filter = data.filter((item:any)=>item.creatorUserId == name.celebrityId)
+    //   console.log('filter data,',filter)
+    //   console.log('name celebrity id',name.celebrityId)
+    //   setCollectibles(data)
+    // });
+    
+    // console.log('_____',name.celebrityId);
+
+    //getCollectible(name.celebrityId).then(({data})=>setCollectibles(data))
+
   }, [])
 
   return (
     <Slider className={cx(classes.slider, className)} {...sliderConfig}>
-      {collectibles.map((el: any, index) => (
+      {name.map((el: any, index:any) => (
         <div key={index} onClick={() => location.replace('/drop-of-the-day/' + el.id)}>
           <DropOfTheDaySliderItem id={el.id} name={el.name} imagePreview={el.thumbnailUrl} price={el.price}/>
         </div>

@@ -291,6 +291,35 @@ export const bidCollectible = async (collectibleId: any, price: any) => {
   );
 };
 
+export const latestBids = async () => {
+  return axios.get(`${process.env.REACT_APP_API}/api/auth/user/collecbibles/latest-bids`, {
+    headers: {
+      id: readCookie('id'),
+      token: readCookie('token'),
+      metamask_address: readCookie('metamask_address'),
+    },
+  });
+};
 export const getAuctionHistory = async (collectibleId: any) => {
   return await axios.get(`${process.env.REACT_APP_API}/api/public/collectibles/auction/${collectibleId}/history`);
 };
+
+
+export const getCurrentBidByCollectibleId = async(collectibleId:any)=>{
+  return await axios.get(`${process.env.REACT_APP_API}/api/auth/user/collecbibles/${collectibleId}/current-bids`)
+}
+
+export const tradeCollectible = async(collectibleId:any, price:any,tradeType:any,)=>{
+  return axios.post(`${process.env.REACT_APP_API}/api/auth/trade/${collectibleId}`,
+  {
+    price: price,
+    tradeType:  tradeType
+  },
+  {
+    headers: {
+      id: readCookie('id'),
+      token: readCookie('token'),
+      metamask_address: readCookie('metamask_address'),
+    },
+  })
+}

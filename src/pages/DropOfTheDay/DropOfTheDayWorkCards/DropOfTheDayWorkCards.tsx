@@ -13,15 +13,20 @@ import cx from 'clsx';
 // import console from 'console';
 
 type DropOfTheDayWorkCardsProp = {
-  contentList?: any
+  contentList?: any;
+  userId:any;
 }
-export default function OrderListFilters({contentList}: DropOfTheDayWorkCardsProp): JSX.Element {
+export default function OrderListFilters({contentList, userId}: DropOfTheDayWorkCardsProp): JSX.Element {
   const classes = useStyles();
   const [collectibles, setCollectibles] = useState([]);
 
   useEffect(() => {
     getDropOfTheDay().then(({ data }) => {
-      setCollectibles(data.slice(0, 4))
+      const filter = data.filter((item:any)=>item.creatorUserId == userId)
+      console.log('filter data,',filter)
+      console.log('name celebrity id',userId)
+      setCollectibles(filter.slice(0, 4))
+
     }
     );
   }, []);
@@ -38,14 +43,19 @@ export default function OrderListFilters({contentList}: DropOfTheDayWorkCardsPro
             {/* <img
               src={thumbnailUrl}
               alt=''
+
+              style={{maxWidth:'300px', maxHeight:'300px', }}
+            />
+
             /> */}
+
             {console.log("in drop of the day work card", contentList)}
             <div className={classes.subTitle}>{name}</div>
               <div className={classes.content}>
-                <ul>{contentList.map((info: any, index: number) => <li key={index}>{info}</li>)}</ul>
+                {/* <ul>{contentList.map((info: any, index: number) => <li key={index}>{info}</li>)}</ul> */}
               </div>
             {status == "onSale" && (
-              <Link to={`/product/${id}`}>
+              <Link to={`/product/${id}`} style={{textDecoration:"none"}}>
                 <Button className={classes.buyNow} fullWidth variantCustom='action'>
                   {text['buyNow']}
                 </Button>

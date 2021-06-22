@@ -9,11 +9,11 @@ type PreviewProps = {
   fileSrc?: string;
   fields: { name?: string; copiesCount?: number; unlockContent?: string; price?: number };
   isSingle: boolean;
-  handleTransferToken: any;
+  //handleTransferToken: any;
   celebrity: any;
 };
 
-const Preview = ({ isSingle, fileSrc, fields, handleTransferToken, celebrity }: PreviewProps): JSX.Element => {
+const Preview = ({ isSingle, fileSrc, fields, celebrity }: PreviewProps): JSX.Element => {
   const classes = useStyles();
 
   const isFieldsNotEmpty = Object.values(fields).some(field => field);

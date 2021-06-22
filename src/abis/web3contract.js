@@ -343,7 +343,7 @@ const setDropOfTheDayAuctionEndTime = async (tokenId, newEndTime) => {
  * Item owner can call the method to transfer their collectible to
  * another address.
  */
-const transferCollectible = async (tokenId, receiverAddress) => {
+const transferCollectible = async (tokenId, receiverAddress, collectibleOwner) => {
   const { contractWithSigner } = getMarketplaceContract();
   const receipt = await contractWithSigner.transfer(tokenId, receiverAddress);
   const response = await receipt.wait();
@@ -394,4 +394,5 @@ export default {
   putOnHold,
   userBalance,
   checkCollectibleStatus,
+  isApprovedDropOfTheDayCreator,
 };

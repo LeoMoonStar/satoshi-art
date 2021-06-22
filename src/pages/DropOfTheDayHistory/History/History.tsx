@@ -33,7 +33,7 @@ export default function History({ items }: any): JSX.Element {
           id={item.celebrityUserId}
           color={`#${item.colorCode}`}
           name={item.name}
-          artistImage={item.homePageAvatarUrl}
+          artistImage={item.homePageBarUrl}
           imagePreview={item.homePageBarUrl}
         />
       ))}
