@@ -122,10 +122,8 @@ export default function Header({ inverseHeader = false, hasDivider = true }: Hea
         <div className={classes.bottomRow}>
           <div className={classes.innerBottomRow}>
             <>
-              {window.ethereum == undefined ? (
+              {window.ethereum.selectedAddress == undefined ? (
                 <>
-                  {console.log('!!!!', window.ethereum)}
-
                   <div className={classes.profileBar}>
                     <div className={classes.notificationBox}>
                       <div>

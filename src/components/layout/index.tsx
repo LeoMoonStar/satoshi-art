@@ -52,75 +52,78 @@ ILayoutProps): JSX.Element => {
     } else {
       if (window.ethereum != undefined) {
         // resolve temporary problem
-        const accounts = await web3.eth.getAccounts();
-        if (window.ethereum) {
-          account = accounts[0];
-          try {
-            await window.ethereum.request({
-              method: 'eth_requestAccounts',
-            });
+        if (window.ethereum.selectedAddress != undefined) {
+          const accounts = await web3.eth.getAccounts();
+          if (window.ethereum) {
+            account = accounts[0];
+            try {
+              await window.ethereum.request({
+                method: 'eth_requestAccounts',
+              });
 
-            if (isInLoginAsMode()) {
-              console.log('user sign in');
-              console.log('id', readCookie('id'));
-              console.log('token', readCookie('token'));
-              console.log('metamask_address', readCookie('metamask_address'));
-            } else {
-              console.log(`Account before get challenge ${account}`);
-              const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
-              const challenge = res.data;
+              if (isInLoginAsMode()) {
+                console.log('user sign in');
+                console.log('id', readCookie('id'));
+                console.log('token', readCookie('token'));
+                console.log('metamask_address', readCookie('metamask_address'));
+              } else {
+                console.log(`Account before get challenge ${account}`);
+                const res = await axios.get(`${process.env.REACT_APP_API}/api/public/auth/${account.toLowerCase()}`);
+                const challenge = res.data;
 
-              (web3 as any).currentProvider.send(
-                {
-                  method: 'eth_signTypedData',
-                  params: [challenge.challenge, account],
-                  from: account,
-                },
-                (error: any, res: any) => {
-                  if (error) {
-                    eraseLoginAsCookies();
-                    // change redux value of connection
+                (web3 as any).currentProvider.send(
+                  {
+                    method: 'eth_signTypedData',
+                    params: [challenge.challenge, account],
+                    from: account,
+                  },
+                  (error: any, res: any) => {
+                    if (error) {
+                      eraseLoginAsCookies();
+                      // change redux value of connection
+                    }
+                    if (res) {
+                      eraseLoginAsCookies();
+                      axios
+                        .get(
+                          `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
+                        )
+                        .then(sigRes => {
+                          if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
+                            console.log('Signature verified');
+                            createLoginAsCookies({
+                              id: sigRes.data.id,
+                              metamask_address: sigRes.data.metamaskId,
+                              token: sigRes.data.token,
+                            });
+
+                            console.log('id', sigRes.data.id);
+                            console.log('token', sigRes.data.token);
+                            console.log('metamask_address', sigRes.data.metamaskId);
+
+                            setShowPopup(true);
+                            setShowConnectionPopup(false);
+                          } else {
+                            setShowFailedPopup(true);
+                            console.log('Signature not verified');
+                          }
+                        })
+                        .catch(err => console.log(err));
+                    }
                   }
-                  if (res) {
-                    eraseLoginAsCookies();
-                    axios
-                      .get(
-                        `${process.env.REACT_APP_API}/api/public/auth/${challenge.challenge[1].value}/${res.result}/${account}`
-                      )
-                      .then(sigRes => {
-                        if (sigRes.status === 200 && sigRes.data.recover === account!.toLowerCase()) {
-                          console.log('Signature verified');
-                          createLoginAsCookies({
-                            id: sigRes.data.id,
-                            metamask_address: sigRes.data.metamaskId,
-                            token: sigRes.data.token,
-                          });
-
-                          console.log('id', sigRes.data.id);
-                          console.log('token', sigRes.data.token);
-                          console.log('metamask_address', sigRes.data.metamaskId);
-
-                          setShowPopup(true);
-                          setShowConnectionPopup(false);
-                        } else {
-                          setShowFailedPopup(true);
-                          console.log('Signature not verified');
-                        }
-                      })
-                      .catch(err => console.log(err));
-                  }
-                }
-              );
+                );
+              }
+            } catch (err) {
+              console.log(err);
             }
-          } catch (err) {
-            console.log(err);
           }
+        } else {
+          console.log('No account detected');
+          dispatch(removeProfile());
+          eraseLoginAsCookies();
         }
       } else {
         setShowConnectionPopup(true);
-        console.log('No account detected');
-        dispatch(removeProfile());
-        eraseLoginAsCookies();
       }
     }
   };
